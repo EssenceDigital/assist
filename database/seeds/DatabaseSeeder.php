@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // Provinices stored in an array
-        $provinces = ['Alberta', 'Saskatchewan', 'British Colombia'];
+        $provinces = ['Alberta', 'Saskatchewan', 'British Columbia'];
 
         // Insert some fake companies
         for($i = 0; $i <= 40; $i++){

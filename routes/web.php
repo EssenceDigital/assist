@@ -23,5 +23,9 @@ Route::get('/app', function () {
 
 Route::get('/projects', 'ProjectsController@all');
 Route::get('/projects/clients', 'ProjectsController@clients');
-Route::get('/projects/{client?}/{province?}/{invoice?}', 'ProjectsController@filter');
+Route::post('/projects/start', 'ProjectsController@store');
+Route::post('/projects/update-field', 'ProjectsController@updateField');
+Route::get('/projects/{id}', 'ProjectsController@single');
+Route::get('/projects/{client?}/{province?}/{location?}/{invoice?}', 'ProjectsController@filter');
+
 

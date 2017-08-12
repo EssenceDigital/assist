@@ -4,56 +4,70 @@
  * Is used by multiple components, so the table_state prop determines what headers and fields will be displayed.
 */
 <template>
-  <v-container>
+  <v-container fluid>
+    <!-- Row for project filter -->
     <v-layout row>
-      <v-flex xs3>
-        <h6>Province</h6>
+      <v-spacer></v-spacer>
+      <!-- Province filter -->
+      <v-flex xs2>
         <v-select
           v-model="provinceFilter"
           :items="provinces"
-          label="Select..."
+          label="Province..."
           single-line
           bottom
         ></v-select>        
       </v-flex>
-      <v-flex xs3>
-        <h6>Client</h6>
+      <v-spacer></v-spacer>
+      <!-- Client filter -->
+      <v-flex xs2>
         <v-select
           v-model="clientFilter"
           :items="clients"
-          label="Select..."
+          label="Client..."
           single-line
           bottom
         ></v-select>        
-      </v-flex>  
+      </v-flex> 
+      <v-spacer></v-spacer>
+      <!-- Location filter -->
+      <v-flex xs3>
+          <v-text-field
+            label="Enter part of location..."
+            v-model="locationFilter"
+          ></v-text-field>        
+      </v-flex> 
+      <v-spacer></v-spacer>
+      <!-- Invoice status filter -->
       <v-flex xs2>
-        <h6>Invoice Status</h6>
         <v-select
           v-model="invoiceFilter"
           :items="invoiceStatus"
-          label="Select..."
+          label="Invoice status..."
           single-line
           bottom
         ></v-select>        
-      </v-flex>          
+      </v-flex> 
+      <v-spacer></v-spacer> 
+      <!-- Filter button -->        
       <v-flex xs1>
         <v-btn 
-          flat
-          class="mt-5" 
+          icon
+          class="mt-3" 
           v-tooltip:top="{ html: 'Filter Projects' }"
           @click="filterProjects"
         >
           <v-icon>search</v-icon>
-          Filter
         </v-btn>
       </v-flex> 
-    </v-layout>
+    </v-layout><!-- /Row for project filter -->
 
+    <!-- Data table -->
     <v-data-table
         :headers="headers"
         :items="projects"
         :rows-per-page-items="perPage"
-        class="elevation-1 mt-3"
+        class="elevation-1 mt-2"
       >    
       <template slot="items" scope="props">
         <td v-if="table_state === 'admin'" class="text-xs-right">{{ props.item.id }}</td>
@@ -88,6 +102,7 @@
               icon 
               v-tooltip:top="{ html: 'View Project ' + props.item.id }"
               v-if="table_state === 'admin'"
+              @click.native.stop="viewProject(props.item.id)"
             >
               <v-icon>subdirectory_arrow_right</v-icon>
             </v-btn>
@@ -97,18 +112,46 @@
       <template slot="pageText" scope="{ pageStart, pageStop }">
         From {{ pageStart }} to {{ pageStop }}
       </template>    
-    </v-data-table>    
+    </v-data-table><!-- /Data table -->  
+
+    <!-- Dialog to view a full project -->
+    <v-layout row justify-center>
+      <v-dialog v-model="viewProjectDialog" fullscreen transition="dialog-bottom-transition" :overlay=false>
+        <v-card>
+          <v-toolbar dark class="primary">
+            <v-btn icon @click.native="viewProjectDialog = false" dark>
+              <v-icon>close</v-icon>
+            </v-btn>
+            <v-toolbar-title>
+              Close
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+          <!-- Use the project view component to display project info -->
+          <project-view></project-view>
+        </v-card>
+      </v-dialog>
+    </v-layout><!-- Dialog to view a full project -->
+
   </v-container>
 
 </template>
 
 <script>
+  import ProjectView from './Project-view';
+
   export default {
     // Determines what headers and fields the table should display ("admin" or "user")
     props: ['table_state'],
 
+    components: {
+      'project-view': ProjectView
+    },
+
     data () {
       return {
+        // The view project dialog window
+        viewProjectDialog: false,
         // For data table pagination   
         perPage: [15, 30, 45, { text: "All", value: -1 }],
         // The headers the data table will use
@@ -128,7 +171,7 @@
         ],
         // For provinces filter
         provinces: [
-          { text: 'Select...', value: '' },
+          { text: 'Province...', value: '' },
           { text: 'Alberta', value: 'Alberta' },
           { text: 'British Columbia', value: 'British Columbia' },
           { text: 'Saskatchewan', value: 'Saskatchewan' }
@@ -139,10 +182,12 @@
         clientFilter: '',
         // For invoice status
         invoiceStatus: [
-          { text: 'Select...', value: '' },
+          { text: 'Invoice status...', value: '' },
           { text: 'Paid', value: '1' },
           { text: 'Outstanding', value: '0' }                 
         ],
+        // Location filter
+        locationFilter: '',        
         // Invoice status filter
         invoiceFilter: ''
       }
@@ -156,23 +201,25 @@
 
       // Watch for uniqueCLients state to update
       clients () {
-        var clients = this.$store.getters.clients,
-            clientFilter = [{ text: "Select...", value: "" }];
-        clients.forEach(function(client){
-          clientFilter.push({ text: client, value: client });
-        });
-        return clientFilter;
+        return this.$store.getters.clientsSelectList;
       }
     },
 
     methods: {
-      filterProjects (){
-        console.log(this.provinceFilter);
+      filterProjects () {
         this.$store.dispatch('getProjects', {
           client: this.clientFilter,
           province: this.provinceFilter,
+          location: this.locationFilter,
           invoice: this.invoiceFilter
         });
+      },
+
+      viewProject (id) {
+        // Update the requested project
+        this.$store.dispatch('getProject', id);
+        // Show dialog
+        this.viewProjectDialog = true;
       }
     },
 

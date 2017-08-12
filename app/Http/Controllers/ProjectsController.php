@@ -63,7 +63,7 @@ class ProjectsController extends Controller
         ], 200);     
     }
 
-    public function filter($client = false, $province = false, $invoice = false){
+    public function filter($client = false, $province = false, $location = false, $invoice = false){
         // Construct where array for query
         $queryArray = [];
         // Add company field or not
@@ -75,6 +75,11 @@ class ProjectsController extends Controller
         if($province){
             // Push array clause
             array_push($queryArray, ['province', '=', $province]);
+        }
+        // Add location field or not
+        if($location){
+            // Push array clause
+            array_push($queryArray, ['location', 'LIKE', '%' . $location . '%']);
         }
         // Add invoiced date or not
         if($invoice){
@@ -108,7 +113,7 @@ class ProjectsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $project
+            'payload' => $project
         ], 200);        
     }
 
@@ -143,8 +148,12 @@ class ProjectsController extends Controller
      */
     public function store(Request $request)
     {
+        $validationFields = [
+            'client_company_name' => 'required|max:30'
+        ];
+
         // Validate and populate the request
-        $project = $this->validateAndPopulate($request, new Project, $this->validationFields);
+        $project = $this->validateAndPopulate($request, new Project, $validationFields);
 
         // Attempt to store model
         $result = $project->save();
@@ -160,7 +169,7 @@ class ProjectsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $project
+            'payload' => $project
         ], 200);
 
     }

@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 /** Load Project components needed by routes */
 import Home from './components/dashboard/Home';
 import Projects from './components/project/Projects';
+import ProjectView from './components/project/Project-view'
 import Timesheets from './components/timesheet/Timesheets';
 import Users from './components/user/Users';
 
@@ -23,7 +24,12 @@ export default new VueRouter({
 			name: 'Projects',
 			component: Projects
 		},
-
+		{
+			path: '/projects/:id/view',
+			name: 'ProjectView',
+			component: ProjectView,
+			props: true
+		},		
 		{
 			path: '/timesheets',
 			name: 'Timesheets',

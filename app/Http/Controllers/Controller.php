@@ -68,7 +68,7 @@ class Controller extends BaseController
             // Return response for ajax call
             return response()->json([
                 'result' => 'success',
-                'model' => $model
+                'payload' => $model
             ], 200);      
         }
     } 

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 14);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -71,7 +71,7 @@
 
 
 var bind = __webpack_require__(6);
-var isBuffer = __webpack_require__(17);
+var isBuffer = __webpack_require__(20);
 
 /*global toString:true*/
 
@@ -478,7 +478,7 @@ module.exports = function normalizeComponent (
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(20);
+var normalizeHeaderName = __webpack_require__(23);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -568,7 +568,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)))
 
 /***/ }),
 /* 3 */
@@ -10696,7 +10696,7 @@ module.exports = g;
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(16);
+module.exports = __webpack_require__(19);
 
 /***/ }),
 /* 6 */
@@ -10724,12 +10724,12 @@ module.exports = function bind(fn, thisArg) {
 
 
 var utils = __webpack_require__(0);
-var settle = __webpack_require__(21);
-var buildURL = __webpack_require__(23);
-var parseHeaders = __webpack_require__(24);
-var isURLSameOrigin = __webpack_require__(25);
+var settle = __webpack_require__(24);
+var buildURL = __webpack_require__(26);
+var parseHeaders = __webpack_require__(27);
+var isURLSameOrigin = __webpack_require__(28);
 var createError = __webpack_require__(8);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(26);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(29);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -10826,7 +10826,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(27);
+      var cookies = __webpack_require__(30);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -10910,7 +10910,7 @@ module.exports = function xhrAdapter(config) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(22);
+var enhanceError = __webpack_require__(25);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -10968,26 +10968,373 @@ module.exports = Cancel;
 
 /***/ }),
 /* 11 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-__webpack_require__(12);
-module.exports = __webpack_require__(62);
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
 
 
 /***/ }),
 /* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(50)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction) {
+  isProduction = _isProduction
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(54)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(56),
+  /* template */
+  __webpack_require__(60),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  "data-v-a4250e2e",
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Project-view.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Project-view.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-a4250e2e", Component.options)
+  } else {
+    hotAPI.reload("data-v-a4250e2e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(15);
+module.exports = __webpack_require__(75);
+
+
+/***/ }),
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuetify__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuetify__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuetify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vuetify__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store_index__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__router__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store_index__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__router__ = __webpack_require__(42);
 /** Load general dependencies from a file */
-__webpack_require__(13);
+__webpack_require__(16);
 /** Load Vue based dependencies */
 
 
@@ -10997,7 +11344,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuet
 /** Set up Router */
 
 /** Register Vue components */
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('dashboard', __webpack_require__(56));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('dashboard', __webpack_require__(69));
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.productionTip = false;
 
@@ -11009,11 +11356,11 @@ var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
 });
 
 /***/ }),
-/* 13 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(14);
+window._ = __webpack_require__(17);
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -11055,7 +11402,7 @@ if (token) {
 // });
 
 /***/ }),
-/* 14 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -28144,10 +28491,10 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(15)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(18)(module)))
 
 /***/ }),
-/* 15 */
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -28175,7 +28522,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 16 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28183,7 +28530,7 @@ module.exports = function(module) {
 
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(6);
-var Axios = __webpack_require__(18);
+var Axios = __webpack_require__(21);
 var defaults = __webpack_require__(2);
 
 /**
@@ -28218,14 +28565,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(10);
-axios.CancelToken = __webpack_require__(33);
+axios.CancelToken = __webpack_require__(36);
 axios.isCancel = __webpack_require__(9);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(34);
+axios.spread = __webpack_require__(37);
 
 module.exports = axios;
 
@@ -28234,7 +28581,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 17 */
+/* 20 */
 /***/ (function(module, exports) {
 
 /*!
@@ -28261,7 +28608,7 @@ function isSlowBuffer (obj) {
 
 
 /***/ }),
-/* 18 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28269,10 +28616,10 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(2);
 var utils = __webpack_require__(0);
-var InterceptorManager = __webpack_require__(28);
-var dispatchRequest = __webpack_require__(29);
-var isAbsoluteURL = __webpack_require__(31);
-var combineURLs = __webpack_require__(32);
+var InterceptorManager = __webpack_require__(31);
+var dispatchRequest = __webpack_require__(32);
+var isAbsoluteURL = __webpack_require__(34);
+var combineURLs = __webpack_require__(35);
 
 /**
  * Create a new instance of Axios
@@ -28354,7 +28701,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 19 */
+/* 22 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -28544,7 +28891,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 20 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28563,7 +28910,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 21 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28596,7 +28943,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 22 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28624,7 +28971,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 
 /***/ }),
-/* 23 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28699,7 +29046,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 24 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28743,7 +29090,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 25 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28818,7 +29165,7 @@ module.exports = (
 
 
 /***/ }),
-/* 26 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28861,7 +29208,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 27 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28921,7 +29268,7 @@ module.exports = (
 
 
 /***/ }),
-/* 28 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28980,14 +29327,14 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 29 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var transformData = __webpack_require__(30);
+var transformData = __webpack_require__(33);
 var isCancel = __webpack_require__(9);
 var defaults = __webpack_require__(2);
 
@@ -29066,7 +29413,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 30 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29093,7 +29440,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 31 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29114,7 +29461,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 32 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29135,7 +29482,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 33 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29199,7 +29546,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 34 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29233,7 +29580,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 35 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -40249,15 +40596,15 @@ process.umask = function() { return 0; };
 //# sourceMappingURL=vuetify.js.map
 
 /***/ }),
-/* 36 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return store; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api__ = __webpack_require__(41);
 
 
 
@@ -40268,6 +40615,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 	state: {
 		debug: true,
 		projects: [],
+		currentProject: {},
+		projectAdded: false,
 		clients: []
 	},
 
@@ -40277,6 +40626,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			state.projects = payload;
 		},
 
+		// Update the current project
+		updateCurrentProject: function updateCurrentProject(state, payload) {
+			state.currentProject = payload;
+		},
+
+		// When a project was added
+		updateProjectAdded: function updateProjectAdded(state, payload) {
+			state.projectAdded = payload;
+		},
 
 		// Update clients
 		updateClients: function updateClients(state, payload) {
@@ -40294,6 +40652,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 				if (payload.client != '') url += '/' + payload.client;else url += '/' + 0;
 				// Add province to string
 				if (payload.province != '') url += '/' + payload.province;else url += '/' + 0;
+				// Add province to string
+				if (payload.location != '') url += '/' + payload.location;else url += '/' + 0;
 				// Add invoice status to filter
 				if (payload.invoice != '') url += '/' + payload.invoice;else url += '/' + 0;
 			}
@@ -40305,6 +40665,49 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 				context.commit('updateProjects', response);
 			}).catch(function (error) {
 				return console.log(error);
+			});
+		},
+		getProject: function getProject(context, payload) {
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].get('/projects/' + payload).then(function (response) {
+				context.commit('updateCurrentProject', response);
+			}).catch(function (error) {
+				return console.log(error);
+			});
+		},
+
+
+		// Use api to add a new project to the db
+		addProject: function addProject(context, payload) {
+			var url = '/projects/start';
+
+			return new Promise(function (resolve, reject) {
+				// Use api to send POST request
+				__WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].post(url, payload).then(function (response) {
+					// For debug
+					if (context.state.debug) console.log(response);
+					// Change state					
+					context.commit('updateCurrentProject', response);
+					// Resolve promise
+					resolve();
+				}).catch(function (error) {
+					return console.log(error);
+				});
+			});
+		},
+
+
+		// Use api to edit a project field in the db
+		updateProjectField: function updateProjectField(context, payload) {
+
+			return new Promise(function (resolve, reject) {
+				// Use api to send POST request
+				__WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].post('/projects/update-field', payload).then(function (response) {
+					context.commit('updateCurrentProject', response);
+					// Resolve promise
+					resolve();
+				}).catch(function (error) {
+					reject(error);
+				});
 			});
 		},
 
@@ -40333,17 +40736,36 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		projects: function projects(state) {
 			return state.projects;
 		},
+		currentProject: function currentProject(state) {
+			return state.currentProject;
+		},
+		projectAdded: function projectAdded(state) {
+			return state.projectAdded;
+		},
 
 
 		// Return the clients (from projects table)
 		clients: function clients(state) {
 			return state.clients;
+		},
+
+
+		// Return the clients formatted for a vuetify select list
+		clientsSelectList: function clientsSelectList(state) {
+			// Cache clients
+			var clients = state.clients,
+			    clientsSelect = [{ text: "Client...", value: "" }];
+			// Create client select array
+			clients.forEach(function (client) {
+				clientsSelect.push({ text: client, value: client });
+			});
+			return clientsSelect;
 		}
 	}
 });
 
 /***/ }),
-/* 37 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41156,7 +41578,7 @@ var index_esm = {
 
 
 /***/ }),
-/* 38 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41171,29 +41593,39 @@ var index_esm = {
 		}).catch(function (error) {
 			return Promise.reject(error);
 		});
+	},
+	post: function post(url, payload) {
+		return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(url, payload).then(function (response) {
+			return Promise.resolve(response.data.payload);
+		}).catch(function (error) {
+			return Promise.reject(error);
+		});
 	}
 });
 
 /***/ }),
-/* 39 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_dashboard_Home__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_dashboard_Home__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_dashboard_Home___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_dashboard_Home__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_project_Projects__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_project_Projects__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_project_Projects___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_project_Projects__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_timesheet_Timesheets__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_timesheet_Timesheets___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_timesheet_Timesheets__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_user_Users__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_user_Users___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_user_Users__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_project_Project_view__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_project_Project_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_project_Project_view__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_timesheet_Timesheets__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_timesheet_Timesheets___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_timesheet_Timesheets__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_user_Users__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_user_Users___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_user_Users__);
 /** Load Vue based dependencies */
 
 
 /** Load Project components needed by routes */
+
 
 
 
@@ -41212,18 +41644,23 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 		name: 'Projects',
 		component: __WEBPACK_IMPORTED_MODULE_3__components_project_Projects___default.a
 	}, {
+		path: '/projects/:id/view',
+		name: 'ProjectView',
+		component: __WEBPACK_IMPORTED_MODULE_4__components_project_Project_view___default.a,
+		props: true
+	}, {
 		path: '/timesheets',
 		name: 'Timesheets',
-		component: __WEBPACK_IMPORTED_MODULE_4__components_timesheet_Timesheets___default.a
+		component: __WEBPACK_IMPORTED_MODULE_5__components_timesheet_Timesheets___default.a
 	}, {
 		path: '/users',
 		name: 'Users',
-		component: __WEBPACK_IMPORTED_MODULE_5__components_user_Users___default.a
+		component: __WEBPACK_IMPORTED_MODULE_6__components_user_Users___default.a
 	}]
 }));
 
 /***/ }),
-/* 40 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43735,15 +44172,15 @@ if (inBrowser && window.Vue) {
 
 
 /***/ }),
-/* 41 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(42),
+  __webpack_require__(45),
   /* template */
-  __webpack_require__(43),
+  __webpack_require__(46),
   /* styles */
   null,
   /* scopeId */
@@ -43775,7 +44212,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 42 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43790,7 +44227,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
-/* 43 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -43805,19 +44242,19 @@ if (false) {
 }
 
 /***/ }),
-/* 44 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(66)
+  __webpack_require__(48)
 }
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(45),
+  __webpack_require__(51),
   /* template */
-  __webpack_require__(71),
+  __webpack_require__(62),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -43849,13 +44286,168 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 45 */
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(49);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(12)("01d043de", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c4a7c0a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Projects.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c4a7c0a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Projects.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(11)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.card--flex-toolbar[data-v-2c4a7c0a] {\n  margin-top: -64px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports) {
+
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+
+/***/ }),
+/* 51 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Projects_table__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Projects_table__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Projects_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Projects_table__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -43917,6 +44509,62 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     'projects-table': __WEBPACK_IMPORTED_MODULE_0__Projects_table___default.a
   },
 
+  data: function data() {
+    return {
+      // For add project dialog
+      addProjectDialog: false,
+      // For project form inputs
+      client_company_name: { val: '', err: false, default: '' },
+      // For dual company name input
+      client_company_name_select: '',
+      disableClientCompanyInput: false
+    };
+  },
+
+
+  computed: {
+    // The unique clients for the select inputs (Uses the store)
+    clients: function clients() {
+      return this.$store.getters.clientsSelectList;
+    },
+
+
+    // If a project has just been added (Uses the store)
+    projectAdded: function projectAdded() {
+      return this.$store.getters.projectAdded;
+    }
+  },
+
+  watch: {
+    /* For the dual client company input setup. If a select option is selected then
+     * set the selected value to the form property and disable the text input. 
+    */
+    client_company_name_select: function client_company_name_select(value) {
+      // If a value is present
+      if (value != '') {
+        this.client_company_name.val = value;
+        this.disableClientCompanyInput = true;
+      } else {
+        // If empty string then enable text input again
+        this.disableClientCompanyInput = false;
+      }
+    }
+  },
+
+  methods: {
+    // Add a project to the db via a store action
+    startProject: function startProject() {
+      var _this = this;
+
+      // Dispatch action
+      this.$store.dispatch('addProject', {
+        client_company_name: this.client_company_name.val
+      }).then(function () {
+        _this.addProjectDialog = false;
+      });
+    }
+  },
+
   created: function created() {
     // For debug
     if (this.$store.getters.debug) console.log("Projects component created");
@@ -43924,15 +44572,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 46 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(47),
+  __webpack_require__(53),
   /* template */
-  __webpack_require__(48),
+  __webpack_require__(61),
   /* styles */
   null,
   /* scopeId */
@@ -43964,7 +44612,599 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 47 */
+/* 53 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Project_view__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Project_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Project_view__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  // Determines what headers and fields the table should display ("admin" or "user")
+  props: ['table_state'],
+
+  components: {
+    'project-view': __WEBPACK_IMPORTED_MODULE_0__Project_view___default.a
+  },
+
+  data: function data() {
+    return {
+      // The view project dialog window
+      viewProjectDialog: false,
+      // For data table pagination   
+      perPage: [15, 30, 45, { text: "All", value: -1 }],
+      // The headers the data table will use
+      headers: [],
+      // Admin state headers for data table
+      adminStateHeaders: [{ text: 'Identifier', value: 'id' }, { text: 'Company Name', value: 'client_company_name' }, { text: 'Province', value: 'province' }, { text: 'Location', value: 'location' }, { text: 'Invoice Status', value: 'invoiced_date' }, { text: 'Actions', value: '' }],
+      // User state headers for data table
+      userStateHeaders: [],
+      // For provinces filter
+      provinces: [{ text: 'Province...', value: '' }, { text: 'Alberta', value: 'Alberta' }, { text: 'British Columbia', value: 'British Columbia' }, { text: 'Saskatchewan', value: 'Saskatchewan' }],
+      // Provinces filter
+      provinceFilter: '',
+      // Clients filter
+      clientFilter: '',
+      // For invoice status
+      invoiceStatus: [{ text: 'Invoice status...', value: '' }, { text: 'Paid', value: '1' }, { text: 'Outstanding', value: '0' }],
+      // Location filter
+      locationFilter: '',
+      // Invoice status filter
+      invoiceFilter: ''
+    };
+  },
+
+
+  computed: {
+    // Watch for projects state to update
+    projects: function projects() {
+      return this.$store.getters.projects;
+    },
+
+
+    // Watch for uniqueCLients state to update
+    clients: function clients() {
+      return this.$store.getters.clientsSelectList;
+    }
+  },
+
+  methods: {
+    filterProjects: function filterProjects() {
+      this.$store.dispatch('getProjects', {
+        client: this.clientFilter,
+        province: this.provinceFilter,
+        location: this.locationFilter,
+        invoice: this.invoiceFilter
+      });
+    },
+    viewProject: function viewProject(id) {
+      // Update the requested project
+      this.$store.dispatch('getProject', id);
+      // Show dialog
+      this.viewProjectDialog = true;
+    }
+  },
+
+  created: function created() {
+    // For debug
+    if (this.$store.getters.debug) console.log("Projects table created");
+
+    // Set headers the data table will use based on the table state
+    if (this.table_state === 'admin') {
+      this.headers = this.adminStateHeaders;
+    } else if (this.table_state === 'user') {
+      this.headers = this.userStateHeaders;
+    }
+
+    // Tell store to load projects
+    this.$store.dispatch('getProjects');
+    // Tell store to update unique clients
+    this.$store.dispatch('getClients');
+  }
+});
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(55);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(12)("16f686ef", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a4250e2e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-view.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a4250e2e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-view.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(11)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 56 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	props: ['id'],
+
+	components: {
+		'field-input-toggle': __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default.a
+	},
+
+	data: function data() {
+		return {
+			loading: false
+		};
+	},
+
+
+	computed: {
+		// Watch for uniqueCLients state to update
+		clients: function clients() {
+			return this.$store.getters.clientsSelectList;
+		}
+	},
+
+	created: function created() {
+		// Update the requested project
+		this.$store.dispatch('getProject', this.id);
+		this.$store.dispatch('getClients');
+	}
+});
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(58),
+  /* template */
+  __webpack_require__(59),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\form\\Field-input-toggle.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Field-input-toggle.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-bee3b1aa", Component.options)
+  } else {
+    hotAPI.reload("data-v-bee3b1aa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 58 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44073,99 +45313,748 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  // Determines what headers and fields the table should display ("admin" or "user")
-  props: ['table_state'],
 
-  data: function data() {
-    return {
-      // For data table pagination   
-      perPage: [15, 30, 45, { text: "All", value: -1 }],
-      // The headers the data table will use
-      headers: [],
-      // Admin state headers for data table
-      adminStateHeaders: [{ text: 'Identifier', value: 'id' }, { text: 'Company Name', value: 'client_company_name' }, { text: 'Province', value: 'province' }, { text: 'Location', value: 'location' }, { text: 'Invoice Status', value: 'invoiced_date' }, { text: 'Actions', value: '' }],
-      // User state headers for data table
-      userStateHeaders: [],
-      // For provinces filter
-      provinces: [{ text: 'Select...', value: '' }, { text: 'Alberta', value: 'Alberta' }, { text: 'British Columbia', value: 'British Columbia' }, { text: 'Saskatchewan', value: 'Saskatchewan' }],
-      // Provinces filter
-      provinceFilter: '',
-      // Clients filter
-      clientFilter: '',
-      // For invoice status
-      invoiceStatus: [{ text: 'Select...', value: '' }, { text: 'Paid', value: '1' }, { text: 'Outstanding', value: '0' }],
-      // Invoice status filter
-      invoiceFilter: ''
-    };
-  },
+	props: ['type', 'select_options', 'icon', 'action', 'id', 'label', 'prefix', 'field', 'value'],
+
+	data: function data() {
+		return {
+			// Controls showing the field or the input
+			editState: false,
+			// For date picker
+			dateMenu: false,
+			// For loader
+			loading: false,
+			// The new field value
+			fieldValue: '',
+			fieldError: false,
+			fieldErrorMsg: ''
+		};
+	},
 
 
-  computed: {
-    // Watch for projects state to update
-    projects: function projects() {
-      return this.$store.getters.projects;
-    },
+	methods: {
+		// Shows the field input
+		showEditInput: function showEditInput() {
+			// Adjust field value
+			this.fieldValue = this.value;
+			// Adjust state to edit
+			this.editState = true;
+		},
 
 
-    // Watch for uniqueCLients state to update
-    clients: function clients() {
-      var clients = this.$store.getters.clients,
-          clientFilter = [{ text: "Select...", value: "" }];
-      clients.forEach(function (client) {
-        clientFilter.push({ text: client, value: client });
-      });
-      return clientFilter;
-    }
-  },
+		// Hides the field input
+		hideEditInput: function hideEditInput() {
+			// Toggle state
+			this.editState = false;
+			// Clear possible errors
+			this.fieldError = false;
+			this.fieldErrorMsg = '';
+		},
 
-  methods: {
-    filterProjects: function filterProjects() {
-      console.log(this.provinceFilter);
-      this.$store.dispatch('getProjects', {
-        client: this.clientFilter,
-        province: this.provinceFilter,
-        invoice: this.invoiceFilter
-      });
-    }
-  },
 
-  created: function created() {
-    // For debug
-    if (this.$store.getters.debug) console.log("Projects table created");
+		// Uses the store to update the field in the db
+		updateField: function updateField() {
+			var _this = this;
 
-    // Set headers the data table will use based on the table state
-    if (this.table_state === 'admin') {
-      this.headers = this.adminStateHeaders;
-    } else if (this.table_state === 'user') {
-      this.headers = this.userStateHeaders;
-    }
+			// Toggle loader
+			this.loading = true;
+			// Start the payload
+			var payload = {
+				id: this.id,
+				field: this.field
+			};
+			// Dynamically add field and value to payload
+			payload[this.field] = this.fieldValue;
+			// Dispatch action and run cb when complete
+			this.$store.dispatch(this.action, payload).then(function () {
+				// Toggle state
+				_this.editState = false;
+				// Toggle loader
+				_this.loading = false;
+			}).catch(function (error) {
+				// Set error props
+				_this.fieldError = true;
+				_this.fieldErrorMsg = error.response.data[_this.field][0];
+				// Hide loader
+				_this.loading = false;
+			});
+		}
+	}
 
-    // Tell store to load projects
-    this.$store.dispatch('getProjects');
-    // Tell store to update unique clients
-    this.$store.dispatch('getClients');
-  }
 });
 
 /***/ }),
-/* 48 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-container', [_c('v-layout', {
+  return _c('v-card', {
+    staticClass: "grey lighten-5 mt-3"
+  }, [(!_vm.editState) ? _c('v-container', [_c('v-toolbar', {
+    staticClass: "white",
+    attrs: {
+      "card": "",
+      "prominent": ""
+    }
+  }, [_c('v-toolbar-title', {
+    staticClass: "subheading grey--text"
+  }, [_vm._v("\t\t\t\t         \n        \t" + _vm._s(_vm.label) + "\t\t\t          \t\n        ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Edit Field'
+      }),
+      expression: "{ html: 'Edit Field' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    on: {
+      "click": _vm.showEditInput
+    }
+  }, [_c('v-icon', [_vm._v("settings")])], 1)], 1), _vm._v(" "), _c('v-card-text', {
+    staticClass: "pt-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [(_vm.value) ? _c('div', {
+    staticClass: "pl-2"
+  }, [(_vm.prefix) ? _c('span', [_vm._v(_vm._s(_vm.prefix))]) : _vm._e(), _vm._v(_vm._s(_vm.value) + "\n      \t\t")]) : _c('div', {
+    staticClass: "pl-2 error--text"
+  }, [_vm._v("\n      \t\t\tN/A\n      \t\t")])])], 1)], 1) : _vm._e(), _vm._v(" "), (_vm.editState) ? _c('v-container', {
+    staticClass: "pt-0 pb-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Close Edit Mode'
+      }),
+      expression: "{ html: 'Close Edit Mode' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    on: {
+      "click": _vm.hideEditInput
+    }
+  }, [_c('v-icon', [_vm._v("close")])], 1)], 1), _vm._v(" "), _c('v-card-text', {
+    staticClass: "pt-0 pb-0"
+  }, [(_vm.type === 'text') ? _c('v-container', {
+    staticClass: "pt-0 pb-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-text-field', {
+    staticClass: "pb-0",
+    attrs: {
+      "label": _vm.label + '...',
+      "prepend-icon": _vm.icon,
+      "error": _vm.fieldError
+    },
+    model: {
+      value: (_vm.fieldValue),
+      callback: function($$v) {
+        _vm.fieldValue = $$v
+      },
+      expression: "fieldValue"
+    }
+  })], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [(_vm.fieldError) ? _c('p', {
+    staticClass: "caption error--text"
+  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'textarea') ? _c('v-container', {
+    staticClass: "pt-0 pb-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-text-field', {
+    staticClass: "pb-0",
+    attrs: {
+      "label": _vm.label + '...',
+      "prepend-icon": _vm.icon,
+      "error": _vm.fieldError,
+      "multi-line": ""
+    },
+    model: {
+      value: (_vm.fieldValue),
+      callback: function($$v) {
+        _vm.fieldValue = $$v
+      },
+      expression: "fieldValue"
+    }
+  })], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [(_vm.fieldError) ? _c('p', {
+    staticClass: "caption error--text"
+  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'select') ? _c('v-container', {
+    staticClass: "pt-0 pb-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-select', {
+    staticClass: "pb-0",
+    attrs: {
+      "items": _vm.select_options,
+      "label": _vm.label + '...',
+      "single-line": "",
+      "bottom": "",
+      "error": _vm.fieldError
+    },
+    model: {
+      value: (_vm.fieldValue),
+      callback: function($$v) {
+        _vm.fieldValue = $$v
+      },
+      expression: "fieldValue"
+    }
+  })], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [(_vm.fieldError) ? _c('p', {
+    staticClass: "caption error--text"
+  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'date') ? _c('v-container', {
+    staticClass: "pt-0 pb-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-menu', {
+    attrs: {
+      "lazy": "",
+      "close-on-content-click": false,
+      "transition": "scale-transition",
+      "offset-y": "",
+      "full-width": "",
+      "nudge-left": 40,
+      "max-width": "290px"
+    },
+    model: {
+      value: (_vm.dateMenu),
+      callback: function($$v) {
+        _vm.dateMenu = $$v
+      },
+      expression: "dateMenu"
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": _vm.label + '...',
+      "prepend-icon": "event",
+      "readonly": ""
+    },
+    slot: "activator",
+    model: {
+      value: (_vm.fieldValue),
+      callback: function($$v) {
+        _vm.fieldValue = $$v
+      },
+      expression: "fieldValue"
+    }
+  }), _vm._v(" "), _c('v-date-picker', {
+    attrs: {
+      "no-title": "",
+      "scrollable": "",
+      "actions": ""
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function(ref) {
+        var save = ref.save;
+        var cancel = ref.cancel;
+
+        return [_c('v-card-actions', [_c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              cancel()
+            }
+          }
+        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              save()
+            }
+          }
+        }, [_vm._v("Save")])], 1)]
+      }
+    }]),
+    model: {
+      value: (_vm.fieldValue),
+      callback: function($$v) {
+        _vm.fieldValue = $$v
+      },
+      expression: "fieldValue"
+    }
+  })], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-btn', {
+    attrs: {
+      "block": "",
+      "flat": "",
+      "outline": "",
+      "loading": _vm.loading,
+      "disabled": _vm.loading
+    },
+    on: {
+      "click": _vm.updateField
+    }
+  }, [_vm._v("\n\t\t      Save\n\t\t      "), _c('span', {
+    staticClass: "custom-loader",
+    slot: "loader"
+  }, [_c('v-icon', {
+    attrs: {
+      "light": ""
+    }
+  }, [_vm._v("update")])], 1)])], 1)], 1)], 1) : _vm._e()], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-bee3b1aa", module.exports)
+  }
+}
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    staticClass: "mt-5",
     attrs: {
       "row": ""
     }
   }, [_c('v-flex', {
     attrs: {
-      "xs3": ""
+      "xs12": "",
+      "xl10": "",
+      "offset-xl1": ""
     }
-  }, [_c('h6', [_vm._v("Province")]), _vm._v(" "), _c('v-select', {
+  }, [_c('v-card', {
+    staticClass: "grey lighten-5",
+    attrs: {
+      "flat": ""
+    }
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "lg10": "",
+      "offset-lg1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "card--flex-toolbar"
+  }, [_c('v-container', [_c('v-toolbar', {
+    staticClass: "white",
+    attrs: {
+      "card": "",
+      "prominent": ""
+    }
+  }, [_c('v-toolbar-title', {
+    staticClass: "display-1"
+  }, [_vm._v("\t\t\t\t         \n\t\t\t\t          \tProject Details (" + _vm._s(_vm.$store.getters.currentProject.id) + ")\t\t          \t\n\t\t\t\t          ")]), _vm._v(" "), _c('v-spacer')], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading pl-4"
+  }, [_vm._v("\n\t\t\t\t\t          This is where you can edit and track the project you've selected.\t\t\t\t        \t\t\n\t\t\t\t        \t")])])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-4"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t          To edit a field just click the gear icon next to that field.\t        \t\t\t\n\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    staticClass: "pl-4",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-container', [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tClient\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'select',
+      "select_options": _vm.clients,
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Client Company',
+      "field": 'client_company_name',
+      "value": _vm.$store.getters.currentProject.client_company_name
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Company Contact',
+      "field": 'client_contact_name',
+      "value": _vm.$store.getters.currentProject.client_contact_name
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Contact\'s Phone No.',
+      "icon": 'phone',
+      "field": 'client_contact_phone',
+      "value": _vm.$store.getters.currentProject.client_contact_phone
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Contact\'s Email',
+      "field": 'client_contact_email',
+      "value": _vm.$store.getters.currentProject.client_contact_email
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5"
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tLocation\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'select',
+      "select_options": [{
+          text: 'Province...',
+          value: ''
+        },
+        {
+          text: 'Alberta',
+          value: 'Alberta'
+        },
+        {
+          text: 'British Columbia',
+          value: 'British Columbia'
+        },
+        {
+          text: 'Saskatchewan',
+          value: 'Saskatchewan'
+        }
+      ],
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Province',
+      "field": 'province',
+      "value": _vm.$store.getters.currentProject.province
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs8": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'textarea',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Specific Location',
+      "field": 'location',
+      "value": _vm.$store.getters.currentProject.location
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5"
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tBasics\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'textarea',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Basic Details',
+      "field": 'details',
+      "value": _vm.$store.getters.currentProject.details
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5"
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tWork Details\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'select',
+      "select_options": [{
+          text: 'Work type...',
+          value: ''
+        },
+        {
+          text: 'HRIA',
+          value: 'HRIA'
+        },
+        {
+          text: 'Archaeology',
+          value: 'Archaeology'
+        },
+        {
+          text: 'Paleaontology',
+          value: 'Paleaontology'
+        }
+      ],
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Work Type',
+      "field": 'work_type',
+      "value": _vm.$store.getters.currentProject.work_type
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'date',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Respond By',
+      "field": 'response_by',
+      "value": _vm.$store.getters.currentProject.response_by
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "icon": 'attach_money',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Estimate',
+      "field": 'estimate',
+      "prefix": '$',
+      "value": _vm.$store.getters.currentProject.estimate
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'textarea',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Work Overview',
+      "field": 'work_overview',
+      "value": _vm.$store.getters.currentProject.work_overview
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'textarea',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Work Plans',
+      "field": 'plans',
+      "value": _vm.$store.getters.currentProject.plans
+    }
+  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-a4250e2e", module.exports)
+  }
+}
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('v-select', {
     attrs: {
       "items": _vm.provinces,
-      "label": "Select...",
+      "label": "Province...",
       "single-line": "",
       "bottom": ""
     },
@@ -44176,14 +46065,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "provinceFilter"
     }
-  })], 1), _vm._v(" "), _c('v-flex', {
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
     attrs: {
-      "xs3": ""
+      "xs2": ""
     }
-  }, [_c('h6', [_vm._v("Client")]), _vm._v(" "), _c('v-select', {
+  }, [_c('v-select', {
     attrs: {
       "items": _vm.clients,
-      "label": "Select...",
+      "label": "Client...",
       "single-line": "",
       "bottom": ""
     },
@@ -44194,14 +46083,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "clientFilter"
     }
-  })], 1), _vm._v(" "), _c('v-flex', {
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "Enter part of location..."
+    },
+    model: {
+      value: (_vm.locationFilter),
+      callback: function($$v) {
+        _vm.locationFilter = $$v
+      },
+      expression: "locationFilter"
+    }
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
     attrs: {
       "xs2": ""
     }
-  }, [_c('h6', [_vm._v("Invoice Status")]), _vm._v(" "), _c('v-select', {
+  }, [_c('v-select', {
     attrs: {
       "items": _vm.invoiceStatus,
-      "label": "Select...",
+      "label": "Invoice status...",
       "single-line": "",
       "bottom": ""
     },
@@ -44212,7 +46116,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "invoiceFilter"
     }
-  })], 1), _vm._v(" "), _c('v-flex', {
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
     attrs: {
       "xs1": ""
     }
@@ -44226,15 +46130,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       expression: "{ html: 'Filter Projects' }",
       arg: "top"
     }],
-    staticClass: "mt-5",
+    staticClass: "mt-3",
     attrs: {
-      "flat": ""
+      "icon": ""
     },
     on: {
       "click": _vm.filterProjects
     }
-  }, [_c('v-icon', [_vm._v("search")]), _vm._v("\n        Filter\n      ")], 1)], 1)], 1), _vm._v(" "), _c('v-data-table', {
-    staticClass: "elevation-1 mt-3",
+  }, [_c('v-icon', [_vm._v("search")])], 1)], 1)], 1), _vm._v(" "), _c('v-data-table', {
+    staticClass: "elevation-1 mt-2",
     attrs: {
       "headers": _vm.headers,
       "items": _vm.projects,
@@ -44273,6 +46177,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           }],
           attrs: {
             "icon": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              $event.stopPropagation();
+              _vm.viewProject(props.item.id)
+            }
           }
         }, [_c('v-icon', [_vm._v("subdirectory_arrow_right")])], 1) : _vm._e()], 1)]
       }
@@ -44285,7 +46195,40 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         return [_vm._v("\n      From " + _vm._s(pageStart) + " to " + _vm._s(pageStop) + "\n    ")]
       }
     }])
-  })], 1)
+  }), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "fullscreen": "",
+      "transition": "dialog-bottom-transition",
+      "overlay": false
+    },
+    model: {
+      value: (_vm.viewProjectDialog),
+      callback: function($$v) {
+        _vm.viewProjectDialog = $$v
+      },
+      expression: "viewProjectDialog"
+    }
+  }, [_c('v-card', [_c('v-toolbar', {
+    staticClass: "primary",
+    attrs: {
+      "dark": ""
+    }
+  }, [_c('v-btn', {
+    attrs: {
+      "icon": "",
+      "dark": ""
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.viewProjectDialog = false
+      }
+    }
+  }, [_c('v-icon', [_vm._v("close")])], 1), _vm._v(" "), _c('v-toolbar-title', [_vm._v("\n            Close\n          ")]), _vm._v(" "), _c('v-spacer')], 1), _vm._v(" "), _c('project-view')], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -44296,16 +46239,255 @@ if (false) {
 }
 
 /***/ }),
-/* 49 */,
-/* 50 */
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "xl10": "",
+      "offset-xl1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "grey lighten-5",
+    attrs: {
+      "flat": ""
+    }
+  }, [_c('v-toolbar', {
+    staticClass: "primary elevation-0",
+    attrs: {
+      "dark": "",
+      "extended": ""
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Go Back'
+      }),
+      expression: "{ html: 'Go Back' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    }
+  }, [_c('v-icon', {
+    attrs: {
+      "dark": ""
+    }
+  }, [_vm._v("arrow_back")])], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "lg10": "",
+      "offset-lg1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "card--flex-toolbar"
+  }, [_c('v-container', [_c('v-toolbar', {
+    staticClass: "white",
+    attrs: {
+      "card": "",
+      "prominent": ""
+    }
+  }, [_c('v-toolbar-title', {
+    staticClass: "display-1"
+  }, [_vm._v("\t\t\t\t         \n\t\t\t\t          \tFind & Add Projects\t\t\t\t          \t\n\t\t\t\t          ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-layout', {
+    staticStyle: {
+      "position": "relative"
+    },
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "width": "765",
+      "lazy": "",
+      "absolute": ""
+    },
+    model: {
+      value: (_vm.addProjectDialog),
+      callback: function($$v) {
+        _vm.addProjectDialog = $$v
+      },
+      expression: "addProjectDialog"
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Add Project'
+      }),
+      expression: "{ html: 'Add Project' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    slot: "activator"
+  }, [_c('v-icon', [_vm._v("add_circle")])], 1), _vm._v(" "), _c('v-card', [_c('v-card-title', [_c('div', {
+    staticClass: "headline grey--text"
+  }, [_vm._v("Start a project")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', [_c('p', {
+    staticClass: "subheading info--text pl-2"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t\t\t          After starting the project you will be able to add more information.        \t\t\t\n\t\t\t\t\t\t\t        \t\t")], 1)]), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs5": ""
+    }
+  }, [_c('v-select', {
+    attrs: {
+      "items": _vm.clients,
+      "label": "Client...",
+      "single-line": "",
+      "bottom": ""
+    },
+    model: {
+      value: (_vm.client_company_name_select),
+      callback: function($$v) {
+        _vm.client_company_name_select = $$v
+      },
+      expression: "client_company_name_select"
+    }
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    staticClass: "mt-4",
+    attrs: {
+      "xs1": ""
+    }
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t      \t- OR -\n\t\t\t\t\t\t\t\t\t\t\t      ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs5": ""
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "Add a new client",
+      "disabled": _vm.disableClientCompanyInput
+    },
+    model: {
+      value: (_vm.client_company_name.val),
+      callback: function($$v) {
+        _vm.client_company_name.val = $$v
+      },
+      expression: "client_company_name.val"
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    staticClass: "red--text darken-1",
+    attrs: {
+      "flat": "flat"
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.addProjectDialog = false
+      }
+    }
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+    staticClass: "green--text darken-1",
+    attrs: {
+      "flat": "flat"
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.startProject($event)
+      }
+    }
+  }, [_vm._v("Start Project")])], 1)], 1)], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading pl-4"
+  }, [_vm._v("\n\t\t\t\t\t          This is where you can find and filter all of the projects within the system.       \t\t\n\t\t\t\t        \t")])])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-4"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t          Add a new project with the plus icon in the upper right corner of this card.        \t\t\t\n\t\t\t\t        \t\t")], 1), _vm._v(" "), _c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t          You can use all of the filters at once, or simply one at a time. In addition, clicking on a heading will sort the projects accordingly.\t\t        \t\t\t\n\t\t\t\t        \t\t")], 1), _vm._v(" "), _c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t          Click on the view projects arrow in the action column to see the entire project.\t\t        \t\t\t\n\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('projects-table', {
+    staticClass: "mt-2 mb-5",
+    attrs: {
+      "table_state": 'admin'
+    }
+  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-2c4a7c0a", module.exports)
+  }
+}
+
+/***/ }),
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(51),
+  __webpack_require__(64),
   /* template */
-  __webpack_require__(52),
+  __webpack_require__(65),
   /* styles */
   null,
   /* scopeId */
@@ -44337,7 +46519,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 51 */
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44352,7 +46534,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
-/* 52 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -44367,15 +46549,15 @@ if (false) {
 }
 
 /***/ }),
-/* 53 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(54),
+  __webpack_require__(67),
   /* template */
-  __webpack_require__(55),
+  __webpack_require__(68),
   /* styles */
   null,
   /* scopeId */
@@ -44407,7 +46589,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 54 */
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44422,7 +46604,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
-/* 55 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -44437,15 +46619,15 @@ if (false) {
 }
 
 /***/ }),
-/* 56 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(57),
+  __webpack_require__(70),
   /* template */
-  __webpack_require__(61),
+  __webpack_require__(74),
   /* styles */
   null,
   /* scopeId */
@@ -44477,12 +46659,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 57 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar__ = __webpack_require__(71);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar__);
 //
 //
@@ -44513,15 +46695,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 58 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(59),
+  __webpack_require__(72),
   /* template */
-  __webpack_require__(60),
+  __webpack_require__(73),
   /* styles */
   null,
   /* scopeId */
@@ -44553,7 +46735,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 59 */
+/* 72 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44625,7 +46807,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 60 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -44695,7 +46877,7 @@ if (false) {
 }
 
 /***/ }),
-/* 61 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -44716,488 +46898,10 @@ if (false) {
 }
 
 /***/ }),
-/* 62 */
+/* 75 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 63 */,
-/* 64 */,
-/* 65 */,
-/* 66 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(67);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(69)("01d043de", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c4a7c0a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Projects.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c4a7c0a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Projects.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 67 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(72)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n.card--flex-toolbar[data-v-2c4a7c0a] {\n  margin-top: -64px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 68 */,
-/* 69 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
-
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
-}
-
-var listToStyles = __webpack_require__(70)
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-module.exports = function (parentId, list, _isProduction) {
-  isProduction = _isProduction
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
-    }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
-    } else {
-      styles = []
-    }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
-        }
-        delete stylesInDom[domStyle.id]
-      }
-    }
-  }
-}
-
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
-
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
-
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
-
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  update(obj)
-
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
-
-var replaceText = (function () {
-  var textStore = []
-
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
-
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
-
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
-
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
-
-
-/***/ }),
-/* 70 */
-/***/ (function(module, exports) {
-
-/**
- * Translates the list format produced by css-loader into something
- * easier to manipulate.
- */
-module.exports = function listToStyles (parentId, list) {
-  var styles = []
-  var newStyles = {}
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i]
-    var id = item[0]
-    var css = item[1]
-    var media = item[2]
-    var sourceMap = item[3]
-    var part = {
-      id: parentId + ':' + i,
-      css: css,
-      media: media,
-      sourceMap: sourceMap
-    }
-    if (!newStyles[id]) {
-      styles.push(newStyles[id] = { id: id, parts: [part] })
-    } else {
-      newStyles[id].parts.push(part)
-    }
-  }
-  return styles
-}
-
-
-/***/ }),
-/* 71 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-container', [_c('v-layout', {
-    staticClass: "mt-5",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs10": "",
-      "offset-xs1": ""
-    }
-  }, [_c('v-card', {
-    staticClass: "grey lighten-5",
-    attrs: {
-      "flat": ""
-    }
-  }, [_c('v-toolbar', {
-    staticClass: "primary elevation-0",
-    attrs: {
-      "dark": "",
-      "extended": ""
-    }
-  }, [_c('v-btn', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:top",
-      value: ({
-        html: 'Go Back'
-      }),
-      expression: "{ html: 'Go Back' }",
-      arg: "top"
-    }],
-    attrs: {
-      "icon": ""
-    }
-  }, [_c('v-icon', {
-    attrs: {
-      "dark": ""
-    }
-  }, [_vm._v("arrow_back")])], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs10": "",
-      "offset-xs1": ""
-    }
-  }, [_c('v-card', {
-    staticClass: "card--flex-toolbar"
-  }, [_c('v-toolbar', {
-    staticClass: "white",
-    attrs: {
-      "card": "",
-      "prominent": ""
-    }
-  }, [_c('v-toolbar-title', {
-    staticClass: "body-2 grey--text"
-  }, [_vm._v("\n\t\t\t          \tProjects\n\t\t\t          ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-btn', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:top",
-      value: ({
-        html: 'Add Project'
-      }),
-      expression: "{ html: 'Add Project' }",
-      arg: "top"
-    }],
-    attrs: {
-      "icon": ""
-    }
-  }, [_c('v-icon', [_vm._v("add_circle")])], 1)], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('projects-table', {
-    staticClass: "mt-5 mb-5",
-    attrs: {
-      "table_state": 'admin'
-    }
-  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-2c4a7c0a", module.exports)
-  }
-}
-
-/***/ }),
-/* 72 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
 
 /***/ })
 /******/ ]);
