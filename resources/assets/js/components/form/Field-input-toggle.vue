@@ -22,12 +22,22 @@
       <!-- The field value -->
       <v-card-text class="pt-0">
       	<v-layout row>
-      		<div v-if="value" class="pl-2">
-      			<span v-if="prefix">{{ prefix }}</span>{{ value }}
-      		</div>
-      		<div v-else class="pl-2 error--text">
-      			N/A
-      		</div>
+	      	<!-- If the value IS NOT a boolean -->
+	      	<div v-if="!bool_field">
+	      		<!-- If value then show it -->
+	      		<div v-if="value" class="pl-2">
+	      				<span v-if="prefix">{{ prefix }}</span>{{ value }}
+	   				</div>
+	   				<!-- If no value show this -->
+	      		<div v-else class="pl-2 error--text">
+	      			N/A
+	      		</div>
+	      	</div>
+	      	<!-- If IS boolean -->
+	  			<div v-else>
+	  				<div v-if="value === 1">Yes</div>
+	  				<div v-if="value === 0">No</div>
+	  			</div>      	
       	</v-layout>
       </v-card-text><!-- /The field value -->
 		</v-container><!-- /Container for viewing field -->
@@ -173,7 +183,29 @@
 <script>
 	export default {
 
-		props: ['type', 'select_options', 'icon', 'action', 'id', 'label', 'prefix', 'field', 'value'],
+		props: {
+			// Required. Type of input to use
+			type: { type: String, required: true }, 
+			// Optional. If the type is a select then it should have options to populate with.
+			// Should be an object ready for a Vuetify select: { text: '...?', value: '...?' }
+			select_options: { type: Array }, 
+			// Required. The store action to dispatch when the save button is clicked
+			action: { type: String, required: true }, 
+			// Required. The db ID of the parent the field belongs to.
+			id: { type: Number, required: true, default: 0 }, 
+			// Required. The label text for the input and field view.
+			label: { type: String, required: true }, 
+			// Optional. Vuetify icon to prepend the input with
+			icon: { type: String }, 			
+			// Optional. A character to prepend the value with.
+			prefix: { type: String }, 
+			// Required. The db field name.
+			field: { type: String, required: true }, 
+			// Required. The current value of the field.
+			value: { required: true },
+			// Optional. If the field value should be interpreted as a boolean.
+			bool_field: { type: Boolean, default: false }
+		},
 
 		data () {
 			return {
@@ -221,8 +253,7 @@
 				// Dynamically add field and value to payload
 				payload[this.field] = this.fieldValue;
 				// Dispatch action and run cb when complete
-				this.$store.dispatch(this.action, payload)
-				.then( () => {
+				this.$store.dispatch(this.action, payload).then( () => {
 					// Toggle state
 					this.editState = false;
 					// Toggle loader

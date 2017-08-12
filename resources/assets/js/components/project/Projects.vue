@@ -77,8 +77,8 @@
 									        </v-card-text>
 									        <v-card-actions>
 									          <v-spacer></v-spacer>
-									          <v-btn class="red--text darken-1" flat="flat" @click.native="addProjectDialog = false">Cancel</v-btn>
-									          <v-btn class="green--text darken-1" flat="flat" @click.native="startProject">Start Project</v-btn>
+									          <v-btn outline class="red--text darken-1" flat="flat" @click.native="addProjectDialog = false">Cancel</v-btn>
+									          <v-btn outline class="green--text darken-1" flat="flat" @click.native="startProject">Start Project</v-btn>
 									        </v-card-actions>
 									      </v-card>
 									    </v-dialog>
@@ -187,8 +187,7 @@
   			// Dispatch action
   			this.$store.dispatch('addProject', {
   				client_company_name: this.client_company_name.val
-  			})
-  			.then( () => {
+  			}).then( () => {
   				this.addProjectDialog = false;
   			});
   		}

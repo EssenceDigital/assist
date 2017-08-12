@@ -1,6 +1,9 @@
 <template>
 	<v-container fluid>
-		<v-layout row class="mt-5">
+
+		<!-- Main layout container -->
+		<v-layout v-if="!loading" row class="mt-5">
+			<!-- Main flex container -->
 			<v-flex xs12 xl10 offset-xl1>
 				<!-- Top most card -->
 				<v-card class="grey lighten-5" flat>
@@ -38,7 +41,7 @@
 				        </v-container><!-- / Container for helpful tips -->	
 				        <!-- Card body -->
 				        <v-card-text>				 
-									<v-layout row class="pl-4">
+									<v-layout row>
 										<v-flex xs12>
 
 											<!-- Client details -->
@@ -96,6 +99,8 @@
 												</v-layout>	
 											</v-container><!-- /Client details -->
 
+											<v-divider class="mt-5"></v-divider>
+
 											<!-- Location details -->
 											<v-container class="mt-5">
 												<div class="headline">
@@ -131,6 +136,8 @@
 												</v-layout>
 											</v-container><!-- /Location details -->
 
+											<v-divider class="mt-5"></v-divider>
+
 											<!-- Basic details -->
 											<v-container class="mt-5">
 												<div class="headline">
@@ -149,6 +156,8 @@
 													</v-flex>
 												</v-layout>
 											</v-container><!-- /Basic details -->		
+
+											<v-divider class="mt-5"></v-divider>
 
 											<!-- Work details -->
 											<v-container class="mt-5">
@@ -222,7 +231,150 @@
 														></field-input-toggle>														
 													</v-flex>
 												</v-layout>												
-											</v-container><!-- /Basic details -->																					
+											</v-container><!-- /Basic details -->		
+
+											<v-divider class="mt-5"></v-divider>
+
+											<!-- Land details -->
+											<v-container class="mt-5">
+												<div class="headline">
+													Land
+												</div>
+												<!-- Row one -->
+												<v-layout row>
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'select'"
+															:select_options="[
+											          { text: 'Land ownership...', value: '' },
+											          { text: 'Crown', value: 'Crown' },
+											          { text: 'Freehold', value: 'Freehold' }
+															]"
+															:action="'updateProjectField'"
+															:id="$store.getters.currentProject.id"
+															:label="'Land Ownership'"
+															:field="'land_ownership'"
+															:value="$store.getters.currentProject.land_ownership"
+														></field-input-toggle>														
+													</v-flex>
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'select'"
+															:select_options="[
+											          { text: 'Land access granted...', value: '' },
+											          { text: 'No', value: 0 },
+											          { text: 'Yes', value: 1 }
+															]"
+															:action="'updateProjectField'"
+															:id="$store.getters.currentProject.id"
+															:label="'Access Granted'"
+															:field="'land_access_granted'"
+															:value="$store.getters.currentProject.land_access_granted"
+															:bool_field="true"
+														></field-input-toggle>														
+													</v-flex>													
+												</v-layout>
+												<!-- Row two -->
+												<v-layout row>
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'text'"
+															:action="'updateProjectField'"
+															:id="$store.getters.currentProject.id"
+															:label="'Access Granted By'"
+															:field="'land_access_granted_by'"
+															:value="$store.getters.currentProject.land_access_granted_by"
+														></field-input-toggle>														
+													</v-flex>													
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'text'"
+															:action="'updateProjectField'"
+															:id="$store.getters.currentProject.id"
+															:label="'Access Contact'"
+															:field="'land_access_contact'"
+															:value="$store.getters.currentProject.land_access_contact"
+														></field-input-toggle>														
+													</v-flex>	
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'text'"
+															:icon="'phone'"
+															:action="'updateProjectField'"
+															:id="$store.getters.currentProject.id"
+															:label="'Contact\'s Phone'"
+															:field="'land_access_phone'"
+															:value="$store.getters.currentProject.land_access_phone"
+														></field-input-toggle>														
+													</v-flex>																									
+												</v-layout>
+											</v-container><!-- /Land details -->
+
+											<v-divider class="mt-5"></v-divider>
+
+											<!-- Approval details -->
+											<v-container class="mt-5">
+												<div class="headline">
+													Approval
+												</div>										
+												<v-layout row>
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'date'"
+															:action="'updateProjectField'"
+															:id="$store.getters.currentProject.id"
+															:label="'Approval Date'"
+															:field="'approval_date'"
+															:value="$store.getters.currentProject.approval_date"
+														></field-input-toggle>														
+													</v-flex>													
+												</v-layout>
+											</v-container><!-- / Approval details -->
+
+											<v-divider class="mt-5"></v-divider>
+
+											<!-- Invoicing details -->
+											<v-container class="mt-5">
+												<div class="headline">
+													Invoicing
+												</div>												
+												<v-layout row>
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'date'"
+															:action="'updateProjectField'"
+															:id="$store.getters.currentProject.id"
+															:label="'Invoiced Date'"
+															:field="'invoiced_date'"
+															:value="$store.getters.currentProject.invoiced_date"
+														></field-input-toggle>														
+													</v-flex>	
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'date'"
+															:action="'updateProjectField'"
+															:id="$store.getters.currentProject.id"
+															:label="'Invoice Paid Date'"
+															:field="'invoice_paid_date'"
+															:value="$store.getters.currentProject.invoice_paid_date"
+														></field-input-toggle>														
+													</v-flex>
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'text'"
+															:icon="'attach_money'"
+															:action="'updateProjectField'"
+															:id="$store.getters.currentProject.id"
+															:label="'Invoice Amount'"
+															:field="'invoice_amount'"
+															:prefix="'$'"
+															:value="$store.getters.currentProject.invoice_amount"
+														></field-input-toggle>														
+													</v-flex>																						
+												</v-layout>
+											</v-container><!-- /Invoicing details -->
+
+																																									
 
 										</v-flex>
 									</v-layout>					        	
@@ -231,9 +383,8 @@
 				    </v-flex>
 				  </v-layout><!-- / Main card container -->
 				</v-card><!-- / Top most card -->
-			</v-flex>
-		</v-layout>
-
+			</v-flex><!-- / Flex container -->
+		</v-layout><!-- /Layout container -->
 	</v-container>
 </template>
 
@@ -261,14 +412,23 @@
 		},
 
 		created () {
+			// Toggle loader
+			this.loading = true;
       // Update the requested project
-      this.$store.dispatch('getProject', this.id);
-      this.$store.dispatch('getClients');			
+      this.$store.dispatch('getProject', this.id).then( () => {
+    		// Get unique clients
+    		this.$store.dispatch('getClients');
+    		// Toggle loader
+    		this.loading = false;
+    	});			
 		}
 	}
 
 </script>
 
 <style scoped>
-
+	.center{
+		margin-left: auto;
+		margin-right: auto;	
+	}
 </style>

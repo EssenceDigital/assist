@@ -8,7 +8,7 @@ export const store = new Vuex.Store({
 	state: {
 		debug: true,
 		projects: [],
-		currentProject: {},
+		currentProject: { id: 0 },
 		projectAdded: false,
 		clients: []
 	},
@@ -35,39 +35,50 @@ export const store = new Vuex.Store({
 	actions: {
 		// Use api to retrieve all projects
 		getProjects (context, payload) {
-			var url = '/projects';
 
-			if(payload){
-				// Add client to string
-				if(payload.client != '') url += '/' + payload.client;
-					else url += '/' + 0;
-				// Add province to string
-				if(payload.province != '') url += '/' + payload.province;
-					else url += '/' + 0;
-				// Add province to string
-				if(payload.location != '') url += '/' + payload.location;
-					else url += '/' + 0;					
-				// Add invoice status to filter
-				if(payload.invoice != '') url += '/' + payload.invoice;
-					else url += '/' + 0;
-			}
+			return new Promise((resolve, reject) => {
+				var url = '/projects';
 
-			return api.get(url)
-				.then( (response) => { 
-					// For debug
-					if(context.state.debug) console.log(response);
-					// Change state
-					context.commit('updateProjects', response);
-				})
-				.catch( (error) => console.log(error) );
+				if(payload){
+					// Add client to string
+					if(payload.client != '') url += '/' + payload.client;
+						else url += '/' + 0;
+					// Add province to string
+					if(payload.province != '') url += '/' + payload.province;
+						else url += '/' + 0;
+					// Add province to string
+					if(payload.location != '') url += '/' + payload.location;
+						else url += '/' + 0;					
+					// Add invoice status to filter
+					if(payload.invoice != '') url += '/' + payload.invoice;
+						else url += '/' + 'any';
+				}
+
+				api.get(url)
+					.then( (response) => { 
+						// For debug
+						if(context.state.debug) console.log(response);
+						// Change state
+						context.commit('updateProjects', response);
+						// Resolve promise
+						resolve();
+					})
+					.catch( (error) => console.log(error) );
+
+			});
+
 		},
 
 		getProject (context, payload) {
-			return api.get('/projects/' + payload)
-				.then( (response) => {
-					context.commit('updateCurrentProject', response);
-				})
-				.catch( (error) => console.log(error) );
+			return new Promise((resolve, reject) => {
+				api.get('/projects/' + payload)
+					.then( (response) => {
+						context.commit('updateCurrentProject', response);
+						// Resolve promise
+						resolve();
+					})
+					.catch( (error) => console.log(error) );				
+			});
 		},
 
 		// Use api to add a new project to the db

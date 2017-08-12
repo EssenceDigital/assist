@@ -63,7 +63,7 @@ class ProjectsController extends Controller
         ], 200);     
     }
 
-    public function filter($client = false, $province = false, $location = false, $invoice = false){
+    public function filter($client = false, $province = false, $location = false, $invoice = null){
         // Construct where array for query
         $queryArray = [];
         // Add company field or not
@@ -81,14 +81,18 @@ class ProjectsController extends Controller
             // Push array clause
             array_push($queryArray, ['location', 'LIKE', '%' . $location . '%']);
         }
-        // Add invoiced date or not
-        if($invoice){
+
+        if($invoice != 'any'){
             if($invoice == 0){
                 array_push($queryArray, ['invoice_paid_date', '=', null]);
-            } else if($invoice ==  1){
-                array_push($queryArray, ['invoice_paid_date', '<>', null]);
             }
+            if($invoice ==  1){
+                array_push($queryArray, ['invoice_paid_date', '<>', null]);
+            } 
         }
+   
+
+
 
        $projects = Project::where($queryArray)->get();  
 
