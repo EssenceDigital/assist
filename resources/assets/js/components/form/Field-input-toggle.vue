@@ -14,7 +14,7 @@
         <v-btn 
         	icon 
         	v-tooltip:top="{ html: 'Edit Field' }"
-        	@click="showEditInput"
+        	@click.native.stop="showEditInput"
         >
           <v-icon>settings</v-icon>
         </v-btn>
@@ -51,7 +51,7 @@
         <v-btn 
         	icon 
         	v-tooltip:top="{ html: 'Close Edit Mode' }"
-        	@click="hideEditInput"
+        	@click.native.stop="hideEditInput"
         >
           <v-icon>close</v-icon>
         </v-btn>
@@ -71,6 +71,7 @@
 							v-model="fieldValue"						
 						  :label="label + '...'"
 						  :prepend-icon="icon"
+						  :prefix="prefix"
 						  :error="fieldError"
 						></v-text-field>       			
       		</v-layout>
@@ -94,6 +95,8 @@
 						  :prepend-icon="icon"
 						  :error="fieldError"
 						  multi-line
+						  :counter="char_count"
+						  :max="char_count"
 						></v-text-field>       			
       		</v-layout>
       		<!-- Error msg -->
@@ -166,10 +169,7 @@
 						:disabled="loading"
 						@click="updateField"
 					>
-		      Save
-		      <span slot="loader" class="custom-loader">
-		        <v-icon light>update</v-icon>
-		      </span>					
+		      Save					
 					</v-btn>					
 				</v-layout>
 	      	
@@ -204,7 +204,9 @@
 			// Required. The current value of the field.
 			value: { required: true },
 			// Optional. If the field value should be interpreted as a boolean.
-			bool_field: { type: Boolean, default: false }
+			bool_field: { type: Boolean, default: false },
+			// Optional. The max character count a textarea should contain. Shows the counter under textarea
+			char_count: { type: Number }
 		},
 
 		data () {

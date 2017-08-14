@@ -10666,88 +10666,7 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
+/* 4 */,
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -40614,123 +40533,112 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 	state: {
 		debug: true,
+		user: {
+			id: 1
+		},
 		projects: [],
 		currentProject: { id: 0 },
-		projectAdded: false,
 		clients: []
 	},
 
 	mutations: {
 		// Update projects
 		updateProjects: function updateProjects(state, payload) {
-			state.projects = payload;
+			return state.projects = payload;
 		},
 
 		// Update the current project
 		updateCurrentProject: function updateCurrentProject(state, payload) {
-			state.currentProject = payload;
+			return state.currentProject = payload;
 		},
 
-		// When a project was added
-		updateProjectAdded: function updateProjectAdded(state, payload) {
-			state.projectAdded = payload;
+		// Push a freshly added comment into the current project
+		addProjectComment: function addProjectComment(state, payload) {
+			return state.currentProject.comments.push(payload);
+		},
+
+		// Remove a comment from the current project
+		deleteProjectComment: function deleteProjectComment(state, payload) {
+			console.log(payload);
+			state.currentProject.comments.forEach(function (comment) {
+				console.log('itterating');
+				if (comment.id == payload) {
+					console.log("matching");
+					var index = state.currentProject.comments.indexOf(comment);
+					state.currentProject.comments.splice(index, 1);
+				}
+			});
 		},
 
 		// Update clients
 		updateClients: function updateClients(state, payload) {
-			state.clients = payload;
+			return state.clients = payload;
 		}
 	},
 
 	actions: {
-		// Use api to retrieve all projects
+
+		/* 
+  	PROJECT ACTIONS
+  */
+
+		// Use api to retrieve all projects and set them in the state
 		getProjects: function getProjects(context, payload) {
-
-			return new Promise(function (resolve, reject) {
-				var url = '/projects';
-
-				if (payload) {
-					// Add client to string
-					if (payload.client != '') url += '/' + payload.client;else url += '/' + 0;
-					// Add province to string
-					if (payload.province != '') url += '/' + payload.province;else url += '/' + 0;
-					// Add province to string
-					if (payload.location != '') url += '/' + payload.location;else url += '/' + 0;
-					// Add invoice status to filter
-					if (payload.invoice != '') url += '/' + payload.invoice;else url += '/' + 'any';
-				}
-
-				__WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].get(url).then(function (response) {
-					// For debug
-					if (context.state.debug) console.log(response);
-					// Change state
-					context.commit('updateProjects', response);
-					// Resolve promise
-					resolve();
-				}).catch(function (error) {
-					return console.log(error);
-				});
-			});
+			// Create payload 
+			if (payload) {
+				// Add client to string
+				if (payload.client != '') url += '/' + payload.client;else url += '/' + 0;
+				// Add province to string
+				if (payload.province != '') url += '/' + payload.province;else url += '/' + 0;
+				// Add province to string
+				if (payload.location != '') url += '/' + payload.location;else url += '/' + 0;
+				// Add invoice status to filter
+				if (payload.invoice != '') url += '/' + payload.invoice;else url += '/' + 'any';
+			}
+			// Use api to send the request
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/projects', 'updateProjects');
 		},
+
+		// Use api to retrieve a project and set it in the state
 		getProject: function getProject(context, payload) {
-			return new Promise(function (resolve, reject) {
-				__WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].get('/projects/' + payload).then(function (response) {
-					context.commit('updateCurrentProject', response);
-					// Resolve promise
-					resolve();
-				}).catch(function (error) {
-					return console.log(error);
-				});
-			});
+			// Use api to send request
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/projects/', 'updateCurrentProject');
 		},
 
 
-		// Use api to add a new project to the db
+		// Use api to add a new project to the db and update the current project in the state
 		addProject: function addProject(context, payload) {
-			var url = '/projects/start';
-
-			return new Promise(function (resolve, reject) {
-				// Use api to send POST request
-				__WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].post(url, payload).then(function (response) {
-					// For debug
-					if (context.state.debug) console.log(response);
-					// Change state					
-					context.commit('updateCurrentProject', response);
-					// Resolve promise
-					resolve();
-				}).catch(function (error) {
-					return console.log(error);
-				});
-			});
+			// Use api to send request
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/projects/start', 'updateCurrentProject');
 		},
 
 
-		// Use api to edit a project field in the db
+		// Use api to edit a project field in the db and update the current project in the state
 		updateProjectField: function updateProjectField(context, payload) {
-
-			return new Promise(function (resolve, reject) {
-				// Use api to send POST request
-				__WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].post('/projects/update-field', payload).then(function (response) {
-					context.commit('updateCurrentProject', response);
-					// Resolve promise
-					resolve();
-				}).catch(function (error) {
-					reject(error);
-				});
-			});
+			// Use api to send request
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/projects/update-field', 'updateCurrentProject');
 		},
 
+		// Use api to add a comment to specific project and update the current project comments in the state
+		addProjectComment: function addProjectComment(context, payload) {
+			// Use api to send request
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/projects/add-comment', 'addProjectComment');
+		},
+
+		// Use api to delete a comment and update the current project comments in the state
+		deleteProjectComment: function deleteProjectComment(context, payload) {
+			console.log(payload);
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/projects/delete-comment/', 'deleteProjectComment');
+		},
+
+		/*
+  	MISC ACTIONS
+  */
 
 		// Use api to retrieve all the unique clients (from projects)
-		getClients: function getClients(context) {
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].get('/projects/clients').then(function (response) {
-				// For debug
-				if (context.state.debug) console.log(response);
-				// Change state
-				context.commit('updateClients', response);
-			}).catch(function (error) {
-				return console.log(error);
-			});
+		getClients: function getClients(context, payload) {
+			// Use api to send request
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/projects/clients', 'updateClients');
 		}
 	},
 
@@ -40738,6 +40646,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		// Return the debug state
 		debug: function debug(state) {
 			return state.debug;
+		},
+
+
+		// Return the logged in user
+		user: function user(state) {
+			return state.user;
 		},
 
 
@@ -41603,11 +41517,70 @@ var index_esm = {
 			return Promise.reject(error);
 		});
 	},
+	getAction: function getAction(context, payload, url, mutation) {
+		var _this = this;
+
+		// Return a promise
+		return new Promise(function (resolve, reject) {
+			// Make sure payload is not undefined
+			if (payload === undefined) payload = '';
+			// Use helper method to send GET request
+			_this.get(url + payload).then(function (response) {
+				// Commit change to state
+				context.commit(mutation, response);
+				// Resolve promise
+				resolve();
+			}).catch(function (error) {
+				return reject(error);
+			});
+		});
+	},
 	post: function post(url, payload) {
 		return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(url, payload).then(function (response) {
 			return Promise.resolve(response.data.payload);
 		}).catch(function (error) {
 			return Promise.reject(error);
+		});
+	},
+	postAction: function postAction(context, payload, url, mutation) {
+		var _this2 = this;
+
+		// Return a promise
+		return new Promise(function (resolve, reject) {
+			// Use api to send POST request
+			_this2.post(url, payload).then(function (response) {
+				// For debug
+				if (context.state.debug) console.log(response);
+				// Change state					
+				context.commit(mutation, response);
+				// Resolve promise
+				resolve();
+			}).catch(function (error) {
+				return reject(error);
+			});
+		});
+	},
+	delete: function _delete(url) {
+		console.log(url);
+		return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete(url).then(function (response) {
+			return Promise.resolve(response.data.payload);
+		}).catch(function (error) {
+			return Promise.reject(error);
+		});
+	},
+	deleteAction: function deleteAction(context, payload, url, mutation) {
+		var _this3 = this;
+
+		console.log(payload.id);
+		// Return a promise
+		return new Promise(function (resolve, reject) {
+			// Use api to send DELETE request
+			_this3.delete(url + payload.id).then(function (response) {
+				// Change state
+				context.commit(mutation, response);
+				// Resolve promise
+				resolve();
+			});
 		});
 	}
 });
@@ -44324,7 +44297,7 @@ if(false) {
 /* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(84)(undefined);
 // imports
 
 
@@ -44654,7 +44627,7 @@ if(false) {
 /* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(84)(undefined);
 // imports
 
 
@@ -44957,7 +44930,7 @@ if(false) {
 /* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(84)(undefined);
 // imports
 
 
@@ -44975,6 +44948,8 @@ exports.push([module.i, "\n.center[data-v-a4250e2e]{\n\tmargin-left: auto;\n\tma
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_Project_notes_vue__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_Project_notes_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__form_Project_notes_vue__);
 //
 //
 //
@@ -45365,6 +45340,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -45372,7 +45369,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	props: ['id'],
 
 	components: {
-		'field-input-toggle': __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default.a
+		'field-input-toggle': __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default.a,
+		'project-notes': __WEBPACK_IMPORTED_MODULE_1__form_Project_notes_vue___default.a
 	},
 
 	data: function data() {
@@ -45656,7 +45654,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		// Required. The current value of the field.
 		value: { required: true },
 		// Optional. If the field value should be interpreted as a boolean.
-		bool_field: { type: Boolean, default: false }
+		bool_field: { type: Boolean, default: false },
+		// Optional. The max character count a textarea should contain. Shows the counter under textarea
+		char_count: { type: Number }
 	},
 
 	data: function data() {
@@ -45754,8 +45754,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "icon": ""
     },
-    on: {
-      "click": _vm.showEditInput
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.showEditInput($event)
+      }
     }
   }, [_c('v-icon', [_vm._v("settings")])], 1)], 1), _vm._v(" "), _c('v-card-text', {
     staticClass: "pt-0"
@@ -45786,8 +45789,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "icon": ""
     },
-    on: {
-      "click": _vm.hideEditInput
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.hideEditInput($event)
+      }
     }
   }, [_c('v-icon', [_vm._v("close")])], 1)], 1), _vm._v(" "), _c('v-card-text', {
     staticClass: "pt-0 pb-0"
@@ -45802,6 +45808,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "label": _vm.label + '...',
       "prepend-icon": _vm.icon,
+      "prefix": _vm.prefix,
       "error": _vm.fieldError
     },
     model: {
@@ -45829,7 +45836,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": _vm.label + '...',
       "prepend-icon": _vm.icon,
       "error": _vm.fieldError,
-      "multi-line": ""
+      "multi-line": "",
+      "counter": _vm.char_count,
+      "max": _vm.char_count
     },
     model: {
       value: (_vm.fieldValue),
@@ -45966,14 +45975,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.updateField
     }
-  }, [_vm._v("\n\t\t      Save\n\t\t      "), _c('span', {
-    staticClass: "custom-loader",
-    slot: "loader"
-  }, [_c('v-icon', {
-    attrs: {
-      "light": ""
-    }
-  }, [_vm._v("update")])], 1)])], 1)], 1)], 1) : _vm._e()], 1)
+  }, [_vm._v("\n\t\t      Save\t\t\t\t\t\n\t\t\t\t\t")])], 1)], 1)], 1) : _vm._e()], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -46175,7 +46177,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": _vm.$store.getters.currentProject.id,
       "label": 'Specific Location',
       "field": 'location',
-      "value": _vm.$store.getters.currentProject.location
+      "value": _vm.$store.getters.currentProject.location,
+      "char_count": 100
     }
   })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
     staticClass: "mt-5"
@@ -46198,7 +46201,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": _vm.$store.getters.currentProject.id,
       "label": 'Basic Details',
       "field": 'details',
-      "value": _vm.$store.getters.currentProject.details
+      "value": _vm.$store.getters.currentProject.details,
+      "char_count": 750
     }
   })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
     staticClass: "mt-5"
@@ -46260,7 +46264,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('field-input-toggle', {
     attrs: {
       "type": 'text',
-      "icon": 'attach_money',
       "action": 'updateProjectField',
       "id": _vm.$store.getters.currentProject.id,
       "label": 'Estimate',
@@ -46283,7 +46286,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": _vm.$store.getters.currentProject.id,
       "label": 'Work Overview',
       "field": 'work_overview',
-      "value": _vm.$store.getters.currentProject.work_overview
+      "value": _vm.$store.getters.currentProject.work_overview,
+      "char_count": 750
     }
   })], 1)], 1), _vm._v(" "), _c('v-layout', {
     attrs: {
@@ -46300,7 +46304,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": _vm.$store.getters.currentProject.id,
       "label": 'Work Plans',
       "field": 'plans',
-      "value": _vm.$store.getters.currentProject.plans
+      "value": _vm.$store.getters.currentProject.plans,
+      "char_count": 750
     }
   })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
     staticClass: "mt-5"
@@ -46483,7 +46488,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "prefix": '$',
       "value": _vm.$store.getters.currentProject.invoice_amount
     }
-  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1) : _vm._e()], 1)
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-container', {
+    staticClass: "mt-5"
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tNotes\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('project-notes')], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1) : _vm._e()], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -47380,6 +47407,599 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(85)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(82),
+  /* template */
+  __webpack_require__(87),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  "data-v-018656c8",
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\form\\Project-notes.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Project-notes.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-018656c8", Component.options)
+  } else {
+    hotAPI.reload("data-v-018656c8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 82 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {
+			// The note on que for deletion
+			selectedNoteId: '',
+			// For the delete dialog
+			deleteNoteDialog: false,
+			// To show when a note is deleting
+			deletingNote: false,
+			// To show when a note is saving
+			loading: false,
+			// The note value
+			note: '',
+			// If the server returned an error when saving
+			noteErr: false,
+			// The error message
+			noteErrMsg: ''
+		};
+	},
+
+
+	computed: {
+		// Retrieve notes for current project from store
+		notes: function notes() {
+			return this.$store.getters.currentProject.comments;
+		}
+	},
+
+	methods: {
+		// Uses the store to add a note to the current project
+		addNote: function addNote() {
+			var _this = this;
+
+			// Toggle loader
+			this.loading = true;
+			// Dispatch the action with post payload
+			this.$store.dispatch('addProjectComment', {
+				project_id: this.$store.getters.currentProject.id,
+				user_id: this.$store.getters.user.id,
+				comment: this.note
+			}).then(function () {
+				// Toggle loader
+				_this.loading = false;
+				// Clear data values
+				_this.note = '';
+				_this.noteErr = false;
+				_this.noteErrMsg = '';
+			}).catch(function (error) {
+				// Toggle error state and set error message
+				_this.noteErr = true;
+				_this.noteErrMsg = error.response.data.comment[0];
+				_this.loading = false;
+			});
+		},
+
+
+		// Opens the delete note dialog and sets the selected note id
+		openDeleteNoteDialog: function openDeleteNoteDialog(id) {
+			// Set the selected note id in que for deletion
+			this.selectedNoteId = id;
+			// Open the dialog
+			this.deleteNoteDialog = true;
+		},
+
+
+		// Uses the store to delete selected note from the db
+		deleteNote: function deleteNote(id) {
+			var _this2 = this;
+
+			console.log(id);
+			this.deletingNote = true;
+			// Dispatch action with note id as payload
+			this.$store.dispatch('deleteProjectComment', {
+				id: id
+			}).then(function () {
+				// Toggle loaderand dialog
+				_this2.deletingNote = false;
+				_this2.deleteNoteDialog = false;
+			});
+		}
+	}
+
+});
+
+/***/ }),
+/* 83 */,
+/* 84 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(86);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(5)("299d3136", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-018656c8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-notes.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-018656c8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-notes.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(84)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.chip[data-v-018656c8] {\n\theight: auto;\n\twhite-space: normal;\n\tpadding: 8px 16px 8px 16px;\n}\n.text-center[data-v-018656c8] {\n\ttext-align: center;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', [(_vm.$store.getters.currentProject.comments.length === 0) ? _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-alert', {
+    attrs: {
+      "info": "",
+      "value": "true"
+    }
+  }, [_vm._v("\n\t      No notes have been added to this project\n\t    ")])], 1) : _vm._l((_vm.$store.getters.currentProject.comments), function(note) {
+    return _c('v-card', {
+      key: note.id,
+      staticClass: "grey lighten-5",
+      attrs: {
+        "flat": ""
+      }
+    }, [_c('v-toolbar', {
+      staticClass: "white",
+      attrs: {
+        "card": "",
+        "prominent": ""
+      }
+    }, [_c('v-toolbar-title', {
+      staticClass: "subheading grey--text"
+    }, [_vm._v("\t\t\t\t         \n        \t" + _vm._s(note.user.first + ' ' + note.user.last) + " says:          \t\n        ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), (note.user.id === _vm.$store.getters.user.id) ? _c('v-btn', {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: ({
+          html: 'Delete note'
+        }),
+        expression: "{ html: 'Delete note' }",
+        arg: "top"
+      }],
+      staticClass: "mr-0",
+      attrs: {
+        "icon": ""
+      },
+      nativeOn: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.openDeleteNoteDialog(note.id)
+        }
+      }
+    }, [_c('v-icon', [_vm._v("close")])], 1) : _vm._e()], 1), _vm._v(" "), _c('v-card-text', {
+      staticClass: "pt-0"
+    }, [_c('v-layout', {
+      attrs: {
+        "row": ""
+      }
+    }, [_c('v-flex', {
+      attrs: {
+        "xs12": ""
+      }
+    }, [_c('v-chip', {
+      staticClass: "info white--text",
+      attrs: {
+        "xs12": ""
+      }
+    }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(note.comment) + "\n\t\t\t\t\t\t")])], 1)], 1)], 1)], 1)
+  }), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5 mb-5"
+  }), _vm._v(" "), _c('v-layout', {
+    staticClass: "mr-0",
+    staticStyle: {
+      "position": "relative"
+    },
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "width": "365",
+      "lazy": "",
+      "absolute": ""
+    },
+    model: {
+      value: (_vm.deleteNoteDialog),
+      callback: function($$v) {
+        _vm.deleteNoteDialog = $$v
+      },
+      expression: "deleteNoteDialog"
+    }
+  }, [_c('v-card', [_c('v-card-title', [_c('div', {
+    staticClass: "headline grey--text"
+  }, [_vm._v("Delete Note?")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-card-text', [_vm._v("\n\t        \tDelete this note until the age that gave it birth comes again?\n\t        ")]), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    staticClass: "red--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat"
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.deleteNoteDialog = false
+      }
+    }
+  }, [_vm._v("\n\t          \t\tMaybe not\n\t          ")]), _vm._v(" "), _c('v-btn', {
+    staticClass: "green--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat",
+      "loading": _vm.deletingNote,
+      "disable": _vm.deletingNote
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.deleteNote(_vm.selectedNoteId)
+      }
+    }
+  }, [_vm._v("\n\t          \tDo it\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-card', {
+    staticClass: "grey lighten-5 mt-3"
+  }, [_c('v-container', [_c('v-toolbar', {
+    staticClass: "white",
+    attrs: {
+      "card": "",
+      "prominent": ""
+    }
+  }, [_c('v-toolbar-title', {
+    staticClass: "subheading grey--text"
+  }, [_vm._v("\t\t\t\t         \n\t        \tAdd a Note\t          \t\n\t        ")]), _vm._v(" "), _c('v-spacer')], 1), _vm._v(" "), _c('v-card-text', {
+    staticClass: "pt-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "error": _vm.noteErr,
+      "label": "Enter note...",
+      "counter": "",
+      "max": "255",
+      "textarea": ""
+    },
+    model: {
+      value: (_vm.note),
+      callback: function($$v) {
+        _vm.note = $$v
+      },
+      expression: "note"
+    }
+  })], 1)], 1), _vm._v(" "), (_vm.noteErr) ? _c('v-layout', {
+    staticClass: "caption error--text",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    staticClass: "text-center",
+    attrs: {
+      "xs12": ""
+    }
+  }, [_vm._v("\n      \t\t\t\t" + _vm._s(_vm.noteErrMsg) + "  \n      \t\t\t")])], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": "",
+      "offset-xs4": ""
+    }
+  }, [_c('v-btn', {
+    attrs: {
+      "block": "",
+      "flat": "",
+      "outline": "",
+      "loading": _vm.loading,
+      "disabled": _vm.loading
+    },
+    on: {
+      "click": _vm.addNote
+    }
+  }, [_vm._v("\n\t      \t\t\t\tAdd Note\n\t      \t\t\t")])], 1)], 1)], 1)], 1)], 1)], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-018656c8", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

@@ -27,5 +27,7 @@ Route::post('/projects/start', 'ProjectsController@store');
 Route::post('/projects/update-field', 'ProjectsController@updateField');
 Route::get('/projects/{id}', 'ProjectsController@single');
 Route::get('/projects/{client?}/{province?}/{location?}/{invoice?}', 'ProjectsController@filter');
+Route::post('/projects/add-comment', 'ProjectsController@addComment');
+Route::delete('/projects/delete-comment/{id}', 'ProjectsController@deleteComment');
 
 

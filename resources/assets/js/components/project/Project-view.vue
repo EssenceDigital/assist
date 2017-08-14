@@ -43,7 +43,6 @@
 				        <v-card-text>				 
 									<v-layout row>
 										<v-flex xs12>
-
 											<!-- Client details -->
 											<v-container>
 												<div class="headline">
@@ -131,6 +130,7 @@
 															:label="'Specific Location'"
 															:field="'location'"
 															:value="$store.getters.currentProject.location"
+															:char_count="100"
 														></field-input-toggle>														
 													</v-flex>
 												</v-layout>
@@ -152,6 +152,7 @@
 															:label="'Basic Details'"
 															:field="'details'"
 															:value="$store.getters.currentProject.details"
+															:char_count="750"
 														></field-input-toggle>														
 													</v-flex>
 												</v-layout>
@@ -195,7 +196,6 @@
 													<v-flex xs4>
 														<field-input-toggle
 															:type="'text'"
-															:icon="'attach_money'"
 															:action="'updateProjectField'"
 															:id="$store.getters.currentProject.id"
 															:label="'Estimate'"
@@ -215,6 +215,7 @@
 															:label="'Work Overview'"
 															:field="'work_overview'"
 															:value="$store.getters.currentProject.work_overview"
+															:char_count="750"
 														></field-input-toggle>														
 													</v-flex>
 												</v-layout>
@@ -228,6 +229,7 @@
 															:label="'Work Plans'"
 															:field="'plans'"
 															:value="$store.getters.currentProject.plans"
+															:char_count="750"
 														></field-input-toggle>														
 													</v-flex>
 												</v-layout>												
@@ -372,12 +374,31 @@
 														></field-input-toggle>														
 													</v-flex>																						
 												</v-layout>
-											</v-container><!-- /Invoicing details -->
-
-																																									
-
+											</v-container><!-- /Invoicing details -->		
+											<v-divider class="mt-5"></v-divider>
 										</v-flex>
-									</v-layout>					        	
+									</v-layout><!-- Project view layout -->		
+
+									<!-- Project notes -->
+									<v-layout row>
+										<v-flex xs12>
+											<!-- Notes-->
+											<v-container class="mt-5">
+												<div class="headline">
+													Notes
+												</div>
+												<project-notes></project-notes>
+											</v-container><!-- /Notes -->
+										</v-flex>
+									</v-layout><!-- /Project notes -->
+
+									<!-- Project crew -->
+									<v-layout row>
+										<v-flex xs12>
+											
+										</v-flex>
+									</v-layout><!-- /Project crew -->
+
 				        </v-card-text><!-- /Card body -->
 				      </v-card>
 				    </v-flex>
@@ -390,12 +411,14 @@
 
 <script>
 	import FieldInputToggle from './../form/Field-input-toggle';
+	import ProjectNotes from './../form/Project-notes.vue';
 
 	export default {
 		props: ['id'],
 
 		components: {
-			'field-input-toggle': FieldInputToggle
+			'field-input-toggle': FieldInputToggle,
+			'project-notes': ProjectNotes
 		},
 
 		data () {

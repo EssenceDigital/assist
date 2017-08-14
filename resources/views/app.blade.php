@@ -15,6 +15,6 @@
             <dashboard></dashboard>
         </div>
 
-        <script src="{{ url('js/app.js') }}"></script>
+        <script src="{{ url('js/app.js') }}"></script>    
     </body>
 </html>

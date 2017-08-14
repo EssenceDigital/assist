@@ -277,7 +277,7 @@ class ProjectsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $comment
+            'payload' => $comment
         ], 200);
 
     }
@@ -288,9 +288,9 @@ class ProjectsController extends Controller
      * @param Illuminate\Http\Request
      * @return \Illuminate\Http\Response
     */
-    public function removeComment(Request $request){
+    public function deleteComment($id){
         // Find or throw 404
-        $comment = ProjectComment::findOrFail($request->comment_id);
+        $comment = ProjectComment::findOrFail($id);
 
         // Attempt to remove 
         $result = $comment->delete();
@@ -304,7 +304,8 @@ class ProjectsController extends Controller
 
         // Return successful response for ajax call
         return response()->json([
-            'result' => 'success'
+            'result' => 'success',
+            'payload' => $id
         ], 200);        
     }
 
