@@ -48,18 +48,16 @@ export default {
 	},
 
 	delete (url) {
-		console.log(url);
 		return axios.delete(url)
 			.then( (response) => Promise.resolve(response.data.payload) )
 			.catch( (error) => Promise.reject(error) );
 	},
 
 	deleteAction (context, payload, url, mutation) {
-		console.log(payload.id)
 		// Return a promise
 		return new Promise((resolve, reject) => {
 			// Use api to send DELETE request
-			this.delete(url + payload.id)
+			this.delete(url)
 				.then( (response) => {
 					// Change state
 					context.commit(mutation, response);

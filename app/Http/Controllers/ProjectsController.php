@@ -112,7 +112,7 @@ class ProjectsController extends Controller
     public function single($id)
     {
         // With all foreign keys / children
-        $project = Project::with(['comments', 'comments.user', 'timeline', 'users', 'timesheets'])->find($id);
+        $project = Project::with(['comments', 'comments.user', 'timeline', 'users', 'users.timesheets', 'timesheets'])->find($id);
 
         // Return response for ajax call
         return response()->json([
@@ -184,11 +184,11 @@ class ProjectsController extends Controller
      * @param Illuminate\Http\Request
      * @return \Illuminate\Http\Response
     */
-    public function addCrewMember(Request $request){
+    public function addCrew(Request $request){
         // Find project
         $project = Project::find($request->project_id);
         // Find the user now
-        $user = User::find($request->user_id);        
+        $user = User::with(['timesheets'])->find($request->user_id);        
         // Attempt to store association
         $result = $project->users()->save($user);
         // Verify success on store
@@ -202,7 +202,7 @@ class ProjectsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $user
+            'payload' => $user
         ], 200);               
     }
 
@@ -212,11 +212,11 @@ class ProjectsController extends Controller
      * @param Illuminate\Http\Request
      * @return \Illuminate\Http\Response
     */
-    public function removeCrewMember(Request $request){
+    public function deleteCrew($project_id, $id){
         // Find the association
-        $project = Project::find($request->project_id);
+        $project = Project::find($project_id);
         // Attempt to detach
-        $result = $project->users()->detach($request->user_id);
+        $result = $project->users()->detach($id);
         // Verify success
         if(! $result){
             // Return response for ajax call
@@ -227,7 +227,8 @@ class ProjectsController extends Controller
 
         // Return successful response for ajax call
         return response()->json([
-            'result' => 'success'
+            'result' => 'success',
+            'payload' => $id
         ], 200);
     }
 

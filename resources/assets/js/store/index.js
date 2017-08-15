@@ -10,6 +10,7 @@ export const store = new Vuex.Store({
 		user: {
 			id: 1
 		},
+		users: [],
 		projects: [],
 		currentProject: { id: 0 },
 		clients: []
@@ -30,16 +31,33 @@ export const store = new Vuex.Store({
 		},
 		// Remove a comment from the current project
 		deleteProjectComment (state, payload) {
-			console.log(payload);
+			// Find comment to delete
 			state.currentProject.comments.forEach(function(comment){
-				console.log('itterating');
 				if(comment.id == payload) {
-					console.log("matching");
 					var index = state.currentProject.comments.indexOf(comment); 
 					state.currentProject.comments.splice(index, 1);					
 				}
 			});
 		},
+		// Push a freshly added crew member into the current project
+		addProjectCrew (state, payload) {
+			return state.currentProject.users.push(payload);
+		},
+		// Remove a crew member from the current project
+		deleteProjectCrew (state, payload) {
+			state.currentProject.users.forEach(function(user){
+				if(user.id == payload) {
+					var index = state.currentProject.users.indexOf(user); 
+					state.currentProject.users.splice(index, 1);					
+				}
+			});
+		},
+
+		// Update users
+		updateUsers (state, payload) {
+			return state.users = payload;
+		},
+
 		// Update clients
 		updateClients (state, payload) {
 			return state.clients = payload;
@@ -83,7 +101,6 @@ export const store = new Vuex.Store({
 			// Use api to send request
 			return api.postAction(context, payload, '/projects/start', 'updateCurrentProject');
 		},
-
 		// Use api to edit a project field in the db and update the current project in the state
 		updateProjectField (context, payload) {
 			// Use api to send request
@@ -96,9 +113,27 @@ export const store = new Vuex.Store({
 		},
 		// Use api to delete a comment and update the current project comments in the state
 		deleteProjectComment (context, payload) {
-			console.log(payload);
-			return api.deleteAction(context, payload, '/projects/delete-comment/', 'deleteProjectComment');
+			// Use api to send request
+			return api.deleteAction(context, payload, '/projects/delete-comment/'+payload.id, 'deleteProjectComment');
 		},
+		// Use api to add a crew member to a specific project and update the current project users in the state
+		addProjectCrew (context, payload) {
+			return api.postAction(context, payload, '/projects/add-crew', 'addProjectCrew');
+		},
+		// Use api to delete a crew member from a specific project and update the current project crew in the state
+		deleteProjectCrew (context, payload) {
+			return api.deleteAction(context, payload, '/projects/'+payload.project_id+'/delete-crew/'+ payload.id, 'deleteProjectCrew');
+		},
+
+		/* 
+			USER ACTIONS
+		*/
+		// Use api to retrieve all users and set them in the store
+		getUsers (context, payload) {
+			return api.getAction(context, payload, '/users', 'updateUsers');
+		},
+
+
 		/*
 			MISC ACTIONS
 		*/
@@ -133,6 +168,11 @@ export const store = new Vuex.Store({
 
 		projectAdded (state) {
 			return state.projectAdded;
+		},
+
+		// Return all users
+		users (state) {
+			return state.users;
 		},
 
 		// Return the clients (from projects table)

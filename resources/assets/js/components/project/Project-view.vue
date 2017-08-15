@@ -395,9 +395,20 @@
 									<!-- Project crew -->
 									<v-layout row>
 										<v-flex xs12>
-											
+											<v-container class="mt-5">											
+												<project-crew></project-crew>
+											</v-container>											
 										</v-flex>
 									</v-layout><!-- /Project crew -->
+
+									<!-- Project timeline -->
+									<v-layout row>
+										<v-flex xs12>
+											<v-container class="mt-5">											
+												<project-timeline></project-timeline>
+											</v-container>											
+										</v-flex>
+									</v-layout><!-- /Project timeline -->									
 
 				        </v-card-text><!-- /Card body -->
 				      </v-card>
@@ -411,14 +422,18 @@
 
 <script>
 	import FieldInputToggle from './../form/Field-input-toggle';
-	import ProjectNotes from './../form/Project-notes.vue';
+	import ProjectNotes from './Project-notes.vue';
+	import ProjectCrew from './Project-crew.vue';
+	import ProjectTimeline from './Project-timeline.vue';
 
 	export default {
 		props: ['id'],
 
 		components: {
 			'field-input-toggle': FieldInputToggle,
-			'project-notes': ProjectNotes
+			'project-notes': ProjectNotes,
+			'project-crew': ProjectCrew,
+			'project-timeline': ProjectTimeline
 		},
 
 		data () {

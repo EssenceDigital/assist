@@ -2,7 +2,7 @@
 	<v-container>
 
 		<!-- No notes info -->
-		<v-layout row v-if="$store.getters.currentProject.comments.length === 0">
+		<v-layout row v-if="notes.length === 0">
 			<v-alert info value="true">
 	      No notes have been added to this project
 	    </v-alert>			
@@ -24,7 +24,7 @@
         <!-- Trigger for delete note dialog -->
         <v-btn 
         	v-if="note.user.id === $store.getters.user.id"
-        	class="mr-0" 
+        	class="mr-0 red--text" 
         	icon 
         	v-tooltip:top="{ html: 'Delete note' }"
         	@click.native.stop="openDeleteNoteDialog(note.id)"
@@ -168,6 +168,14 @@
 		},
 
 		methods: {
+			// Opens the delete note dialog and sets the selected note id
+			openDeleteNoteDialog (id) {
+				// Set the selected note id in que for deletion
+				this.selectedNoteId = id;
+				// Open the dialog
+				this.deleteNoteDialog = true;
+			},
+			
 			// Uses the store to add a note to the current project
 			addNote () {
 				// Toggle loader
@@ -191,14 +199,6 @@
 					this.noteErrMsg = error.response.data.comment[0];
 					this.loading = false;
 				});
-			},
-
-			// Opens the delete note dialog and sets the selected note id
-			openDeleteNoteDialog (id) {
-				// Set the selected note id in que for deletion
-				this.selectedNoteId = id;
-				// Open the dialog
-				this.deleteNoteDialog = true;
 			},
 
 			// Uses the store to delete selected note from the db

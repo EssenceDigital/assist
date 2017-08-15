@@ -29,5 +29,10 @@ Route::get('/projects/{id}', 'ProjectsController@single');
 Route::get('/projects/{client?}/{province?}/{location?}/{invoice?}', 'ProjectsController@filter');
 Route::post('/projects/add-comment', 'ProjectsController@addComment');
 Route::delete('/projects/delete-comment/{id}', 'ProjectsController@deleteComment');
+Route::post('/projects/add-crew', 'ProjectsController@addCrew');
+Route::delete('/projects/{project_id}/delete-crew/{id}', 'ProjectsController@deleteCrew');
+
+
+Route::get('/users', 'UsersController@all');
 
 

@@ -77,11 +77,11 @@
           class="elevation-1 mt-2"
         >    
         <template slot="items" scope="props">
-          <td v-if="table_state === 'admin'" class="text-xs-right">{{ props.item.id }}</td>
-          <td v-if="table_state === 'admin'" class="text-xs-right">{{ props.item.client_company_name }}</td>
-          <td v-if="table_state === 'admin'" class="text-xs-right">{{ props.item.province }}</td>
-          <td v-if="table_state === 'admin'" class="text-xs-right">{{ props.item.location }}</td>
-          <td v-if="table_state === 'admin'" class="text-xs-right">
+          <td v-if="table_state === 'admin'">{{ props.item.id }}</td>
+          <td v-if="table_state === 'admin'">{{ props.item.client_company_name }}</td>
+          <td v-if="table_state === 'admin'">{{ props.item.province }}</td>
+          <td v-if="table_state === 'admin'">{{ props.item.location }}</td>
+          <td v-if="table_state === 'admin'">
             <!-- Display different chip depending on invoice status.
             Not Invoiced chip -->
             <v-chip 
@@ -103,18 +103,19 @@
               class="success white--text"
             >
               Paid   
-            </v-chip> 
-            <td class="text-xs-right">
-              <v-btn 
-                icon 
-                v-tooltip:top="{ html: 'View Project ' + props.item.id }"
-                v-if="table_state === 'admin'"
-                @click.native.stop="viewProject(props.item.id)"
-              >
-                <v-icon>subdirectory_arrow_right</v-icon>
-              </v-btn>
-            </td>                
+            </v-chip>                 
           </td>
+          <td>
+            <v-btn 
+              icon 
+              v-tooltip:top="{ html: 'View Project ' + props.item.id }"
+              v-if="table_state === 'admin'"
+              class="success--text"
+              @click.native.stop="viewProject(props.item.id)"
+            >
+              <v-icon>subdirectory_arrow_right</v-icon>
+            </v-btn>
+          </td>          
         </template>
         <template slot="pageText" scope="{ pageStart, pageStop }">
           From {{ pageStart }} to {{ pageStop }}
@@ -173,12 +174,12 @@
         headers: [],
         // Admin state headers for data table
         adminStateHeaders: [
-          { text: 'Identifier', value: 'id' },
-          { text: 'Company Name', value: 'client_company_name' },
-          { text: 'Province', value: 'province' },
-          { text: 'Location', value: 'location' },
-          { text: 'Invoice Status', value: 'invoiced_date' },
-          { text: 'Actions', value: '' },
+          { text: 'Identifier', value: 'id', align: 'left' },
+          { text: 'Company Name', value: 'client_company_name', align: 'left' },
+          { text: 'Province', value: 'province', align: 'left' },
+          { text: 'Location', value: 'location', align: 'left' },
+          { text: 'Invoice Status', value: 'invoiced_date', align: 'left' },
+          { text: 'Actions', value: '', align: 'left' },
         ],
         // User state headers for data table
         userStateHeaders: [

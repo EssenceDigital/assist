@@ -10,10 +10,10 @@ use App\Timesheet;
 class UsersController extends Controller
 {
 
-    public function __construct()
+    /*public function __construct()
     {
         $this->middleware('auth');
-    }
+    }*/
 
     // Fields and their respective validation rules
     private $validationFields = [
@@ -86,7 +86,7 @@ class UsersController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'users' => $users
+            'payload' => $users
         ], 200);        
     }
 
