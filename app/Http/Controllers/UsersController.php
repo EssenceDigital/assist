@@ -137,7 +137,7 @@ class UsersController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'models' => $projects
+            'payload' => $projects
         ], 200);          
     }
 

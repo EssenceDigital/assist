@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Project;
 use App\ProjectUser;
 use App\ProjectComment;
+use App\Timeline;
 use App\User;
 
 use Session;
@@ -169,6 +170,21 @@ class ProjectsController extends Controller
                 'result' => false
             ], 404);
         }
+
+        // Add a timeline to the project
+        $timeline = new Timeline;
+        // Attempt to store timeline
+        $resultTwo = $project->timeline()->save($timeline);
+        // Verify success on store
+        if(! $resultTwo){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false,
+            ], 404);
+        }        
+
+        // Get the full project
+        $project = Project::with((['comments', 'comments.user', 'timeline', 'users', 'users.timesheets', 'timesheets']))->find($project->id);
 
         // Return response for ajax call
         return response()->json([

@@ -32,6 +32,7 @@ Route::delete('/projects/delete-comment/{id}', 'ProjectsController@deleteComment
 Route::post('/projects/add-crew', 'ProjectsController@addCrew');
 Route::delete('/projects/{project_id}/delete-crew/{id}', 'ProjectsController@deleteCrew');
 
+Route::post('/timelines/update-field', 'TimelinesController@updateField');
 
 Route::get('/users', 'UsersController@all');
 

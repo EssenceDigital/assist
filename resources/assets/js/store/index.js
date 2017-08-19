@@ -52,6 +52,10 @@ export const store = new Vuex.Store({
 				}
 			});
 		},
+		// Update the current project timline
+		updateCurrentProjectTimeline (state, payload) {
+			return state.currentProject.timeline = payload;
+		},
 
 		// Update users
 		updateUsers (state, payload) {
@@ -123,6 +127,10 @@ export const store = new Vuex.Store({
 		// Use api to delete a crew member from a specific project and update the current project crew in the state
 		deleteProjectCrew (context, payload) {
 			return api.deleteAction(context, payload, '/projects/'+payload.project_id+'/delete-crew/'+ payload.id, 'deleteProjectCrew');
+		},
+
+		updateTimelineField (context, payload) {
+			return api.postAction(context, payload, '/timelines/update-field', 'updateCurrentProjectTimeline');
 		},
 
 		/* 

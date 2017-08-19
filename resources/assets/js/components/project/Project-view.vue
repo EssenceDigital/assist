@@ -1,46 +1,55 @@
 <template>
-	<v-container fluid>
 
-		<!-- Main layout container -->
-		<v-layout v-if="!loading" row class="mt-5">
-			<!-- Main flex container -->
+	<v-container fluid>
+		<v-layout row class="mt-5">
 			<v-flex xs12 xl10 offset-xl1>
 				<!-- Top most card -->
 				<v-card class="grey lighten-5" flat>
+					<!-- Red top toolbar -->
+				  <v-toolbar dark class="primary elevation-0" extended>
+				  	<!-- Back button -->
+				    <v-btn 
+				    	icon 
+				    	v-tooltip:top="{ html: 'Go Back' }"
+				    	@click="$router.go(-1)"
+				    >
+				    	<v-icon dark>arrow_back</v-icon>
+				    </v-btn>
+				  </v-toolbar><!-- / Red top toolbar -->
 				  <!-- Main card container -->
 				  <v-layout row>
 				    <v-flex xs12 lg10 offset-lg1>
-				      <v-card class="card--flex-toolbar">	
-								<v-container>
+				      <v-card class="card--flex-toolbar">
+				      	<v-container>
 					      	<!-- Card toolbar -->
 					        <v-toolbar card class="white" prominent>
 					          <v-toolbar-title class="display-1">				         
-					          	Project Details ({{ $store.getters.currentProject.id }})		          	
+					          	Project Details ({{ $store.getters.currentProject.id }})			          	
 					          </v-toolbar-title>				          				          
-					          <v-spacer></v-spacer>
 					        </v-toolbar><!-- /Card toolbar -->	
-					      </v-container>	
+					      </v-container>			        
 					      <v-container>
 					      	<v-layout row>
-					        	<p class="subheading pl-4">
-						          This is where you can edit and track the project you've selected.				        		
-					        	</p>					      		
+				      			<p class="subheading pl-4">
+						          This is where you can edit and track the project you've selected.	       		
+					        	</p>
 					      	</v-layout>
-					      </v-container>		        				      		        
+					      </v-container>
 				        <v-divider></v-divider>
 				        <!-- Container for helpful tips -->
 				        <v-container class="mt-4">				        	
 					        <v-layout row>
-					        	<v-flex xs12>
+					        	<v-flex xs12>	
 			        				<p class="subheading info--text pl-4">
 												<v-icon left class="info--text">help_outline</v-icon>
-							          To edit a field just click the gear icon next to that field.	        			
-					        		</p>						        							        				        		
+							          To edit a field just click the gear icon next to that field.       			
+					        		</p>					        						        							        							        				        		
 					        	</v-flex>				        	
 					        </v-layout>		        	
 				        </v-container><!-- / Container for helpful tips -->	
 				        <!-- Card body -->
-				        <v-card-text>				 
+				        <v-card-text v-if="!loading">				 
+
 									<v-layout row>
 										<v-flex xs12>
 											<!-- Client details -->
@@ -408,16 +417,17 @@
 												<project-timeline></project-timeline>
 											</v-container>											
 										</v-flex>
-									</v-layout><!-- /Project timeline -->									
-
+									</v-layout><!-- /Project timeline -->		
+					        	
 				        </v-card-text><!-- /Card body -->
 				      </v-card>
 				    </v-flex>
 				  </v-layout><!-- / Main card container -->
 				</v-card><!-- / Top most card -->
-			</v-flex><!-- / Flex container -->
-		</v-layout><!-- /Layout container -->
+			</v-flex>
+		</v-layout>
 	</v-container>
+
 </template>
 
 <script>
@@ -469,4 +479,7 @@
 		margin-left: auto;
 		margin-right: auto;	
 	}
+  .card--flex-toolbar {
+    margin-top: -64px;
+  }	
 </style>

@@ -17,13 +17,15 @@ class CreateTimelinesTable extends Migration
             $table->increments('id');
             $table->integer('project_id')->unsigned();
             $table->foreign('project_id')->references('id')->on('projects');
+            $table->date('permit_advised_submit')->nullable();
+            $table->string('permit_applicant', 100)->nullable();
             $table->date('permit_application_date')->nullable();
             $table->boolean('permit_recieved')->default(false);
             $table->date('permit_recieved_date')->nullable();
-            $table->string('permit_number', 50)->nullable();
+            $table->string('permit_number', 100)->nullable();
             $table->date('site_number_application_date')->nullable();
             $table->date('site_number_recieved_date')->nullable();
-            $table->string('site_number', 50)->nullable();
+            $table->string('site_number', 100)->nullable();
             $table->date('completion_target')->nullable();
             $table->date('field_completion_target')->nullable();
             $table->date('report_completion_target')->nullable();

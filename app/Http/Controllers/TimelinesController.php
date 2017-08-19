@@ -9,15 +9,17 @@ use App\Timeline;
 class TimelinesController extends Controller
 {
 
-    public function __construct()
+    /*public function __construct()
     {
         $this->middleware('auth');
-    }
+    }*/
 
     // Fields and their respective validation rules
     private $validationFields = [
         'project_id' => 'numeric',
-        'permit_application_date' => 'required|date|nullable',
+        'permit_advised_submit' => 'date|nullable',
+        'permit_applicant' => 'max:50|nullable',
+        'permit_application_date' => 'date|nullable',
         'permit_recieved_date' => 'date|nullable',
         'permit_number' => 'max:50',
         'site_number_application_date' => 'date|nullable',
