@@ -13,7 +13,7 @@
     <!-- Container for table and filter -->
     <v-container v-if="!loading" fluid >
       <!-- Row for project filter -->
-      <v-layout row>
+      <v-layout row v-if="table_state === 'admin'">
         <v-spacer></v-spacer>
         <!-- Province filter -->
         <v-flex xs2>
@@ -77,10 +77,13 @@
           class="elevation-1 mt-2"
         >    
         <template slot="items" scope="props">
-          <td v-if="table_state === 'admin'">{{ props.item.id }}</td>
+          <td>{{ props.item.id }}</td>
+
           <td v-if="table_state === 'admin'">{{ props.item.client_company_name }}</td>
-          <td v-if="table_state === 'admin'">{{ props.item.province }}</td>
-          <td v-if="table_state === 'admin'">{{ props.item.location }}</td>
+
+          <td>{{ props.item.province }}</td>
+          <td>{{ props.item.location }}</td>
+
           <td v-if="table_state === 'admin'">
             <!-- Display different chip depending on invoice status.
             Not Invoiced chip -->
@@ -105,17 +108,19 @@
               Paid   
             </v-chip>                 
           </td>
+
+          <td v-if="table_state === 'user'">{{ props.item.timesheets.length }}</td>
+
           <td>
             <v-btn 
               icon 
-              v-tooltip:top="{ html: 'View Project ' + props.item.id }"
-              v-if="table_state === 'admin'"
+              v-tooltip:top="{ html: 'View ' + props.item.id }"
               class="success--text"
               @click.native.stop="viewProject(props.item.id)"
             >
               <v-icon>subdirectory_arrow_right</v-icon>
             </v-btn>
-          </td>          
+          </td>           
         </template>
         <template slot="pageText" scope="{ pageStart, pageStop }">
           From {{ pageStart }} to {{ pageStop }}
@@ -183,7 +188,11 @@
         ],
         // User state headers for data table
         userStateHeaders: [
-
+          { text: 'Identifier', value: 'id', align: 'left' },
+          { text: 'Province', value: 'province', align: 'left' },
+          { text: 'Location', value: 'location', align: 'left' },
+          { text: 'Timesheets', value: 'timesheets', align: 'left' },
+          { text: 'Actions', value: '', align: 'left' },
         ],
         // For provinces filter
         provinces: [
@@ -238,9 +247,10 @@
       },
 
       viewProject (id) {
-        // Show dialog
-        this.viewProjectDialog = true;
-        this.currentProjectId = id;
+        // Admin state forward
+        if(this.table_state === 'admin') this.$router.push('/projects/'+id+'/view');
+        // User state forward
+        if(this.table_state === 'user') this.$router.push('/projects/'+id+'/timesheets');        
       }
     },
 
@@ -251,14 +261,21 @@
       this.loading = true;
 
       // Set headers the data table will use based on the table state
+      var dispatchAction = '',
+          payload = false;
       if(this.table_state === 'admin') {
         this.headers = this.adminStateHeaders;
+        dispatchAction = 'getProjects';
       } else if(this.table_state === 'user') {
         this.headers = this.userStateHeaders;
+        dispatchAction = 'getUsersProjects';
+        payload = {
+          user_id: this.$store.getters.user.id
+        };
       }
 
       // Tell store to load projects
-      this.$store.dispatch('getProjects').then( () => {
+      this.$store.dispatch(dispatchAction, payload).then( () => {
         // Tell store to update unique clients
         this.$store.dispatch('getClients'); 
         // Toggle loader

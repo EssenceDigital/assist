@@ -10,10 +10,10 @@ use App\WorkJob;
 class WorkJobsController extends Controller
 {
 
-    public function __construct()
+    /*public function __construct()
     {
         $this->middleware('auth');
-    }
+    }*/
     
     // Fields and their respective validation rules
     private $validationFields = [
@@ -48,7 +48,7 @@ class WorkJobsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $workjob
+            'payload' => $workjob
         ], 200);
     }
 

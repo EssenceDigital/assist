@@ -10,10 +10,8 @@ export default {
 	getAction (context, payload, url, mutation) {
 		// Return a promise
 		return new Promise((resolve, reject) => {
-			// Make sure payload is not undefined
-			if(payload === undefined) payload = '';
 			// Use helper method to send GET request
-			this.get(url + payload)
+			this.get(url)
 				.then( (response) => {
 					// Commit change to state
 					context.commit(mutation, response);					

@@ -10,10 +10,10 @@ use App\Timesheet;
 class TimesheetsController extends Controller
 {
 
-    public function __construct()
+   /* public function __construct()
     {
         $this->middleware('auth');
-    }
+    }*/
     
     // Fields and their respective validation rules
     private $validationFields = [
@@ -107,7 +107,7 @@ class TimesheetsController extends Controller
         $timesheet = $this->validateAndPopulate($request, new Timesheet, $this->validationFields);
         
         // Add user id to the timesheet
-        $timesheet->user_id = Auth::id();
+        $timesheet->user_id = $request->user_id;
 
         // Attempt to store model
         $result = $timesheet->save();
@@ -123,7 +123,7 @@ class TimesheetsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $timesheet
+            'payload' => $timesheet
         ], 200);
 
     }

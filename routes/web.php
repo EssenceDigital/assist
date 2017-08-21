@@ -35,5 +35,10 @@ Route::delete('/projects/{project_id}/delete-crew/{id}', 'ProjectsController@del
 Route::post('/timelines/update-field', 'TimelinesController@updateField');
 
 Route::get('/users', 'UsersController@all');
+Route::get('/users/{user_id}/projects', 'UsersController@projects');
+Route::get('/users/{user_id}/projects/{project_id}/timesheets', 'UsersController@projectTimesheets');
+
+Route::post('/timesheets/add', 'TimesheetsController@store');
+Route::post('/timesheets/add-hours', 'WorkJobsController@store');
 
 

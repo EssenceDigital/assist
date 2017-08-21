@@ -13,6 +13,8 @@ export const store = new Vuex.Store({
 		users: [],
 		projects: [],
 		currentProject: { id: 0 },
+		timesheets: [],
+		currentTimesheet: { },
 		clients: []
 	},
 
@@ -57,6 +59,28 @@ export const store = new Vuex.Store({
 			return state.currentProject.timeline = payload;
 		},
 
+		// Update the timesheets
+		updateTimesheets (state, payload) {
+			return state.timesheets = payload;
+		},
+
+		// Add a timesheet
+		addTimesheet (state, payload) {
+			return state.timesheets.unshift(payload);
+		},
+
+		// Add timesheet hours
+		addTimesheetHours (state, payload) {
+			// Find timesheet
+			state.timesheets.forEach(function(timesheet){
+				if(timesheet.id == payload.timesheet_id) {
+					timesheet.work_jobs.push(payload);					
+				}
+			});			
+		},
+
+
+
 		// Update users
 		updateUsers (state, payload) {
 			return state.users = payload;
@@ -97,7 +121,7 @@ export const store = new Vuex.Store({
 		// Use api to retrieve a project and set it in the state
 		getProject (context, payload) {
 			// Use api to send request
-			return api.getAction(context, payload, '/projects/', 'updateCurrentProject');
+			return api.getAction(context, payload, '/projects/'+payload, 'updateCurrentProject');
 		},
 
 		// Use api to add a new project to the db and update the current project in the state
@@ -131,6 +155,22 @@ export const store = new Vuex.Store({
 
 		updateTimelineField (context, payload) {
 			return api.postAction(context, payload, '/timelines/update-field', 'updateCurrentProjectTimeline');
+		},
+		// Use api to retrieve all of a users projects and set them in the state
+		getUsersProjects (context, payload) {
+			 return api.getAction(context, payload, '/users/'+payload.user_id+'/projects', 'updateProjects');
+		},
+		// Use api to retrieve all of a users timesheets on a project
+		getProjectTimesheets (context, payload) {
+			return api.getAction(context, payload, '/users/'+payload.user_id+'/projects/'+payload.project_id+'/timesheets', 'updateTimesheets');
+		},
+		// Use api to add a timesheet to a project
+		addTimesheet (context, payload) {
+			return api.postAction(context, payload, '/timesheets/add', 'addTimesheet');
+		},
+		// Use api to add hours to a timesheet
+		addTimesheetHours (context, payload) {
+			return api.postAction(context, payload, '/timesheets/add-hours', 'addTimesheetHours');
 		},
 
 		/* 
@@ -174,8 +214,8 @@ export const store = new Vuex.Store({
 			return state.currentProject;
 		},
 
-		projectAdded (state) {
-			return state.projectAdded;
+		timesheets (state) {
+			return state.timesheets;
 		},
 
 		// Return all users

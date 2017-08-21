@@ -6,6 +6,7 @@ import Home from './components/dashboard/Home';
 import Projects from './components/project/Projects';
 import ProjectView from './components/project/Project-view'
 import Timesheets from './components/timesheet/Timesheets';
+import ProjectTimesheets from './components/timesheet/Project-timesheets';
 import Users from './components/user/Users';
 
 /** Register router with Vue */
@@ -29,7 +30,13 @@ export default new VueRouter({
 			name: 'ProjectView',
 			component: ProjectView,
 			props: true
-		},		
+		},	
+		{
+			path: '/projects/:id/timesheets',
+			name: 'ProjectTimesheets',
+			component: ProjectTimesheets,
+			props: true
+		},	
 		{
 			path: '/timesheets',
 			name: 'Timesheets',

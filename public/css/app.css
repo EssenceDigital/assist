@@ -1,4 +1,7 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons);@-webkit-keyframes shake {
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons);.text-center {
+  text-align: center;
+}
+@-webkit-keyframes shake {
   59% {
     margin-left: 0;
   }

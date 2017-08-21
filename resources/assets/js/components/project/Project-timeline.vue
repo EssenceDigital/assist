@@ -20,8 +20,10 @@
 			 		<!-- Steps -->
 			 		<v-container fluid v-for="current in steps" :key="step.field">
 				    <v-stepper-step :step="current.step" 
+				    	style="cursor:pointer;"
 				    	:complete="timeline[current.field] != null && timeline[current.field] != 0" 
 				    	@click.native.stop="step = current.step"
+
 				    >
 				      {{ current.heading}}
 				      <small v-if="timeline[current.field] != 0 && timeline[current.field] != 1">{{ timeline[current.field] }}</small>
@@ -73,7 +75,7 @@
 		data () {
 			return {
 				// The current milestone the project is on
-				step: 1,
+				step: -1,
 				// The steps/milestones for the timeline
 				steps: [
 					{
@@ -207,7 +209,13 @@
 		},
 
 		created () {
-
+			// Determine the current step
+			for(let step of this.steps){
+				if(this.timeline[step.field] === null || this.timeline[step.field] === 0){
+					this.step = step.step;
+					break;
+				}
+			}
 		}
 	}
 </script>

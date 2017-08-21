@@ -116,14 +116,14 @@ class UsersController extends Controller
         ], 200);        
     }
 
-    public function projects($userId){
+    public function projects($user_id){
 
         // Construct query to find all projects user is a part of
-        $projects = Project::whereHas('users', function ($q) use ($userId) {
-            $q->where('user_id', $userId);
+        $projects = Project::whereHas('users', function ($q) use ($user_id) {
+            $q->where('user_id', $user_id);
         // Now, only select the timesheets that belongs to this user
-        })->with(['timesheets' => function($q) use ($userId)  {
-            $q->where('user_id', $userId);
+        })->with(['timesheets' => function($q) use ($user_id)  {
+            $q->where('user_id', $user_id);
         }])->get();
 
         // Return failed response if collection empty
@@ -141,11 +141,12 @@ class UsersController extends Controller
         ], 200);          
     }
 
-    public function projectTimesheets($userId, $projectId){
+    public function projectTimesheets($user_id, $project_id){
+
         // Get the users timesheets for the requested project
         $timesheets = Timesheet::where([
-            ['user_id', '=', $userId],
-            ['project_id', '=', $projectId],
+            ['user_id', '=', $user_id],
+            ['project_id', '=', $project_id],
         ])->with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->orderBy('date', 'desc')->get();
 
         // Return failed response if collection empty
@@ -159,7 +160,7 @@ class UsersController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'models' => $timesheets
+            'payload' => $timesheets
         ], 200);          
     }
 
