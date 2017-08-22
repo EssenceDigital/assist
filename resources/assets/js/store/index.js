@@ -73,12 +73,21 @@ export const store = new Vuex.Store({
 		addTimesheetHours (state, payload) {
 			// Find timesheet
 			state.timesheets.forEach(function(timesheet){
-				if(timesheet.id == payload.timesheet_id) {
+				if(timesheet.id === payload.timesheet_id) {
 					timesheet.work_jobs.push(payload);					
 				}
 			});			
 		},
 
+		// Add timesheet travel
+		addTimesheetTravel (state, payload) {
+			// Find timesheet
+			state.timesheets.forEach(function(timesheet){
+				if(timesheet.id === payload.timesheet_id) {
+					timesheet.travel_jobs.push(payload);					
+				}
+			});			
+		},
 
 
 		// Update users
@@ -171,6 +180,10 @@ export const store = new Vuex.Store({
 		// Use api to add hours to a timesheet
 		addTimesheetHours (context, payload) {
 			return api.postAction(context, payload, '/timesheets/add-hours', 'addTimesheetHours');
+		},
+		// Use api to add trave; to a timesheet
+		addTimesheetTravel (context, payload) {
+			return api.postAction(context, payload, '/timesheets/add-travel', 'addTimesheetTravel');
 		},
 
 		/* 

@@ -7,5 +7,15 @@ export default {
 			}
 			resolve(data);
 		});
+	},
+
+	populateForm (form, data) {
+		return new Promise((resolve, reject) => {
+			// Populate form
+			for(var key in form) {
+				form[key].val = data[key];
+			}
+			resolve(form);
+		});
 	}
 }

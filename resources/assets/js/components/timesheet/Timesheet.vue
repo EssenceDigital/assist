@@ -61,6 +61,51 @@
 
         	<v-divider class="mb-3"></v-divider>
 
+        	<!-- Travel hours -->
+        	<v-container v-if="timesheet.travel_jobs.length > 0"
+        		fluid 
+        		class="pt-0 pl-0 pr-0"
+        	>
+        		<v-layout row class="mb-3">
+        			<v-chip class="primary white--text ml-0">Travel Hours</v-chip>
+        		</v-layout>
+        		<!-- Travel jobs -->
+        		<div v-for="job in timesheet.travel_jobs" :key="job.id">
+	        		<v-layout row>
+			        	<v-flex xs5>
+		        			<div>
+			        			<p class="body-2 mb-1">Distance</p>
+			        			<p class="grey--text mb-1">{{ job.travel_distance }} kms</p>        				
+		        			</div>	        		
+			        	</v-flex>	        		
+			        	<v-flex xs5>
+		        			<div>
+			        			<p class="body-2 mb-1">Hours</p>
+			        			<p class="grey--text mb-0">{{ job.travel_time }}</p>        				
+		        			</div>	        		
+			        	</v-flex>	 
+			        	<v-spacer></v-spacer>
+			        	<v-flex xs1>
+					        <!-- Edit button -->
+					        <v-btn 
+					        	icon 
+					        	v-tooltip:top="{ html: 'Edit Job' }"
+					        	@click.native.stop="editDialog('travel', 'travel_jobs', job.id)"
+					        >
+					          <v-icon>settings</v-icon>
+					        </v-btn>	        		
+			        	</v-flex>         			
+	        		</v-layout><!-- /Travel jobs -->
+	        		<v-layout row v-if="job.comment">
+	        			<v-flex xs12>
+		        			<p class="body-2 mb-1">Comment</p>
+		        			<p class="grey--text mb-0">{{ job.comment }}</p>           				
+	        			</v-flex>
+	        		</v-layout> 
+	        		<v-divider class="mt-2 mb-2"></v-divider>     			
+        		</div>
+        	</v-container><!-- /Travel hours -->
+
         	<!-- Work hours -->
         	<v-container v-if="timesheet.work_jobs.length > 0"
         		fluid 
@@ -90,7 +135,7 @@
 					        <v-btn 
 					        	icon 
 					        	v-tooltip:top="{ html: 'Edit Job' }"
-					        	@click.native=""
+					        	@click.native.stop="editDialog('hours', 'work_jobs', job.id)"
 					        >
 					          <v-icon>settings</v-icon>
 					        </v-btn>	        		
@@ -104,7 +149,6 @@
 	        		</v-layout> 
 	        		<v-divider class="mt-2 mb-2"></v-divider>     			
         		</div>
-      			
         	</v-container><!-- /Work hours -->        	
 
         </v-card-text>
@@ -165,12 +209,12 @@
 	        </v-card-text>
 	        <v-card-actions>
 	          <v-spacer></v-spacer>
-	          <v-btn outline class="red--text darken-1" flat="flat" @click.native="hoursDialog = false">Cancel</v-btn>
+	          <v-btn outline class="red--text darken-1" flat="flat" @click.native="closeDialog('hours')">Cancel</v-btn>
 	          <v-btn outline class="green--text darken-1" flat="flat" 
-	          	@click="addHours"
-	          	:loading="hoursAdding"
+	          	@click="saveForm('hours', 'addTimesheetHours')"
+	          	:loading="hoursSaving"
 	          >
-	          	Add Hours
+	          	Save Hours
 	          </v-btn>
 	        </v-card-actions>
 	      </v-card>
@@ -228,9 +272,10 @@
 	          <v-spacer></v-spacer>
 	          <v-btn outline class="red--text darken-1" flat="flat" @click.native="travelDialog = false">Cancel</v-btn>
 	          <v-btn outline class="green--text darken-1" flat="flat" 
-
+	          	@click="saveForm('travel', 'addTimesheetTravel')"
+	          	:loading="travelSaving"
 	          >
-	          	Add Travel
+	          	Save Travel
 	          </v-btn>
 	        </v-card-actions>
 	      </v-card>
@@ -355,7 +400,7 @@
 		data () {
 			return {
 				hoursDialog: false,
-				hoursAdding: false,
+				hoursSaving: false,
 				hoursForm: {
 					id: {val: '', err: false, dflt: ''},
 					timesheet_id: {val: this.timesheet.id, err: false, dflt: ''},
@@ -364,6 +409,7 @@
 					comment: {val: '', err: false, dflt: ''}
 				},
 				travelDialog: false,
+				travelSaving: false,
 				travelForm: {
 					id: {val: '', err: false, dflt: ''},
 					timesheet_id: {val: this.timesheet.id, err: false, dflt: ''},
@@ -372,6 +418,7 @@
 					comment: {val: '', err: false, dflt: ''}
 				},
 				equipmentDialog: false,
+				equipmentSaving: false,
 				equipmentForm: {
 					id: {val: '', err: false, dflt: ''},
 					timesheet_id: {val: this.timesheet.id, err: false, dflt: ''},
@@ -380,6 +427,7 @@
 					comment: {val: '', err: false, dflt: ''}
 				},
 				otherDialog: false,
+				otherSaving: false,
 				otherForm: {
 					id: {val: '', err: false, dflt: ''},
 					timesheet_id: {val: this.timesheet.id, err: false, dflt: ''},
@@ -392,17 +440,43 @@
 
 		methods: {
 
+			closeDialog (dialog) {
+				// Close dialog
+				this[dialog + 'Dialog'] = false;				
+				// Clear form
+				for(var key in this[dialog + 'Form']){
+					if(key != 'timesheet_id') {
+						// Reset field value
+						this[dialog + 'Form'][key].val = this[dialog + 'Form'][key].dflt;						
+					}
+				}
+			},
 
-			addHours () {
+			editDialog (dialog, fieldKey, id) {
+				var data = this.timesheet[fieldKey].find(elem => elem.id === id);
+				// Populate form
+				for(var key in this[dialog + 'Form']) {
+					this[dialog + 'Form'][key].val = data[key];
+				}
+				// Toggle dialog
+				this[dialog + 'Dialog'] = true;
+			},
+
+			saveForm (formPrefix, dispatchAction) {
+				// Toggle loader
+				this[formPrefix + 'Saving'] = true;
 				// Use helper to create post object then dispatch event to add hours
-				Helpers.populatePostData(this.hoursForm).then( (data) => {
+				Helpers.populatePostData(this[formPrefix + 'Form']).then( (data) => {
 					// Dispatch event
-					this.$store.dispatch('addTimesheetHours', data).then( () => {
+					this.$store.dispatch(dispatchAction, data).then( () => {
 						// Toggle dialog
-						this.hoursDialog = false;
+						this[formPrefix + 'Dialog'] = false;
+						// Toggle loader
+						this[formPrefix + 'Saving'] = false;						
 					});
 				});
 			}
+
 		}
 
 	}

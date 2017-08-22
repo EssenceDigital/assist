@@ -40,5 +40,5 @@ Route::get('/users/{user_id}/projects/{project_id}/timesheets', 'UsersController
 
 Route::post('/timesheets/add', 'TimesheetsController@store');
 Route::post('/timesheets/add-hours', 'WorkJobsController@store');
-
+Route::post('/timesheets/add-travel', 'TravelJobsController@store');
 

@@ -471,7 +471,88 @@ module.exports = {
 
 
 /***/ }),
-/* 2 */,
+/* 2 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11321,7 +11402,7 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(17);
-module.exports = __webpack_require__(93);
+module.exports = __webpack_require__(99);
 
 
 /***/ }),
@@ -11347,7 +11428,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuet
 /** Set up Router */
 
 /** Register Vue components */
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('dashboard', __webpack_require__(87));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('dashboard', __webpack_require__(93));
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.productionTip = false;
 
@@ -40692,8 +40773,19 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		addTimesheetHours: function addTimesheetHours(state, payload) {
 			// Find timesheet
 			state.timesheets.forEach(function (timesheet) {
-				if (timesheet.id == payload.timesheet_id) {
+				if (timesheet.id === payload.timesheet_id) {
 					timesheet.work_jobs.push(payload);
+				}
+			});
+		},
+
+
+		// Add timesheet travel
+		addTimesheetTravel: function addTimesheetTravel(state, payload) {
+			// Find timesheet
+			state.timesheets.forEach(function (timesheet) {
+				if (timesheet.id === payload.timesheet_id) {
+					timesheet.travel_jobs.push(payload);
 				}
 			});
 		},
@@ -40796,6 +40888,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		// Use api to add hours to a timesheet
 		addTimesheetHours: function addTimesheetHours(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/add-hours', 'addTimesheetHours');
+		},
+
+		// Use api to add trave; to a timesheet
+		addTimesheetTravel: function addTimesheetTravel(context, payload) {
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/add-travel', 'addTimesheetTravel');
 		},
 
 
@@ -41782,7 +41879,7 @@ var index_esm = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_timesheet_Timesheets___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_timesheet_Timesheets__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_timesheet_Project_timesheets__ = __webpack_require__(81);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_timesheet_Project_timesheets___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_timesheet_Project_timesheets__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_user_Users__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_user_Users__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_user_Users___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_user_Users__);
 /** Load Vue based dependencies */
 
@@ -44414,7 +44511,7 @@ if(false) {
 /* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(100)(undefined);
+exports = module.exports = __webpack_require__(2)(undefined);
 // imports
 
 
@@ -44575,7 +44672,7 @@ if(false) {
 /* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(100)(undefined);
+exports = module.exports = __webpack_require__(2)(undefined);
 // imports
 
 
@@ -44892,7 +44989,7 @@ if(false) {
 /* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(100)(undefined);
+exports = module.exports = __webpack_require__(2)(undefined);
 // imports
 
 
@@ -46132,7 +46229,7 @@ if(false) {
 /* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(100)(undefined);
+exports = module.exports = __webpack_require__(2)(undefined);
 // imports
 
 
@@ -48451,7 +48548,7 @@ if(false) {
 /* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(100)(undefined);
+exports = module.exports = __webpack_require__(2)(undefined);
 // imports
 
 
@@ -48991,15 +49088,19 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(103)
+}
 var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(82),
   /* template */
-  __webpack_require__(83),
+  __webpack_require__(105),
   /* styles */
-  null,
+  injectStyle,
   /* scopeId */
-  null,
+  "data-v-4285ff0c",
   /* moduleIdentifier (server only) */
   null
 )
@@ -49032,7 +49133,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheet__ = __webpack_require__(97);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheet__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheet___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Timesheet__);
 //
 //
@@ -49262,681 +49363,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-container', {
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('v-layout', {
-    staticClass: "mt-5",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": "",
-      "xl10": "",
-      "offset-xl1": ""
-    }
-  }, [_c('v-card', {
-    staticClass: "grey lighten-5",
-    attrs: {
-      "flat": ""
-    }
-  }, [_c('v-toolbar', {
-    staticClass: "primary elevation-0",
-    attrs: {
-      "dark": "",
-      "extended": ""
-    }
-  }, [_c('v-btn', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:top",
-      value: ({
-        html: 'Go Back'
-      }),
-      expression: "{ html: 'Go Back' }",
-      arg: "top"
-    }],
-    attrs: {
-      "icon": ""
-    },
-    on: {
-      "click": function($event) {
-        _vm.$router.go(-1)
-      }
-    }
-  }, [_c('v-icon', {
-    attrs: {
-      "dark": ""
-    }
-  }, [_vm._v("arrow_back")])], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": "",
-      "lg10": "",
-      "offset-lg1": ""
-    }
-  }, [_c('v-card', {
-    staticClass: "card--flex-toolbar"
-  }, [_c('v-container', [_c('v-toolbar', {
-    staticClass: "white",
-    attrs: {
-      "card": "",
-      "prominent": ""
-    }
-  }, [_c('v-toolbar-title', {
-    staticClass: "display-1"
-  }, [_vm._v("\t\t\t\t         \n\t\t\t\t\t          \tProject Timesheets (" + _vm._s(_vm.id) + ")\t\t\t          \t\n\t\t\t\t\t          ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-layout', {
-    staticStyle: {
-      "position": "relative"
-    },
-    attrs: {
-      "row": "",
-      "justify-center": ""
-    }
-  }, [_c('v-dialog', {
-    attrs: {
-      "width": "765",
-      "lazy": "",
-      "absolute": ""
-    },
-    model: {
-      value: (_vm.addTimesheetDialog),
-      callback: function($$v) {
-        _vm.addTimesheetDialog = $$v
-      },
-      expression: "addTimesheetDialog"
-    }
-  }, [_c('v-btn', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:top",
-      value: ({
-        html: 'Add Project'
-      }),
-      expression: "{ html: 'Add Project' }",
-      arg: "top"
-    }],
-    attrs: {
-      "icon": ""
-    },
-    slot: "activator"
-  }, [_c('v-icon', [_vm._v("add_circle")])], 1), _vm._v(" "), _c('v-card', [_c('v-card-title', [_c('div', {
-    staticClass: "headline grey--text"
-  }, [_vm._v("Add a timesheet")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', [_c('p', {
-    staticClass: "subheading info--text pl-2"
-  }, [_c('v-icon', {
-    staticClass: "info--text",
-    attrs: {
-      "left": ""
-    }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t\t\t\t          Once the timesheet is started you can add hours.        \t\t\t\n\t\t\t\t\t\t\t\t        \t\t")], 1)]), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs6": ""
-    }
-  }, [_c('v-menu', {
-    attrs: {
-      "lazy": "",
-      "close-on-content-click": false,
-      "transition": "scale-transition",
-      "offset-y": "",
-      "full-width": "",
-      "nudge-left": 40,
-      "max-width": "290px"
-    },
-    model: {
-      value: (_vm.dateMenu),
-      callback: function($$v) {
-        _vm.dateMenu = $$v
-      },
-      expression: "dateMenu"
-    }
-  }, [_c('v-text-field', {
-    attrs: {
-      "label": "Date...",
-      "prepend-icon": "event",
-      "readonly": ""
-    },
-    slot: "activator",
-    model: {
-      value: (_vm.form.date.val),
-      callback: function($$v) {
-        _vm.form.date.val = $$v
-      },
-      expression: "form.date.val"
-    }
-  }), _vm._v(" "), _c('v-date-picker', {
-    attrs: {
-      "no-title": "",
-      "scrollable": "",
-      "actions": ""
-    },
-    scopedSlots: _vm._u([{
-      key: "default",
-      fn: function(ref) {
-        var save = ref.save;
-        var cancel = ref.cancel;
-
-        return [_c('v-card-actions', [_c('v-btn', {
-          attrs: {
-            "flat": "",
-            "primary": ""
-          },
-          nativeOn: {
-            "click": function($event) {
-              cancel()
-            }
-          }
-        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
-          attrs: {
-            "flat": "",
-            "primary": ""
-          },
-          nativeOn: {
-            "click": function($event) {
-              save()
-            }
-          }
-        }, [_vm._v("Save")])], 1)]
-      }
-    }]),
-    model: {
-      value: (_vm.form.date.val),
-      callback: function($$v) {
-        _vm.form.date.val = $$v
-      },
-      expression: "form.date.val"
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs6": ""
-    }
-  }, [_c('v-text-field', {
-    attrs: {
-      "label": "Per Diem",
-      "single-line": "",
-      "prepend-icon": "attach_money"
-    },
-    model: {
-      value: (_vm.form.per_diem.val),
-      callback: function($$v) {
-        _vm.form.per_diem.val = $$v
-      },
-      expression: "form.per_diem.val"
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-text-field', {
-    attrs: {
-      "label": "Comment",
-      "multi-line": ""
-    },
-    model: {
-      value: (_vm.form.comment.val),
-      callback: function($$v) {
-        _vm.form.comment.val = $$v
-      },
-      expression: "form.comment.val"
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
-    staticClass: "red--text darken-1",
-    attrs: {
-      "outline": "",
-      "flat": "flat"
-    },
-    nativeOn: {
-      "click": function($event) {
-        _vm.addTimesheetDialog = false
-      }
-    }
-  }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
-    staticClass: "green--text darken-1",
-    attrs: {
-      "outline": "",
-      "flat": "flat",
-      "loading": _vm.timesheetAdding
-    },
-    nativeOn: {
-      "click": function($event) {
-        _vm.addTimesheet($event)
-      }
-    }
-  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t          \tAdd Timesheet\n\t\t\t\t\t\t\t\t\t          ")])], 1)], 1)], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('p', {
-    staticClass: "subheading pl-4"
-  }, [_vm._v("\n \t\t\t\t\t\t\t\t\t\t\tNow showing all of your timesheets for this project.       \t\t\n\t\t\t\t\t        \t")])])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-4"
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('p', {
-    staticClass: "subheading info--text pl-4"
-  }, [_c('v-icon', {
-    staticClass: "info--text",
-    attrs: {
-      "left": ""
-    }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t          Once you add a timesheet you can then add travel hours, work hours, equipment rentals, and other costs.       \t\t\t\n\t\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', _vm._l((_vm.timesheets), function(timesheet) {
-    return _c('v-layout', {
-      key: timesheet.id,
-      staticClass: "mt-5",
-      attrs: {
-        "row": ""
-      }
-    }, [_c('v-flex', {
-      attrs: {
-        "xs12": ""
-      }
-    }, [_c('timesheet', {
-      attrs: {
-        "timesheet": timesheet
-      }
-    })], 1)], 1)
-  }))], 1)], 1)], 1)], 1)], 1)], 1)], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-4285ff0c", module.exports)
-  }
-}
-
-/***/ }),
-/* 84 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(85),
-  /* template */
-  __webpack_require__(86),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\user\\Users.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Users.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5b729f5e", Component.options)
-  } else {
-    hotAPI.reload("data-v-5b729f5e", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 85 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({});
-
-/***/ }),
-/* 86 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_vm._v("\n  Users\n")])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-5b729f5e", module.exports)
-  }
-}
-
-/***/ }),
-/* 87 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(88),
-  /* template */
-  __webpack_require__(92),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\Dashboard.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Dashboard.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-de4ee6d6", Component.options)
-  } else {
-    hotAPI.reload("data-v-de4ee6d6", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 88 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar__ = __webpack_require__(89);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-
-  components: {
-    'nav-bar': __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar___default.a
-  }
-
-});
-
-/***/ }),
-/* 89 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(90),
-  /* template */
-  __webpack_require__(91),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\_ui\\Nav-bar.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Nav-bar.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-24c05664", Component.options)
-  } else {
-    hotAPI.reload("data-v-24c05664", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 90 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	data: function data() {
-		return {
-			navDrawer: false,
-			menuItems: [{ icon: 'dashboard', title: 'Dashboard', link: '/' }, { icon: 'assignment', title: 'Projects', link: '/projects' }, { icon: 'today', title: 'Timesheets', link: '/timesheets' }, { icon: 'group', title: 'Users', link: '/users' }]
-		};
-	}
-});
-
-/***/ }),
-/* 91 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-layout', [_c('v-toolbar', {
-    staticClass: "default",
-    attrs: {
-      "dark": ""
-    }
-  }, [_c('v-toolbar-side-icon', {
-    staticClass: "hidden-sm-and-up ",
-    on: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.navDrawer = !_vm.navDrawer
-      }
-    }
-  }), _vm._v(" "), _c('v-toolbar-title', [_c('router-link', {
-    staticStyle: {
-      "cursor": "pointer"
-    },
-    attrs: {
-      "to": "/",
-      "tag": "span"
-    }
-  }, [_vm._v("\n\t\t\t\t\tArrow Assist\n\t\t\t\t")])], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-toolbar-items', {
-    staticClass: "hidden-xs-only"
-  }, _vm._l((_vm.menuItems), function(item) {
-    return _c('v-btn', {
-      key: item.title,
-      attrs: {
-        "flat": "",
-        "router": "",
-        "to": item.link
-      }
-    }, [_c('v-icon', {
-      attrs: {
-        "left": "",
-        "dark": ""
-      }
-    }, [_vm._v(_vm._s(item.icon))]), _vm._v("\n\t\t\t\t\t\t" + _vm._s(item.title) + "\n\t\t\t\t")], 1)
-  }))], 1), _vm._v(" "), _c('v-navigation-drawer', {
-    attrs: {
-      "temporary": ""
-    },
-    model: {
-      value: (_vm.navDrawer),
-      callback: function($$v) {
-        _vm.navDrawer = $$v
-      },
-      expression: "navDrawer"
-    }
-  }, [_c('v-list', _vm._l((_vm.menuItems), function(item) {
-    return _c('v-list-tile', {
-      key: item.title,
-      attrs: {
-        "to": item.link
-      }
-    }, [_c('v-list-tile-action', [_c('v-icon', [_vm._v(_vm._s(item.icon))])], 1), _vm._v(" "), _c('v-list-tile-content', [_vm._v(_vm._s(item.title))])], 1)
-  }))], 1)], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-24c05664", module.exports)
-  }
-}
-
-/***/ }),
-/* 92 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-app', {
-    attrs: {
-      "standalone": ""
-    }
-  }, [_c('nav-bar'), _vm._v(" "), _c('main', [_c('router-view')], 1), _vm._v(" "), _c('v-footer', {
-    staticClass: "default pa-3 mt-5"
-  }, [_c('v-spacer'), _vm._v(" "), _c('div', [_vm._v("© " + _vm._s(new Date().getFullYear()))])], 1)], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-de4ee6d6", module.exports)
-  }
-}
-
-/***/ }),
-/* 93 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 94 */,
-/* 95 */,
-/* 96 */,
-/* 97 */
-/***/ (function(module, exports, __webpack_require__) {
-
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(102)
+  __webpack_require__(84)
 }
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(98),
+  __webpack_require__(86),
   /* template */
-  __webpack_require__(104),
+  __webpack_require__(88),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -49968,12 +49404,97 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 98 */
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(85);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("f22ce1c4", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0aedd5ab\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Timesheet.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0aedd5ab\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Timesheet.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.chip[data-v-0aedd5ab] {\n\theight: auto;\n\twhite-space: normal;\n\tpadding: 8px 16px 8px 16px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 86 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(87);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -50331,7 +49852,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	data: function data() {
 		return {
 			hoursDialog: false,
-			hoursAdding: false,
+			hoursSaving: false,
 			hoursForm: {
 				id: { val: '', err: false, dflt: '' },
 				timesheet_id: { val: this.timesheet.id, err: false, dflt: '' },
@@ -50340,6 +49861,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				comment: { val: '', err: false, dflt: '' }
 			},
 			travelDialog: false,
+			travelSaving: false,
 			travelForm: {
 				id: { val: '', err: false, dflt: '' },
 				timesheet_id: { val: this.timesheet.id, err: false, dflt: '' },
@@ -50348,6 +49870,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				comment: { val: '', err: false, dflt: '' }
 			},
 			equipmentDialog: false,
+			equipmentSaving: false,
 			equipmentForm: {
 				id: { val: '', err: false, dflt: '' },
 				timesheet_id: { val: this.timesheet.id, err: false, dflt: '' },
@@ -50356,6 +49879,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				comment: { val: '', err: false, dflt: '' }
 			},
 			otherDialog: false,
+			otherSaving: false,
 			otherForm: {
 				id: { val: '', err: false, dflt: '' },
 				timesheet_id: { val: this.timesheet.id, err: false, dflt: '' },
@@ -50368,15 +49892,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 	methods: {
-		addHours: function addHours() {
+		closeDialog: function closeDialog(dialog) {
+			// Close dialog
+			this[dialog + 'Dialog'] = false;
+			// Clear form
+			for (var key in this[dialog + 'Form']) {
+				if (key != 'timesheet_id') {
+					// Reset field value
+					this[dialog + 'Form'][key].val = this[dialog + 'Form'][key].dflt;
+				}
+			}
+		},
+		editDialog: function editDialog(dialog, fieldKey, id) {
+			var data = this.timesheet[fieldKey].find(function (elem) {
+				return elem.id === id;
+			});
+			// Populate form
+			for (var key in this[dialog + 'Form']) {
+				this[dialog + 'Form'][key].val = data[key];
+			}
+			// Toggle dialog
+			this[dialog + 'Dialog'] = true;
+		},
+		saveForm: function saveForm(formPrefix, dispatchAction) {
 			var _this = this;
 
+			// Toggle loader
+			this[formPrefix + 'Saving'] = true;
 			// Use helper to create post object then dispatch event to add hours
-			__WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].populatePostData(this.hoursForm).then(function (data) {
+			__WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].populatePostData(this[formPrefix + 'Form']).then(function (data) {
 				// Dispatch event
-				_this.$store.dispatch('addTimesheetHours', data).then(function () {
+				_this.$store.dispatch(dispatchAction, data).then(function () {
 					// Toggle dialog
-					_this.hoursDialog = false;
+					_this[formPrefix + 'Dialog'] = false;
+					// Toggle loader
+					_this[formPrefix + 'Saving'] = false;
 				});
 			});
 		}
@@ -50385,90 +49935,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 99 */,
-/* 100 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
-
-
-/***/ }),
-/* 101 */
+/* 87 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50481,51 +49948,20 @@ function toComment(sourceMap) {
 			}
 			resolve(data);
 		});
+	},
+	populateForm: function populateForm(form, data) {
+		return new Promise(function (resolve, reject) {
+			// Populate form
+			for (var key in form) {
+				form[key].val = data[key];
+			}
+			resolve(form);
+		});
 	}
 });
 
 /***/ }),
-/* 102 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(103);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("f22ce1c4", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0aedd5ab\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Timesheet.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0aedd5ab\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Timesheet.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 103 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(100)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n.chip[data-v-0aedd5ab] {\n\theight: auto;\n\twhite-space: normal;\n\tpadding: 8px 16px 8px 16px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 104 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -50634,7 +50070,80 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "grey--text"
   }, [_vm._v(_vm._s(_vm.timesheet.comment))])]) : _vm._e()])], 1), _vm._v(" "), _c('v-divider', {
     staticClass: "mb-3"
-  }), _vm._v(" "), (_vm.timesheet.work_jobs.length > 0) ? _c('v-container', {
+  }), _vm._v(" "), (_vm.timesheet.travel_jobs.length > 0) ? _c('v-container', {
+    staticClass: "pt-0 pl-0 pr-0",
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    staticClass: "mb-3",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-chip', {
+    staticClass: "primary white--text ml-0"
+  }, [_vm._v("Travel Hours")])], 1), _vm._v(" "), _vm._l((_vm.timesheet.travel_jobs), function(job) {
+    return _c('div', {
+      key: job.id
+    }, [_c('v-layout', {
+      attrs: {
+        "row": ""
+      }
+    }, [_c('v-flex', {
+      attrs: {
+        "xs5": ""
+      }
+    }, [_c('div', [_c('p', {
+      staticClass: "body-2 mb-1"
+    }, [_vm._v("Distance")]), _vm._v(" "), _c('p', {
+      staticClass: "grey--text mb-1"
+    }, [_vm._v(_vm._s(job.travel_distance) + " kms")])])]), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs5": ""
+      }
+    }, [_c('div', [_c('p', {
+      staticClass: "body-2 mb-1"
+    }, [_vm._v("Hours")]), _vm._v(" "), _c('p', {
+      staticClass: "grey--text mb-0"
+    }, [_vm._v(_vm._s(job.travel_time))])])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('v-btn', {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: ({
+          html: 'Edit Job'
+        }),
+        expression: "{ html: 'Edit Job' }",
+        arg: "top"
+      }],
+      attrs: {
+        "icon": ""
+      },
+      nativeOn: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.editDialog('travel', 'travel_jobs', job.id)
+        }
+      }
+    }, [_c('v-icon', [_vm._v("settings")])], 1)], 1)], 1), _vm._v(" "), (job.comment) ? _c('v-layout', {
+      attrs: {
+        "row": ""
+      }
+    }, [_c('v-flex', {
+      attrs: {
+        "xs12": ""
+      }
+    }, [_c('p', {
+      staticClass: "body-2 mb-1"
+    }, [_vm._v("Comment")]), _vm._v(" "), _c('p', {
+      staticClass: "grey--text mb-0"
+    }, [_vm._v(_vm._s(job.comment))])])], 1) : _vm._e(), _vm._v(" "), _c('v-divider', {
+      staticClass: "mt-2 mb-2"
+    })], 1)
+  })], 2) : _vm._e(), _vm._v(" "), (_vm.timesheet.work_jobs.length > 0) ? _c('v-container', {
     staticClass: "pt-0 pl-0 pr-0",
     attrs: {
       "fluid": ""
@@ -50687,7 +50196,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "icon": ""
       },
       nativeOn: {
-        "click": function($event) {}
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.editDialog('hours', 'work_jobs', job.id)
+        }
       }
     }, [_c('v-icon', [_vm._v("settings")])], 1)], 1)], 1), _vm._v(" "), (job.comment) ? _c('v-layout', {
       attrs: {
@@ -50810,7 +50322,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     },
     nativeOn: {
       "click": function($event) {
-        _vm.hoursDialog = false
+        _vm.closeDialog('hours')
       }
     }
   }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
@@ -50818,12 +50330,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "outline": "",
       "flat": "flat",
-      "loading": _vm.hoursAdding
+      "loading": _vm.hoursSaving
     },
     on: {
-      "click": _vm.addHours
+      "click": function($event) {
+        _vm.saveForm('hours', 'addTimesheetHours')
+      }
     }
-  }, [_vm._v("\n\t          \tAdd Hours\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v("\n\t          \tSave Hours\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
     staticStyle: {
       "position": "relative"
     },
@@ -50923,9 +50437,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "green--text darken-1",
     attrs: {
       "outline": "",
-      "flat": "flat"
+      "flat": "flat",
+      "loading": _vm.travelSaving
+    },
+    on: {
+      "click": function($event) {
+        _vm.saveForm('travel', 'addTimesheetTravel')
+      }
     }
-  }, [_vm._v("\n\t          \tAdd Travel\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v("\n\t          \tSave Travel\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
     staticStyle: {
       "position": "relative"
     },
@@ -51122,6 +50642,712 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-0aedd5ab", module.exports)
+  }
+}
+
+/***/ }),
+/* 89 */,
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(91),
+  /* template */
+  __webpack_require__(92),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\user\\Users.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Users.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5b729f5e", Component.options)
+  } else {
+    hotAPI.reload("data-v-5b729f5e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 91 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_vm._v("\n  Users\n")])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-5b729f5e", module.exports)
+  }
+}
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(94),
+  /* template */
+  __webpack_require__(98),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\Dashboard.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Dashboard.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-de4ee6d6", Component.options)
+  } else {
+    hotAPI.reload("data-v-de4ee6d6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 94 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+  components: {
+    'nav-bar': __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar___default.a
+  }
+
+});
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(96),
+  /* template */
+  __webpack_require__(97),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\_ui\\Nav-bar.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Nav-bar.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-24c05664", Component.options)
+  } else {
+    hotAPI.reload("data-v-24c05664", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 96 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {
+			navDrawer: false,
+			menuItems: [{ icon: 'dashboard', title: 'Dashboard', link: '/' }, { icon: 'assignment', title: 'Projects', link: '/projects' }, { icon: 'today', title: 'Timesheets', link: '/timesheets' }, { icon: 'group', title: 'Users', link: '/users' }]
+		};
+	}
+});
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-layout', [_c('v-toolbar', {
+    staticClass: "default",
+    attrs: {
+      "dark": ""
+    }
+  }, [_c('v-toolbar-side-icon', {
+    staticClass: "hidden-sm-and-up ",
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.navDrawer = !_vm.navDrawer
+      }
+    }
+  }), _vm._v(" "), _c('v-toolbar-title', [_c('router-link', {
+    staticStyle: {
+      "cursor": "pointer"
+    },
+    attrs: {
+      "to": "/",
+      "tag": "span"
+    }
+  }, [_vm._v("\n\t\t\t\t\tArrow Assist\n\t\t\t\t")])], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-toolbar-items', {
+    staticClass: "hidden-xs-only"
+  }, _vm._l((_vm.menuItems), function(item) {
+    return _c('v-btn', {
+      key: item.title,
+      attrs: {
+        "flat": "",
+        "router": "",
+        "to": item.link
+      }
+    }, [_c('v-icon', {
+      attrs: {
+        "left": "",
+        "dark": ""
+      }
+    }, [_vm._v(_vm._s(item.icon))]), _vm._v("\n\t\t\t\t\t\t" + _vm._s(item.title) + "\n\t\t\t\t")], 1)
+  }))], 1), _vm._v(" "), _c('v-navigation-drawer', {
+    attrs: {
+      "temporary": ""
+    },
+    model: {
+      value: (_vm.navDrawer),
+      callback: function($$v) {
+        _vm.navDrawer = $$v
+      },
+      expression: "navDrawer"
+    }
+  }, [_c('v-list', _vm._l((_vm.menuItems), function(item) {
+    return _c('v-list-tile', {
+      key: item.title,
+      attrs: {
+        "to": item.link
+      }
+    }, [_c('v-list-tile-action', [_c('v-icon', [_vm._v(_vm._s(item.icon))])], 1), _vm._v(" "), _c('v-list-tile-content', [_vm._v(_vm._s(item.title))])], 1)
+  }))], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-24c05664", module.exports)
+  }
+}
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-app', {
+    attrs: {
+      "standalone": ""
+    }
+  }, [_c('nav-bar'), _vm._v(" "), _c('main', [_c('router-view')], 1), _vm._v(" "), _c('v-footer', {
+    staticClass: "default pa-3 mt-5"
+  }, [_c('v-spacer'), _vm._v(" "), _c('div', [_vm._v("© " + _vm._s(new Date().getFullYear()))])], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-de4ee6d6", module.exports)
+  }
+}
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 100 */,
+/* 101 */,
+/* 102 */,
+/* 103 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(104);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("0b831803", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4285ff0c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-timesheets.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4285ff0c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-timesheets.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 104 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.card--flex-toolbar[data-v-4285ff0c] {\n  margin-top: -64px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "xl10": "",
+      "offset-xl1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "grey lighten-5",
+    attrs: {
+      "flat": ""
+    }
+  }, [_c('v-toolbar', {
+    staticClass: "primary elevation-0",
+    attrs: {
+      "dark": "",
+      "extended": ""
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Go Back'
+      }),
+      expression: "{ html: 'Go Back' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    }
+  }, [_c('v-icon', {
+    attrs: {
+      "dark": ""
+    }
+  }, [_vm._v("arrow_back")])], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "lg10": "",
+      "offset-lg1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "card--flex-toolbar"
+  }, [_c('v-container', [_c('v-toolbar', {
+    staticClass: "white",
+    attrs: {
+      "card": "",
+      "prominent": ""
+    }
+  }, [_c('v-toolbar-title', {
+    staticClass: "display-1"
+  }, [_vm._v("\t\t\t\t         \n\t\t\t\t\t          \tProject Timesheets (" + _vm._s(_vm.id) + ")\t\t\t          \t\n\t\t\t\t\t          ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-layout', {
+    staticStyle: {
+      "position": "relative"
+    },
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "width": "765",
+      "lazy": "",
+      "absolute": ""
+    },
+    model: {
+      value: (_vm.addTimesheetDialog),
+      callback: function($$v) {
+        _vm.addTimesheetDialog = $$v
+      },
+      expression: "addTimesheetDialog"
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Add Project'
+      }),
+      expression: "{ html: 'Add Project' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    slot: "activator"
+  }, [_c('v-icon', [_vm._v("add_circle")])], 1), _vm._v(" "), _c('v-card', [_c('v-card-title', [_c('div', {
+    staticClass: "headline grey--text"
+  }, [_vm._v("Add a timesheet")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', [_c('p', {
+    staticClass: "subheading info--text pl-2"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t\t\t\t          Once the timesheet is started you can add hours.        \t\t\t\n\t\t\t\t\t\t\t\t        \t\t")], 1)]), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs6": ""
+    }
+  }, [_c('v-menu', {
+    attrs: {
+      "lazy": "",
+      "close-on-content-click": false,
+      "transition": "scale-transition",
+      "offset-y": "",
+      "full-width": "",
+      "nudge-left": 40,
+      "max-width": "290px"
+    },
+    model: {
+      value: (_vm.dateMenu),
+      callback: function($$v) {
+        _vm.dateMenu = $$v
+      },
+      expression: "dateMenu"
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "Date...",
+      "prepend-icon": "event",
+      "readonly": ""
+    },
+    slot: "activator",
+    model: {
+      value: (_vm.form.date.val),
+      callback: function($$v) {
+        _vm.form.date.val = $$v
+      },
+      expression: "form.date.val"
+    }
+  }), _vm._v(" "), _c('v-date-picker', {
+    attrs: {
+      "no-title": "",
+      "scrollable": "",
+      "actions": ""
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function(ref) {
+        var save = ref.save;
+        var cancel = ref.cancel;
+
+        return [_c('v-card-actions', [_c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              cancel()
+            }
+          }
+        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              save()
+            }
+          }
+        }, [_vm._v("Save")])], 1)]
+      }
+    }]),
+    model: {
+      value: (_vm.form.date.val),
+      callback: function($$v) {
+        _vm.form.date.val = $$v
+      },
+      expression: "form.date.val"
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs6": ""
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "Per Diem",
+      "single-line": "",
+      "prepend-icon": "attach_money"
+    },
+    model: {
+      value: (_vm.form.per_diem.val),
+      callback: function($$v) {
+        _vm.form.per_diem.val = $$v
+      },
+      expression: "form.per_diem.val"
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "Comment",
+      "multi-line": ""
+    },
+    model: {
+      value: (_vm.form.comment.val),
+      callback: function($$v) {
+        _vm.form.comment.val = $$v
+      },
+      expression: "form.comment.val"
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    staticClass: "red--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat"
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.addTimesheetDialog = false
+      }
+    }
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+    staticClass: "green--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat",
+      "loading": _vm.timesheetAdding
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.addTimesheet($event)
+      }
+    }
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t          \tAdd Timesheet\n\t\t\t\t\t\t\t\t\t          ")])], 1)], 1)], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading pl-4"
+  }, [_vm._v("\n \t\t\t\t\t\t\t\t\t\t\tNow showing all of your timesheets for this project.       \t\t\n\t\t\t\t\t        \t")])])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-4"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t          Once you add a timesheet you can then add travel hours, work hours, equipment rentals, and other costs.       \t\t\t\n\t\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', _vm._l((_vm.timesheets), function(timesheet) {
+    return _c('v-layout', {
+      key: timesheet.id,
+      staticClass: "mt-5",
+      attrs: {
+        "row": ""
+      }
+    }, [_c('v-flex', {
+      attrs: {
+        "xs12": ""
+      }
+    }, [_c('timesheet', {
+      attrs: {
+        "timesheet": timesheet
+      }
+    })], 1)], 1)
+  }))], 1)], 1)], 1)], 1)], 1)], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-4285ff0c", module.exports)
   }
 }
 
