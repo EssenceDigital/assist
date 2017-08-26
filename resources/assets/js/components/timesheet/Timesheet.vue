@@ -2,6 +2,19 @@
  <v-layout row>
     <v-flex xs12 sm6 offset-sm3>
       <v-card>
+	  		<v-layout row class="pr-2">		        	
+        	<v-flex xs1 offset-xs11>
+		        <!-- Edit button -->
+		        <v-btn 
+		        	icon 
+		        	v-tooltip:top="{ html: 'Edit Timesheet' }"
+		        	@click.native.stop="editTimesheetDialog = true"
+		        >
+		          <v-icon>settings</v-icon>
+		        </v-btn>	        		
+        	</v-flex>
+	  		</v-layout>
+
       	<!-- Timesheet title, date -->
 	  		<v-layout row>
 	  			<v-flex xs12 class="text-xs-center pt-3">
@@ -72,19 +85,30 @@
         		<!-- Travel jobs -->
         		<div v-for="job in timesheet.travel_jobs" :key="job.id">
 	        		<v-layout row>
-			        	<v-flex xs5>
+			        	<v-flex xs4>
 		        			<div>
 			        			<p class="body-2 mb-1">Distance</p>
 			        			<p class="grey--text mb-1">{{ job.travel_distance }} kms</p>        				
 		        			</div>	        		
 			        	</v-flex>	        		
-			        	<v-flex xs5>
+			        	<v-flex xs4>
 		        			<div>
 			        			<p class="body-2 mb-1">Hours</p>
 			        			<p class="grey--text mb-0">{{ job.travel_time }}</p>        				
 		        			</div>	        		
 			        	</v-flex>	 
 			        	<v-spacer></v-spacer>
+			        	<v-flex xs1>
+					        <!-- Delete button -->
+					        <v-btn 
+					        	icon 
+					        	class="mr-0 red--text" 
+					        	v-tooltip:top="{ html: 'Remove' }"
+					        	@click.native.stop="openDeleteDialog('deleteTimesheetTravel', job.id)"
+					        >
+					          <v-icon>close</v-icon>
+					        </v-btn>
+					      </v-flex>			        	
 			        	<v-flex xs1>
 					        <!-- Edit button -->
 					        <v-btn 
@@ -117,13 +141,13 @@
         		<!-- Work jobs -->
         		<div v-for="job in timesheet.work_jobs" :key="job.id">
 	        		<v-layout row>
-			        	<v-flex xs5>
+			        	<v-flex xs4>
 		        			<div>
 			        			<p class="body-2 mb-1">Job Type</p>
 			        			<p class="grey--text mb-0">{{ job.job_type }}</p>        				
 		        			</div>	        		
 			        	</v-flex>
-			        	<v-flex xs5>
+			        	<v-flex xs4>
 		        			<div>
 			        			<p class="body-2 mb-1">Hours</p>
 			        			<p class="grey--text mb-1">{{ job.hours_worked }}</p>        				
@@ -131,6 +155,17 @@
 			        	</v-flex>	 
 			        	<v-spacer></v-spacer>
 			        	<v-flex xs1>
+					        <!-- Delete button -->
+					        <v-btn 
+					        	icon 
+					        	class="mr-0 red--text" 
+					        	v-tooltip:top="{ html: 'Remove' }"
+					        	@click.native.stop="openDeleteDialog('deleteTimesheetHours', job.id)"
+					        >
+					          <v-icon>close</v-icon>
+					        </v-btn>
+					      </v-flex>			        	
+			        	<v-flex xs1>			        	
 					        <!-- Edit button -->
 					        <v-btn 
 					        	icon 
@@ -151,13 +186,125 @@
         		</div>
         	</v-container><!-- /Work hours -->        	
 
+        	<!--Equipment rentals -->
+        	<v-container v-if="timesheet.equipment_rentals.length > 0"
+        		fluid 
+        		class="pt-0 pl-0 pr-0"
+        	>
+        		<v-layout row class="mb-3">
+        			<v-chip class="primary white--text ml-0">Equipment Rentals</v-chip>
+        		</v-layout>
+        		<!-- Work jobs -->
+        		<div v-for="job in timesheet.equipment_rentals" :key="job.id">
+	        		<v-layout row>
+			        	<v-flex xs4>
+		        			<div>
+			        			<p class="body-2 mb-1">Equipment Type</p>
+			        			<p class="grey--text mb-0">{{ job.equipment_type }}</p>        				
+		        			</div>	        		
+			        	</v-flex>
+			        	<v-flex xs4>
+		        			<div>
+			        			<p class="body-2 mb-1">Rental Fee</p>
+			        			<p class="grey--text mb-1">${{ job.rental_fee }}</p>        				
+		        			</div>	        		
+			        	</v-flex>	 
+			        	<v-spacer></v-spacer>
+			        	<v-flex xs1>
+					        <!-- Delete button -->
+					        <v-btn 
+					        	icon 
+					        	class="mr-0 red--text" 
+					        	v-tooltip:top="{ html: 'Remove' }"
+					        	@click.native.stop="openDeleteDialog('deleteTimesheetEquipment', job.id)"
+					        >
+					          <v-icon>close</v-icon>
+					        </v-btn>
+					      </v-flex>			        	
+			        	<v-flex xs1>
+					        <!-- Edit button -->
+					        <v-btn 
+					        	icon 
+					        	v-tooltip:top="{ html: 'Edit Job' }"
+					        	@click.native.stop="editDialog('equipment', 'equipment_rentals', job.id)"
+					        >
+					          <v-icon>settings</v-icon>
+					        </v-btn>	        		
+			        	</v-flex>         			
+	        		</v-layout><!-- /Work jobs -->
+	        		<v-layout row v-if="job.comment">
+	        			<v-flex xs12>
+		        			<p class="body-2 mb-1">Comment</p>
+		        			<p class="grey--text mb-0">{{ job.comment }}</p>           				
+	        			</v-flex>
+	        		</v-layout> 
+	        		<v-divider class="mt-2 mb-2"></v-divider>     			
+        		</div>
+        	</v-container><!-- /Equipment rentals--> 
+
+        	<!-- Other costs -->
+        	<v-container v-if="timesheet.other_costs.length > 0"
+        		fluid 
+        		class="pt-0 pl-0 pr-0"
+        	>
+        		<v-layout row class="mb-3">
+        			<v-chip class="primary white--text ml-0">Other Costs</v-chip>
+        		</v-layout>
+        		<!-- Work jobs -->
+        		<div v-for="job in timesheet.other_costs" :key="job.id">
+	        		<v-layout row>
+			        	<v-flex xs4>
+		        			<div>
+			        			<p class="body-2 mb-1">Cost Name</p>
+			        			<p class="grey--text mb-0">{{ job.cost_name }}</p>        				
+		        			</div>	        		
+			        	</v-flex>
+			        	<v-flex xs4>
+		        			<div>
+			        			<p class="body-2 mb-1">Cost</p>
+			        			<p class="grey--text mb-1">${{ job.cost }}</p>        				
+		        			</div>	        		
+			        	</v-flex>	 
+			        	<v-spacer></v-spacer>
+			        	<v-flex xs1>
+					        <!-- Delete button -->
+					        <v-btn 
+					        	icon 
+					        	class="mr-0 red--text" 
+					        	v-tooltip:top="{ html: 'Remove' }"
+					        	@click.native.stop="openDeleteDialog('deleteTimesheetOther', job.id)"
+					        >
+					          <v-icon>close</v-icon>
+					        </v-btn>
+					      </v-flex>			        	
+			        	<v-flex xs1>
+					        <!-- Edit button -->
+					        <v-btn 
+					        	icon 
+					        	v-tooltip:top="{ html: 'Edit Job' }"
+					        	@click.native.stop="editDialog('other', 'other_costs', job.id)"
+					        >
+					          <v-icon>settings</v-icon>
+					        </v-btn>	        		
+			        	</v-flex>         			
+	        		</v-layout><!-- /Work jobs -->
+	        		<v-layout row v-if="job.comment">
+	        			<v-flex xs12>
+		        			<p class="body-2 mb-1">Comment</p>
+		        			<p class="grey--text mb-0">{{ job.comment }}</p>           				
+	        			</v-flex>
+	        		</v-layout> 
+	        		<v-divider class="mt-2 mb-2"></v-divider>     			
+        		</div>
+        	</v-container><!-- /Other costs--> 
+
         </v-card-text>
       </v-card>
     </v-flex>
 
     <!-- Add work hours dialog -->
 		<v-layout row justify-center style="position: relative;">
-	    <v-dialog v-model="hoursDialog" width="765" lazy absolute>    
+	    <v-dialog v-model="hoursDialog" width="765" lazy absolute persistent>    
 	      <v-card>
 	        <v-card-title>
 	          <div class="headline grey--text">Add work hours</div>									          
@@ -211,7 +358,7 @@
 	          <v-spacer></v-spacer>
 	          <v-btn outline class="red--text darken-1" flat="flat" @click.native="closeDialog('hours')">Cancel</v-btn>
 	          <v-btn outline class="green--text darken-1" flat="flat" 
-	          	@click="saveForm('hours', 'addTimesheetHours')"
+	          	@click="saveForm('hours')"
 	          	:loading="hoursSaving"
 	          >
 	          	Save Hours
@@ -223,7 +370,7 @@
 
     <!-- Add travel hours dialog -->
 		<v-layout row justify-center style="position: relative;">
-	    <v-dialog v-model="travelDialog" width="765" lazy absolute>    
+	    <v-dialog v-model="travelDialog" width="765" lazy absolute persistent>    
 	      <v-card>
 	        <v-card-title>
 	          <div class="headline grey--text">Add travel hours</div>									          
@@ -270,9 +417,9 @@
 	        </v-card-text>
 	        <v-card-actions>
 	          <v-spacer></v-spacer>
-	          <v-btn outline class="red--text darken-1" flat="flat" @click.native="travelDialog = false">Cancel</v-btn>
+	          <v-btn outline class="red--text darken-1" flat="flat" @click.native="closeDialog('travel')">Cancel</v-btn>
 	          <v-btn outline class="green--text darken-1" flat="flat" 
-	          	@click="saveForm('travel', 'addTimesheetTravel')"
+	          	@click="saveForm('travel')"
 	          	:loading="travelSaving"
 	          >
 	          	Save Travel
@@ -284,7 +431,7 @@
 
     <!-- Add equipment dialog -->
 		<v-layout row justify-center style="position: relative;">
-	    <v-dialog v-model="equipmentDialog" width="765" lazy absolute>    
+	    <v-dialog v-model="equipmentDialog" width="765" lazy absolute persistent>    
 	      <v-card>
 	        <v-card-title>
 	          <div class="headline grey--text">Add equipment rental</div>									          
@@ -324,11 +471,12 @@
 	        </v-card-text>
 	        <v-card-actions>
 	          <v-spacer></v-spacer>
-	          <v-btn outline class="red--text darken-1" flat="flat" @click.native="equipmentDialog = false">Cancel</v-btn>
+	          <v-btn outline class="red--text darken-1" flat="flat" @click.native="closeDialog('equipment')">Cancel</v-btn>
 	          <v-btn outline class="green--text darken-1" flat="flat" 
-
+	          	@click="saveForm('equipment')"
+	          	:loading="equipmentSaving"
 	          >
-	          	Add Equipment
+	          	Save Equipment
 	          </v-btn>
 	        </v-card-actions>
 	      </v-card>
@@ -337,7 +485,7 @@
 
     <!-- Add other cost dialog -->
 		<v-layout row justify-center style="position: relative;">
-	    <v-dialog v-model="otherDialog" width="765" lazy absolute>    
+	    <v-dialog v-model="otherDialog" width="765" lazy absolute persistent>    
 	      <v-card>
 	        <v-card-title>
 	          <div class="headline grey--text">Add other cost</div>									          
@@ -377,16 +525,127 @@
 	        </v-card-text>
 	        <v-card-actions>
 	          <v-spacer></v-spacer>
-	          <v-btn outline class="red--text darken-1" flat="flat" @click.native="otherDialog = false">Cancel</v-btn>
+	          <v-btn outline class="red--text darken-1" flat="flat" @click.native="closeDialog('other')">Cancel</v-btn>
 	          <v-btn outline class="green--text darken-1" flat="flat" 
-
+	          	@click="saveForm('other')"
+	          	:loading="otherSaving"
 	          >
-	          	Add Cost
+	          	Save Cost
 	          </v-btn>
 	        </v-card-actions>
 	      </v-card>
 	    </v-dialog>
 	  </v-layout><!-- /Add other cost dialog -->  
+
+    <!-- Remove asset dialog and button -->
+		<v-layout row justify-center 
+			class="mr-0" 
+			style="position: relative;"
+		>
+	    <v-dialog v-model="deleteDialog" width="365" lazy absolute persistent>	    
+	      <v-card>
+	        <v-card-title>
+	          <div class="headline grey--text">Delete this?</div>									          
+	        </v-card-title>
+	        <v-divider></v-divider>
+	        <v-card-text>
+	        	Are you sure you want to delete this?
+	        </v-card-text>
+	        <v-card-actions>
+	          <v-spacer></v-spacer>
+	          <!-- Cancel delete button-->
+	          <v-btn outline 
+	          	class="red--text darken-1" 
+	          	flat="flat" 
+	          	@click.native.stop="closeDeleteDialog">
+	          		Maybe not
+	          </v-btn>
+	          <!-- Confirm delete button -->
+	          <v-btn outline 
+	          class="green--text darken-1" 
+	          flat="flat" 
+	          :loading="deletingAsset" 
+	          :disable="deletingAsset" 
+	          @click.native.stop="deleteAsset">
+	          	Do it
+	          </v-btn>
+	        </v-card-actions>
+	      </v-card>
+	    </v-dialog>
+	  </v-layout><!-- Remove asset dialog and button -->
+
+    <!-- Edit timesheet dialog -->
+		<v-layout row justify-center style="position: relative;">
+	    <v-dialog v-model="editTimesheetDialog" width="765" lazy absolute persistent>	    
+	      <v-card>
+	        <v-card-title>
+	          <div class="headline grey--text">Edit a timesheet</div>									          
+	        </v-card-title>
+	        <v-divider></v-divider>
+	        <v-card-text>
+	        	<v-layout row>
+				      <v-flex xs6>
+								<v-menu
+								  lazy
+								  :close-on-content-click="false"
+								  v-model="dateMenu"
+								  transition="scale-transition"
+								  offset-y
+								  full-width
+								  :nudge-left="40"
+								  max-width="290px"
+								>
+								  <v-text-field
+								  	slot="activator"
+								    v-model="form.date.val"
+								    label="Date..."
+								    prepend-icon="event"
+								    readonly
+								  ></v-text-field>
+								  <v-date-picker v-model="form.date.val" no-title scrollable actions>
+								    <template scope="{ save, cancel }">
+								      <v-card-actions>
+								        <v-btn flat primary @click.native="cancel()">Cancel</v-btn>
+								        <v-btn flat primary @click.native="save()">Save</v-btn>
+								      </v-card-actions>
+								    </template>
+								  </v-date-picker>
+								</v-menu>        
+				      </v-flex>	
+				      <v-spacer></v-spacer>
+				      <v-flex xs6>
+								<v-text-field
+									v-model="form.per_diem.val"
+								  label="Per Diem"
+								  single-line
+								  prepend-icon="attach_money"
+								></v-text-field>												      	
+				      </v-flex>							        		
+	        	</v-layout>
+	        	<v-layout row>
+	        		<v-flex xs12>
+								<v-text-field
+									v-model="form.comment.val"
+								  label="Comment"
+								  multi-line
+								></v-text-field>										        			
+	        		</v-flex>
+	        	</v-layout>
+		        	
+	        </v-card-text>
+	        <v-card-actions>
+	          <v-spacer></v-spacer>
+	          <v-btn outline class="red--text darken-1" flat="flat" @click.native="editTimesheetDialog = false">Cancel</v-btn>
+	          <v-btn outline class="green--text darken-1" flat="flat" 
+	          	@click.native="editTimesheet" 
+	          	:loading="timesheetSaving"
+	          >
+	          	Save Timesheet
+	          </v-btn>
+	        </v-card-actions>
+	      </v-card>
+	    </v-dialog>
+	  </v-layout><!-- / edit timesheet dialog -->		  
 
   </v-layout>	
 </template>
@@ -399,8 +658,24 @@
 
 		data () {
 			return {
+				// The edit timesheet form	
+				editTimesheetDialog: false,		
+				timesheetSaving: false,
+				form: {				
+					id: {val: '', err: false, dflt: ''},
+					date: {val: '', err: false, dflt: ''},	
+					per_diem: {val: '0.00', err: false, dflt: '0.00'},
+					comment: {val: '', err: false, dflt: ''}
+				},				
+				// For the delete dialog
+				deleteDialog: false,
+				deleteDispatchAction: '',
+				deletingAsset: false,
+				assetId: '',
+				// The asset forms
 				hoursDialog: false,
 				hoursSaving: false,
+				hoursDispatchAction: 'addTimesheetHours',
 				hoursForm: {
 					id: {val: '', err: false, dflt: ''},
 					timesheet_id: {val: this.timesheet.id, err: false, dflt: ''},
@@ -410,6 +685,7 @@
 				},
 				travelDialog: false,
 				travelSaving: false,
+				travelDispatchAction: 'addTimesheetTravel',
 				travelForm: {
 					id: {val: '', err: false, dflt: ''},
 					timesheet_id: {val: this.timesheet.id, err: false, dflt: ''},
@@ -419,6 +695,7 @@
 				},
 				equipmentDialog: false,
 				equipmentSaving: false,
+				equipmentDispatchAction: 'addTimesheetEquipment',
 				equipmentForm: {
 					id: {val: '', err: false, dflt: ''},
 					timesheet_id: {val: this.timesheet.id, err: false, dflt: ''},
@@ -428,6 +705,7 @@
 				},
 				otherDialog: false,
 				otherSaving: false,
+				otherDispatchAction: 'addTimesheetOther',
 				otherForm: {
 					id: {val: '', err: false, dflt: ''},
 					timesheet_id: {val: this.timesheet.id, err: false, dflt: ''},
@@ -450,6 +728,8 @@
 						this[dialog + 'Form'][key].val = this[dialog + 'Form'][key].dflt;						
 					}
 				}
+				// Reset the dispatch action
+				this[dialog + 'DispatchAction'] = 'addTimesheet' + dialog.charAt(0).toUpperCase() + dialog.slice(1);
 			},
 
 			editDialog (dialog, fieldKey, id) {
@@ -458,25 +738,63 @@
 				for(var key in this[dialog + 'Form']) {
 					this[dialog + 'Form'][key].val = data[key];
 				}
+				// Change the dispatch action
+				this[dialog + 'DispatchAction'] = 'updateTimesheet' + dialog.charAt(0).toUpperCase()+ dialog.slice(1);				
 				// Toggle dialog
 				this[dialog + 'Dialog'] = true;
 			},
 
-			saveForm (formPrefix, dispatchAction) {
+			openDeleteDialog (dispatchAction, assetId) {
+				// Set the delete dispatch action
+				this.deleteDispatchAction = dispatchAction;
+				// Toggle dialog
+				this.deleteDialog = true;
+				// Set asset id
+				this.assetId = assetId;
+			},
+
+			closeDeleteDialog () {
+				// Set the delete dispatch action
+				this.deleteDispatchAction = '';
+				// Toggle dialog
+				this.deleteDialog = false;
+				// Reset asset id
+				this.assetId = '';				
+			},
+
+			saveForm (formPrefix) {
 				// Toggle loader
 				this[formPrefix + 'Saving'] = true;
 				// Use helper to create post object then dispatch event to add hours
 				Helpers.populatePostData(this[formPrefix + 'Form']).then( (data) => {
 					// Dispatch event
-					this.$store.dispatch(dispatchAction, data).then( () => {
+					this.$store.dispatch(this[formPrefix + 'DispatchAction'], data).then( () => {
 						// Toggle dialog
 						this[formPrefix + 'Dialog'] = false;
 						// Toggle loader
 						this[formPrefix + 'Saving'] = false;						
 					});
 				});
+			},
+
+			deleteAsset () {
+				// Toggle loader
+				this.deletingAsset = true;
+				// Dispatch event
+				this.$store.dispatch(this.deleteDispatchAction, this.assetId).then( () => {
+					// Toggle loader
+					this.deletingAsset = false;
+					// Toggle dialog
+					this.deleteDialog = false;
+					// Reset asset id
+					this.assetId = '';
+				});
 			}
 
+		},
+
+		created () {
+			Helpers.populateForm(this.form, this.timesheet);
 		}
 
 	}

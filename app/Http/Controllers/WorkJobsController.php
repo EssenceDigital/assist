@@ -87,7 +87,7 @@ class WorkJobsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $workjob
+            'payload' => $workjob
         ], 200);
 
     }
@@ -98,10 +98,10 @@ class WorkJobsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete(Request $request)
+    public function delete($id)
     {
         // Find or throw 404 :)
-        $workjob = WorkJob::findOrFail($request->id);
+        $workjob = WorkJob::findOrFail($id);
         // To return
         $return = $workjob;
 
@@ -118,7 +118,7 @@ class WorkJobsController extends Controller
         // Return successful response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $return
+            'payload' => $return
         ], 200);
     }        
 

@@ -10,10 +10,10 @@ use App\OtherCost;
 class OtherCostsController extends Controller
 {
 
-    public function __construct()
+    /*public function __construct()
     {
         $this->middleware('auth');
-    }
+    }*/
     
     // Fields and their respective validation rules
     private $validationFields = [
@@ -48,7 +48,7 @@ class OtherCostsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $otherCost
+            'payload' => $otherCost
         ], 200);
     }
 
@@ -87,7 +87,7 @@ class OtherCostsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $otherCost
+            'payload' => $otherCost
         ], 200);
 
     }
@@ -98,10 +98,10 @@ class OtherCostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete(Request $request)
+    public function delete($id)
     {
         // Find or throw 404 :)
-        $otherCost = OtherCost::findOrFail($request->id);
+        $otherCost = OtherCost::findOrFail($id);
         // To return
         $return = $otherCost;
 
@@ -118,7 +118,7 @@ class OtherCostsController extends Controller
         // Return successful response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $return
+            'payload' => $return
         ], 200);
     }        
 

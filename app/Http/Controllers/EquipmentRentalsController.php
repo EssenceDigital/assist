@@ -10,10 +10,10 @@ use App\EquipmentRental;
 class EquipmentRentalsController extends Controller
 {
 
-    public function __construct()
+    /*public function __construct()
     {
         $this->middleware('auth');
-    }
+    }*/
     
     // Fields and their respective validation rules
     private $validationFields = [
@@ -48,7 +48,7 @@ class EquipmentRentalsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $equipment
+            'payload' => $equipment
         ], 200);
     }
 
@@ -87,7 +87,7 @@ class EquipmentRentalsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $equipment
+            'payload' => $equipment
         ], 200);
 
     }
@@ -98,10 +98,10 @@ class EquipmentRentalsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete(Request $request)
+    public function delete($id)
     {
         // Find or throw 404 :)
-        $equipment = EquipmentRental::findOrFail($request->id);
+        $equipment = EquipmentRental::findOrFail($id);
         // To return
         $return = $equipment;
 
@@ -118,7 +118,7 @@ class EquipmentRentalsController extends Controller
         // Return successful response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $return
+            'payload' => $return
         ], 200);
     }        
 

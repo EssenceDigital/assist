@@ -32,7 +32,7 @@
 										<v-layout row justify-center style="position: relative;">
 									    <v-dialog v-model="addTimesheetDialog" width="765" lazy absolute>
 								        <!-- Add project button -->
-								        <v-btn slot="activator" icon v-tooltip:top="{ html: 'Add Project' }">
+								        <v-btn slot="activator" icon v-tooltip:top="{ html: 'Add Timesheet' }">
 								          <v-icon>add_circle</v-icon>
 								        </v-btn>	    
 									      <v-card>

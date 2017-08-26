@@ -11402,7 +11402,7 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(17);
-module.exports = __webpack_require__(99);
+module.exports = __webpack_require__(101);
 
 
 /***/ }),
@@ -11428,7 +11428,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuet
 /** Set up Router */
 
 /** Register Vue components */
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('dashboard', __webpack_require__(93));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('dashboard', __webpack_require__(95));
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.productionTip = false;
 
@@ -40689,6 +40689,12 @@ process.umask = function() { return 0; };
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__helpers__ = __webpack_require__(89);
+var _actions;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
 
 
 
@@ -40772,10 +40778,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		// Add timesheet hours
 		addTimesheetHours: function addTimesheetHours(state, payload) {
 			// Find timesheet
-			state.timesheets.forEach(function (timesheet) {
-				if (timesheet.id === payload.timesheet_id) {
-					timesheet.work_jobs.push(payload);
-				}
+			__WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].findTimesheet(state.timesheets, payload.timesheet_id).then(function (timesheet) {
+				timesheet.work_jobs.push(payload);
 			});
 		},
 
@@ -40783,11 +40787,84 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		// Add timesheet travel
 		addTimesheetTravel: function addTimesheetTravel(state, payload) {
 			// Find timesheet
-			state.timesheets.forEach(function (timesheet) {
-				if (timesheet.id === payload.timesheet_id) {
-					timesheet.travel_jobs.push(payload);
-				}
+			__WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].findTimesheet(state.timesheets, payload.timesheet_id).then(function (timesheet) {
+				timesheet.travel_jobs.push(payload);
 			});
+		},
+
+
+		// Add timesheet equipment
+		addTimesheetEquipment: function addTimesheetEquipment(state, payload) {
+			// Find timesheet
+			__WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].findTimesheet(state.timesheets, payload.timesheet_id).then(function (timesheet) {
+				timesheet.equipment_rentals.push(payload);
+			});
+		},
+
+
+		// Add timesheet other costs
+		addTimesheetOther: function addTimesheetOther(state, payload) {
+			// Find timesheet
+			__WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].findTimesheet(state.timesheets, payload.timesheet_id).then(function (timesheet) {
+				timesheet.other_costs.push(payload);
+			});
+		},
+
+
+		// Update timesheet hours asset
+		updateTimesheetHours: function updateTimesheetHours(state, payload) {
+			// Find timesheet asset
+			return __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].findTimesheetAsset(state.timesheets, payload.timesheet_id, 'work_jobs', payload.id).then(function (asset) {
+				// Update asset
+				asset.job_type = payload.job_type;
+				asset.hours_worked = payload.hours_worked;
+				asset.comment = payload.comment;
+			});
+		},
+
+		// Update timesheet travel asset
+		updateTimesheetTravel: function updateTimesheetTravel(state, payload) {
+			// Find timesheet asset
+			return __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].findTimesheetAsset(state.timesheets, payload.timesheet_id, 'travel_jobs', payload.id).then(function (asset) {
+				// Update asset
+				asset.travel_distance = payload.travel_distance;
+				asset.travel_time = payload.travel_time;
+				asset.comment = payload.comment;
+			});
+		},
+
+		// Update timesheet equipment asset
+		updateTimesheetEquipment: function updateTimesheetEquipment(state, payload) {
+			// Find timesheet asset
+			return __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].findTimesheetAsset(state.timesheets, payload.timesheet_id, 'equipment_rentals', payload.id).then(function (asset) {
+				// Update asset
+				asset.equipment_type = payload.equipment_type;
+				asset.rental_fee = payload.rental_fee;
+				asset.comment = payload.comment;
+			});
+		},
+
+		// Update timesheet other cost asset
+		updateTimesheetOther: function updateTimesheetOther(state, payload) {
+			// Find timesheet asset
+			return __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].findTimesheetAsset(state.timesheets, payload.timesheet_id, 'other_costs', payload.id).then(function (asset) {
+				// Update asset
+				asset.cost_name = payload.cost_name;
+				asset.cost = payload.cost;
+				asset.comment = payload.comment;
+			});
+		},
+		deleteTimesheetHours: function deleteTimesheetHours(state, payload) {
+			return __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].deleteTimesheetAsset(state.timesheets, payload.timesheet_id, 'work_jobs', payload.id);
+		},
+		deleteTimesheetTravel: function deleteTimesheetTravel(state, payload) {
+			return __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].deleteTimesheetAsset(state.timesheets, payload.timesheet_id, 'travel_jobs', payload.id);
+		},
+		deleteTimesheetEquipment: function deleteTimesheetEquipment(state, payload) {
+			return __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].deleteTimesheetAsset(state.timesheets, payload.timesheet_id, 'equipment_rentals', payload.id);
+		},
+		deleteTimesheetOther: function deleteTimesheetOther(state, payload) {
+			return __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].deleteTimesheetAsset(state.timesheets, payload.timesheet_id, 'other_costs', payload.id);
 		},
 
 
@@ -40803,7 +40880,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		}
 	},
 
-	actions: {
+	actions: (_actions = {
 
 		/* 
   	PROJECT ACTIONS
@@ -40880,41 +40957,47 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/users/' + payload.user_id + '/projects/' + payload.project_id + '/timesheets', 'updateTimesheets');
 		},
 
+
+		/* 
+  	TIMESHEET ACTIONS
+  */
+
 		// Use api to add a timesheet to a project
 		addTimesheet: function addTimesheet(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/add', 'addTimesheet');
-		},
-
-		// Use api to add hours to a timesheet
-		addTimesheetHours: function addTimesheetHours(context, payload) {
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/add-hours', 'addTimesheetHours');
-		},
-
-		// Use api to add trave; to a timesheet
-		addTimesheetTravel: function addTimesheetTravel(context, payload) {
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/add-travel', 'addTimesheetTravel');
-		},
-
-
-		/* 
-  	USER ACTIONS
-  */
-		// Use api to retrieve all users and set them in the store
-		getUsers: function getUsers(context, payload) {
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/users', 'updateUsers');
-		},
-
-
-		/*
-  	MISC ACTIONS
-  */
-
-		// Use api to retrieve all the unique clients (from projects)
-		getClients: function getClients(context, payload) {
-			// Use api to send request
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/projects/clients', 'updateClients');
 		}
-	},
+	}, _defineProperty(_actions, 'deleteProjectCrew', function deleteProjectCrew(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/projects/' + payload.project_id + '/delete-crew/' + payload.id, 'deleteProjectCrew');
+	}), _defineProperty(_actions, 'addTimesheetHours', function addTimesheetHours(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/add-hours', 'addTimesheetHours');
+	}), _defineProperty(_actions, 'addTimesheetTravel', function addTimesheetTravel(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/add-travel', 'addTimesheetTravel');
+	}), _defineProperty(_actions, 'addTimesheetEquipment', function addTimesheetEquipment(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/add-equipment', 'addTimesheetEquipment');
+	}), _defineProperty(_actions, 'addTimesheetOther', function addTimesheetOther(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/add-other', 'addTimesheetOther');
+	}), _defineProperty(_actions, 'updateTimesheetHours', function updateTimesheetHours(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update-hours', 'updateTimesheetHours');
+	}), _defineProperty(_actions, 'updateTimesheetTravel', function updateTimesheetTravel(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update-travel', 'updateTimesheetTravel');
+	}), _defineProperty(_actions, 'updateTimesheetEquipment', function updateTimesheetEquipment(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update-equipment', 'updateTimesheetEquipment');
+	}), _defineProperty(_actions, 'updateTimesheetOther', function updateTimesheetOther(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update-other', 'updateTimesheetOther');
+	}), _defineProperty(_actions, 'deleteTimesheetHours', function deleteTimesheetHours(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/timesheets/delete-hours/' + payload, 'deleteTimesheetHours');
+	}), _defineProperty(_actions, 'deleteTimesheetTravel', function deleteTimesheetTravel(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/timesheets/delete-travel/' + payload, 'deleteTimesheetTravel');
+	}), _defineProperty(_actions, 'deleteTimesheetEquipment', function deleteTimesheetEquipment(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/timesheets/delete-equipment/' + payload, 'deleteTimesheetEquipment');
+	}), _defineProperty(_actions, 'deleteTimesheetOther', function deleteTimesheetOther(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/timesheets/delete-other/' + payload, 'deleteTimesheetOther');
+	}), _defineProperty(_actions, 'getUsers', function getUsers(context, payload) {
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/users', 'updateUsers');
+	}), _defineProperty(_actions, 'getClients', function getClients(context, payload) {
+		// Use api to send request
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/projects/clients', 'updateClients');
+	}), _actions),
 
 	getters: {
 		// Return the debug state
@@ -41879,7 +41962,7 @@ var index_esm = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_timesheet_Timesheets___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_timesheet_Timesheets__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_timesheet_Project_timesheets__ = __webpack_require__(81);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_timesheet_Project_timesheets___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_timesheet_Project_timesheets__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_user_Users__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_user_Users__ = __webpack_require__(92);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_user_Users___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_user_Users__);
 /** Load Vue based dependencies */
 
@@ -49090,13 +49173,13 @@ if (false) {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(103)
+  __webpack_require__(82)
 }
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(82),
+  __webpack_require__(84),
   /* template */
-  __webpack_require__(105),
+  __webpack_require__(91),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -49129,11 +49212,51 @@ module.exports = Component.exports
 
 /***/ }),
 /* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(83);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("0b831803", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4285ff0c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-timesheets.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4285ff0c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-timesheets.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.card--flex-toolbar[data-v-4285ff0c] {\n  margin-top: -64px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 84 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheet__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheet__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheet___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Timesheet__);
 //
 //
@@ -49360,19 +49483,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 83 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(84)
+  __webpack_require__(86)
 }
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(86),
-  /* template */
   __webpack_require__(88),
+  /* template */
+  __webpack_require__(90),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -49404,13 +49527,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 84 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(85);
+var content = __webpack_require__(87);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -49430,7 +49553,7 @@ if(false) {
 }
 
 /***/ }),
-/* 85 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(undefined);
@@ -49444,12 +49567,271 @@ exports.push([module.i, "\n.chip[data-v-0aedd5ab] {\n\theight: auto;\n\twhite-sp
 
 
 /***/ }),
-/* 86 */
+/* 88 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(89);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -49851,8 +50233,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	data: function data() {
 		return {
+			// The edit timesheet form	
+			editTimesheetDialog: false,
+			timesheetSaving: false,
+			form: {
+				id: { val: '', err: false, dflt: '' },
+				date: { val: '', err: false, dflt: '' },
+				per_diem: { val: '0.00', err: false, dflt: '0.00' },
+				comment: { val: '', err: false, dflt: '' }
+			},
+			// For the delete dialog
+			deleteDialog: false,
+			deleteDispatchAction: '',
+			deletingAsset: false,
+			assetId: '',
+			// The asset forms
 			hoursDialog: false,
 			hoursSaving: false,
+			hoursDispatchAction: 'addTimesheetHours',
 			hoursForm: {
 				id: { val: '', err: false, dflt: '' },
 				timesheet_id: { val: this.timesheet.id, err: false, dflt: '' },
@@ -49862,6 +50260,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			},
 			travelDialog: false,
 			travelSaving: false,
+			travelDispatchAction: 'addTimesheetTravel',
 			travelForm: {
 				id: { val: '', err: false, dflt: '' },
 				timesheet_id: { val: this.timesheet.id, err: false, dflt: '' },
@@ -49871,6 +50270,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			},
 			equipmentDialog: false,
 			equipmentSaving: false,
+			equipmentDispatchAction: 'addTimesheetEquipment',
 			equipmentForm: {
 				id: { val: '', err: false, dflt: '' },
 				timesheet_id: { val: this.timesheet.id, err: false, dflt: '' },
@@ -49880,6 +50280,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			},
 			otherDialog: false,
 			otherSaving: false,
+			otherDispatchAction: 'addTimesheetOther',
 			otherForm: {
 				id: { val: '', err: false, dflt: '' },
 				timesheet_id: { val: this.timesheet.id, err: false, dflt: '' },
@@ -49902,6 +50303,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					this[dialog + 'Form'][key].val = this[dialog + 'Form'][key].dflt;
 				}
 			}
+			// Reset the dispatch action
+			this[dialog + 'DispatchAction'] = 'addTimesheet' + dialog.charAt(0).toUpperCase() + dialog.slice(1);
 		},
 		editDialog: function editDialog(dialog, fieldKey, id) {
 			var data = this.timesheet[fieldKey].find(function (elem) {
@@ -49911,10 +50314,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			for (var key in this[dialog + 'Form']) {
 				this[dialog + 'Form'][key].val = data[key];
 			}
+			// Change the dispatch action
+			this[dialog + 'DispatchAction'] = 'updateTimesheet' + dialog.charAt(0).toUpperCase() + dialog.slice(1);
 			// Toggle dialog
 			this[dialog + 'Dialog'] = true;
 		},
-		saveForm: function saveForm(formPrefix, dispatchAction) {
+		openDeleteDialog: function openDeleteDialog(dispatchAction, assetId) {
+			// Set the delete dispatch action
+			this.deleteDispatchAction = dispatchAction;
+			// Toggle dialog
+			this.deleteDialog = true;
+			// Set asset id
+			this.assetId = assetId;
+		},
+		closeDeleteDialog: function closeDeleteDialog() {
+			// Set the delete dispatch action
+			this.deleteDispatchAction = '';
+			// Toggle dialog
+			this.deleteDialog = false;
+			// Reset asset id
+			this.assetId = '';
+		},
+		saveForm: function saveForm(formPrefix) {
 			var _this = this;
 
 			// Toggle loader
@@ -49922,20 +50343,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// Use helper to create post object then dispatch event to add hours
 			__WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].populatePostData(this[formPrefix + 'Form']).then(function (data) {
 				// Dispatch event
-				_this.$store.dispatch(dispatchAction, data).then(function () {
+				_this.$store.dispatch(_this[formPrefix + 'DispatchAction'], data).then(function () {
 					// Toggle dialog
 					_this[formPrefix + 'Dialog'] = false;
 					// Toggle loader
 					_this[formPrefix + 'Saving'] = false;
 				});
 			});
-		}
-	}
+		},
+		deleteAsset: function deleteAsset() {
+			var _this2 = this;
 
+			// Toggle loader
+			this.deletingAsset = true;
+			// Dispatch event
+			this.$store.dispatch(this.deleteDispatchAction, this.assetId).then(function () {
+				// Toggle loader
+				_this2.deletingAsset = false;
+				// Toggle dialog
+				_this2.deleteDialog = false;
+				// Reset asset id
+				_this2.assetId = '';
+			});
+		}
+	},
+
+	created: function created() {
+		__WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].populateForm(this.form, this.timesheet);
+	}
 });
 
 /***/ }),
-/* 87 */
+/* 89 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49957,11 +50396,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 			resolve(form);
 		});
+	},
+	findTimesheet: function findTimesheet(timesheets, timesheetId) {
+		return new Promise(function (resolve, reject) {
+			// Find timesheet
+			timesheets.forEach(function (timesheet) {
+				if (timesheet.id === timesheetId) {
+					resolve(timesheet);
+				}
+			});
+		});
+	},
+	findTimesheetAsset: function findTimesheetAsset(timesheets, timesheetId, assetName, assetId) {
+		var _this = this;
+
+		return new Promise(function (resolve, reject) {
+			_this.findTimesheet(timesheets, timesheetId).then(function (timesheet) {
+				timesheet[assetName].forEach(function (asset) {
+					if (asset.id === assetId) {
+						resolve(asset);
+					}
+				});
+			});
+		});
+	},
+	deleteTimesheetAsset: function deleteTimesheetAsset(timesheets, timesheetId, assetName, assetId) {
+		var _this2 = this;
+
+		return new Promise(function (resolve, reject) {
+			_this2.findTimesheet(timesheets, timesheetId).then(function (timesheet) {
+				timesheet[assetName].forEach(function (asset) {
+					if (asset.id === assetId) {
+						var index = timesheet[assetName].indexOf(asset);
+						timesheet[assetName].splice(index, 1);
+						resolve();
+					}
+				});
+			});
+		});
 	}
 });
 
 /***/ }),
-/* 88 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -49976,6 +50453,35 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "offset-sm3": ""
     }
   }, [_c('v-card', [_c('v-layout', {
+    staticClass: "pr-2",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs1": "",
+      "offset-xs11": ""
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Edit Timesheet'
+      }),
+      expression: "{ html: 'Edit Timesheet' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.editTimesheetDialog = true
+      }
+    }
+  }, [_c('v-icon', [_vm._v("settings")])], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -50091,7 +50597,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('v-flex', {
       attrs: {
-        "xs5": ""
+        "xs4": ""
       }
     }, [_c('div', [_c('p', {
       staticClass: "body-2 mb-1"
@@ -50099,13 +50605,37 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "grey--text mb-1"
     }, [_vm._v(_vm._s(job.travel_distance) + " kms")])])]), _vm._v(" "), _c('v-flex', {
       attrs: {
-        "xs5": ""
+        "xs4": ""
       }
     }, [_c('div', [_c('p', {
       staticClass: "body-2 mb-1"
     }, [_vm._v("Hours")]), _vm._v(" "), _c('p', {
       staticClass: "grey--text mb-0"
     }, [_vm._v(_vm._s(job.travel_time))])])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('v-btn', {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: ({
+          html: 'Remove'
+        }),
+        expression: "{ html: 'Remove' }",
+        arg: "top"
+      }],
+      staticClass: "mr-0 red--text",
+      attrs: {
+        "icon": ""
+      },
+      nativeOn: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.openDeleteDialog('deleteTimesheetTravel', job.id)
+        }
+      }
+    }, [_c('v-icon', [_vm._v("close")])], 1)], 1), _vm._v(" "), _c('v-flex', {
       attrs: {
         "xs1": ""
       }
@@ -50164,7 +50694,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('v-flex', {
       attrs: {
-        "xs5": ""
+        "xs4": ""
       }
     }, [_c('div', [_c('p', {
       staticClass: "body-2 mb-1"
@@ -50172,13 +50702,37 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "grey--text mb-0"
     }, [_vm._v(_vm._s(job.job_type))])])]), _vm._v(" "), _c('v-flex', {
       attrs: {
-        "xs5": ""
+        "xs4": ""
       }
     }, [_c('div', [_c('p', {
       staticClass: "body-2 mb-1"
     }, [_vm._v("Hours")]), _vm._v(" "), _c('p', {
       staticClass: "grey--text mb-1"
     }, [_vm._v(_vm._s(job.hours_worked))])])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('v-btn', {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: ({
+          html: 'Remove'
+        }),
+        expression: "{ html: 'Remove' }",
+        arg: "top"
+      }],
+      staticClass: "mr-0 red--text",
+      attrs: {
+        "icon": ""
+      },
+      nativeOn: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.openDeleteDialog('deleteTimesheetHours', job.id)
+        }
+      }
+    }, [_c('v-icon', [_vm._v("close")])], 1)], 1), _vm._v(" "), _c('v-flex', {
       attrs: {
         "xs1": ""
       }
@@ -50216,6 +50770,200 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_vm._v(_vm._s(job.comment))])])], 1) : _vm._e(), _vm._v(" "), _c('v-divider', {
       staticClass: "mt-2 mb-2"
     })], 1)
+  })], 2) : _vm._e(), _vm._v(" "), (_vm.timesheet.equipment_rentals.length > 0) ? _c('v-container', {
+    staticClass: "pt-0 pl-0 pr-0",
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    staticClass: "mb-3",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-chip', {
+    staticClass: "primary white--text ml-0"
+  }, [_vm._v("Equipment Rentals")])], 1), _vm._v(" "), _vm._l((_vm.timesheet.equipment_rentals), function(job) {
+    return _c('div', {
+      key: job.id
+    }, [_c('v-layout', {
+      attrs: {
+        "row": ""
+      }
+    }, [_c('v-flex', {
+      attrs: {
+        "xs4": ""
+      }
+    }, [_c('div', [_c('p', {
+      staticClass: "body-2 mb-1"
+    }, [_vm._v("Equipment Type")]), _vm._v(" "), _c('p', {
+      staticClass: "grey--text mb-0"
+    }, [_vm._v(_vm._s(job.equipment_type))])])]), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs4": ""
+      }
+    }, [_c('div', [_c('p', {
+      staticClass: "body-2 mb-1"
+    }, [_vm._v("Rental Fee")]), _vm._v(" "), _c('p', {
+      staticClass: "grey--text mb-1"
+    }, [_vm._v("$" + _vm._s(job.rental_fee))])])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('v-btn', {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: ({
+          html: 'Remove'
+        }),
+        expression: "{ html: 'Remove' }",
+        arg: "top"
+      }],
+      staticClass: "mr-0 red--text",
+      attrs: {
+        "icon": ""
+      },
+      nativeOn: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.openDeleteDialog('deleteTimesheetEquipment', job.id)
+        }
+      }
+    }, [_c('v-icon', [_vm._v("close")])], 1)], 1), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('v-btn', {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: ({
+          html: 'Edit Job'
+        }),
+        expression: "{ html: 'Edit Job' }",
+        arg: "top"
+      }],
+      attrs: {
+        "icon": ""
+      },
+      nativeOn: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.editDialog('equipment', 'equipment_rentals', job.id)
+        }
+      }
+    }, [_c('v-icon', [_vm._v("settings")])], 1)], 1)], 1), _vm._v(" "), (job.comment) ? _c('v-layout', {
+      attrs: {
+        "row": ""
+      }
+    }, [_c('v-flex', {
+      attrs: {
+        "xs12": ""
+      }
+    }, [_c('p', {
+      staticClass: "body-2 mb-1"
+    }, [_vm._v("Comment")]), _vm._v(" "), _c('p', {
+      staticClass: "grey--text mb-0"
+    }, [_vm._v(_vm._s(job.comment))])])], 1) : _vm._e(), _vm._v(" "), _c('v-divider', {
+      staticClass: "mt-2 mb-2"
+    })], 1)
+  })], 2) : _vm._e(), _vm._v(" "), (_vm.timesheet.other_costs.length > 0) ? _c('v-container', {
+    staticClass: "pt-0 pl-0 pr-0",
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    staticClass: "mb-3",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-chip', {
+    staticClass: "primary white--text ml-0"
+  }, [_vm._v("Other Costs")])], 1), _vm._v(" "), _vm._l((_vm.timesheet.other_costs), function(job) {
+    return _c('div', {
+      key: job.id
+    }, [_c('v-layout', {
+      attrs: {
+        "row": ""
+      }
+    }, [_c('v-flex', {
+      attrs: {
+        "xs4": ""
+      }
+    }, [_c('div', [_c('p', {
+      staticClass: "body-2 mb-1"
+    }, [_vm._v("Cost Name")]), _vm._v(" "), _c('p', {
+      staticClass: "grey--text mb-0"
+    }, [_vm._v(_vm._s(job.cost_name))])])]), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs4": ""
+      }
+    }, [_c('div', [_c('p', {
+      staticClass: "body-2 mb-1"
+    }, [_vm._v("Cost")]), _vm._v(" "), _c('p', {
+      staticClass: "grey--text mb-1"
+    }, [_vm._v("$" + _vm._s(job.cost))])])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('v-btn', {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: ({
+          html: 'Remove'
+        }),
+        expression: "{ html: 'Remove' }",
+        arg: "top"
+      }],
+      staticClass: "mr-0 red--text",
+      attrs: {
+        "icon": ""
+      },
+      nativeOn: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.openDeleteDialog('deleteTimesheetOther', job.id)
+        }
+      }
+    }, [_c('v-icon', [_vm._v("close")])], 1)], 1), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('v-btn', {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: ({
+          html: 'Edit Job'
+        }),
+        expression: "{ html: 'Edit Job' }",
+        arg: "top"
+      }],
+      attrs: {
+        "icon": ""
+      },
+      nativeOn: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.editDialog('other', 'other_costs', job.id)
+        }
+      }
+    }, [_c('v-icon', [_vm._v("settings")])], 1)], 1)], 1), _vm._v(" "), (job.comment) ? _c('v-layout', {
+      attrs: {
+        "row": ""
+      }
+    }, [_c('v-flex', {
+      attrs: {
+        "xs12": ""
+      }
+    }, [_c('p', {
+      staticClass: "body-2 mb-1"
+    }, [_vm._v("Comment")]), _vm._v(" "), _c('p', {
+      staticClass: "grey--text mb-0"
+    }, [_vm._v(_vm._s(job.comment))])])], 1) : _vm._e(), _vm._v(" "), _c('v-divider', {
+      staticClass: "mt-2 mb-2"
+    })], 1)
   })], 2) : _vm._e()], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
     staticStyle: {
       "position": "relative"
@@ -50228,7 +50976,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "width": "765",
       "lazy": "",
-      "absolute": ""
+      "absolute": "",
+      "persistent": ""
     },
     model: {
       value: (_vm.hoursDialog),
@@ -50334,7 +51083,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     },
     on: {
       "click": function($event) {
-        _vm.saveForm('hours', 'addTimesheetHours')
+        _vm.saveForm('hours')
       }
     }
   }, [_vm._v("\n\t          \tSave Hours\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
@@ -50349,7 +51098,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "width": "765",
       "lazy": "",
-      "absolute": ""
+      "absolute": "",
+      "persistent": ""
     },
     model: {
       value: (_vm.travelDialog),
@@ -50430,7 +51180,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     },
     nativeOn: {
       "click": function($event) {
-        _vm.travelDialog = false
+        _vm.closeDialog('travel')
       }
     }
   }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
@@ -50442,7 +51192,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     },
     on: {
       "click": function($event) {
-        _vm.saveForm('travel', 'addTimesheetTravel')
+        _vm.saveForm('travel')
       }
     }
   }, [_vm._v("\n\t          \tSave Travel\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
@@ -50457,7 +51207,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "width": "765",
       "lazy": "",
-      "absolute": ""
+      "absolute": "",
+      "persistent": ""
     },
     model: {
       value: (_vm.equipmentDialog),
@@ -50531,16 +51282,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     },
     nativeOn: {
       "click": function($event) {
-        _vm.equipmentDialog = false
+        _vm.closeDialog('equipment')
       }
     }
   }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
     staticClass: "green--text darken-1",
     attrs: {
       "outline": "",
-      "flat": "flat"
+      "flat": "flat",
+      "loading": _vm.equipmentSaving
+    },
+    on: {
+      "click": function($event) {
+        _vm.saveForm('equipment')
+      }
     }
-  }, [_vm._v("\n\t          \tAdd Equipment\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v("\n\t          \tSave Equipment\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
     staticStyle: {
       "position": "relative"
     },
@@ -50552,7 +51309,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "width": "765",
       "lazy": "",
-      "absolute": ""
+      "absolute": "",
+      "persistent": ""
     },
     model: {
       value: (_vm.otherDialog),
@@ -50626,16 +51384,238 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     },
     nativeOn: {
       "click": function($event) {
-        _vm.otherDialog = false
+        _vm.closeDialog('other')
       }
     }
   }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
     staticClass: "green--text darken-1",
     attrs: {
       "outline": "",
-      "flat": "flat"
+      "flat": "flat",
+      "loading": _vm.otherSaving
+    },
+    on: {
+      "click": function($event) {
+        _vm.saveForm('other')
+      }
     }
-  }, [_vm._v("\n\t          \tAdd Cost\n\t          ")])], 1)], 1)], 1)], 1)], 1)
+  }, [_vm._v("\n\t          \tSave Cost\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+    staticClass: "mr-0",
+    staticStyle: {
+      "position": "relative"
+    },
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "width": "365",
+      "lazy": "",
+      "absolute": "",
+      "persistent": ""
+    },
+    model: {
+      value: (_vm.deleteDialog),
+      callback: function($$v) {
+        _vm.deleteDialog = $$v
+      },
+      expression: "deleteDialog"
+    }
+  }, [_c('v-card', [_c('v-card-title', [_c('div', {
+    staticClass: "headline grey--text"
+  }, [_vm._v("Delete this?")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-card-text', [_vm._v("\n\t        \tAre you sure you want to delete this?\n\t        ")]), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    staticClass: "red--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat"
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.closeDeleteDialog($event)
+      }
+    }
+  }, [_vm._v("\n\t          \t\tMaybe not\n\t          ")]), _vm._v(" "), _c('v-btn', {
+    staticClass: "green--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat",
+      "loading": _vm.deletingAsset,
+      "disable": _vm.deletingAsset
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.deleteAsset($event)
+      }
+    }
+  }, [_vm._v("\n\t          \tDo it\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+    staticStyle: {
+      "position": "relative"
+    },
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "width": "765",
+      "lazy": "",
+      "absolute": "",
+      "persistent": ""
+    },
+    model: {
+      value: (_vm.editTimesheetDialog),
+      callback: function($$v) {
+        _vm.editTimesheetDialog = $$v
+      },
+      expression: "editTimesheetDialog"
+    }
+  }, [_c('v-card', [_c('v-card-title', [_c('div', {
+    staticClass: "headline grey--text"
+  }, [_vm._v("Edit a timesheet")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs6": ""
+    }
+  }, [_c('v-menu', {
+    attrs: {
+      "lazy": "",
+      "close-on-content-click": false,
+      "transition": "scale-transition",
+      "offset-y": "",
+      "full-width": "",
+      "nudge-left": 40,
+      "max-width": "290px"
+    },
+    model: {
+      value: (_vm.dateMenu),
+      callback: function($$v) {
+        _vm.dateMenu = $$v
+      },
+      expression: "dateMenu"
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "Date...",
+      "prepend-icon": "event",
+      "readonly": ""
+    },
+    slot: "activator",
+    model: {
+      value: (_vm.form.date.val),
+      callback: function($$v) {
+        _vm.form.date.val = $$v
+      },
+      expression: "form.date.val"
+    }
+  }), _vm._v(" "), _c('v-date-picker', {
+    attrs: {
+      "no-title": "",
+      "scrollable": "",
+      "actions": ""
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function(ref) {
+        var save = ref.save;
+        var cancel = ref.cancel;
+
+        return [_c('v-card-actions', [_c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              cancel()
+            }
+          }
+        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              save()
+            }
+          }
+        }, [_vm._v("Save")])], 1)]
+      }
+    }]),
+    model: {
+      value: (_vm.form.date.val),
+      callback: function($$v) {
+        _vm.form.date.val = $$v
+      },
+      expression: "form.date.val"
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs6": ""
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "Per Diem",
+      "single-line": "",
+      "prepend-icon": "attach_money"
+    },
+    model: {
+      value: (_vm.form.per_diem.val),
+      callback: function($$v) {
+        _vm.form.per_diem.val = $$v
+      },
+      expression: "form.per_diem.val"
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "Comment",
+      "multi-line": ""
+    },
+    model: {
+      value: (_vm.form.comment.val),
+      callback: function($$v) {
+        _vm.form.comment.val = $$v
+      },
+      expression: "form.comment.val"
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    staticClass: "red--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat"
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.editTimesheetDialog = false
+      }
+    }
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+    staticClass: "green--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat",
+      "loading": _vm.timesheetSaving
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.editTimesheet($event)
+      }
+    }
+  }, [_vm._v("\n\t          \tSave Timesheet\n\t          ")])], 1)], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -50646,406 +51626,7 @@ if (false) {
 }
 
 /***/ }),
-/* 89 */,
-/* 90 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(91),
-  /* template */
-  __webpack_require__(92),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\user\\Users.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Users.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5b729f5e", Component.options)
-  } else {
-    hotAPI.reload("data-v-5b729f5e", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
 /* 91 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({});
-
-/***/ }),
-/* 92 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_vm._v("\n  Users\n")])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-5b729f5e", module.exports)
-  }
-}
-
-/***/ }),
-/* 93 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(94),
-  /* template */
-  __webpack_require__(98),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\Dashboard.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Dashboard.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-de4ee6d6", Component.options)
-  } else {
-    hotAPI.reload("data-v-de4ee6d6", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 94 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-
-  components: {
-    'nav-bar': __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar___default.a
-  }
-
-});
-
-/***/ }),
-/* 95 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(96),
-  /* template */
-  __webpack_require__(97),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\_ui\\Nav-bar.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Nav-bar.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-24c05664", Component.options)
-  } else {
-    hotAPI.reload("data-v-24c05664", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 96 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	data: function data() {
-		return {
-			navDrawer: false,
-			menuItems: [{ icon: 'dashboard', title: 'Dashboard', link: '/' }, { icon: 'assignment', title: 'Projects', link: '/projects' }, { icon: 'today', title: 'Timesheets', link: '/timesheets' }, { icon: 'group', title: 'Users', link: '/users' }]
-		};
-	}
-});
-
-/***/ }),
-/* 97 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-layout', [_c('v-toolbar', {
-    staticClass: "default",
-    attrs: {
-      "dark": ""
-    }
-  }, [_c('v-toolbar-side-icon', {
-    staticClass: "hidden-sm-and-up ",
-    on: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.navDrawer = !_vm.navDrawer
-      }
-    }
-  }), _vm._v(" "), _c('v-toolbar-title', [_c('router-link', {
-    staticStyle: {
-      "cursor": "pointer"
-    },
-    attrs: {
-      "to": "/",
-      "tag": "span"
-    }
-  }, [_vm._v("\n\t\t\t\t\tArrow Assist\n\t\t\t\t")])], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-toolbar-items', {
-    staticClass: "hidden-xs-only"
-  }, _vm._l((_vm.menuItems), function(item) {
-    return _c('v-btn', {
-      key: item.title,
-      attrs: {
-        "flat": "",
-        "router": "",
-        "to": item.link
-      }
-    }, [_c('v-icon', {
-      attrs: {
-        "left": "",
-        "dark": ""
-      }
-    }, [_vm._v(_vm._s(item.icon))]), _vm._v("\n\t\t\t\t\t\t" + _vm._s(item.title) + "\n\t\t\t\t")], 1)
-  }))], 1), _vm._v(" "), _c('v-navigation-drawer', {
-    attrs: {
-      "temporary": ""
-    },
-    model: {
-      value: (_vm.navDrawer),
-      callback: function($$v) {
-        _vm.navDrawer = $$v
-      },
-      expression: "navDrawer"
-    }
-  }, [_c('v-list', _vm._l((_vm.menuItems), function(item) {
-    return _c('v-list-tile', {
-      key: item.title,
-      attrs: {
-        "to": item.link
-      }
-    }, [_c('v-list-tile-action', [_c('v-icon', [_vm._v(_vm._s(item.icon))])], 1), _vm._v(" "), _c('v-list-tile-content', [_vm._v(_vm._s(item.title))])], 1)
-  }))], 1)], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-24c05664", module.exports)
-  }
-}
-
-/***/ }),
-/* 98 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-app', {
-    attrs: {
-      "standalone": ""
-    }
-  }, [_c('nav-bar'), _vm._v(" "), _c('main', [_c('router-view')], 1), _vm._v(" "), _c('v-footer', {
-    staticClass: "default pa-3 mt-5"
-  }, [_c('v-spacer'), _vm._v(" "), _c('div', [_vm._v("© " + _vm._s(new Date().getFullYear()))])], 1)], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-de4ee6d6", module.exports)
-  }
-}
-
-/***/ }),
-/* 99 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 100 */,
-/* 101 */,
-/* 102 */,
-/* 103 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(104);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("0b831803", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4285ff0c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-timesheets.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4285ff0c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-timesheets.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 104 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(2)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n.card--flex-toolbar[data-v-4285ff0c] {\n  margin-top: -64px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -51143,9 +51724,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       name: "tooltip",
       rawName: "v-tooltip:top",
       value: ({
-        html: 'Add Project'
+        html: 'Add Timesheet'
       }),
-      expression: "{ html: 'Add Project' }",
+      expression: "{ html: 'Add Timesheet' }",
       arg: "top"
     }],
     attrs: {
@@ -51350,6 +51931,361 @@ if (false) {
      require("vue-hot-reload-api").rerender("data-v-4285ff0c", module.exports)
   }
 }
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(93),
+  /* template */
+  __webpack_require__(94),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\user\\Users.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Users.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5b729f5e", Component.options)
+  } else {
+    hotAPI.reload("data-v-5b729f5e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 93 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_vm._v("\n  Users\n")])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-5b729f5e", module.exports)
+  }
+}
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(96),
+  /* template */
+  __webpack_require__(100),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\Dashboard.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Dashboard.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-de4ee6d6", Component.options)
+  } else {
+    hotAPI.reload("data-v-de4ee6d6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 96 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar__ = __webpack_require__(97);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+  components: {
+    'nav-bar': __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar___default.a
+  }
+
+});
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(98),
+  /* template */
+  __webpack_require__(99),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\_ui\\Nav-bar.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Nav-bar.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-24c05664", Component.options)
+  } else {
+    hotAPI.reload("data-v-24c05664", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 98 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {
+			navDrawer: false,
+			menuItems: [{ icon: 'dashboard', title: 'Dashboard', link: '/' }, { icon: 'assignment', title: 'Projects', link: '/projects' }, { icon: 'today', title: 'Timesheets', link: '/timesheets' }, { icon: 'group', title: 'Users', link: '/users' }]
+		};
+	}
+});
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-layout', [_c('v-toolbar', {
+    staticClass: "default",
+    attrs: {
+      "dark": ""
+    }
+  }, [_c('v-toolbar-side-icon', {
+    staticClass: "hidden-sm-and-up ",
+    on: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.navDrawer = !_vm.navDrawer
+      }
+    }
+  }), _vm._v(" "), _c('v-toolbar-title', [_c('router-link', {
+    staticStyle: {
+      "cursor": "pointer"
+    },
+    attrs: {
+      "to": "/",
+      "tag": "span"
+    }
+  }, [_vm._v("\n\t\t\t\t\tArrow Assist\n\t\t\t\t")])], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-toolbar-items', {
+    staticClass: "hidden-xs-only"
+  }, _vm._l((_vm.menuItems), function(item) {
+    return _c('v-btn', {
+      key: item.title,
+      attrs: {
+        "flat": "",
+        "router": "",
+        "to": item.link
+      }
+    }, [_c('v-icon', {
+      attrs: {
+        "left": "",
+        "dark": ""
+      }
+    }, [_vm._v(_vm._s(item.icon))]), _vm._v("\n\t\t\t\t\t\t" + _vm._s(item.title) + "\n\t\t\t\t")], 1)
+  }))], 1), _vm._v(" "), _c('v-navigation-drawer', {
+    attrs: {
+      "temporary": ""
+    },
+    model: {
+      value: (_vm.navDrawer),
+      callback: function($$v) {
+        _vm.navDrawer = $$v
+      },
+      expression: "navDrawer"
+    }
+  }, [_c('v-list', _vm._l((_vm.menuItems), function(item) {
+    return _c('v-list-tile', {
+      key: item.title,
+      attrs: {
+        "to": item.link
+      }
+    }, [_c('v-list-tile-action', [_c('v-icon', [_vm._v(_vm._s(item.icon))])], 1), _vm._v(" "), _c('v-list-tile-content', [_vm._v(_vm._s(item.title))])], 1)
+  }))], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-24c05664", module.exports)
+  }
+}
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-app', {
+    attrs: {
+      "standalone": ""
+    }
+  }, [_c('nav-bar'), _vm._v(" "), _c('main', [_c('router-view')], 1), _vm._v(" "), _c('v-footer', {
+    staticClass: "default pa-3 mt-5"
+  }, [_c('v-spacer'), _vm._v(" "), _c('div', [_vm._v("© " + _vm._s(new Date().getFullYear()))])], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-de4ee6d6", module.exports)
+  }
+}
+
+/***/ }),
+/* 101 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

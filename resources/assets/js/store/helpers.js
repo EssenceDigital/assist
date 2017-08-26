@@ -17,5 +17,42 @@ export default {
 			}
 			resolve(form);
 		});
+	},
+
+	findTimesheet (timesheets, timesheetId) {
+		return new Promise((resolve, reject) => {
+			// Find timesheet
+			timesheets.forEach(function(timesheet){
+				if(timesheet.id === timesheetId) {
+					resolve(timesheet);				
+				}
+			});	
+		});
+	},
+
+	findTimesheetAsset (timesheets, timesheetId, assetName, assetId) {
+		return new Promise((resolve, reject) => {
+			this.findTimesheet(timesheets, timesheetId).then( (timesheet) => {
+				timesheet[assetName].forEach(function(asset){
+					if(asset.id === assetId){
+						resolve(asset);
+					}
+				});
+			});
+		});
+	},
+
+	deleteTimesheetAsset (timesheets, timesheetId, assetName, assetId) {
+		return new Promise((resolve, reject) => {
+			this.findTimesheet(timesheets, timesheetId).then( (timesheet) => {
+				timesheet[assetName].forEach(function(asset){
+					if(asset.id === assetId){
+						var index = timesheet[assetName].indexOf(asset); 
+						timesheet[assetName].splice(index, 1);	
+						resolve();					
+					}
+				});
+			});
+		});
 	}
 }

@@ -41,4 +41,13 @@ Route::get('/users/{user_id}/projects/{project_id}/timesheets', 'UsersController
 Route::post('/timesheets/add', 'TimesheetsController@store');
 Route::post('/timesheets/add-hours', 'WorkJobsController@store');
 Route::post('/timesheets/add-travel', 'TravelJobsController@store');
-
+Route::post('/timesheets/add-equipment', 'EquipmentRentalsController@store');
+Route::post('/timesheets/add-other', 'OtherCostsController@store');
+Route::post('/timesheets/update-hours', 'WorkJobsController@update');
+Route::post('/timesheets/update-travel', 'TravelJobsController@update');
+Route::post('/timesheets/update-equipment', 'EquipmentRentalsController@update');
+Route::post('/timesheets/update-other', 'OtherCostsController@update');
+Route::delete('/timesheets/delete-hours/{id}', 'WorkJobsController@delete');
+Route::delete('/timesheets/delete-travel/{id}', 'TravelJobsController@delete');
+Route::delete('/timesheets/delete-equipment/{id}', 'EquipmentRentalsController@delete');
+Route::delete('/timesheets/delete-other/{id}', 'OtherCostsController@delete');

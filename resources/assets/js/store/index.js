@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import api from './api';
+import Helpers from './helpers';
 
 Vue.use(Vuex);
 
@@ -72,23 +73,96 @@ export const store = new Vuex.Store({
 		// Add timesheet hours
 		addTimesheetHours (state, payload) {
 			// Find timesheet
-			state.timesheets.forEach(function(timesheet){
-				if(timesheet.id === payload.timesheet_id) {
-					timesheet.work_jobs.push(payload);					
-				}
-			});			
+			Helpers.findTimesheet(state.timesheets, payload.timesheet_id)
+				.then( (timesheet) => {
+					timesheet.work_jobs.push(payload);
+				});		
 		},
 
 		// Add timesheet travel
 		addTimesheetTravel (state, payload) {
 			// Find timesheet
-			state.timesheets.forEach(function(timesheet){
-				if(timesheet.id === payload.timesheet_id) {
-					timesheet.travel_jobs.push(payload);					
-				}
-			});			
+			Helpers.findTimesheet(state.timesheets, payload.timesheet_id)
+				.then( (timesheet) => {
+					timesheet.travel_jobs.push(payload);
+				});					
 		},
 
+		// Add timesheet equipment
+		addTimesheetEquipment (state, payload) {
+			// Find timesheet
+			Helpers.findTimesheet(state.timesheets, payload.timesheet_id)
+				.then( (timesheet) => {
+					timesheet.equipment_rentals.push(payload);
+				});					
+		},
+
+		// Add timesheet other costs
+		addTimesheetOther (state, payload) {
+			// Find timesheet
+			Helpers.findTimesheet(state.timesheets, payload.timesheet_id)
+				.then( (timesheet) => {
+					timesheet.other_costs.push(payload);
+				});						
+		},
+
+		// Update timesheet hours asset
+		updateTimesheetHours (state, payload) {
+			// Find timesheet asset
+			return Helpers.findTimesheetAsset(state.timesheets, payload.timesheet_id, 'work_jobs', payload.id)
+				.then( (asset) => {
+					// Update asset
+					asset.job_type = payload.job_type;
+					asset.hours_worked = payload.hours_worked;
+					asset.comment = payload.comment;
+				});
+		},
+		// Update timesheet travel asset
+		updateTimesheetTravel (state, payload) {
+			// Find timesheet asset
+			return Helpers.findTimesheetAsset(state.timesheets, payload.timesheet_id, 'travel_jobs', payload.id)
+				.then( (asset) => {
+					// Update asset
+					asset.travel_distance = payload.travel_distance;
+					asset.travel_time = payload.travel_time;
+					asset.comment = payload.comment;
+				});
+		},
+		// Update timesheet equipment asset
+		updateTimesheetEquipment (state, payload) {
+			// Find timesheet asset
+			return Helpers.findTimesheetAsset(state.timesheets, payload.timesheet_id, 'equipment_rentals', payload.id)
+				.then( (asset) => {
+					// Update asset
+					asset.equipment_type = payload.equipment_type;
+					asset.rental_fee = payload.rental_fee;
+					asset.comment = payload.comment;
+				});
+		},
+		// Update timesheet other cost asset
+		updateTimesheetOther (state, payload) {
+			// Find timesheet asset
+			return Helpers.findTimesheetAsset(state.timesheets, payload.timesheet_id, 'other_costs', payload.id)
+				.then( (asset) => {
+					// Update asset
+					asset.cost_name = payload.cost_name;
+					asset.cost = payload.cost;
+					asset.comment = payload.comment;
+				});
+		},
+
+		deleteTimesheetHours (state, payload) {
+			return Helpers.deleteTimesheetAsset(state.timesheets, payload.timesheet_id, 'work_jobs', payload.id);
+		},
+		deleteTimesheetTravel (state, payload) {
+			return Helpers.deleteTimesheetAsset(state.timesheets, payload.timesheet_id, 'travel_jobs', payload.id);
+		},
+		deleteTimesheetEquipment (state, payload) {
+			return Helpers.deleteTimesheetAsset(state.timesheets, payload.timesheet_id, 'equipment_rentals', payload.id);
+		},
+		deleteTimesheetOther (state, payload) {
+			return Helpers.deleteTimesheetAsset(state.timesheets, payload.timesheet_id, 'other_costs', payload.id);
+		},
 
 		// Update users
 		updateUsers (state, payload) {
@@ -173,22 +247,76 @@ export const store = new Vuex.Store({
 		getProjectTimesheets (context, payload) {
 			return api.getAction(context, payload, '/users/'+payload.user_id+'/projects/'+payload.project_id+'/timesheets', 'updateTimesheets');
 		},
+
+		/* 
+			TIMESHEET ACTIONS
+		*/
+		
 		// Use api to add a timesheet to a project
 		addTimesheet (context, payload) {
 			return api.postAction(context, payload, '/timesheets/add', 'addTimesheet');
 		},
+		// Use api to delete an entire timesheet
+		deleteProjectCrew (context, payload) {
+			return api.deleteAction(context, payload, '/projects/'+payload.project_id+'/delete-crew/'+ payload.id, 'deleteProjectCrew');
+		},		
 		// Use api to add hours to a timesheet
 		addTimesheetHours (context, payload) {
 			return api.postAction(context, payload, '/timesheets/add-hours', 'addTimesheetHours');
-		},
-		// Use api to add trave; to a timesheet
+		},		
+		// Use api to add travel to a timesheet
 		addTimesheetTravel (context, payload) {
 			return api.postAction(context, payload, '/timesheets/add-travel', 'addTimesheetTravel');
 		},
+		
+		// Use api to add equipment to a timesheet
+		addTimesheetEquipment (context, payload) {
+			return api.postAction(context, payload, '/timesheets/add-equipment', 'addTimesheetEquipment');
+		},
+		
+		// Use api to add other costs to a timesheet
+		addTimesheetOther (context, payload) {
+			return api.postAction(context, payload, '/timesheets/add-other', 'addTimesheetOther');
+		},
+
+		// Use api to update hours on a timesheet
+		updateTimesheetHours (context, payload) {
+			return api.postAction(context, payload, '/timesheets/update-hours', 'updateTimesheetHours');
+		},			
+		// Use api to update travel on a timesheet
+		updateTimesheetTravel (context, payload) {
+			return api.postAction(context, payload, '/timesheets/update-travel', 'updateTimesheetTravel');
+		},
+		// Use api to update equipment on a timesheet
+		updateTimesheetEquipment (context, payload) {
+			return api.postAction(context, payload, '/timesheets/update-equipment', 'updateTimesheetEquipment');
+		},		
+		// Use api to update other cost on a timesheet
+		updateTimesheetOther (context, payload) {
+			return api.postAction(context, payload, '/timesheets/update-other', 'updateTimesheetOther');
+		},	
+
+		// Use api to delete hours on a timesheet
+		deleteTimesheetHours (context, payload) {
+			return api.deleteAction(context, payload, '/timesheets/delete-hours/' + payload, 'deleteTimesheetHours');
+		},		
+		// Use api to delete travel on a timesheet
+		deleteTimesheetTravel (context, payload) {
+			return api.deleteAction(context, payload, '/timesheets/delete-travel/' + payload, 'deleteTimesheetTravel');
+		},	
+		// Use api to delete equipment on a timesheet
+		deleteTimesheetEquipment (context, payload) {
+			return api.deleteAction(context, payload, '/timesheets/delete-equipment/' + payload, 'deleteTimesheetEquipment');
+		},	
+		// Use api to delete other cost on a timesheet
+		deleteTimesheetOther (context, payload) {
+			return api.deleteAction(context, payload, '/timesheets/delete-other/' + payload, 'deleteTimesheetOther');
+		},	
 
 		/* 
 			USER ACTIONS
 		*/
+
 		// Use api to retrieve all users and set them in the store
 		getUsers (context, payload) {
 			return api.getAction(context, payload, '/users', 'updateUsers');

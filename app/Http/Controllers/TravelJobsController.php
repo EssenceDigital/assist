@@ -87,7 +87,7 @@ class TravelJobsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $travelJob
+            'payload' => $travelJob
         ], 200);
 
     }
@@ -98,10 +98,10 @@ class TravelJobsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete(Request $request)
+    public function delete($id)
     {
         // Find or throw 404 :)
-        $travelJob = TravelJob::findOrFail($request->id);
+        $travelJob = TravelJob::findOrFail($id);
         // To return
         $return = $travelJob;
 
@@ -118,7 +118,7 @@ class TravelJobsController extends Controller
         // Return successful response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $return
+            'payload' => $return
         ], 200);
     }        
 
