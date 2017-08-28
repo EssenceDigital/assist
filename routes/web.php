@@ -38,7 +38,9 @@ Route::get('/users', 'UsersController@all');
 Route::get('/users/{user_id}/projects', 'UsersController@projects');
 Route::get('/users/{user_id}/projects/{project_id}/timesheets', 'UsersController@projectTimesheets');
 
+Route::get('/timesheets', 'TimesheetsController@all');
 Route::post('/timesheets/add', 'TimesheetsController@store');
+Route::post('/timesheets/update', 'TimesheetsController@update');
 Route::post('/timesheets/add-hours', 'WorkJobsController@store');
 Route::post('/timesheets/add-travel', 'TravelJobsController@store');
 Route::post('/timesheets/add-equipment', 'EquipmentRentalsController@store');

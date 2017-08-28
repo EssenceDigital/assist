@@ -157,6 +157,7 @@
 
 <script>
 	import Timesheet from './Timesheet';
+	import Helpers from './../../store/helpers';	
 
 	export default {
 		props: ['id'],
@@ -205,6 +206,8 @@
 					// Toggle loader
 					this.timesheetAdding = false;
 					this.addTimesheetDialog = false;
+					// Reset form
+					Helpers.resetForm(this.form);
 				});
 			}
 		},

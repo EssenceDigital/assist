@@ -19,6 +19,16 @@ export default {
 		});
 	},
 
+	resetForm (form) {
+		return new Promise((resolve, reject) => {
+			// Populate form
+			for(var key in form) {
+				form[key].val = form[key].dflt;
+			}
+			resolve(form);
+		});		
+	},
+
 	findTimesheet (timesheets, timesheetId) {
 		return new Promise((resolve, reject) => {
 			// Find timesheet
@@ -54,5 +64,27 @@ export default {
 				});
 			});
 		});
+	},
+
+	calcTimesheetHours (workJobs) {
+		var totalHours = 0;
+		// Calculate hours
+		workJobs.forEach( (job) => {
+			totalHours += parseFloat(job.hours_worked);
+		});
+		return totalHours;
+	},
+
+	calcTimesheetTravel (travelJobs) {
+
+	},
+
+	calcTimesheetEquipment (equipmentRentals) {
+
+	},
+
+	calcTimesheetOther (otherCosts) {
+
 	}
+
 }

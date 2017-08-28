@@ -663,10 +663,13 @@
 				timesheetSaving: false,
 				form: {				
 					id: {val: '', err: false, dflt: ''},
+					project_id: {val: '', err: false, dflt: ''},
 					date: {val: '', err: false, dflt: ''},	
 					per_diem: {val: '0.00', err: false, dflt: '0.00'},
 					comment: {val: '', err: false, dflt: ''}
-				},				
+				},	
+				// For date picker
+				dateMenu: false,								
 				// For the delete dialog
 				deleteDialog: false,
 				deleteDispatchAction: '',
@@ -678,7 +681,7 @@
 				hoursDispatchAction: 'addTimesheetHours',
 				hoursForm: {
 					id: {val: '', err: false, dflt: ''},
-					timesheet_id: {val: this.timesheet.id, err: false, dflt: ''},
+					timesheet_id: {val: this.timesheet.id, err: false, dflt: this.timesheet.id},
 					job_type: {val: '', err: false, dflt: ''},	
 					hours_worked: {val: '0', err: false, dflt: '0'},
 					comment: {val: '', err: false, dflt: ''}
@@ -688,7 +691,7 @@
 				travelDispatchAction: 'addTimesheetTravel',
 				travelForm: {
 					id: {val: '', err: false, dflt: ''},
-					timesheet_id: {val: this.timesheet.id, err: false, dflt: ''},
+					timesheet_id: {val: this.timesheet.id, err: false, dflt: this.timesheet.id},
 					travel_distance: {val: '0', err: false, dflt: '0'},	
 					travel_time: {val: '0', err: false, dflt: '0'},
 					comment: {val: '', err: false, dflt: ''}
@@ -698,7 +701,7 @@
 				equipmentDispatchAction: 'addTimesheetEquipment',
 				equipmentForm: {
 					id: {val: '', err: false, dflt: ''},
-					timesheet_id: {val: this.timesheet.id, err: false, dflt: ''},
+					timesheet_id: {val: this.timesheet.id, err: false, dflt: this.timesheet.id},
 					equipment_type: {val: '', err: false, dflt: ''},	
 					rental_fee: {val: '0.00', err: false, dflt: '0.00'},
 					comment: {val: '', err: false, dflt: ''}
@@ -708,7 +711,7 @@
 				otherDispatchAction: 'addTimesheetOther',
 				otherForm: {
 					id: {val: '', err: false, dflt: ''},
-					timesheet_id: {val: this.timesheet.id, err: false, dflt: ''},
+					timesheet_id: {val: this.timesheet.id, err: false, dflt: this.timesheet.id},
 					cost_name: {val: '', err: false, dflt: ''},	
 					cost: {val: '0.00', err: false, dflt: '0.00'},
 					comment: {val: '', err: false, dflt: ''}
@@ -772,10 +775,29 @@
 						// Toggle dialog
 						this[formPrefix + 'Dialog'] = false;
 						// Toggle loader
-						this[formPrefix + 'Saving'] = false;						
+						this[formPrefix + 'Saving'] = false;	
+						// Reset form
+						Helpers.resetForm(this[formPrefix + 'Form']);
 					});
 				});
 			},
+
+			editTimesheet () {
+				// Toggle loader
+				this.timesheetSaving = true;
+				// Use helper to create post object
+				Helpers.populatePostData(this.form).then( (data) => {
+					// Dispatch event
+					this.$store.dispatch('updateTimesheet', data).then( () => {
+						// Toggle loader
+						this.timesheetSaving = false;
+						// Close dialog
+						this.editTimesheetDialog = false;
+					});					
+				});
+
+			},
+
 
 			deleteAsset () {
 				// Toggle loader

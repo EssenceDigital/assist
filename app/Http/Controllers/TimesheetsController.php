@@ -31,7 +31,13 @@ class TimesheetsController extends Controller
      */
     public function all()
     {
-        return Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user'])->paginate(15);
+        $timesheets = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user'])->get();
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'payload' => $timesheets
+        ], 200);         
     }
 
     /**
@@ -120,10 +126,13 @@ class TimesheetsController extends Controller
             ], 404);
         }
 
+        // Update timesheet with all foreign keys
+        $return = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->find($timesheet->id);
+
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'payload' => $timesheet
+            'payload' => $return
         ], 200);
 
     }
@@ -163,7 +172,7 @@ class TimesheetsController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $timesheet
+            'payload' => $timesheet
         ], 200);
 
     } 

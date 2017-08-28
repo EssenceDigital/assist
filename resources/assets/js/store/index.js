@@ -70,6 +70,17 @@ export const store = new Vuex.Store({
 			return state.timesheets.unshift(payload);
 		},
 
+		// Update a timesheet
+		updateTimesheet (state, payload) {
+			// Find timesheet to update
+			Helpers.findTimesheet(state.timesheets, payload.id)
+				.then( (timesheet) => {
+					timesheet.date = payload.date;
+					timesheet.per_diem = payload.per_diem;
+					timesheet.comment = payload.comment;
+				});
+		},
+
 		// Add timesheet hours
 		addTimesheetHours (state, payload) {
 			// Find timesheet
@@ -247,6 +258,20 @@ export const store = new Vuex.Store({
 		getProjectTimesheets (context, payload) {
 			return api.getAction(context, payload, '/users/'+payload.user_id+'/projects/'+payload.project_id+'/timesheets', 'updateTimesheets');
 		},
+		// Use api to retrieve all timesheets
+		getAllTimesheets (context, payload) {
+			// Create payload 
+			if(payload){
+				// Add client to string
+				if(payload.project != '') url += '/' + payload.project;
+					else url += '/' + 0;
+				// Add province to string
+				if(payload.user != '') url += '/' + payload.user;
+					else url += '/' + 0;
+			}
+			// Use api to send request
+			return api.getAction(context, payload, '/timesheets', 'updateTimesheets');
+		},
 
 		/* 
 			TIMESHEET ACTIONS
@@ -254,7 +279,12 @@ export const store = new Vuex.Store({
 		
 		// Use api to add a timesheet to a project
 		addTimesheet (context, payload) {
+			console.log(payload);
 			return api.postAction(context, payload, '/timesheets/add', 'addTimesheet');
+		},
+		// Use api to update a timesheet on a project
+		updateTimesheet (context, payload) {
+			return api.postAction(context, payload, '/timesheets/update', 'updateTimesheet');
 		},
 		// Use api to delete an entire timesheet
 		deleteProjectCrew (context, payload) {
@@ -363,6 +393,19 @@ export const store = new Vuex.Store({
 		users (state) {
 			return state.users;
 		},
+
+		// Return the clients formatted for a vuetify select list
+		usersSelectList (state) {
+			// Cache users
+			var users = state.users,
+          usersSelect = [{ text: "User...", value: "" }];
+      // Create client select array
+      users.forEach(function(user){
+        usersSelect.push({ text: user, value: user });
+      });		
+      return usersSelect;	
+		},
+
 
 		// Return the clients (from projects table)
 		clients (state) {
