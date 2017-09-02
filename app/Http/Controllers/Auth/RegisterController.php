@@ -27,7 +27,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/users';
 
     /**
      * Create a new controller instance.
@@ -36,7 +36,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('auth');
     }
 
     /**
@@ -48,9 +48,14 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
+            'first' => 'required|string|max:25',
+            'last' => 'required|string|max:25',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'company_name' => 'required|string|max:25',
+            'hourly_rate_one' => 'required|string|max:25',
+            'hourly_rate_two' => 'string|max:25',
+            'gst_number' => 'required|string|max:25'
         ]);
     }
 
@@ -58,14 +63,20 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return \App\User
+     * @return User
      */
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'first' => $data['first'],
+            'last' => $data['last'],
+            'permissions' => $data['permissions'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'company_name' => $data['company_name'],
+            'hourly_rate_one' => $data['hourly_rate_one'],
+            'hourly_rate_two' => $data['hourly_rate_two'],
+            'gst_number' => $data['gst_number']
         ]);
     }
 }

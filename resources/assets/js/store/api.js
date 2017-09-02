@@ -36,8 +36,8 @@ export default {
 				.then( (response) => {
 					// For debug
 					if(context.state.debug) console.log(response);
-					// Change state					
-					context.commit(mutation, response);
+					// Change state						
+					if(mutation) context.commit(mutation, response);
 					// Resolve promise
 					resolve();
 				})

@@ -10,6 +10,11 @@ Vue.use(Vuetify);
 import Router from './router';
 /** Register Vue components */
 Vue.component('dashboard', require('./Dashboard.vue'));
+Vue.component('login', require('./Login.vue'));
+
+/** Register Vue filters */
+import DateFilter from './filters/date';
+Vue.filter('date', DateFilter);
 
 Vue.config.productionTip = false;
 

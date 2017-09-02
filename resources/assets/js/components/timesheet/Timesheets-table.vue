@@ -25,10 +25,10 @@
           <td>{{ props.item.project_id }}</td>
           <td>{{ props.item.date }}</td>
           <td>${{ props.item.per_diem }}</td>
-          <td>{{ timesheetHours(props.item.work_jobs) }}</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><small>{{ timesheetHours(props.item.work_jobs) }} hr</small></td>
+          <td>{{ timesheetTravel(props.item.travel_jobs) }} km</td>
+          <td>${{ timesheetEquipment(props.item.equipment_rentals) }}</td>
+          <td>${{ timesheetOther(props.item.other_costs) }}</td>
           <td>
             <v-btn 
               icon 
@@ -93,6 +93,18 @@
 
       timesheetHours (workJobs) {
         return Helpers.calcTimesheetHours(workJobs);
+      },
+
+      timesheetTravel (travelJobs) {
+        return Helpers.calcTimesheetTravel(travelJobs);
+      },
+
+      timesheetEquipment (equipmentRentals) {
+        return Helpers.calcTimesheetEquipment(equipmentRentals);
+      },
+
+      timesheetOther (otherCosts) {
+        return Helpers.calcTimesheetOther(otherCosts);
       }
     },
 

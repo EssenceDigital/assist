@@ -25,7 +25,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/app#';
 
     /**
      * Create a new controller instance.
@@ -36,4 +36,24 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+    
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(\Illuminate\Http\Request $request, $user)
+    {
+        if ($request->ajax()){
+
+            return response()->json([
+                'auth' => auth()->check(),
+                'user' => $user,
+                'intended' => $this->redirectPath(),
+            ]);
+
+        }
+    }    
 }

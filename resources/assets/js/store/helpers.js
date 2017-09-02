@@ -1,4 +1,9 @@
 export default {
+	
+	formatDate (yyyMMdd) {
+		return new Date(Date.parse(yyyMMdd + 'T00:00:00')).toDateString();
+	},
+
 	populatePostData (form) {
 		return new Promise((resolve, reject) => {
 			var data = {};
@@ -27,6 +32,17 @@ export default {
 			}
 			resolve(form);
 		});		
+	},
+
+	clearFormErrors (form) {
+		return new Promise((resolve, reject) => {
+			// Clear form errors
+			for(var key in form) {
+				form[key].err = false;
+				form[key].errMsg = '';
+			}
+			resolve(form);			
+		});
 	},
 
 	findTimesheet (timesheets, timesheetId) {
@@ -72,19 +88,34 @@ export default {
 		workJobs.forEach( (job) => {
 			totalHours += parseFloat(job.hours_worked);
 		});
-		return totalHours;
+		return totalHours.toFixed(2);
 	},
 
 	calcTimesheetTravel (travelJobs) {
-
+		var totalTravel = 0;
+		// Calculate hours
+		travelJobs.forEach( (job) => {
+			totalTravel += parseFloat(job.travel_distance);
+		});
+		return totalTravel;		
 	},
 
 	calcTimesheetEquipment (equipmentRentals) {
-
+		var totalEquipment = 0;
+		// Calculate total
+		equipmentRentals.forEach( (rental) => {
+			totalEquipment += parseFloat(rental.rental_fee);
+		});
+		return totalEquipment.toFixed(2);			
 	},
 
 	calcTimesheetOther (otherCosts) {
-
+		var totalOther = 0;
+		// Calculate total
+		otherCosts.forEach( (cost) => {
+			totalOther += parseFloat(cost.cost);
+		});
+		return totalOther.toFixed(2);	
 	}
 
 }

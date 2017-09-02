@@ -31,7 +31,22 @@
 					>
 						<v-icon left dark>{{ item.icon }}</v-icon>
 						{{ item.title }}
-				</v-btn>		
+				</v-btn>	
+				<!-- User options -->
+				<v-menu offset-y>
+					<v-btn 
+						class="pr-0 mr-0"
+						flat 
+						slot="activator"
+						>
+							<v-icon right dark class="mt-2">arrow_drop_down_circle</v-icon>
+					</v-btn>	
+		      <v-list>
+		        <v-list-tile @click="">
+		          <v-list-tile-title></v-list-tile-title>
+		        </v-list-tile>
+		      </v-list>
+		    </v-menu>					
 			</v-toolbar-items><!-- /Holds menu items -->
 		</v-toolbar><!-- /Medium and large screen menu -->
 
@@ -48,6 +63,22 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>{{ item.title }}</v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile>
+					<v-menu offset-y>
+						<v-layout row slot="activator">
+		          <v-list-tile-action>
+		            <v-icon>arrow_drop_down_circle</v-icon>
+		          </v-list-tile-action>
+		          <v-list-tile-content >User</v-list-tile-content>							
+						</v-layout>
+
+			      <v-list>
+			        <v-list-tile>
+			          
+			        </v-list-tile>
+			      </v-list>
+			    </v-menu>        	
         </v-list-tile>
       </v-list><!-- /Menu item list -->
     </v-navigation-drawer><!-- /Small screen menu side drawer -->

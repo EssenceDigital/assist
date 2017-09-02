@@ -8,9 +8,18 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
 	state: {
 		debug: true,
-		user: {
-			id: 1
+		authUser: {
+			id: AUTH_ID,
+			first: AUTH_FIRST,
+			last: AUTH_LAST,
+			name: AUTH_NAME,
+			permissions: AUTH_PERMISSIONS,
+			email: AUTH_EMAIL,
+			company: AUTH_COMPANY,
+			gstNo: AUTH_GST_NO,
+			hourly: AUTH_HOURLY
 		},
+		currentUser: { id: 0 },
 		users: [],
 		projects: [],
 		currentProject: { id: 0 },
@@ -178,6 +187,10 @@ export const store = new Vuex.Store({
 		// Update users
 		updateUsers (state, payload) {
 			return state.users = payload;
+		},
+
+		updateCurrentUser (state, payload) {
+			return state.currentUser = payload;
 		},
 
 		// Update clients
@@ -352,6 +365,20 @@ export const store = new Vuex.Store({
 			return api.getAction(context, payload, '/users', 'updateUsers');
 		},
 
+		// Use api to retrieve a user and set it in the state
+		getUser (context, payload) {
+			// Use api to send request
+			return api.getAction(context, payload, '/users/'+payload, 'updateCurrentUser');
+		},
+		// Use api to edit a user field in the db and update the current user in the state
+		updateUserField (context, payload) {
+			// Use api to send request
+			return api.postAction(context, payload, '/users/update-field', 'updateCurrentUser');
+		},
+		// Use api to change a users password
+		changeUserPassword (context, payload) {
+			return api.postAction(context, payload, '/users/change-password');
+		},
 
 		/*
 			MISC ACTIONS
@@ -371,11 +398,6 @@ export const store = new Vuex.Store({
 			return state.debug;
 		},
 
-		// Return the logged in user
-		user (state) {
-			return state.user;
-		},
-
 		// Return the loaded projects
 		projects (state) {
 			return state.projects;
@@ -392,6 +414,15 @@ export const store = new Vuex.Store({
 		// Return all users
 		users (state) {
 			return state.users;
+		},
+
+		// Return the logged in user
+		user (state) {
+			return state.authUser;
+		},
+
+		currentUser (state) {
+			return state.currentUser;
 		},
 
 		// Return the clients formatted for a vuetify select list

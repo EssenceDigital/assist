@@ -1,0 +1,278 @@
+<template>
+
+	<v-container fluid>
+		<v-layout row class="mt-5">
+			<v-flex xs12 xl10 offset-xl1>
+				<!-- Top most card -->
+				<v-card class="grey lighten-5" flat>
+					<!-- Red top toolbar -->
+				  <v-toolbar dark class="primary elevation-0" extended>
+				  	<!-- Back button -->
+				    <v-btn 
+				    	icon 
+				    	v-tooltip:top="{ html: 'Go Back' }"
+				    	@click="$router.go(-1)"
+				    >
+				    	<v-icon dark>arrow_back</v-icon>
+				    </v-btn>
+				  </v-toolbar><!-- / Red top toolbar -->
+				  <!-- Main card container -->
+				  <v-layout row>
+				    <v-flex xs12 lg10 offset-lg1>
+				      <v-card class="card--flex-toolbar">
+				      	<v-container>
+					      	<!-- Card toolbar -->
+					        <v-toolbar card class="white" prominent>
+					          <v-toolbar-title class="display-1">				         
+					          	User Details ({{ $store.getters.currentUser.id }})			          	
+					          </v-toolbar-title>				          				          
+					        </v-toolbar><!-- /Card toolbar -->	
+					      </v-container>			        
+					      <v-container>
+					      	<v-layout row>
+				      			<p class="subheading pl-4">
+						          This is where you can edit the user you've selected.	       		
+					        	</p>
+					      	</v-layout>
+					      </v-container>
+				        <v-divider></v-divider>
+				        <!-- Container for helpful tips -->
+				        <v-container class="mt-4">				        	
+					        <v-layout row>
+					        	<v-flex xs12>	
+			        				<p class="subheading info--text pl-4">
+												<v-icon left class="info--text">help_outline</v-icon>
+							          To edit a field just click the gear icon next to that field.       			
+					        		</p>					        						        							        							        				        		
+					        	</v-flex>				        	
+					        </v-layout>		        	
+				        </v-container><!-- / Container for helpful tips -->	
+				        <!-- Card body -->
+				        <v-card-text v-if="!loading">				 
+
+									<v-layout row>
+										<v-flex xs12>
+											<!-- User details -->
+											<v-container>
+												<div class="headline">
+													Basics
+												</div>
+												<!-- Row one -->
+												<v-layout row>
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'text'"
+															:action="'updateUserField'"
+															:id="$store.getters.currentUser.id"
+															:label="'First'"
+															:field="'first'"
+															:value="$store.getters.currentUser.first"
+														></field-input-toggle>
+													</v-flex>
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'text'"
+															:action="'updateUserField'"
+															:id="$store.getters.currentUser.id"
+															:label="'Last'"
+															:field="'last'"
+															:value="$store.getters.currentUser.last"
+														></field-input-toggle>
+													</v-flex>
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'text'"
+															:action="'updateUserField'"
+															:id="$store.getters.currentUser.id"
+															:label="'Email'"
+															:field="'email'"
+															:value="$store.getters.currentUser.email"
+														></field-input-toggle>
+													</v-flex>																										
+												</v-layout>	
+												<!-- Row two -->
+												<v-layout row>
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'select'"
+															:select_options="[
+											          { text: 'Permissions...', value: '' },
+											          { text: 'Admin', value: 'admin' },
+											          { text: 'User', value: 'user' }
+															]"
+															:action="'updateUserField'"
+															:id="$store.getters.currentUser.id"
+															:label="'Permissions'"
+															:field="'permissions'"
+															:value="$store.getters.currentUser.permissions"
+														></field-input-toggle>																
+													</v-flex>																									
+												</v-layout>													
+											</v-container><!-- /basic details -->
+
+											<!-- Business details -->
+											<v-container>
+												<div class="headline">
+													Business
+												</div>
+												<!-- Row one -->
+												<v-layout row>
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'text'"
+															:action="'updateUserField'"
+															:id="$store.getters.currentUser.id"
+															:label="'Company'"
+															:field="'company_name'"
+															:value="$store.getters.currentUser.company_name"
+														></field-input-toggle>
+													</v-flex>
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'text'"
+															:action="'updateUserField'"
+															:id="$store.getters.currentUser.id"
+															:label="'Hourly Rate'"
+															:field="'hourly_rate_one'"
+															:prefix="'$'"
+															:value="$store.getters.currentUser.hourly_rate_one"
+														></field-input-toggle>
+													</v-flex>
+													<v-flex xs4>
+														<field-input-toggle
+															:type="'text'"
+															:action="'updateUserField'"
+															:id="$store.getters.currentUser.id"
+															:label="'GST Number'"
+															:field="'gst_number'"
+															:value="$store.getters.currentUser.gst_number"
+														></field-input-toggle>
+													</v-flex>																										
+												</v-layout>													
+											</v-container><!-- /user company -->
+
+											<v-container>
+												<v-divider class="mt-4 mb-4"></v-divider>												
+											</v-container>
+
+											<v-container>
+												<v-card class="grey lighten-2 elevation-3">
+												  <v-card-text>
+														<!-- Change password -->
+										        <v-container>
+															<div class="headline">
+																Change Password
+															</div>
+															<!-- Row one -->
+															<v-layout row>
+																<v-flex xs5>
+																	<v-text-field
+																		v-model="passwordForm.password.val"
+																		type="password"
+																	  label="New Password"
+																	></v-text-field>													
+																</v-flex>
+																<v-spacer></v-spacer>
+																<v-flex xs5>
+																	<v-text-field
+																		v-model="passwordForm.password_confirmation.val"
+																		type="password"
+																	  label="Confirm New Password"
+																	></v-text-field>													
+																</v-flex>													
+															</v-layout>
+															<v-layout row>
+																<v-flex xs4 offset-xs4>
+																	<v-btn block flat outline
+																		:loading="passwordChanging"
+																		:disabled="passwordChanging"
+																		@click.native="changePassword"
+																	>
+														      	Change					
+																	</v-btn>																	
+																</v-flex>
+															</v-layout>							        	
+										        </v-container>
+												  </v-card-text>
+												</v-card>												
+											</v-container>
+
+										</v-flex>
+									</v-layout><!-- Project view layout -->		
+	
+
+
+				        </v-card-text><!-- /Card body -->
+				      </v-card>
+				    </v-flex>
+				  </v-layout><!-- / Main card container -->
+				</v-card><!-- / Top most card -->
+			</v-flex>
+		</v-layout>
+	</v-container>
+
+</template>
+
+<script>
+	import FieldInputToggle from './../form/Field-input-toggle';
+  import Helpers from './../../store/helpers'; 
+
+	export default {
+		props: ['id'],
+
+		components: {
+			'field-input-toggle': FieldInputToggle,
+		},
+
+		data () {
+			return {
+				loading: false,
+				passwordChanging: false,
+				passwordForm: {
+					id: {val: this.id, err: false, dflt: this.id},	
+					password: {val: '', err: false, dflt: ''},
+					password_confirmation: {val: '', err: false, dflt: ''}	
+				}
+			}
+		},
+
+		methods: {
+			changePassword () {
+				// Toggle loader
+				this.passwordChanging = true;
+				// Populate data then dispatch action
+				Helpers.populatePostData(this.passwordForm).then( (data) => {
+					// Dispatch action to change password
+					this.$store.dispatch('changeUserPassword', data).then( () => {
+						// Toggle loader
+						this.passwordChanging = false;
+						// Clear form
+						Helpers.resetForm(this.passwordForm);
+					});					
+				});
+
+			}
+		},
+
+		created () {
+			// Toggle loader
+			this.loading = true;
+      // Update the requested project
+      this.$store.dispatch('getUser', this.id).then( () => {
+    		// Toggle loader
+    		this.loading = false;
+    	});			
+		}
+	}
+
+</script>
+
+<style scoped>
+	.center{
+		margin-left: auto;
+		margin-right: auto;	
+	}
+  .card--flex-toolbar {
+    margin-top: -64px;
+  }	
+</style>
