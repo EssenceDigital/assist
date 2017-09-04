@@ -19,7 +19,7 @@ class DashboardController extends Controller
 
     // Returns the associated view
     public function index(){
-        return view('app.dashboard');
+        return view('app');
     }
 
     // Returns the associated view
@@ -89,12 +89,14 @@ class DashboardController extends Controller
             return response()->json([
                 'result' => false,
             ], 404);
-        }   
+        }
+        // Tally timesheet totals   
+        $talliedTimesheets = $this->tallyTimesheets($timesheets);
 
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'models' => $timesheets
+            'payload' => $talliedTimesheets
         ], 200);                  
     }
 

@@ -22,6 +22,13 @@
 
     components: {
       'nav-bar': NavBar
+    },
+
+    created () {
+      // For debug
+      if(this.$store.state.debug) console.log("Dashboard Created");
+      // Set authenticated user
+      this.$store.commit('setAuthUser');
     }
 
   }

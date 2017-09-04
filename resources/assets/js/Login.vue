@@ -58,8 +58,6 @@
 	import Helpers from './store/helpers';
 
 	export default {
-		props: ['token'],
-
 		data () {
 			return {
 				login : true,
@@ -84,16 +82,15 @@
 				})
 				// Login success
 				.then( (response) => {
-					// Toggle loader
-					this.loggingIn = false;					
-					console.log(response);
+					// Redirect to dashboard
 					this.$router.go('/app')
-					
 				})
 				// Login errors
 				.catch( (error) => {
+					console.log(error);
 					// Cache errors
-					var errors = error.response.data;
+					if(error) var errors = error.response.data;
+				
 					// Set possible email errors
 					if(errors.email) {
 						this.form.email.err = true;

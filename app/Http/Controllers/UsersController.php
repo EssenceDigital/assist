@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Auth;
 use App\User;
 use App\Project;
 use App\Timesheet;
@@ -155,12 +156,14 @@ class UsersController extends Controller
             return response()->json([
                 'result' => false,
             ], 404);
-        }   
+        }
+        // Tally timesheet totals   
+        $talliedTimesheets = $this->tallyTimesheets($timesheets);
 
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'payload' => $timesheets
+            'payload' => $talliedTimesheets
         ], 200);          
     }
 

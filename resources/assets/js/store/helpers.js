@@ -50,7 +50,8 @@ export default {
 			// Find timesheet
 			timesheets.forEach(function(timesheet){
 				if(timesheet.id === timesheetId) {
-					resolve(timesheet);				
+					var index = timesheets.indexOf(timesheet); 
+					resolve(index);				
 				}
 			});	
 		});
@@ -88,7 +89,7 @@ export default {
 		workJobs.forEach( (job) => {
 			totalHours += parseFloat(job.hours_worked);
 		});
-		return totalHours.toFixed(2);
+		return +totalHours.toFixed(2);
 	},
 
 	calcTimesheetTravel (travelJobs) {

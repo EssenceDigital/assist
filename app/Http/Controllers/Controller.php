@@ -71,7 +71,64 @@ class Controller extends BaseController
                 'payload' => $model
             ], 200);      
         }
-    } 
+    }
+
+    protected function tallyTimesheets($timesheets){
+        $talliedTimesheets = [];
+
+        forEach($timesheets as $timesheet){
+            // Push tallied timesheet to array
+            array_push($talliedTimesheets, $this->tallyTimesheet($timesheet));
+       }
+
+       return $talliedTimesheets;
+    }
+
+    protected function tallyTimesheet($timesheet){
+        // Total hours on timesheet
+        $totalHours = 0;
+        // Calculate total hours
+        forEach($timesheet->workJobs as $job){
+            $totalHours += $job->hours_worked;
+        }
+        // Add total hours to timesheet
+        $timesheet->total_hours = number_format($totalHours, 2, '.', '');
+        // Total hour pay
+        $totalHourPay = $totalHours * $timesheet->user->hourly_rate_one;
+        // Add total pay to timesheet (rounding up and showing 2 decimal places)
+        $timesheet->total_hours_pay = number_format(round($totalHourPay, 2, PHP_ROUND_HALF_UP), 2, '.', '');
+        // Total travel distance on timesheet
+        $totalTravel = 0;
+        forEach($timesheet->travelJobs as $job){
+            $totalTravel += $job->travel_distance;
+        }
+        // Add total travel to timesheet
+        $timesheet->total_travel_distance = round($totalTravel, 0, PHP_ROUND_HALF_UP);
+        // Total equipment rentals on timesheet
+        $totalEquipment = 0;
+        forEach($timesheet->equipmentRentals as $rental){
+            $totalEquipment += $rental->rental_fee;
+        }
+        // Add total equipment rentals to timesheet (rounding up and showing 2 decimal places)
+        $timesheet->total_equipment_cost = number_format(round($totalEquipment, 2, PHP_ROUND_HALF_UP), 2, '.', '');
+        // Total other costs on timesheet
+        $totalOther = 0;
+        forEach($timesheet->otherCosts as $cost){
+            $totalOther += $cost->cost;
+        }
+        // Add total other costs to timesheet (rounding up and showing 2 decimal places)
+        $timesheet->total_other_costs = number_format(round($totalOther, 2, PHP_ROUND_HALF_UP), 2, '.', '');
+        // Tally total of everything on timesheet
+        $timesheetTotal = number_format(round($totalHourPay, 2, PHP_ROUND_HALF_UP), 2, '.', '') +
+            number_format(round($totalEquipment, 2, PHP_ROUND_HALF_UP), 2, '.', '') +
+            number_format(round($totalOther, 2, PHP_ROUND_HALF_UP), 2, '.', '') +
+            $timesheet->per_diem;
+        // Add timesheet total to timesheet
+        $timesheet->timesheet_total = number_format(round($timesheetTotal, 2, PHP_ROUND_HALF_UP), 2, '.', '');
+
+        return $timesheet;
+    }
+
 
 
 

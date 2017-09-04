@@ -9,15 +9,7 @@ export const store = new Vuex.Store({
 	state: {
 		debug: true,
 		authUser: {
-			id: AUTH_ID,
-			first: AUTH_FIRST,
-			last: AUTH_LAST,
-			name: AUTH_NAME,
-			permissions: AUTH_PERMISSIONS,
-			email: AUTH_EMAIL,
-			company: AUTH_COMPANY,
-			gstNo: AUTH_GST_NO,
-			hourly: AUTH_HOURLY
+
 		},
 		currentUser: { id: 0 },
 		users: [],
@@ -81,12 +73,14 @@ export const store = new Vuex.Store({
 
 		// Update a timesheet
 		updateTimesheet (state, payload) {
+			var id = 0;
+			// Set id
+			if(payload.timesheet_id) id = payload.timesheet_id
+					else id = payload.id
 			// Find timesheet to update
-			Helpers.findTimesheet(state.timesheets, payload.id)
-				.then( (timesheet) => {
-					timesheet.date = payload.date;
-					timesheet.per_diem = payload.per_diem;
-					timesheet.comment = payload.comment;
+			Helpers.findTimesheet(state.timesheets, id)
+				.then( (timesheetIndex) => {
+					state.timesheets.splice(timesheetIndex, 1, payload);
 				});
 		},
 
@@ -193,6 +187,24 @@ export const store = new Vuex.Store({
 			return state.currentUser = payload;
 		},
 
+		setAuthUser (state, payload) {
+			return state.authUser = {
+				id: AUTH_ID,
+				first: AUTH_FIRST,
+				last: AUTH_LAST,
+				name: AUTH_FIRST + ' ' + AUTH_LAST,
+				permissions: AUTH_PERMISSIONS,
+				email: AUTH_EMAIL,
+				company: AUTH_COMPANY,
+				gst_number: AUTH_GST_NO,
+				hourly: AUTH_HOURLY
+			};
+		},
+
+		clearAuthUser (state, payload) {
+			state.authUser = { };
+		},
+
 		// Update clients
 		updateClients (state, payload) {
 			return state.clients = payload;
@@ -207,6 +219,7 @@ export const store = new Vuex.Store({
 
 		// Use api to retrieve all projects and set them in the state
 		getProjects (context, payload) {
+			var url = '/projects'
 			// Create payload 
 			if(payload){
 				// Add client to string
@@ -223,7 +236,7 @@ export const store = new Vuex.Store({
 					else url += '/' + 'any';
 			}
 			// Use api to send the request
-			return api.getAction(context, payload, '/projects', 'updateProjects');
+			return api.getAction(context, payload, url, 'updateProjects');
 		},
 		// Use api to retrieve a project and set it in the state
 		getProject (context, payload) {
@@ -273,17 +286,25 @@ export const store = new Vuex.Store({
 		},
 		// Use api to retrieve all timesheets
 		getAllTimesheets (context, payload) {
+			var url = '/timesheets';
+			
 			// Create payload 
 			if(payload){
-				// Add client to string
-				if(payload.project != '') url += '/' + payload.project;
+				// Add from date to string
+				if(payload.from_date != '') url += '/' + payload.from_date;
 					else url += '/' + 0;
-				// Add province to string
-				if(payload.user != '') url += '/' + payload.user;
+				// Add to date to string
+				if(payload.to_date != '') url += '/' + payload.to_date;
+					else url += '/' + 0;					
+				// Add project id to string
+				if(payload.project_id != '') url += '/' + payload.project_id;
 					else url += '/' + 0;
+				// Add user id to string
+				if(payload.user_id != '') url += '/' + payload.user_id;
+					else url += '/' + 0;					
 			}
 			// Use api to send request
-			return api.getAction(context, payload, '/timesheets', 'updateTimesheets');
+			return api.getAction(context, payload, url, 'updateTimesheets');
 		},
 
 		/* 
@@ -324,19 +345,19 @@ export const store = new Vuex.Store({
 
 		// Use api to update hours on a timesheet
 		updateTimesheetHours (context, payload) {
-			return api.postAction(context, payload, '/timesheets/update-hours', 'updateTimesheetHours');
+			return api.postAction(context, payload, '/timesheets/update-hours', 'updateTimesheet');
 		},			
 		// Use api to update travel on a timesheet
 		updateTimesheetTravel (context, payload) {
-			return api.postAction(context, payload, '/timesheets/update-travel', 'updateTimesheetTravel');
+			return api.postAction(context, payload, '/timesheets/update-travel', 'updateTimesheet');
 		},
 		// Use api to update equipment on a timesheet
 		updateTimesheetEquipment (context, payload) {
-			return api.postAction(context, payload, '/timesheets/update-equipment', 'updateTimesheetEquipment');
+			return api.postAction(context, payload, '/timesheets/update-equipment', 'updateTimesheet');
 		},		
 		// Use api to update other cost on a timesheet
 		updateTimesheetOther (context, payload) {
-			return api.postAction(context, payload, '/timesheets/update-other', 'updateTimesheetOther');
+			return api.postAction(context, payload, '/timesheets/update-other', 'updateTimesheet');
 		},	
 
 		// Use api to delete hours on a timesheet
@@ -388,7 +409,9 @@ export const store = new Vuex.Store({
 		getClients (context, payload) {
 			// Use api to send request
 			return api.getAction(context, payload, '/projects/clients', 'updateClients');
-		}
+		},
+
+
 
 	},
 
@@ -405,6 +428,18 @@ export const store = new Vuex.Store({
 
 		currentProject (state) {
 			return state.currentProject;
+		},
+
+		// Return the clients formatted for a vuetify select list
+		projectsSelectList (state) {
+			// Cache users
+			var projects = state.projects,
+          projectsSelect = [{ text: "Project...", value: "" }];
+      // Create client select array
+      projects.forEach(function(project){
+        projectsSelect.push({ text: project.id+' | '+project.location, value: project.id });
+      });		
+      return projectsSelect;	
 		},
 
 		timesheets (state) {
@@ -432,7 +467,7 @@ export const store = new Vuex.Store({
           usersSelect = [{ text: "User...", value: "" }];
       // Create client select array
       users.forEach(function(user){
-        usersSelect.push({ text: user, value: user });
+        usersSelect.push({ text: user.first+' '+user.last, value: user.id });
       });		
       return usersSelect;	
 		},

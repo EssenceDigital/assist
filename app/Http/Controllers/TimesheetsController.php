@@ -31,12 +31,14 @@ class TimesheetsController extends Controller
      */
     public function all()
     {
+        // Find all timesheets
         $timesheets = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user'])->get();
-
+        // Tally timesheet totals
+        $talliedTimesheets = $this->tallyTimesheets($timesheets);
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'payload' => $timesheets
+            'payload' => $talliedTimesheets
         ], 200);         
     }
 
@@ -58,47 +60,48 @@ class TimesheetsController extends Controller
         ], 200);        
     } 
 
-    public function filter(Request $request){
-        // Validate or stop proccessing :)
-        $this->validate($request, [
-            'from_date' => 'date|nullable',
-            'to_date' => 'date|nullable',
-            'project_id' => 'numeric|nullable',
-            'user_id' => 'numeric|nullable'
-        ]);
+    public function filter($from_date = false, $to_date = false, $project_id = false, $user_id = false){
 
         // Construct where array for query
         $queryArray = [];  
-        $timesheets = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user']);
+        $query = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user']);
 
         // Add project id field or not
-        if($request->project_id != ''){
+        if($project_id){
             // Push array clause
-            array_push($queryArray, ['project_id', '=', $request->project_id]);
+            array_push($queryArray, ['project_id', '=', $project_id]);
         }      
 
         // Add single day (from date) field or not
-        if($request->from_date != ''){
+        if($from_date && !$to_date){
             // Push array clause
-            array_push($queryArray, ['date', '=', $request->from_date]);
+            array_push($queryArray, ['date', '=', $from_date]);
         }
 
-        // Add single day (from date) field or not
-        if($request->user_id != ''){
+        // Add user id field or not
+        if($user_id){
             // Push array clause
-            array_push($queryArray, ['user_id', '=', $request->user_id]);
+            array_push($queryArray, ['user_id', '=', $user_id]);
         }
 
         // Add where queries
-        $timesheets->where($queryArray);
+        $query->where($queryArray);
 
         // If the to date is set then it's a dange range query
-        if($request->from_date != '' && $request->to_date != ''){
+        if($from_date && $to_date){
             // Add possible where between
-            $timesheets->whereBetween('date', [$request->from_date, $request->to_date]);
+            $query->whereBetween('date', [$from_date, $to_date]);
         }
 
-        return $timesheets->paginate($request->perPage);
+        $timesheets = $query->get();
+
+        $talliedTimesheets = $this->tallyTimesheets($timesheets);
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'payload' => $talliedTimesheets
+        ], 200); 
     }
 
     /**
@@ -127,12 +130,15 @@ class TimesheetsController extends Controller
         }
 
         // Update timesheet with all foreign keys
-        $return = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->find($timesheet->id);
+        $timesheet = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->find($timesheet->id);
+
+        // Tally timesheet totals
+        $talliedTimesheet = $this->tallyTimesheet($timesheet);
 
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'payload' => $return
+            'payload' => $talliedTimesheet
         ], 200);
 
     }
@@ -168,11 +174,13 @@ class TimesheetsController extends Controller
                 'result' => false
             ], 404);
         }
+        // Tally the timesheet totals
+        $talliedTimesheet = $this->tallyTimesheet($timesheet);
 
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'payload' => $timesheet
+            'payload' => $talliedTimesheet
         ], 200);
 
     } 

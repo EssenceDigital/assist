@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\OtherCost;
+use App\Timesheet;
 
 class OtherCostsController extends Controller
 {
@@ -84,10 +85,15 @@ class OtherCostsController extends Controller
             ], 404);
         }
 
+        // Get updated timesheet
+        $timesheet = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user'])->find($otherCost->timesheet_id);
+        // Tally timesheet
+        $talliedTimesheet = $this->tallyTimesheet($timesheet);
+
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'payload' => $otherCost
+            'payload' => $talliedTimesheet
         ], 200);
 
     }

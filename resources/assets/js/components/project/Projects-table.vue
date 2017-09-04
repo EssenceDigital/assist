@@ -71,11 +71,11 @@
 
       <!-- Data table -->
       <v-data-table
-          :headers="headers"
-          :items="projects"
-          :rows-per-page-items="perPage"
-          class="elevation-1 mt-2"
-        >    
+        :headers="headers"
+        :items="projects"
+        :rows-per-page-items="perPage"
+        class="elevation-1 mt-2"
+      >    
         <template slot="items" scope="props">
           <td>{{ props.item.id }}</td>
 

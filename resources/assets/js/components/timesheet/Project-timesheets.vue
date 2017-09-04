@@ -134,16 +134,23 @@
 					        </v-layout>		        	
 				        </v-container><!-- / Container for helpful tips -->	
 				        <!-- Card body -->
-				        <v-card-text>				 
-									<v-layout class="mt-5"
-										row
-										v-for="timesheet in timesheets" 
-										:key="timesheet.id"
-									>
-										<v-flex xs12>
-											<timesheet :timesheet="timesheet"></timesheet>
-										</v-flex>
-									</v-layout>					        	
+				        <v-card-text>	
+				        	<v-container fluid>
+					        	<!-- Totals row -->
+					        	<v-layout row>
+					        		<totals :timesheets="timesheets"></totals>
+					        	</v-layout>	
+
+										<v-layout class="mt-5"
+											row
+											v-for="timesheet in timesheets" 
+											:key="timesheet.id"
+										>
+											<v-flex xs12>
+												<timesheet :timesheet="timesheet"></timesheet>
+											</v-flex>
+										</v-layout>				        		
+				        	</v-container>					        	
 				        </v-card-text><!-- /Card body -->
 				      </v-card>
 				    </v-flex>
@@ -158,12 +165,14 @@
 <script>
 	import Timesheet from './Timesheet';
 	import Helpers from './../../store/helpers';	
+	import Totals from './Timesheets-totals';
 
 	export default {
 		props: ['id'],
 
 		components: {
-			'timesheet': Timesheet
+			'timesheet': Timesheet,
+			'totals': Totals
 		},
 
 		data () {

@@ -78,7 +78,11 @@
 									        <v-card-actions>
 									          <v-spacer></v-spacer>
 									          <v-btn outline class="red--text darken-1" flat="flat" @click.native="addProjectDialog = false">Cancel</v-btn>
-									          <v-btn outline class="green--text darken-1" flat="flat" @click.native="startProject">Start Project</v-btn>
+									          <v-btn outline class="green--text darken-1" flat="flat" 
+									          	@click.native="startProject"
+									          	:loading="startingProject"
+									          	:disabled="startingProject"
+									          >Start Project</v-btn>
 									        </v-card-actions>
 									      </v-card>
 									    </v-dialog>
@@ -145,6 +149,8 @@
   		return {
   			// For add project dialog
   			addProjectDialog: false,
+  			// Project adding loader
+  			startingProject: false,
   			// For project form inputs
   			client_company_name: { val: '', err: false, default: '' },
   			// For dual company name input
@@ -184,11 +190,17 @@
   	methods: {
   		// Add a project to the db via a store action
   		startProject () {
+  			// Toggle loader
+  			this.startingProject = true;
   			// Dispatch action
   			this.$store.dispatch('addProject', {
   				client_company_name: this.client_company_name.val
   			}).then( () => {
+  				// Toggle loader and dialog
+  				this.startingProject = false;
   				this.addProjectDialog = false;
+  				// Redirect
+  				this.$router.push('/projects/'+this.$store.getters.currentProject.id+'/view');
   			});
   		}
   	},

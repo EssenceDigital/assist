@@ -17,9 +17,9 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/app', function () {
-    return view('app');
-});
+Route::get('/app', 'DashboardController@index');
+
+Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get('/projects', 'ProjectsController@all');
 Route::get('/projects/clients', 'ProjectsController@clients');
@@ -56,3 +56,4 @@ Route::delete('/timesheets/delete-hours/{id}', 'WorkJobsController@delete');
 Route::delete('/timesheets/delete-travel/{id}', 'TravelJobsController@delete');
 Route::delete('/timesheets/delete-equipment/{id}', 'EquipmentRentalsController@delete');
 Route::delete('/timesheets/delete-other/{id}', 'OtherCostsController@delete');
+Route::get('/timesheets/{from_date?}/{to_date?}/{project_id?}/{user_id?}', 'TimesheetsController@filter');

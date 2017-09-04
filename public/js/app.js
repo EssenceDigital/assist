@@ -824,7 +824,8 @@ function applyToTag (styleElement, obj) {
 			// Find timesheet
 			timesheets.forEach(function (timesheet) {
 				if (timesheet.id === timesheetId) {
-					resolve(timesheet);
+					var index = timesheets.indexOf(timesheet);
+					resolve(index);
 				}
 			});
 		});
@@ -863,7 +864,7 @@ function applyToTag (styleElement, obj) {
 		workJobs.forEach(function (job) {
 			totalHours += parseFloat(job.hours_worked);
 		});
-		return totalHours.toFixed(2);
+		return +totalHours.toFixed(2);
 	},
 	calcTimesheetTravel: function calcTimesheetTravel(travelJobs) {
 		var totalTravel = 0;
@@ -11520,7 +11521,7 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(18);
-module.exports = __webpack_require__(121);
+module.exports = __webpack_require__(124);
 
 
 /***/ }),
@@ -11535,7 +11536,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuetify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vuetify__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store_index__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__router__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__filters_date__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__filters_date__ = __webpack_require__(123);
 /** Load general dependencies from a file */
 __webpack_require__(19);
 /** Load Vue based dependencies */
@@ -11548,7 +11549,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuet
 
 /** Register Vue components */
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('dashboard', __webpack_require__(114));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('login', __webpack_require__(125));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('login', __webpack_require__(120));
 
 /** Register Vue filters */
 
@@ -40828,17 +40829,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 	state: {
 		debug: true,
-		authUser: {
-			id: AUTH_ID,
-			first: AUTH_FIRST,
-			last: AUTH_LAST,
-			name: AUTH_NAME,
-			permissions: AUTH_PERMISSIONS,
-			email: AUTH_EMAIL,
-			company: AUTH_COMPANY,
-			gstNo: AUTH_GST_NO,
-			hourly: AUTH_HOURLY
-		},
+		authUser: {},
 		currentUser: { id: 0 },
 		users: [],
 		projects: [],
@@ -40910,11 +40901,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 
 		// Update a timesheet
 		updateTimesheet: function updateTimesheet(state, payload) {
+			var id = 0;
+			// Set id
+			if (payload.timesheet_id) id = payload.timesheet_id;else id = payload.id;
 			// Find timesheet to update
-			__WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].findTimesheet(state.timesheets, payload.id).then(function (timesheet) {
-				timesheet.date = payload.date;
-				timesheet.per_diem = payload.per_diem;
-				timesheet.comment = payload.comment;
+			__WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].findTimesheet(state.timesheets, id).then(function (timesheetIndex) {
+				state.timesheets.splice(timesheetIndex, 1, payload);
 			});
 		},
 
@@ -41019,6 +41011,22 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		updateCurrentUser: function updateCurrentUser(state, payload) {
 			return state.currentUser = payload;
 		},
+		setAuthUser: function setAuthUser(state, payload) {
+			return state.authUser = {
+				id: AUTH_ID,
+				first: AUTH_FIRST,
+				last: AUTH_LAST,
+				name: AUTH_FIRST + ' ' + AUTH_LAST,
+				permissions: AUTH_PERMISSIONS,
+				email: AUTH_EMAIL,
+				company: AUTH_COMPANY,
+				gst_number: AUTH_GST_NO,
+				hourly: AUTH_HOURLY
+			};
+		},
+		clearAuthUser: function clearAuthUser(state, payload) {
+			state.authUser = {};
+		},
 
 
 		// Update clients
@@ -41035,6 +41043,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 
 		// Use api to retrieve all projects and set them in the state
 		getProjects: function getProjects(context, payload) {
+			var url = '/projects';
 			// Create payload 
 			if (payload) {
 				// Add client to string
@@ -41047,7 +41056,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 				if (payload.invoice != '') url += '/' + payload.invoice;else url += '/' + 'any';
 			}
 			// Use api to send the request
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/projects', 'updateProjects');
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, url, 'updateProjects');
 		},
 
 		// Use api to retrieve a project and set it in the state
@@ -41106,15 +41115,21 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 
 		// Use api to retrieve all timesheets
 		getAllTimesheets: function getAllTimesheets(context, payload) {
+			var url = '/timesheets';
+
 			// Create payload 
 			if (payload) {
-				// Add client to string
-				if (payload.project != '') url += '/' + payload.project;else url += '/' + 0;
-				// Add province to string
-				if (payload.user != '') url += '/' + payload.user;else url += '/' + 0;
+				// Add from date to string
+				if (payload.from_date != '') url += '/' + payload.from_date;else url += '/' + 0;
+				// Add to date to string
+				if (payload.to_date != '') url += '/' + payload.to_date;else url += '/' + 0;
+				// Add project id to string
+				if (payload.project_id != '') url += '/' + payload.project_id;else url += '/' + 0;
+				// Add user id to string
+				if (payload.user_id != '') url += '/' + payload.user_id;else url += '/' + 0;
 			}
 			// Use api to send request
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/timesheets', 'updateTimesheets');
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, url, 'updateTimesheets');
 		},
 
 
@@ -41143,13 +41158,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 	}), _defineProperty(_actions, 'addTimesheetOther', function addTimesheetOther(context, payload) {
 		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/add-other', 'addTimesheetOther');
 	}), _defineProperty(_actions, 'updateTimesheetHours', function updateTimesheetHours(context, payload) {
-		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update-hours', 'updateTimesheetHours');
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update-hours', 'updateTimesheet');
 	}), _defineProperty(_actions, 'updateTimesheetTravel', function updateTimesheetTravel(context, payload) {
-		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update-travel', 'updateTimesheetTravel');
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update-travel', 'updateTimesheet');
 	}), _defineProperty(_actions, 'updateTimesheetEquipment', function updateTimesheetEquipment(context, payload) {
-		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update-equipment', 'updateTimesheetEquipment');
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update-equipment', 'updateTimesheet');
 	}), _defineProperty(_actions, 'updateTimesheetOther', function updateTimesheetOther(context, payload) {
-		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update-other', 'updateTimesheetOther');
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update-other', 'updateTimesheet');
 	}), _defineProperty(_actions, 'deleteTimesheetHours', function deleteTimesheetHours(context, payload) {
 		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/timesheets/delete-hours/' + payload, 'deleteTimesheetHours');
 	}), _defineProperty(_actions, 'deleteTimesheetTravel', function deleteTimesheetTravel(context, payload) {
@@ -41187,6 +41202,19 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		currentProject: function currentProject(state) {
 			return state.currentProject;
 		},
+
+
+		// Return the clients formatted for a vuetify select list
+		projectsSelectList: function projectsSelectList(state) {
+			// Cache users
+			var projects = state.projects,
+			    projectsSelect = [{ text: "Project...", value: "" }];
+			// Create client select array
+			projects.forEach(function (project) {
+				projectsSelect.push({ text: project.id + ' | ' + project.location, value: project.id });
+			});
+			return projectsSelect;
+		},
 		timesheets: function timesheets(state) {
 			return state.timesheets;
 		},
@@ -41214,7 +41242,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			    usersSelect = [{ text: "User...", value: "" }];
 			// Create client select array
 			users.forEach(function (user) {
-				usersSelect.push({ text: user, value: user });
+				usersSelect.push({ text: user.first + ' ' + user.last, value: user.id });
 			});
 			return usersSelect;
 		},
@@ -46059,6 +46087,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.fieldValue = this.value;
 			// Adjust state to edit
 			this.editState = true;
+			// Clear possible errors
+			this.fieldError = false;
+			this.fieldErrorMsg = '';
 		},
 
 
@@ -48982,6 +49013,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -48994,6 +49029,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       // For add project dialog
       addProjectDialog: false,
+      // Project adding loader
+      startingProject: false,
       // For project form inputs
       client_company_name: { val: '', err: false, default: '' },
       // For dual company name input
@@ -49037,11 +49074,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     startProject: function startProject() {
       var _this = this;
 
+      // Toggle loader
+      this.startingProject = true;
       // Dispatch action
       this.$store.dispatch('addProject', {
         client_company_name: this.client_company_name.val
       }).then(function () {
+        // Toggle loader and dialog
+        _this.startingProject = false;
         _this.addProjectDialog = false;
+        // Redirect
+        _this.$router.push('/projects/' + _this.$store.getters.currentProject.id + '/view');
       });
     }
   },
@@ -49227,7 +49270,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "green--text darken-1",
     attrs: {
       "outline": "",
-      "flat": "flat"
+      "flat": "flat",
+      "loading": _vm.startingProject,
+      "disabled": _vm.startingProject
     },
     nativeOn: {
       "click": function($event) {
@@ -49561,6 +49606,8 @@ exports.push([module.i, "\n.center[data-v-412f5819]{\n  margin-left: auto;\n  ma
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Timesheets_totals__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Timesheets_totals___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Timesheets_totals__);
 //
 //
 //
@@ -49614,10 +49661,114 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+
+  components: {
+    'totals': __WEBPACK_IMPORTED_MODULE_1__Timesheets_totals___default.a
+  },
+
   data: function data() {
     return {
       // Loader
@@ -49625,7 +49776,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // For data table pagination   
       perPage: [15, 30, 45, { text: "All", value: -1 }],
       // The headers the data table will use
-      headers: [{ text: 'Project', value: 'project_id', align: 'left' }, { text: 'Date', value: 'date', align: 'left' }, { text: 'Per Diem', value: 'per_diem', align: 'left' }, { text: 'Hours', value: '', align: 'left' }, { text: 'Travel', value: 'project_id', align: 'left' }, { text: 'Equipment', value: '', align: 'left' }, { text: 'Other', value: 'project_id', align: 'left' }, { text: 'Actions', value: '', align: 'left' }]
+      headers: [{ text: 'Project', value: 'project_id', align: 'left' }, { text: 'Date', value: 'date', align: 'left' }, { text: 'Total', value: 'timesheet_total', align: 'left' }, { text: 'Per Diem', value: 'per_diem', align: 'left' }, { text: 'Hours', value: 'total_hours_pay', align: 'left' }, { text: 'Travel', value: 'total_travel_distance', align: 'left' }, { text: 'Equipment', value: 'total_equipment_cost', align: 'left' }, { text: 'Other', value: 'total_other_costs', align: 'left' }, { text: 'Actions', value: '', align: 'left' }],
+      // For the date menus
+      fromDateMenu: false,
+      toDateMenu: false,
+      // For the filter models
+      fromDateFilter: '',
+      toDateFilter: '',
+      projectIdFilter: '',
+      userIdFilter: ''
     };
   },
 
@@ -49636,39 +49795,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     users: function users() {
       return this.$store.getters.usersSelectList;
+    },
+    projectSelectList: function projectSelectList() {
+      return this.$store.getters.projectsSelectList;
     }
   },
 
   methods: {
-    filterTimesheets: function filterTimesheets() {},
-    timesheetHours: function timesheetHours(workJobs) {
-      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].calcTimesheetHours(workJobs);
+    filterTimesheets: function filterTimesheets() {
+      var _this = this;
+
+      // Toggle loader
+      this.loading = true;
+      // Dispatch action to find projects
+      this.$store.dispatch('getAllTimesheets', {
+        from_date: this.fromDateFilter,
+        to_date: this.toDateFilter,
+        project_id: this.projectIdFilter,
+        user_id: this.userIdFilter
+      }).then(function () {
+        // Toggle loader
+        _this.loading = false;
+      });
     },
-    timesheetTravel: function timesheetTravel(travelJobs) {
-      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].calcTimesheetTravel(travelJobs);
-    },
-    timesheetEquipment: function timesheetEquipment(equipmentRentals) {
-      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].calcTimesheetEquipment(equipmentRentals);
-    },
-    timesheetOther: function timesheetOther(otherCosts) {
-      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].calcTimesheetOther(otherCosts);
-    }
+    totalTimesheets: function totalTimesheets() {}
   },
 
   created: function created() {
-    var _this = this;
+    var _this2 = this;
 
     // Toggle loader
     this.loading = true;
 
     var payload = false;
 
-    // Tell store to load projects
+    // Tell store to load timesheets
     this.$store.dispatch('getAllTimesheets', payload).then(function () {
       // Tell store to update unique clients
-      _this.$store.dispatch('getUsers').then(function () {
-        // Toggle loader
-        _this.loading = false;
+      _this2.$store.dispatch('getUsers').then(function () {
+        // Tell store to update all projects
+        _this2.$store.dispatch('getProjects').then(function () {
+          // Toggle loader
+          _this2.loading = false;
+        });
       });
     });
   }
@@ -49700,7 +49869,226 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "row": ""
     }
-  }, [_c('v-spacer')], 1), _vm._v(" "), _c('v-data-table', {
+  }, [_c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('v-menu', {
+    attrs: {
+      "lazy": "",
+      "close-on-content-click": false,
+      "transition": "scale-transition",
+      "offset-y": "",
+      "full-width": "",
+      "nudge-left": 40,
+      "max-width": "290px"
+    },
+    model: {
+      value: (_vm.fromDateMenu),
+      callback: function($$v) {
+        _vm.fromDateMenu = $$v
+      },
+      expression: "fromDateMenu"
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "From Date...",
+      "prepend-icon": "event",
+      "readonly": ""
+    },
+    slot: "activator",
+    model: {
+      value: (_vm.fromDateFilter),
+      callback: function($$v) {
+        _vm.fromDateFilter = $$v
+      },
+      expression: "fromDateFilter"
+    }
+  }), _vm._v(" "), _c('v-date-picker', {
+    attrs: {
+      "no-title": "",
+      "scrollable": "",
+      "actions": ""
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function(ref) {
+        var save = ref.save;
+        var cancel = ref.cancel;
+
+        return [_c('v-card-actions', [_c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              cancel()
+            }
+          }
+        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              save()
+            }
+          }
+        }, [_vm._v("Save")])], 1)]
+      }
+    }]),
+    model: {
+      value: (_vm.fromDateFilter),
+      callback: function($$v) {
+        _vm.fromDateFilter = $$v
+      },
+      expression: "fromDateFilter"
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('v-menu', {
+    attrs: {
+      "lazy": "",
+      "close-on-content-click": false,
+      "transition": "scale-transition",
+      "offset-y": "",
+      "full-width": "",
+      "nudge-left": 40,
+      "max-width": "290px"
+    },
+    model: {
+      value: (_vm.toDateMenu),
+      callback: function($$v) {
+        _vm.toDateMenu = $$v
+      },
+      expression: "toDateMenu"
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "To Date...",
+      "prepend-icon": "event",
+      "readonly": ""
+    },
+    slot: "activator",
+    model: {
+      value: (_vm.toDateFilter),
+      callback: function($$v) {
+        _vm.toDateFilter = $$v
+      },
+      expression: "toDateFilter"
+    }
+  }), _vm._v(" "), _c('v-date-picker', {
+    attrs: {
+      "no-title": "",
+      "scrollable": "",
+      "actions": ""
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function(ref) {
+        var save = ref.save;
+        var cancel = ref.cancel;
+
+        return [_c('v-card-actions', [_c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              cancel()
+            }
+          }
+        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              save()
+            }
+          }
+        }, [_vm._v("Save")])], 1)]
+      }
+    }]),
+    model: {
+      value: (_vm.toDateFilter),
+      callback: function($$v) {
+        _vm.toDateFilter = $$v
+      },
+      expression: "toDateFilter"
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('v-select', {
+    attrs: {
+      "items": _vm.users,
+      "label": "User...",
+      "single-line": "",
+      "bottom": ""
+    },
+    model: {
+      value: (_vm.userIdFilter),
+      callback: function($$v) {
+        _vm.userIdFilter = $$v
+      },
+      expression: "userIdFilter"
+    }
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('v-select', {
+    attrs: {
+      "items": _vm.projectSelectList,
+      "label": "Projects...",
+      "single-line": "",
+      "bottom": ""
+    },
+    model: {
+      value: (_vm.projectIdFilter),
+      callback: function($$v) {
+        _vm.projectIdFilter = $$v
+      },
+      expression: "projectIdFilter"
+    }
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs1": ""
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Filter Timesheets'
+      }),
+      expression: "{ html: 'Filter Timesheets' }",
+      arg: "top"
+    }],
+    staticClass: "mt-3",
+    attrs: {
+      "icon": ""
+    },
+    on: {
+      "click": _vm.filterTimesheets
+    }
+  }, [_c('v-icon', [_vm._v("search")])], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('totals', {
+    attrs: {
+      "timesheets": _vm.timesheets
+    }
+  })], 1), _vm._v(" "), _c('v-data-table', {
     staticClass: "elevation-1 mt-2",
     attrs: {
       "headers": _vm.headers,
@@ -49710,7 +50098,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     scopedSlots: _vm._u([{
       key: "items",
       fn: function(props) {
-        return [_c('td', [_vm._v(_vm._s(props.item.project_id))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.date))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(props.item.per_diem))]), _vm._v(" "), _c('td', [_c('small', [_vm._v(_vm._s(_vm.timesheetHours(props.item.work_jobs)) + " hr")])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.timesheetTravel(props.item.travel_jobs)) + " km")]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(_vm.timesheetEquipment(props.item.equipment_rentals)))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(_vm.timesheetOther(props.item.other_costs)))]), _vm._v(" "), _c('td', [_c('v-btn', {
+        return [_c('td', [_vm._v(_vm._s(props.item.project_id))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.date))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(props.item.timesheet_total))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(props.item.per_diem))]), _vm._v(" "), _c('td', [_vm._v("\n          $" + _vm._s(props.item.total_hours_pay) + "\n          "), _c('small', [_vm._v("(" + _vm._s(props.item.total_hours) + " hrs)")])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.total_travel_distance) + " km")]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(props.item.total_equipment_cost))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(props.item.total_other_costs))]), _vm._v(" "), _c('td', [_c('v-btn', {
           directives: [{
             name: "tooltip",
             rawName: "v-tooltip:top",
@@ -49966,6 +50354,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheet__ = __webpack_require__(93);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheet___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Timesheet__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store_helpers__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Timesheets_totals__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Timesheets_totals___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Timesheets_totals__);
 //
 //
 //
@@ -50123,6 +50513,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -50131,7 +50529,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	props: ['id'],
 
 	components: {
-		'timesheet': __WEBPACK_IMPORTED_MODULE_0__Timesheet___default.a
+		'timesheet': __WEBPACK_IMPORTED_MODULE_0__Timesheet___default.a,
+		'totals': __WEBPACK_IMPORTED_MODULE_2__Timesheets_totals___default.a
 	},
 
 	data: function data() {
@@ -52574,7 +52973,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "left": ""
     }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t          Once you add a timesheet you can then add travel hours, work hours, equipment rentals, and other costs.       \t\t\t\n\t\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', _vm._l((_vm.timesheets), function(timesheet) {
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t          Once you add a timesheet you can then add travel hours, work hours, equipment rentals, and other costs.       \t\t\t\n\t\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('totals', {
+    attrs: {
+      "timesheets": _vm.timesheets
+    }
+  })], 1), _vm._v(" "), _vm._l((_vm.timesheets), function(timesheet) {
     return _c('v-layout', {
       key: timesheet.id,
       staticClass: "mt-5",
@@ -52590,7 +53001,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "timesheet": timesheet
       }
     })], 1)], 1)
-  }))], 1)], 1)], 1)], 1)], 1)], 1)], 1)
+  })], 2)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -53868,8 +54279,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   components: {
     'nav-bar': __WEBPACK_IMPORTED_MODULE_0__ui_Nav_bar___default.a
-  }
+  },
 
+  created: function created() {
+    // For debug
+    if (this.$store.state.debug) console.log("Dashboard Created");
+    // Set authenticated user
+    this.$store.commit('setAuthUser');
+  }
 });
 
 /***/ }),
@@ -54005,6 +54422,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
@@ -54012,6 +54432,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			navDrawer: false,
 			menuItems: [{ icon: 'dashboard', title: 'Dashboard', link: '/' }, { icon: 'assignment', title: 'Projects', link: '/projects' }, { icon: 'today', title: 'Timesheets', link: '/timesheets' }, { icon: 'group', title: 'Users', link: '/users' }]
 		};
+	},
+
+
+	methods: {
+		logout: function logout() {
+			var _this = this;
+
+			// Logout
+			axios.post('/logout').then(function (response) {
+				console.log(response);
+				// Clear auth user
+				_this.$store.commit('clearAuthUser');
+				// Redirect
+				_this.$router.go('/login');
+			}).catch(function (error) {
+				console.log(error);
+			});
+		}
 	}
 });
 
@@ -54077,7 +54515,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": function($event) {}
     }
-  }, [_c('v-list-tile-title')], 1)], 1)], 1)], 2)], 1), _vm._v(" "), _c('v-navigation-drawer', {
+  }, [_c('v-list-tile-title', [_vm._v("Settings")])], 1), _vm._v(" "), _c('v-list-tile', {
+    on: {
+      "click": _vm.logout
+    }
+  }, [_c('v-list-tile-title', [_vm._v("Logout")])], 1)], 1)], 1)], 2)], 1), _vm._v(" "), _c('v-navigation-drawer', {
     attrs: {
       "temporary": ""
     },
@@ -54137,32 +54579,14 @@ if (false) {
 
 /***/ }),
 /* 120 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = (function (yyyyMMdd) {
-	return new Date(Date.parse(yyyyMMdd + 'T00:00:00')).toDateString();
-});
-
-/***/ }),
-/* 121 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 122 */,
-/* 123 */,
-/* 124 */,
-/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(126),
+  __webpack_require__(121),
   /* template */
-  __webpack_require__(127),
+  __webpack_require__(122),
   /* styles */
   null,
   /* scopeId */
@@ -54194,7 +54618,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 126 */
+/* 121 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54260,8 +54684,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	props: ['token'],
-
 	data: function data() {
 		return {
 			login: true,
@@ -54289,15 +54711,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			})
 			// Login success
 			.then(function (response) {
-				// Toggle loader
-				_this.loggingIn = false;
-				console.log(response);
+				// Redirect to dashboard
 				_this.$router.go('/app');
 			})
 			// Login errors
 			.catch(function (error) {
+				console.log(error);
 				// Cache errors
-				var errors = error.response.data;
+				if (error) var errors = error.response.data;
+
 				// Set possible email errors
 				if (errors.email) {
 					_this.form.email.err = true;
@@ -54316,7 +54738,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 127 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -54421,6 +54843,266 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
      require("vue-hot-reload-api").rerender("data-v-20fa3b6a", module.exports)
+  }
+}
+
+/***/ }),
+/* 123 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function (yyyyMMdd) {
+	return new Date(Date.parse(yyyyMMdd + 'T00:00:00')).toDateString();
+});
+
+/***/ }),
+/* 124 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 125 */,
+/* 126 */,
+/* 127 */,
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(129),
+  /* template */
+  __webpack_require__(130),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\timesheet\\Timesheets-totals.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Timesheets-totals.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1807e674", Component.options)
+  } else {
+    hotAPI.reload("data-v-1807e674", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 129 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['timesheets'],
+
+  computed: {
+    totalPerDiem: function totalPerDiem() {
+      var total = 0;
+      this.timesheets.forEach(function (timesheet) {
+        total += parseFloat(timesheet.per_diem);
+      });
+      return total.toFixed(2);
+    },
+    totalHours: function totalHours() {
+      var total = 0;
+      this.timesheets.forEach(function (timesheet) {
+        total += parseFloat(timesheet.total_hours);
+      });
+      return total;
+    },
+    totalHoursPay: function totalHoursPay() {
+      var total = 0;
+      this.timesheets.forEach(function (timesheet) {
+        total += parseFloat(timesheet.total_hours_pay);
+      });
+      return total.toFixed(2);
+    },
+    totalTravelDistance: function totalTravelDistance() {
+      var total = 0;
+      this.timesheets.forEach(function (timesheet) {
+        total += parseFloat(timesheet.total_travel_distance);
+      });
+      return total.toFixed(2);
+    },
+    totalEquipmentCost: function totalEquipmentCost() {
+      var total = 0;
+      this.timesheets.forEach(function (timesheet) {
+        total += parseFloat(timesheet.total_equipment_cost);
+      });
+      return total.toFixed(2);
+    },
+    totalOtherCosts: function totalOtherCosts() {
+      var total = 0;
+      this.timesheets.forEach(function (timesheet) {
+        total += parseFloat(timesheet.total_other_costs);
+      });
+      return total.toFixed(2);
+    },
+    timesheetsTotal: function timesheetsTotal() {
+      var total = parseFloat(this.totalPerDiem) + parseFloat(this.totalHoursPay) + parseFloat(this.totalEquipmentCost) + parseFloat(this.totalOtherCosts);
+      return total.toFixed(2);
+    }
+  }
+});
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    staticClass: "pl-0 pr-0",
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-data-table', {
+    staticClass: "elevation-1 mt-1 mb-4",
+    attrs: {
+      "headers": [{
+          text: 'Total',
+          align: 'center',
+          sortable: false
+        },
+        {
+          text: 'Total Per Diem',
+          align: 'center',
+          sortable: false
+        },
+        {
+          text: 'Total Hours Cost',
+          align: 'center',
+          sortable: false
+        },
+        {
+          text: 'Total Equipment Cost',
+          align: 'center',
+          sortable: false
+        },
+        {
+          text: 'Total Other Costs',
+          align: 'center',
+          sortable: false
+        }
+      ],
+      "items": [{
+        timesheets_total: _vm.timesheetsTotal,
+        total_per_diem: _vm.totalPerDiem,
+        total_hours: _vm.totalHours,
+        total_hours_pay: _vm.totalHoursPay,
+        total_equipment_cost: _vm.totalEquipmentCost,
+        total_other_costs: _vm.totalOtherCosts
+      }],
+      "hide-actions": ""
+    },
+    scopedSlots: _vm._u([{
+      key: "items",
+      fn: function(props) {
+        return [_c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "success white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.timesheets_total) + "\n        ")])], 1), _vm._v(" "), _c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "info white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.total_per_diem) + "\n        ")])], 1), _vm._v(" "), _c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "info white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.total_hours_pay) + " "), _c('small', [_vm._v("(" + _vm._s(props.item.total_hours) + " hrs)")])])], 1), _vm._v(" "), _c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "info white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.total_equipment_cost) + "\n        ")])], 1), _vm._v(" "), _c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "info white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.total_other_costs) + "\n        ")])], 1)]
+      }
+    }])
+  })], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-1807e674", module.exports)
   }
 }
 

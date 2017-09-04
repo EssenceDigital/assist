@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\EquipmentRental;
+use App\Timesheet;
 
 class EquipmentRentalsController extends Controller
 {
@@ -84,11 +85,17 @@ class EquipmentRentalsController extends Controller
             ], 404);
         }
 
+        // Get updated timesheet
+        $timesheet = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user'])->find($equipment->timesheet_id);
+        // Tally timesheet
+        $talliedTimesheet = $this->tallyTimesheet($timesheet);
+
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'payload' => $equipment
+            'payload' => $talliedTimesheet
         ], 200);
+
 
     }
 

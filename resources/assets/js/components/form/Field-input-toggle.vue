@@ -279,6 +279,9 @@
 				this.fieldValue = this.value;
 				// Adjust state to edit
 				this.editState = true;
+				// Clear possible errors
+				this.fieldError = false;
+				this.fieldErrorMsg = '';				
 			},
 
 			// Hides the field input

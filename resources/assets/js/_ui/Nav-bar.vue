@@ -43,8 +43,11 @@
 					</v-btn>	
 		      <v-list>
 		        <v-list-tile @click="">
-		          <v-list-tile-title></v-list-tile-title>
+		          <v-list-tile-title>Settings</v-list-tile-title>
 		        </v-list-tile>
+		        <v-list-tile @click="logout">
+		          <v-list-tile-title>Logout</v-list-tile-title>
+		        </v-list-tile>		        
 		      </v-list>
 		    </v-menu>					
 			</v-toolbar-items><!-- /Holds menu items -->
@@ -96,6 +99,23 @@
 					{ icon: 'today', title: 'Timesheets', link: '/timesheets' },
 					{ icon: 'group', title: 'Users', link: '/users' }
 				]				
+			}
+		},
+
+		methods: {
+			logout () {
+				// Logout
+				axios.post('/logout')
+					.then( (response) => {
+						console.log(response);
+						// Clear auth user
+						this.$store.commit('clearAuthUser');
+						// Redirect
+						this.$router.go('/login');
+					})
+					.catch( (error) => {
+						console.log(error);
+					});
 			}
 		}
 	}

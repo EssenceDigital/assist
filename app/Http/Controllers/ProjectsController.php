@@ -92,9 +92,6 @@ class ProjectsController extends Controller
             } 
         }
    
-
-
-
        $projects = Project::where($queryArray)->get();  
 
         // Return response for ajax call
