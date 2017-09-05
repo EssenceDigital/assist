@@ -23,7 +23,7 @@
         <v-spacer></v-spacer>
         <!-- Trigger for delete note dialog -->
         <v-btn 
-        	v-if="note.user.id === $store.getters.user.id"
+        	v-if="note.user.id == $store.getters.user.id"
         	class="mr-0 red--text" 
         	icon 
         	v-tooltip:top="{ html: 'Delete note' }"

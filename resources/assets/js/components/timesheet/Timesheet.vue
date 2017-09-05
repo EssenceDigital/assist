@@ -1,11 +1,12 @@
 <template>
  <v-layout row>
-    <v-flex xs12 sm6 offset-sm3>
+    <v-flex xs12 sm10 offset-sm1>
       <v-card>
 	  		<v-layout row class="pr-2">		        	
         	<v-flex xs1 offset-xs11>
 		        <!-- Edit button -->
 		        <v-btn 
+		        	v-if="!readonly"
 		        	icon 
 		        	v-tooltip:top="{ html: 'Edit Timesheet' }"
 		        	@click.native.stop="editTimesheetDialog = true"
@@ -19,14 +20,14 @@
 	  		<v-layout row>
 	  			<v-flex xs12 class="text-xs-center pt-3">
 	  				<p class="subheading grey--text">TIMESHEET</p>	
-	  				<p class="title">{{ timesheet.date }}</p>
+	  				<p class="title">{{ timesheet.date | date}}</p>
 	  			</v-flex>
 	  		</v-layout><!-- /Timesheet title, date -->
 
 	  		<v-divider></v-divider>
 
 	  		<!-- Timesheet action buttons -->
-        <v-card-actions>
+        <v-card-actions v-if="!readonly">
         	<v-spacer></v-spacer>
           <v-btn flat class="orange--text"
           	@click.native.stop="hoursDialog = true"
@@ -55,7 +56,7 @@
           <v-spacer></v-spacer>             
         </v-card-actions><!-- /Timesheet action buttons -->
 
-        <v-divider></v-divider>
+        <v-divider v-if="!readonly"></v-divider>
 
         <v-card-text>
         	<!-- Timesheet basics -->
@@ -100,7 +101,8 @@
 			        	<v-spacer></v-spacer>
 			        	<v-flex xs1>
 					        <!-- Delete button -->
-					        <v-btn 
+					        <v-btn
+					        	v-if="!readonly" 
 					        	icon 
 					        	class="mr-0 red--text" 
 					        	v-tooltip:top="{ html: 'Remove' }"
@@ -112,6 +114,7 @@
 			        	<v-flex xs1>
 					        <!-- Edit button -->
 					        <v-btn 
+					        	v-if="!readonly"
 					        	icon 
 					        	v-tooltip:top="{ html: 'Edit Job' }"
 					        	@click.native.stop="editDialog('travel', 'travel_jobs', job.id)"
@@ -157,6 +160,7 @@
 			        	<v-flex xs1>
 					        <!-- Delete button -->
 					        <v-btn 
+					        	v-if="!readonly"
 					        	icon 
 					        	class="mr-0 red--text" 
 					        	v-tooltip:top="{ html: 'Remove' }"
@@ -168,6 +172,7 @@
 			        	<v-flex xs1>			        	
 					        <!-- Edit button -->
 					        <v-btn 
+					        	v-if="!readonly"
 					        	icon 
 					        	v-tooltip:top="{ html: 'Edit Job' }"
 					        	@click.native.stop="editDialog('hours', 'work_jobs', job.id)"
@@ -213,6 +218,7 @@
 			        	<v-flex xs1>
 					        <!-- Delete button -->
 					        <v-btn 
+					        	v-if="!readonly"
 					        	icon 
 					        	class="mr-0 red--text" 
 					        	v-tooltip:top="{ html: 'Remove' }"
@@ -224,6 +230,7 @@
 			        	<v-flex xs1>
 					        <!-- Edit button -->
 					        <v-btn 
+					        	v-if="!readonly"
 					        	icon 
 					        	v-tooltip:top="{ html: 'Edit Job' }"
 					        	@click.native.stop="editDialog('equipment', 'equipment_rentals', job.id)"
@@ -269,6 +276,7 @@
 			        	<v-flex xs1>
 					        <!-- Delete button -->
 					        <v-btn 
+					        	v-if="!readonly"
 					        	icon 
 					        	class="mr-0 red--text" 
 					        	v-tooltip:top="{ html: 'Remove' }"
@@ -280,6 +288,7 @@
 			        	<v-flex xs1>
 					        <!-- Edit button -->
 					        <v-btn 
+					        	v-if="!readonly"
 					        	icon 
 					        	v-tooltip:top="{ html: 'Edit Job' }"
 					        	@click.native.stop="editDialog('other', 'other_costs', job.id)"
@@ -297,13 +306,12 @@
 	        		<v-divider class="mt-2 mb-2"></v-divider>     			
         		</div>
         	</v-container><!-- /Other costs--> 
-
         </v-card-text>
       </v-card>
     </v-flex>
 
     <!-- Add work hours dialog -->
-		<v-layout row justify-center style="position: relative;">
+		<v-layout v-if="!readonly" row justify-center style="position: relative;">
 	    <v-dialog v-model="hoursDialog" width="765" lazy absolute persistent>    
 	      <v-card>
 	        <v-card-title>
@@ -369,7 +377,7 @@
 	  </v-layout><!-- / Add work hours dialog -->
 
     <!-- Add travel hours dialog -->
-		<v-layout row justify-center style="position: relative;">
+		<v-layout v-if="!readonly" row justify-center style="position: relative;">
 	    <v-dialog v-model="travelDialog" width="765" lazy absolute persistent>    
 	      <v-card>
 	        <v-card-title>
@@ -430,7 +438,7 @@
 	  </v-layout><!-- /Add travel hours dialog -->	 
 
     <!-- Add equipment dialog -->
-		<v-layout row justify-center style="position: relative;">
+		<v-layout v-if="!readonly" row justify-center style="position: relative;">
 	    <v-dialog v-model="equipmentDialog" width="765" lazy absolute persistent>    
 	      <v-card>
 	        <v-card-title>
@@ -484,7 +492,7 @@
 	  </v-layout><!-- /Add equipment dialog -->	   	
 
     <!-- Add other cost dialog -->
-		<v-layout row justify-center style="position: relative;">
+		<v-layout v-if="!readonly" row justify-center style="position: relative;">
 	    <v-dialog v-model="otherDialog" width="765" lazy absolute persistent>    
 	      <v-card>
 	        <v-card-title>
@@ -538,7 +546,7 @@
 	  </v-layout><!-- /Add other cost dialog -->  
 
     <!-- Remove asset dialog and button -->
-		<v-layout row justify-center 
+		<v-layout v-if="!readonly" row justify-center 
 			class="mr-0" 
 			style="position: relative;"
 		>
@@ -575,7 +583,7 @@
 	  </v-layout><!-- Remove asset dialog and button -->
 
     <!-- Edit timesheet dialog -->
-		<v-layout row justify-center style="position: relative;">
+		<v-layout v-if="!readonly" row justify-center style="position: relative;">
 	    <v-dialog v-model="editTimesheetDialog" width="765" lazy absolute persistent>	    
 	      <v-card>
 	        <v-card-title>
@@ -654,7 +662,7 @@
 	import Helpers from './../../store/helpers';
 
 	export default {
-		props: ['timesheet'],
+		props: ['timesheet', 'readonly'],
 
 		data () {
 			return {

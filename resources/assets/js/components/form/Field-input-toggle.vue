@@ -29,7 +29,9 @@
 	      	<div v-if="!bool_field">
 	      		<!-- If value then show it -->
 	      		<div v-if="value" class="pl-2">
-	      				<span v-if="prefix">{{ prefix }}</span>{{ value }}
+	      				<span v-if="prefix">{{ prefix }}</span>
+	      				<span v-if="type != 'date'">{{ value }}</span>
+	      				<span v-else>{{ value | date }}</span>
 	   				</div>
 	   				<!-- If no value show this -->
 	      		<div v-if="!value && !alt_style" class="pl-2 error--text">

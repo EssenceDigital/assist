@@ -26,7 +26,10 @@
 
 				    >
 				      {{ current.heading}}
-				      <small v-if="timeline[current.field] != 0 && timeline[current.field] != 1">{{ timeline[current.field] }}</small>
+				      <small v-if="timeline[current.field] != 0 && timeline[current.field] != 1">
+				      	<span v-if="current.inputType != 'date'">{{ timeline[current.field] }}</span>
+				      	<span v-else>{{ timeline[current.field] | date }}</span>
+				      </small>
 				      <small v-if="timeline[current.field] === null">Milestone Not Complete</small>
 				      <small v-if="timeline[current.field] === 0">No</small>
 				      <small v-if="timeline[current.field] === 1">Yes</small>
@@ -36,6 +39,7 @@
 								<field-input-toggle
 									:alt_style="true"
 									:type="current.inputType"
+									:select_options="current.items"
 									:action="'updateTimelineField'"
 									:id="timeline.id"
 									:label="current.label"
@@ -66,6 +70,10 @@
 				return this.$store.getters.currentProject.timeline;
 			},
 
+			usersSelectList () {
+				return this.$store.getters.usersSelectListNameBased;
+			},
+
 			// Date project was approved on (or not)
 			projectApprovalDate () {
 				return this.$store.getters.currentProject.approval_date;
@@ -88,7 +96,8 @@
 					{
 						step: 2,
 						field: 'permit_applicant',
-						inputType: 'text',
+						inputType: 'select',
+						items: [],
 						label: 'Permit Applicant',
 						heading: 'Permit was applied for by:'
 					},	
@@ -209,13 +218,19 @@
 		},
 
 		created () {
-			// Determine the current step
-			for(let step of this.steps){
-				if(this.timeline[step.field] === null || this.timeline[step.field] === 0){
-					this.step = step.step;
-					break;
-				}
-			}
+			this.$store.dispatch('getUsers').then( () => {
+				// Determine the current step
+				for(let step of this.steps){
+					// Set select list for this step
+					if(step.step === 2) step.items = this.usersSelectList;
+					// Determine current step
+					if(this.timeline[step.field] === null || this.timeline[step.field] === 0){
+						this.step = step.step;
+						break;
+					}
+				}	
+				console.log(this.usersSelectList);			
+			});
 		}
 	}
 </script>

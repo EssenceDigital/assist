@@ -132,7 +132,7 @@
               icon 
               v-tooltip:top="{ html: 'View timesheet'}"
               class="success--text"
-              @click.native.stop=""
+              @click.native.stop="showFullTimesheetDialog(props.item.id)"
             >
               <v-icon>subdirectory_arrow_right</v-icon>
             </v-btn>            
@@ -145,6 +145,28 @@
       </v-data-table><!-- /Data table -->  
 
     </v-container><!-- /Container for table and filter -->
+
+    <!-- View full timesheet dialog -->
+    <v-layout row justify-center style="position: relative;">
+      <v-dialog v-model="fullTimesheetDialog" width="765" lazy absolute persistent>     
+        <v-card>
+          <v-card-text>
+            <v-container fluid class="mt-3">
+              <timesheet
+                v-if="currentTimesheet"
+                :timesheet="currentTimesheet"
+                readonly="true"
+              ></timesheet>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn outline class="red--text darken-1" flat="flat" @click.native="closeFullTimesheetDialog">Cancel</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-layout><!-- / view full timesheet dialog --> 
+
   </v-container><!-- /Container -->
 
 </template>
@@ -152,11 +174,13 @@
 <script>
   import Helpers from './../../store/helpers';  
   import Totals from './Timesheets-totals';
+  import Timesheet from './Timesheet'; 
 
   export default {
 
     components: {
-      'totals': Totals
+      'totals': Totals,
+      'timesheet': Timesheet
     },
 
     data () {
@@ -184,7 +208,10 @@
         fromDateFilter: '',
         toDateFilter: '',
         projectIdFilter: '',
-        userIdFilter: ''        
+        userIdFilter: '',
+        // For the view full timesheet dialog
+        fullTimesheetDialog: false ,
+        currentTimesheet: false     
       }
     },
 
@@ -218,8 +245,20 @@
         });
       },
 
-      totalTimesheets () {
+      showFullTimesheetDialog (timesheetId) {
+        // Toggle dialog
+        this.fullTimesheetDialog = true;
+        // Find requested timesheet
+        var timesheet = this.timesheets.find(elem => elem.id === timesheetId);
+        // Set current timesheet
+        this.currentTimesheet = timesheet;
+      },
 
+      closeFullTimesheetDialog (){
+        // Toggle dialog
+        this.fullTimesheetDialog = false;
+        // Reset current timesheet
+        this.currentTimesheet = false;
       }
     },
 

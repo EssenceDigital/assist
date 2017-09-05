@@ -32,24 +32,13 @@ class EquipmentRentalsController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate and populate the request
-        $equipment = $this->validateAndPopulate($request, new EquipmentRental, $this->validationFields);
-
-        // Attempt to store model
-        $result = $equipment->save();
-
-        // Verify success on store
-        if(! $result){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }
+        // Use parent helper method to store
+        $talliedTimesheet = $this->storeTimesheetAsset($request, new EquipmentRental, $this->validationFields);
 
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'payload' => $equipment
+            'payload' => $talliedTimesheet
         ], 200);
     }
 
@@ -61,42 +50,14 @@ class EquipmentRentalsController extends Controller
      */
     public function update(Request $request)
     {   
-        $equipment = EquipmentRental::findOrFail($request->id);
-
-        // Return failed response if collection empty
-        if(! $equipment){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }
-
-        // Validate and populate the request
-        $equipment = $this->validateAndPopulate($request, $equipment, $this->validationFields);
-
-        // Attempt to store model
-        $result = $equipment->save();
-
-        // Verify success on store
-        if(! $result){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }
-
-        // Get updated timesheet
-        $timesheet = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user'])->find($equipment->timesheet_id);
-        // Tally timesheet
-        $talliedTimesheet = $this->tallyTimesheet($timesheet);
+        // Use parent helper method to update
+        $talliedTimesheet = $this->updateTimesheetAsset($request, EquipmentRental::findOrFail($request->id), $this->validationFields);
 
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
             'payload' => $talliedTimesheet
         ], 200);
-
-
     }
 
     /**
@@ -108,24 +69,12 @@ class EquipmentRentalsController extends Controller
     public function delete($id)
     {
         // Find or throw 404 :)
-        $equipment = EquipmentRental::findOrFail($id);
-        // To return
-        $return = $equipment;
-
-        // Attempt to remove 
-        $result = $equipment->delete();
-        // Verify success on store
-        if(! $result){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }
+        $talliedTimesheet = $this->deleteTimesheetAsset(EquipmentRental::findOrFail($id));
 
         // Return successful response for ajax call
         return response()->json([
             'result' => 'success',
-            'payload' => $return
+            'payload' => $talliedTimesheet
         ], 200);
     }        
 

@@ -141,6 +141,13 @@
 					        		<totals :timesheets="timesheets"></totals>
 					        	</v-layout>	
 
+										<!-- No timesheets alert -->
+										<v-layout row v-if="timesheets.length === 0" class="mt-5">
+											<v-alert info value="true">
+									      You have not added any timesheets to this project yet.
+									    </v-alert>			
+										</v-layout><!-- / No timesheets alert -->
+
 										<v-layout class="mt-5"
 											row
 											v-for="timesheet in timesheets" 

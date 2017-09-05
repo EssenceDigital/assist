@@ -167,7 +167,6 @@ class ProjectsController extends Controller
                 'result' => false
             ], 404);
         }
-
         // Add a timeline to the project
         $timeline = new Timeline;
         // Attempt to store timeline
@@ -334,7 +333,7 @@ class ProjectsController extends Controller
         // Use the parent method to update
         return $this->updateModelField(
             $request,
-            Project::with(['comments', 'comments.user', 'timeline', 'users'])->find($request->id),
+            Project::with(['comments', 'comments.user', 'timeline', 'users', 'users.timesheets', 'timesheets'])->find($request->id),
             $this->validationFields
         );        
     }

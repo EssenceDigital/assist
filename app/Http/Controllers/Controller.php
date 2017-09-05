@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Timesheet;
+
 
 class Controller extends BaseController
 {
@@ -127,6 +129,66 @@ class Controller extends BaseController
         $timesheet->timesheet_total = number_format(round($timesheetTotal, 2, PHP_ROUND_HALF_UP), 2, '.', '');
 
         return $timesheet;
+    }
+
+    protected function storeTimesheetAsset(Request $request, $model, $validationFields) {
+        // Validate and populate the request
+        $asset = $this->validateAndPopulate($request, $model, $validationFields);
+        // Attempt to store model
+        $result = $asset->save();
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+        // Get parent timesheet
+        $timesheet = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user'])->find($request->timesheet_id);      
+        // Tally timesheet
+        $talliedTimesheet = $this->tallyTimesheet($timesheet);  
+
+        return $talliedTimesheet;      
+    }
+
+    protected function updateTimesheetAsset(Request $request, $model, $validationFields) {
+        // Validate and populate the request
+        $asset = $this->validateAndPopulate($request, $model, $validationFields);
+        // Attempt to store model
+        $result = $asset->save();
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+        // Get timesheet
+        $timesheet = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user'])->find($asset->timesheet_id);
+        // Tally timesheet
+        $talliedTimesheet = $this->tallyTimesheet($timesheet);
+
+        return $talliedTimesheet;        
+    }
+
+    protected function deleteTimesheetAsset($model) {
+        // Cache timesheet id
+        $timesheetId = $model->timesheet_id;        
+        // Attempt to remove 
+        $result = $model->delete();
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+        // Get timesheet
+        $timesheet = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user'])->find($timesheetId);
+        // Tally timesheet
+        $talliedTimesheet = $this->tallyTimesheet($timesheet);    
+
+        return $talliedTimesheet;    
     }
 
 
