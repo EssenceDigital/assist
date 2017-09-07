@@ -35,8 +35,10 @@ Route::delete('/projects/{project_id}/delete-crew/{id}', 'ProjectsController@del
 Route::post('/timelines/update-field', 'TimelinesController@updateField');
 
 Route::get('/users', 'UsersController@all');
+Route::post('/users/add', 'UsersController@store');
 Route::get('/users/{id}', 'UsersController@single');
 Route::post('/users/change-password', 'UsersController@changePassword');
+Route::post('/users/change-personal-password', 'DashboardController@changePersonalPassword');
 Route::post('/users/update-field', 'UsersController@updateField');
 Route::get('/users/{user_id}/projects', 'UsersController@projects');
 Route::get('/users/{user_id}/projects/{project_id}/timesheets', 'UsersController@projectTimesheets');

@@ -110,11 +110,12 @@
 							  :prepend-icon="icon"
 							  :error="fieldError"
 							  multi-line
-							  :counter="char_count"
+							  :counter="charCount"
 							  :max="char_count"
 							></v-text-field>      				
       			</v-flex>       			
       		</v-layout>
+
       		<!-- Error msg -->
       		<v-layout row>
 						<p v-if="fieldError" class="caption error--text">
@@ -270,7 +271,9 @@
 				// The new field value
 				fieldValue: '',
 				fieldError: false,
-				fieldErrorMsg: ''
+				fieldErrorMsg: '',
+				// For the char count check
+				charCount: false
 			}
 		},
 
@@ -336,6 +339,8 @@
 				// Adjust field value
 				this.fieldValue = this.value;				
 			}
+			// Set the char count check bool
+			if(this.char_count) this.charCount = true;
 		}
 
 

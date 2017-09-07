@@ -25,7 +25,6 @@ class UsersController extends Controller
         'password' => 'required|string|min:6|confirmed',
         'company_name' => 'required|string|max:25',
         'hourly_rate_one' => 'required|numeric|between:0,1000000000000.99',
-        'hourly_rate_two' => 'numeric|between:0,1000000000000.99',
         'gst_number' => 'required|string|max:25'
     ];
 
@@ -34,7 +33,7 @@ class UsersController extends Controller
      *
      * @return App\Model
      */
-    private function validateUser(Request $request, App\User $user)
+    private function validateUser(Request $request, User $user)
     {
         // Make sure hourly rate two is an integer
     	if($request->hourly_rate_two == null){
@@ -191,7 +190,7 @@ class UsersController extends Controller
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
-            'model' => $user
+            'payload' => $user
         ], 200);
 
     }

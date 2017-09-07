@@ -90,6 +90,11 @@ export const store = new Vuex.Store({
 			return state.users = payload;
 		},
 
+		// Add a user to store
+		addUser (state, payload) {
+			return state.users.push(payload);
+		},
+
 		updateCurrentUser (state, payload) {
 			return state.currentUser = payload;
 		},
@@ -298,6 +303,11 @@ export const store = new Vuex.Store({
 			// Use api to send request
 			return api.getAction(context, payload, '/users/'+payload, 'updateCurrentUser');
 		},
+		// Use api to add a new user to the db
+		addUser (context, payload) {
+			// Use api to send request
+			return api.postAction(context, payload, '/users/add', 'addUser');
+		},		
 		// Use api to edit a user field in the db and update the current user in the state
 		updateUserField (context, payload) {
 			// Use api to send request
@@ -307,7 +317,10 @@ export const store = new Vuex.Store({
 		changeUserPassword (context, payload) {
 			return api.postAction(context, payload, '/users/change-password');
 		},
-
+		// Use api to change the logged in users password
+		changePersonalPassword (context, payload) {
+			return api.postAction(context, payload, '/users/change-personal-password');
+		},
 		/*
 			MISC ACTIONS
 		*/

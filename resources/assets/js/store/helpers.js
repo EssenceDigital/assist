@@ -34,6 +34,17 @@ export default {
 		});		
 	},
 
+	populateFormErrors (form, errors) {
+		return new Promise((resolve, reject) => {
+			// Populate form errors
+			for(var key in errors) {
+				form[key].err = true;
+				form[key].errMsg = errors[key][0]; 
+			}
+			resolve();
+		});
+	},
+
 	clearFormErrors (form) {
 		return new Promise((resolve, reject) => {
 			// Clear form errors

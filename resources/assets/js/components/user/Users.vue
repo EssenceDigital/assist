@@ -29,7 +29,7 @@
 
                     <!-- Add user dialog -->
                     <v-layout row justify-center style="position: relative;">
-                      <v-dialog v-model="addUserDialog" width="765" lazy absolute>
+                      <v-dialog v-model="addUserDialog" width="765" lazy absolute persistent>
                         <!-- Add User button -->
                         <v-btn slot="activator" icon v-tooltip:top="{ html: 'Add User' }">
                           <v-icon>add_circle</v-icon>
@@ -46,6 +46,7 @@
                                 <v-text-field
                                   v-model="form.first.val"
                                   label="First Name..."
+                                  :error="form.first.err"
                                 ></v-text-field>                                
                               </v-flex>
                               <v-spacer></v-spacer>
@@ -53,6 +54,7 @@
                                 <v-text-field
                                   v-model="form.last.val"
                                   label="Last Name..."
+                                  :error="form.last.err"
                                 ></v-text-field>                                
                               </v-flex>                              
                             </v-layout>
@@ -61,6 +63,7 @@
                                 <v-text-field
                                   v-model="form.email.val"
                                   label="Email (used as username)..."
+                                  :error="form.email.err"
                                 ></v-text-field>                                
                               </v-flex>
                               <v-spacer></v-spacer>
@@ -73,6 +76,7 @@
                                     { text: 'User', value: 'user' },
                                     { text: 'Admin', value: 'admin' }                                    
                                   ]"
+                                  :error="form.permissions.err"
                                 ></v-select>                                
                               </v-flex>                              
                             </v-layout>
@@ -81,6 +85,7 @@
                                 <v-text-field
                                   v-model="form.company_name.val"
                                   label="Company Name..."
+                                  :error="form.company_name.err"
                                 ></v-text-field>                                
                               </v-flex>
                               <v-spacer></v-spacer>
@@ -88,6 +93,7 @@
                                 <v-text-field
                                   v-model="form.gst_number.val"
                                   label="GST Number..."
+                                  :error="form.gst_number.err"
                                 ></v-text-field>                                
                               </v-flex>                              
                             </v-layout>                            
@@ -96,14 +102,35 @@
                                 <v-text-field
                                   v-model="form.hourly_rate_one.val"
                                   label="Hourly Rate..."
+                                  :error="form.hourly_rate_one.err"
                                   prefix="$"
+                                ></v-text-field>                                
+                              </v-flex>                              
+                            </v-layout>
+                            <v-divider class="mt-2 mb-2"></v-divider>
+                            <v-layout row>
+                              <v-flex xs6>
+                                <v-text-field
+                                  v-model="form.password.val"
+                                  label="Temporary Password..."
+                                  type="password"
+                                  :error="form.password.err"
+                                ></v-text-field>                                
+                              </v-flex>
+                              <v-spacer></v-spacer>
+                              <v-flex xs6>
+                                <v-text-field
+                                  v-model="form.password_confirmation.val"
+                                  label="Confirm Password..."
+                                  type="password"
+                                  :error="form.password_confirmation.err"
                                 ></v-text-field>                                
                               </v-flex>                              
                             </v-layout>
                           </v-card-text>
                           <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn outline class="red--text darken-1" flat="flat" @click.native="addUserDialog = false">Cancel</v-btn>
+                            <v-btn outline class="red--text darken-1" flat="flat" @click.native="closeAddUserDialog">Cancel</v-btn>
                             <v-btn outline class="green--text darken-1" flat="flat" 
                               @click.native="addUser"
                               :loading="addingUser"
@@ -158,6 +185,7 @@
 
 <script>
   import UsersTable from './Users-table';
+  import Helpers from './../../store/helpers'; 
 
   export default {
     components: {
@@ -185,9 +213,30 @@
     },
 
     methods: {
-      addUser () {
+      closeAddUserDialog () {
+        Helpers.clearFormErrors(this.form).then( () => this.addUserDialog = false);
+      },
 
+      addUser () {
+        //Toggle loader
+        this.addingUser = true;
+        // Populate the data for post
+        Helpers.populatePostData(this.form)
+          .then( (data) => {
+            // Dispatch even to store user
+            this.$store.dispatch('addUser', data)
+              .then( () => {
+                // Toggle loader and dialog
+                this.addingUser = false;
+                this.addUserDialog = false;
+              })
+              .catch( (errors) => {
+                // Set form errors
+                Helpers.populateFormErrors(this.form, errors.response.data).then( () => this.addingUser = false);
+              });            
+          });
       }
+
     }
 
   }

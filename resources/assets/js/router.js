@@ -9,6 +9,7 @@ import Timesheets from './components/timesheet/Timesheets';
 import ProjectTimesheets from './components/timesheet/Project-timesheets';
 import Users from './components/user/Users';
 import UserView from './components/user/User-view';
+import UserSettings from './components/user/User-settings';
 
 /** Register router with Vue */
 Vue.use(VueRouter);
@@ -43,7 +44,6 @@ export default new VueRouter({
 			name: 'Timesheets',
 			component: Timesheets
 		},
-
 		{
 			path: '/users',
 			name: 'Users',
@@ -54,6 +54,11 @@ export default new VueRouter({
 			name: 'UserView',
 			component: UserView,
 			props: true
-		},		
+		},	
+		{
+			path: '/user-settings',
+			name: 'UserProfile',
+			component: UserSettings
+		},			
 	]
 });

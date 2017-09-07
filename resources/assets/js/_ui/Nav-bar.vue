@@ -42,7 +42,7 @@
 							<v-icon right dark class="mt-2">arrow_drop_down_circle</v-icon>
 					</v-btn>	
 		      <v-list>
-		        <v-list-tile @click="">
+		        <v-list-tile @click="$router.push('/user-settings')">
 		          <v-list-tile-title>Settings</v-list-tile-title>
 		        </v-list-tile>
 		        <v-list-tile @click="logout">
