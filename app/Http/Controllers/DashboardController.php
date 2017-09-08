@@ -17,6 +17,15 @@ class DashboardController extends Controller
         $this->middleware('auth');
     }
 
+    public function test(){
+        $faker = \Faker\Factory::create();
+
+        $date = $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = date_default_timezone_get());
+        echo $date->format('Y-m-d') . '<br>';
+        echo $date->modify('+ 30 days')->format('Y-m-d');
+    }
+
+
     // Returns the associated view
     public function index(){
         return view('app');

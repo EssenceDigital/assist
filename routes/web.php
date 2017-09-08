@@ -17,6 +17,8 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('/test-dates', 'DashboardController@test');
+
 Route::get('/app', 'DashboardController@index');
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');

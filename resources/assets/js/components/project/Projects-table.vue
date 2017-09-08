@@ -98,7 +98,7 @@
               v-if="props.item.invoiced_date && props.item.invoice_paid_date === null"
               class="error white--text"
             >
-              Invoiced|Not Paid   
+              Not Paid   
             </v-chip>
             <!-- Invoice paid chip-->
             <v-chip 
