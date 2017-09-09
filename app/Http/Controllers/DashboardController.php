@@ -18,28 +18,15 @@ class DashboardController extends Controller
     }
 
     public function test(){
-        //Create an array of numbers from which the randoms
-        //should be choosen. (For raffle: the list of user id's)
-        $array = range(1, 10);
-         
-        //Initialize the random generator
-        srand ((double)microtime()*1000000);
-         
-        //A for-loop which selects every run a different random number
-        for($x = 0; $x < 2; $x++)
-        {
-             //Generate a random number
-             $i = rand(1, count($array))-1;
-         
-             //Take the random number as index for the array
-             $result[] = $array[$i];
-         
-             //The chosen number will be removed from the array
-             //so it can't be taken another time
-             array_splice($array, $i, 1);
-        }
+        // Add things to timesheet
+        $assets = ['WorkJobs', 'TravelJobs', 'EquipmentRental', 'OtherCost'];
 
-        print_r($array);
+        $WorkJobs = ['job_type', 'hours_worked'];
+
+        for($z = 0; $z < rand(1, 2); $z++){
+            $assetName = $assets[rand(0, 3)];
+            echo $assetName . '<br>';
+        }  
     }
 
 
