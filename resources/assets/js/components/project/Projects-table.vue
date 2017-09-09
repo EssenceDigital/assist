@@ -7,13 +7,14 @@
   <v-container fluid>
     <!-- Loading container -->
     <v-layout v-if="loading" row class="mt-5">
-      <v-progress-linear v-bind:indeterminate="true"></v-progress-linear>
+      <v-spacer></v-spacer>
+      <v-progress-linear v-bind:indeterminate="true"></v-progress-linear>        
     </v-layout>
 
     <!-- Container for table and filter -->
     <v-container v-if="!loading" fluid >
       <!-- Row for project filter -->
-      <v-layout row v-if="table_state === 'admin'">
+      <v-layout row v-if="table_state === 'admin_work' || table_state === 'admin_manage'">
         <v-spacer></v-spacer>
         <!-- Province filter -->
         <v-flex xs2>
@@ -44,9 +45,9 @@
               v-model="locationFilter"
             ></v-text-field>        
         </v-flex> 
-        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>        
         <!-- Invoice status filter -->
-        <v-flex xs2>
+        <v-flex xs2 v-if="table_state === 'admin_manage'">
           <v-select
             v-model="invoiceFilter"
             :items="invoiceStatus"
@@ -69,6 +70,10 @@
         </v-flex> 
       </v-layout><!-- /Row for project filter -->
 
+      <v-layout row v-if="table_state === 'admin_manage'">
+        <projects-totals :projects="projects"></projects-totals>
+      </v-layout>
+
       <!-- Data table -->
       <v-data-table
         :headers="headers"
@@ -79,12 +84,19 @@
         <template slot="items" scope="props">
           <td>{{ props.item.id }}</td>
 
-          <td v-if="table_state === 'admin'">{{ props.item.client_company_name }}</td>
+          <td v-if="table_state === 'admin_work' || table_state === 'admin_manage'">{{ props.item.client_company_name }}</td>
 
-          <td>{{ props.item.province }}</td>
+          <td v-if="table_state === 'admin_work' || table_state === 'user'">{{ props.item.province }}</td>
+
           <td>{{ props.item.location }}</td>
 
-          <td v-if="table_state === 'admin'">
+
+
+          <td v-if="table_state === 'admin_work'">
+            {{ props.item.work_type }}
+          </td>
+
+          <td v-if="table_state === 'admin_manage'">
             <!-- Display different chip depending on invoice status.
             Not Invoiced chip -->
             <v-chip 
@@ -107,6 +119,14 @@
             >
               Paid   
             </v-chip>                 
+          </td>
+
+          <td v-if="table_state === 'admin_manage'">
+            ${{ props.item.invoice_amount }}
+          </td>
+
+          <td v-if="table_state === 'admin_manage'">
+            Crew Total
           </td>
 
           <td v-if="table_state === 'user'">{{ props.item.timesheets.length }}</td>
@@ -156,13 +176,15 @@
 
 <script>
   import ProjectView from './Project-view';
+  import ProjectsTotals from './Projects-totals';
 
   export default {
     // Determines what headers and fields the table should display ("admin" or "user")
     props: ['table_state'],
 
     components: {
-      'project-view': ProjectView
+      'project-view': ProjectView,
+      'projects-totals': ProjectsTotals
     },
 
     data () {
@@ -171,29 +193,12 @@
         loading: false,
         // Curret project id
         currentProjectId: -1,
+        // For the table state switch (work or manage)
+        tableStateSwitch: false,
         // The view project dialog window
         viewProjectDialog: false,
         // For data table pagination   
         perPage: [15, 30, 45, { text: "All", value: -1 }],
-        // The headers the data table will use
-        headers: [],
-        // Admin state headers for data table
-        adminStateHeaders: [
-          { text: 'Identifier', value: 'id', align: 'left' },
-          { text: 'Company Name', value: 'client_company_name', align: 'left' },
-          { text: 'Province', value: 'province', align: 'left' },
-          { text: 'Location', value: 'location', align: 'left' },
-          { text: 'Invoice Status', value: 'invoiced_date', align: 'left' },
-          { text: 'Actions', value: '', align: 'left' },
-        ],
-        // User state headers for data table
-        userStateHeaders: [
-          { text: 'Identifier', value: 'id', align: 'left' },
-          { text: 'Province', value: 'province', align: 'left' },
-          { text: 'Location', value: 'location', align: 'left' },
-          { text: 'Timesheets', value: 'timesheets', align: 'left' },
-          { text: 'Actions', value: '', align: 'left' },
-        ],
         // For provinces filter
         provinces: [
           { text: 'Province...', value: '' },
@@ -208,8 +213,9 @@
         // For invoice status
         invoiceStatus: [
           { text: 'Invoice status...', value: '' },
-          { text: 'Paid', value: '1' },
-          { text: 'Outstanding', value: '0' }                 
+          { text: 'Not Invoiced', value: 'not-invoiced' },
+          { text: 'Paid', value: 'paid' },
+          { text: 'Outstanding', value: 'outstanding' }                 
         ],
         // Location filter
         locationFilter: '',        
@@ -227,7 +233,42 @@
       // Watch for uniqueCLients state to update
       clients () {
         return this.$store.getters.clientsSelectList;
+      },
+
+      headers () {
+        if(this.table_state === 'admin_work'){
+          var headers = [
+            { text: 'Identifier', value: 'id', align: 'left' },
+            { text: 'Company Name', value: 'client_company_name', align: 'left' },
+            { text: 'Province', value: 'province', align: 'left' },
+            { text: 'Location', value: 'location', align: 'left' },
+            { text: 'Work Type', value: 'work_type', align: 'left' },
+            { text: 'Actions', value: '', align: 'left' }
+          ];
+        }
+        if(this.table_state === 'admin_manage'){
+          var headers = [
+            { text: 'Identifier', value: 'id', align: 'left' },
+            { text: 'Company Name', value: 'client_company_name', align: 'left' },
+            { text: 'Location', value: 'location', align: 'left' },
+            { text: 'Invoice Status', value: 'invoice_status', align: 'left' },
+            { text: 'Invoice Amount', value: 'invoice_amount', align: 'left' },
+            { text: 'Crew Expense', value: 'invoice_status', align: 'left' },
+            { text: 'Actions', value: '', align: 'left' }
+          ];
+        }
+        if(this.table_state === 'user'){
+          var headers = [
+            { text: 'Identifier', value: 'id', align: 'left' },
+            { text: 'Province', value: 'province', align: 'left' },
+            { text: 'Location', value: 'location', align: 'left' },
+            { text: 'Timesheets', value: 'timesheets', align: 'left' },
+            { text: 'Actions', value: '', align: 'left' }          
+          ];
+        }
+        return headers;
       }
+
     },
 
     methods: {
@@ -248,7 +289,7 @@
 
       viewProject (id) {
         // Admin state forward
-        if(this.table_state === 'admin') this.$router.push('/projects/'+id+'/view');
+        if(this.table_state === 'admin_work' || this.table_state === 'admin_manage') this.$router.push('/projects/'+id+'/view');
         // User state forward
         if(this.table_state === 'user') this.$router.push('/projects/'+id+'/timesheets');        
       }
@@ -259,15 +300,14 @@
       if(this.$store.getters.debug) console.log("Projects table created");
       // Toggle loader
       this.loading = true;
-
       // Set headers the data table will use based on the table state
       var dispatchAction = '',
           payload = false;
-      if(this.table_state === 'admin') {
-        this.headers = this.adminStateHeaders;
+      if(this.table_state === 'admin_work') {
         dispatchAction = 'getProjects';
+      } else if(this.table_state === 'admin_manage'){
+        dispatchAction = 'getProjects';        
       } else if(this.table_state === 'user') {
-        this.headers = this.userStateHeaders;
         dispatchAction = 'getUsersProjects';
         payload = {
           user_id: this.$store.getters.user.id

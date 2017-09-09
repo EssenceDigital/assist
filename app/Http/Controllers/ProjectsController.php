@@ -55,7 +55,7 @@ class ProjectsController extends Controller
      */
     public function all()
     {
-        $projects = Project::all();
+        $projects = Project::with(['timesheets', 'timesheets.workJobs', 'timesheets.travelJobs', 'timesheets.equipmentRentals', 'timesheets.otherCosts'])->get();
 
         // Return response for ajax call
         return response()->json([
@@ -84,10 +84,14 @@ class ProjectsController extends Controller
         }
 
         if($invoice != 'any'){
-            if($invoice == 0){
+            if($invoice == 'outstanding'){
                 array_push($queryArray, ['invoice_paid_date', '=', null]);
+                array_push($queryArray, ['invoiced_date', '<>', null]);
             }
-            if($invoice ==  1){
+            if($invoice == 'not-invoiced') {
+                array_push($queryArray, ['invoiced_date', '=', null]);
+            }            
+            if($invoice ==  'paid'){
                 array_push($queryArray, ['invoice_paid_date', '<>', null]);
             } 
         }
@@ -110,7 +114,7 @@ class ProjectsController extends Controller
     public function single($id)
     {
         // With all foreign keys / children
-        $project = Project::with(['comments', 'comments.user', 'timeline', 'users', 'users.timesheets', 'timesheets'])->find($id);
+        $project = Project::with(['comments', 'comments.user', 'timeline', 'users', 'users.timesheets', 'timesheets', 'timesheets.workJobs', 'timesheets.travelJobs', 'timesheets.equipmentRentals', 'timesheets.otherCosts'])->find($id);
 
         // Return response for ajax call
         return response()->json([

@@ -899,6 +899,60 @@ function applyToTag (styleElement, obj) {
 			totalOther += parseFloat(cost.cost);
 		});
 		return totalOther.toFixed(2);
+	},
+	timesheetsTotalPerDiem: function timesheetsTotalPerDiem(timesheets) {
+		var total = 0;
+		timesheets.forEach(function (timesheet) {
+			total += parseFloat(timesheet.per_diem);
+		});
+		return total.toFixed(2);
+	},
+	timesheetsTotalHours: function timesheetsTotalHours(timesheets) {
+		var _this3 = this;
+
+		var total = 0;
+		timesheets.forEach(function (timesheet) {
+			total += _this3.calcTimesheetHours(timesheet.work_jobs);
+		});
+		console.log(total);
+		return total;
+	},
+	timesheetsTotalHoursPay: function timesheetsTotalHoursPay(timesheets, wage) {
+		var hours = this.timesheetsTotalHours(timesheets),
+		    pay = parseFloat(hours) * parseFloat(wage);
+		console.log(pay + 'pay');
+		return pay.toFixed(2);
+	},
+	timesheetsTotalTravelDistance: function timesheetsTotalTravelDistance(timesheets) {
+		var _this4 = this;
+
+		var total = 0;
+		timesheets.forEach(function (timesheet) {
+			total += parseFloat(_this4.calcTimesheetTravel(timesheet.travel_jobs));
+		});
+		return total.toFixed(2);
+	},
+	timesheetsTotalEquipmentCost: function timesheetsTotalEquipmentCost(timesheets) {
+		var _this5 = this;
+
+		var total = 0;
+		timesheets.forEach(function (timesheet) {
+			total += parseFloat(_this5.calcTimesheetEquipment(timesheet.equipment_rentals));
+		});
+		return total.toFixed(2);
+	},
+	timesheetsTotalOtherCosts: function timesheetsTotalOtherCosts(timesheets) {
+		var _this6 = this;
+
+		var total = 0;
+		timesheets.forEach(function (timesheet) {
+			total += parseFloat(_this6.calcTimesheetOther(timesheet.other_costs));
+		});
+		return total.toFixed(2);
+	},
+	timesheetsTotal: function timesheetsTotal(timesheets) {
+		var total = parseFloat(this.totalPerDiem(timesheets)) + parseFloat(this.totalHoursPay(timesheets)) + parseFloat(this.totalEquipmentCost(timesheets)) + parseFloat(this.totalOtherCosts(timesheets));
+		return total.toFixed(2);
 	}
 });
 
@@ -45032,6 +45086,8 @@ exports.push([module.i, "\n.center[data-v-715eb46a]{\n  margin-left: auto;\n  ma
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Project_view__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Project_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Project_view__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Projects_totals__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Projects_totals___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Projects_totals__);
 //
 //
 //
@@ -45188,6 +45244,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -45196,7 +45273,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   props: ['table_state'],
 
   components: {
-    'project-view': __WEBPACK_IMPORTED_MODULE_0__Project_view___default.a
+    'project-view': __WEBPACK_IMPORTED_MODULE_0__Project_view___default.a,
+    'projects-totals': __WEBPACK_IMPORTED_MODULE_1__Projects_totals___default.a
   },
 
   data: function data() {
@@ -45205,16 +45283,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       loading: false,
       // Curret project id
       currentProjectId: -1,
+      // For the table state switch (work or manage)
+      tableStateSwitch: false,
       // The view project dialog window
       viewProjectDialog: false,
       // For data table pagination   
       perPage: [15, 30, 45, { text: "All", value: -1 }],
-      // The headers the data table will use
-      headers: [],
-      // Admin state headers for data table
-      adminStateHeaders: [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Company Name', value: 'client_company_name', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Invoice Status', value: 'invoiced_date', align: 'left' }, { text: 'Actions', value: '', align: 'left' }],
-      // User state headers for data table
-      userStateHeaders: [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Timesheets', value: 'timesheets', align: 'left' }, { text: 'Actions', value: '', align: 'left' }],
       // For provinces filter
       provinces: [{ text: 'Province...', value: '' }, { text: 'Alberta', value: 'Alberta' }, { text: 'British Columbia', value: 'British Columbia' }, { text: 'Saskatchewan', value: 'Saskatchewan' }],
       // Provinces filter
@@ -45222,7 +45296,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // Clients filter
       clientFilter: '',
       // For invoice status
-      invoiceStatus: [{ text: 'Invoice status...', value: '' }, { text: 'Paid', value: '1' }, { text: 'Outstanding', value: '0' }],
+      invoiceStatus: [{ text: 'Invoice status...', value: '' }, { text: 'Not Invoiced', value: 'not-invoiced' }, { text: 'Paid', value: 'paid' }, { text: 'Outstanding', value: 'outstanding' }],
       // Location filter
       locationFilter: '',
       // Invoice status filter
@@ -45241,6 +45315,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     // Watch for uniqueCLients state to update
     clients: function clients() {
       return this.$store.getters.clientsSelectList;
+    },
+    headers: function headers() {
+      if (this.table_state === 'admin_work') {
+        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Company Name', value: 'client_company_name', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Work Type', value: 'work_type', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+      }
+      if (this.table_state === 'admin_manage') {
+        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Company Name', value: 'client_company_name', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Invoice Status', value: 'invoice_status', align: 'left' }, { text: 'Invoice Amount', value: 'invoice_amount', align: 'left' }, { text: 'Crew Expense', value: 'invoice_status', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+      }
+      if (this.table_state === 'user') {
+        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Timesheets', value: 'timesheets', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+      }
+      return headers;
     }
   },
 
@@ -45263,7 +45349,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     viewProject: function viewProject(id) {
       // Admin state forward
-      if (this.table_state === 'admin') this.$router.push('/projects/' + id + '/view');
+      if (this.table_state === 'admin_work' || this.table_state === 'admin_manage') this.$router.push('/projects/' + id + '/view');
       // User state forward
       if (this.table_state === 'user') this.$router.push('/projects/' + id + '/timesheets');
     }
@@ -45276,15 +45362,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     if (this.$store.getters.debug) console.log("Projects table created");
     // Toggle loader
     this.loading = true;
-
     // Set headers the data table will use based on the table state
     var dispatchAction = '',
         payload = false;
-    if (this.table_state === 'admin') {
-      this.headers = this.adminStateHeaders;
+    if (this.table_state === 'admin_work') {
+      dispatchAction = 'getProjects';
+    } else if (this.table_state === 'admin_manage') {
       dispatchAction = 'getProjects';
     } else if (this.table_state === 'user') {
-      this.headers = this.userStateHeaders;
       dispatchAction = 'getUsersProjects';
       payload = {
         user_id: this.$store.getters.user.id
@@ -45355,6 +45440,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Project_crew_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Project_crew_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Project_timeline_vue__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Project_timeline_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__Project_timeline_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__timesheet_Timesheets_totals_vue__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__timesheet_Timesheets_totals_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__timesheet_Timesheets_totals_vue__);
 //
 //
 //
@@ -45787,6 +45874,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -45800,7 +45897,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		'field-input-toggle': __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default.a,
 		'project-notes': __WEBPACK_IMPORTED_MODULE_1__Project_notes_vue___default.a,
 		'project-crew': __WEBPACK_IMPORTED_MODULE_2__Project_crew_vue___default.a,
-		'project-timeline': __WEBPACK_IMPORTED_MODULE_3__Project_timeline_vue___default.a
+		'project-timeline': __WEBPACK_IMPORTED_MODULE_3__Project_timeline_vue___default.a,
+		'timesheets-totals': __WEBPACK_IMPORTED_MODULE_4__timesheet_Timesheets_totals_vue___default.a
 	},
 
 	data: function data() {
@@ -48044,6 +48142,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "xs12": ""
     }
+  }, [_c('v-container', [_c('timesheets-totals', {
+    attrs: {
+      "timesheets": _vm.$store.getters.currentProject.timesheets
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
   }, [_c('v-container', [_c('div', {
     staticClass: "headline"
   }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tClient\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
@@ -48529,7 +48639,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "row": ""
     }
-  }, [_c('v-progress-linear', {
+  }, [_c('v-spacer'), _vm._v(" "), _c('v-progress-linear', {
     attrs: {
       "indeterminate": true
     }
@@ -48537,7 +48647,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "fluid": ""
     }
-  }, [(_vm.table_state === 'admin') ? _c('v-layout', {
+  }, [(_vm.table_state === 'admin_work' || _vm.table_state === 'admin_manage') ? _c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -48592,7 +48702,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "locationFilter"
     }
-  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('v-flex', {
     attrs: {
       "xs2": ""
     }
@@ -48610,7 +48720,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "invoiceFilter"
     }
-  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+  })], 1) : _vm._e(), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
     attrs: {
       "xs1": ""
     }
@@ -48631,7 +48741,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.filterProjects
     }
-  }, [_c('v-icon', [_vm._v("search")])], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('v-data-table', {
+  }, [_c('v-icon', [_vm._v("search")])], 1)], 1)], 1) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('projects-totals', {
+    attrs: {
+      "projects": _vm.projects
+    }
+  })], 1) : _vm._e(), _vm._v(" "), _c('v-data-table', {
     staticClass: "elevation-1 mt-2",
     attrs: {
       "headers": _vm.headers,
@@ -48641,13 +48759,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     scopedSlots: _vm._u([{
       key: "items",
       fn: function(props) {
-        return [_c('td', [_vm._v(_vm._s(props.item.id))]), _vm._v(" "), (_vm.table_state === 'admin') ? _c('td', [_vm._v(_vm._s(props.item.client_company_name))]) : _vm._e(), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.province))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.location))]), _vm._v(" "), (_vm.table_state === 'admin') ? _c('td', [(props.item.invoiced_date === null) ? _c('v-chip', {
+        return [_c('td', [_vm._v(_vm._s(props.item.id))]), _vm._v(" "), (_vm.table_state === 'admin_work' || _vm.table_state === 'admin_manage') ? _c('td', [_vm._v(_vm._s(props.item.client_company_name))]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_work' || _vm.table_state === 'user') ? _c('td', [_vm._v(_vm._s(props.item.province))]) : _vm._e(), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.location))]), _vm._v(" "), (_vm.table_state === 'admin_work') ? _c('td', [_vm._v("\n          " + _vm._s(props.item.work_type) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [(props.item.invoiced_date === null) ? _c('v-chip', {
           staticClass: "warning white--text"
         }, [_vm._v("\n            Not Invoiced    \n          ")]) : _vm._e(), _vm._v(" "), (props.item.invoiced_date && props.item.invoice_paid_date === null) ? _c('v-chip', {
           staticClass: "error white--text"
         }, [_vm._v("\n            Not Paid   \n          ")]) : _vm._e(), _vm._v(" "), (props.item.invoice_paid_date) ? _c('v-chip', {
           staticClass: "success white--text"
-        }, [_vm._v("\n            Paid   \n          ")]) : _vm._e()], 1) : _vm._e(), _vm._v(" "), (_vm.table_state === 'user') ? _c('td', [_vm._v(_vm._s(props.item.timesheets.length))]) : _vm._e(), _vm._v(" "), _c('td', [_c('v-btn', {
+        }, [_vm._v("\n            Paid   \n          ")]) : _vm._e()], 1) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_vm._v("\n          $" + _vm._s(props.item.invoice_amount) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_vm._v("\n          Crew Total\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'user') ? _c('td', [_vm._v(_vm._s(props.item.timesheets.length))]) : _vm._e(), _vm._v(" "), _c('td', [_c('v-btn', {
           directives: [{
             name: "tooltip",
             rawName: "v-tooltip:top",
@@ -49075,6 +49193,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -49087,6 +49223,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       // For add project dialog
       addProjectDialog: false,
+
+      tableState: 'admin_work',
+
       // Project adding loader
       startingProject: false,
       // For project form inputs
@@ -49227,6 +49366,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('v-toolbar-title', {
     staticClass: "display-1"
   }, [_vm._v("\t\t\t\t         \n\t\t\t\t          \tFind & Add Projects\t\t\t\t          \t\n\t\t\t\t          ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-layout', {
+    staticClass: "mr-0",
     staticStyle: {
       "position": "relative"
     },
@@ -49341,9 +49481,42 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "row": ""
     }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs9": ""
+    }
   }, [_c('p', {
-    staticClass: "subheading pl-4"
-  }, [_vm._v("\n\t\t\t\t\t          This is where you can find and filter all of the projects within the system.       \t\t\n\t\t\t\t        \t")])])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
+    staticClass: "subheading pl-4 mt-2"
+  }, [_vm._v("\n\t\t\t\t\t          This is where you can find and filter all of the projects within the system.       \t\t\n\t\t\t\t        \t")])]), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('v-select', {
+    staticClass: "pt-0 pr-3",
+    attrs: {
+      "items": [{
+          text: 'Work View',
+          value: 'admin_work'
+        },
+        {
+          text: 'Manage View',
+          value: 'admin_manage'
+        }
+      ],
+      "label": "Table State...",
+      "single-line": "",
+      "auto": "",
+      "prepend-icon": "find_in_page",
+      "hide-details": ""
+    },
+    model: {
+      value: (_vm.tableState),
+      callback: function($$v) {
+        _vm.tableState = $$v
+      },
+      expression: "tableState"
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
     staticClass: "mt-4"
   }, [_c('v-layout', {
     attrs: {
@@ -49385,7 +49558,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('projects-table', {
     staticClass: "mt-2 mb-5",
     attrs: {
-      "table_state": 'admin'
+      "table_state": _vm.tableState
     }
   })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
@@ -49951,6 +50124,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(4);
 //
 //
 //
@@ -50008,52 +50182,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['timesheets'],
 
   computed: {
     totalPerDiem: function totalPerDiem() {
-      var total = 0;
-      this.timesheets.forEach(function (timesheet) {
-        total += parseFloat(timesheet.per_diem);
-      });
-      return total.toFixed(2);
+      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalPerDiem(this.timesheets);
     },
     totalHours: function totalHours() {
-      var total = 0;
-      this.timesheets.forEach(function (timesheet) {
-        total += parseFloat(timesheet.total_hours);
-      });
-      return total;
+      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalHours(this.timesheets);
     },
     totalHoursPay: function totalHoursPay() {
-      var total = 0;
-      this.timesheets.forEach(function (timesheet) {
-        total += parseFloat(timesheet.total_hours_pay);
-      });
-      return total.toFixed(2);
+      var pay = parseFloat(this.totalHours) * this.$store.getters.user.hourly;
+      return pay.toFixed(2);
     },
     totalTravelDistance: function totalTravelDistance() {
-      var total = 0;
-      this.timesheets.forEach(function (timesheet) {
-        total += parseFloat(timesheet.total_travel_distance);
-      });
-      return total.toFixed(2);
+      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalTravelDistance(this.timesheets);
     },
     totalEquipmentCost: function totalEquipmentCost() {
-      var total = 0;
-      this.timesheets.forEach(function (timesheet) {
-        total += parseFloat(timesheet.total_equipment_cost);
-      });
-      return total.toFixed(2);
+      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalEquipmentCost(this.timesheets);
     },
     totalOtherCosts: function totalOtherCosts() {
-      var total = 0;
-      this.timesheets.forEach(function (timesheet) {
-        total += parseFloat(timesheet.total_other_costs);
-      });
-      return total.toFixed(2);
+      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalOtherCosts(this.timesheets);
     },
     timesheetsTotal: function timesheetsTotal() {
       var total = parseFloat(this.totalPerDiem) + parseFloat(this.totalHoursPay) + parseFloat(this.totalEquipmentCost) + parseFloat(this.totalOtherCosts);
@@ -56192,6 +56345,169 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 131 */,
+/* 132 */,
+/* 133 */,
+/* 134 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(135),
+  /* template */
+  __webpack_require__(136),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Projects-totals.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Projects-totals.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-56104f02", Component.options)
+  } else {
+    hotAPI.reload("data-v-56104f02", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 135 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['projects'],
+
+  computed: {
+    invoicesPaidTotal: function invoicesPaidTotal() {
+      var total = 0;
+      this.projects.forEach(function (project) {
+        if (project.invoice_paid_date != null) {
+          total += parseFloat(project.invoice_amount);
+        }
+      });
+      return total.toFixed(2);
+    },
+    invoicesOutstandingTotal: function invoicesOutstandingTotal() {
+      var total = 0;
+      this.projects.forEach(function (project) {
+        if (project.invoice_paid_date === null) {
+          total += parseFloat(project.invoice_amount);
+        }
+      });
+      return total.toFixed(2);
+    }
+  }
+});
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    staticClass: "pl-0 pr-0",
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-data-table', {
+    staticClass: "elevation-1 mt-1 mb-4",
+    attrs: {
+      "headers": [{
+          text: 'Total Paid Invoices',
+          align: 'center',
+          sortable: false
+        },
+        {
+          text: 'Total Outstanding Invoices',
+          align: 'center',
+          sortable: false
+        } ],
+      "items": [{
+        invoices_paid_total: _vm.invoicesPaidTotal,
+        invoices_outstanding_total: _vm.invoicesOutstandingTotal
+      }],
+      "hide-actions": ""
+    },
+    scopedSlots: _vm._u([{
+      key: "items",
+      fn: function(props) {
+        return [_c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "success white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.invoices_paid_total) + "\n        ")])], 1), _vm._v(" "), _c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "error white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.invoices_outstanding_total) + "\n        ")])], 1)]
+      }
+    }])
+  })], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-56104f02", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

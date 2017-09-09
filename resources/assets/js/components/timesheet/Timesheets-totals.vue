@@ -56,56 +56,35 @@
 </template>
 
 <script>
+  import Helpers from './../../store/helpers';
+
 	export default {
 		props: ['timesheets'],
 
 		computed: {
       totalPerDiem () {
-        var total = 0;
-        this.timesheets.forEach((timesheet) => {
-          total += parseFloat(timesheet.per_diem);
-        });
-        return total.toFixed(2);
+        return Helpers.timesheetsTotalPerDiem(this.timesheets);
       },
 
       totalHours () {
-        var total = 0;
-        this.timesheets.forEach((timesheet) => {
-          total += parseFloat(timesheet.total_hours);
-        });
-        return total;
+        return Helpers.timesheetsTotalHours(this.timesheets);
       },
 
       totalHoursPay () {
-        var total = 0;
-        this.timesheets.forEach((timesheet) => {
-          total += parseFloat(timesheet.total_hours_pay);
-        });
-        return total.toFixed(2);
+        var pay = parseFloat(this.totalHours) * this.$store.getters.user.hourly;
+        return pay.toFixed(2);
       },
 
       totalTravelDistance () {
-        var total = 0;
-        this.timesheets.forEach((timesheet) => {
-          total += parseFloat(timesheet.total_travel_distance);
-        });
-        return total.toFixed(2);
+        return Helpers.timesheetsTotalTravelDistance(this.timesheets);
       },
 
       totalEquipmentCost () {
-        var total = 0;
-        this.timesheets.forEach((timesheet) => {
-          total += parseFloat(timesheet.total_equipment_cost);
-        });
-        return total.toFixed(2);
+        return Helpers.timesheetsTotalEquipmentCost(this.timesheets);
       },
 
       totalOtherCosts () {
-        var total = 0;
-        this.timesheets.forEach((timesheet) => {
-          total += parseFloat(timesheet.total_other_costs);
-        });
-        return total.toFixed(2);
+        return Helpers.timesheetsTotalOtherCosts(this.timesheets);
       },
 
       timesheetsTotal () {

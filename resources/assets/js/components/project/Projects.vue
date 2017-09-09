@@ -31,7 +31,7 @@
 					          <v-spacer></v-spacer>
 
 					          <!-- Add project dialog -->
-										<v-layout row justify-center style="position: relative;">
+										<v-layout row justify-center style="position: relative;" class="mr-0">
 									    <v-dialog v-model="addProjectDialog" width="765" lazy absolute>
 								        <!-- Add project button -->
 								        <v-btn slot="activator" icon v-tooltip:top="{ html: 'Add Project' }">
@@ -91,9 +91,27 @@
 					      </v-container>			        
 					      <v-container>
 					      	<v-layout row>
-				      			<p class="subheading pl-4">
+					      		<v-flex xs9>
+				      			<p class="subheading pl-4 mt-2">
 						          This is where you can find and filter all of the projects within the system.       		
-					        	</p>
+					        	</p>					      			
+					      		</v-flex>
+						        <v-flex xs3>
+						           <v-select
+						              :items="[
+						                { text: 'Work View', value: 'admin_work' },
+						                { text: 'Manage View', value: 'admin_manage' }
+						              ]"
+						              v-model="tableState"
+						              label="Table State..."
+						              single-line
+						              auto
+						              prepend-icon="find_in_page"
+						              hide-details
+						              class="pt-0 pr-3"
+						            >
+						            </v-select>          
+						        </v-flex>					        	
 					      	</v-layout>
 					      </v-container>
 				        <v-divider></v-divider>
@@ -122,7 +140,7 @@
 										<v-flex xs12>
 											<!-- Projects table component -->
 											<projects-table 
-												:table_state="'admin'"
+												:table_state="tableState"
 												class="mt-2 mb-5"
 											></projects-table>
 										</v-flex>
@@ -149,6 +167,9 @@
   		return {
   			// For add project dialog
   			addProjectDialog: false,
+
+  			tableState: 'admin_work',
+
   			// Project adding loader
   			startingProject: false,
   			// For project form inputs

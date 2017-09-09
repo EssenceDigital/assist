@@ -128,6 +128,64 @@ export default {
 			totalOther += parseFloat(cost.cost);
 		});
 		return totalOther.toFixed(2);	
-	}
+	},
+
+
+
+  timesheetsTotalPerDiem (timesheets) {
+    var total = 0;
+    timesheets.forEach((timesheet) => {
+      total += parseFloat(timesheet.per_diem);
+    });
+    return total.toFixed(2);
+  },
+
+  timesheetsTotalHours (timesheets) {
+    var total = 0;
+    timesheets.forEach((timesheet) => {
+      total += this.calcTimesheetHours(timesheet.work_jobs);
+    });
+    console.log(total);
+    return total;
+  },
+
+  timesheetsTotalHoursPay (timesheets, wage) {
+  	var hours = this.timesheetsTotalHours(timesheets),
+  	 		pay = parseFloat(hours) * parseFloat(wage);
+  	 		console.log(pay + 'pay');
+    return pay.toFixed(2);
+  },
+
+  timesheetsTotalTravelDistance (timesheets) {
+    var total = 0;
+    timesheets.forEach((timesheet) => {
+      total += parseFloat(this.calcTimesheetTravel(timesheet.travel_jobs));
+    });
+    return total.toFixed(2);
+  },
+
+  timesheetsTotalEquipmentCost (timesheets) {
+    var total = 0;
+    timesheets.forEach((timesheet) => {
+      total += parseFloat(this.calcTimesheetEquipment(timesheet.equipment_rentals));
+    });
+    return total.toFixed(2);
+  },
+
+  timesheetsTotalOtherCosts (timesheets) {
+    var total = 0;
+    timesheets.forEach((timesheet) => {
+      total += parseFloat(this.calcTimesheetOther(timesheet.other_costs));
+    });
+    return total.toFixed(2);
+  },
+
+  timesheetsTotal (timesheets) {
+    var total = parseFloat(this.totalPerDiem(timesheets)) +
+                parseFloat(this.totalHoursPay(timesheets)) + 
+                parseFloat(this.totalEquipmentCost(timesheets)) + 
+                parseFloat(this.totalOtherCosts(timesheets));
+    return total.toFixed(2);
+  } 
 
 }
