@@ -116,18 +116,18 @@ export default {
 		var totalEquipment = 0;
 		// Calculate total
 		equipmentRentals.forEach( (rental) => {
-			totalEquipment += parseFloat(rental.rental_fee);
+			totalEquipment += (parseFloat(rental.rental_fee) * 100);
 		});
-		return totalEquipment.toFixed(2);			
+		return (totalEquipment / 100).toFixed(2);			
 	},
 
 	calcTimesheetOther (otherCosts) {
 		var totalOther = 0;
 		// Calculate total
 		otherCosts.forEach( (cost) => {
-			totalOther += parseFloat(cost.cost);
+			totalOther += (parseFloat(cost.cost) * 100);
 		});
-		return totalOther.toFixed(2);	
+		return (totalOther / 100).toFixed(2);	
 	},
 
 
@@ -135,9 +135,10 @@ export default {
   timesheetsTotalPerDiem (timesheets) {
     var total = 0;
     timesheets.forEach((timesheet) => {
-      total += parseFloat(timesheet.per_diem);
+    	// Calculate real money by converting to cents and add to total
+      total += (parseFloat(timesheet.per_diem) * 100);
     });
-    return total.toFixed(2);
+    return (total / 100).toFixed(2);
   },
 
   timesheetsTotalHours (timesheets) {
@@ -145,15 +146,14 @@ export default {
     timesheets.forEach((timesheet) => {
       total += this.calcTimesheetHours(timesheet.work_jobs);
     });
-    console.log(total);
     return total;
   },
 
   timesheetsTotalHoursPay (timesheets, wage) {
   	var hours = this.timesheetsTotalHours(timesheets),
-  	 		pay = parseFloat(hours) * parseFloat(wage);
-  	 		console.log(pay + 'pay');
-    return pay.toFixed(2);
+  	 		pay = parseFloat(hours) * (parseFloat(wage) * 100);
+
+    return (pay / 100).toFixed(2);
   },
 
   timesheetsTotalTravelDistance (timesheets) {
@@ -167,25 +167,25 @@ export default {
   timesheetsTotalEquipmentCost (timesheets) {
     var total = 0;
     timesheets.forEach((timesheet) => {
-      total += parseFloat(this.calcTimesheetEquipment(timesheet.equipment_rentals));
+      total += (parseFloat(this.calcTimesheetEquipment(timesheet.equipment_rentals)) * 100);
     });
-    return total.toFixed(2);
+    return (total / 100).toFixed(2);
   },
 
   timesheetsTotalOtherCosts (timesheets) {
     var total = 0;
     timesheets.forEach((timesheet) => {
-      total += parseFloat(this.calcTimesheetOther(timesheet.other_costs));
+      total += (parseFloat(this.calcTimesheetOther(timesheet.other_costs)) * 100);
     });
-    return total.toFixed(2);
+    return (total / 100).toFixed(2);
   },
 
   timesheetsTotal (timesheets) {
-    var total = parseFloat(this.totalPerDiem(timesheets)) +
-                parseFloat(this.totalHoursPay(timesheets)) + 
-                parseFloat(this.totalEquipmentCost(timesheets)) + 
-                parseFloat(this.totalOtherCosts(timesheets));
-    return total.toFixed(2);
+    var total = (parseFloat(this.totalPerDiem(timesheets)) * 100) +
+                (parseFloat(this.totalHoursPay(timesheets)) * 100) + 
+                (parseFloat(this.totalEquipmentCost(timesheets)) * 100) + 
+                (parseFloat(this.totalOtherCosts(timesheets)) * 100);
+    return (total / 100).toFixed(2);
   } 
 
 }

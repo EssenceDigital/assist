@@ -125,10 +125,6 @@
             ${{ props.item.invoice_amount }}
           </td>
 
-          <td v-if="table_state === 'admin_manage'">
-            Crew Total
-          </td>
-
           <td v-if="table_state === 'user'">{{ props.item.timesheets.length }}</td>
 
           <td>
@@ -253,7 +249,6 @@
             { text: 'Location', value: 'location', align: 'left' },
             { text: 'Invoice Status', value: 'invoice_status', align: 'left' },
             { text: 'Invoice Amount', value: 'invoice_amount', align: 'left' },
-            { text: 'Crew Expense', value: 'invoice_status', align: 'left' },
             { text: 'Actions', value: '', align: 'left' }
           ];
         }

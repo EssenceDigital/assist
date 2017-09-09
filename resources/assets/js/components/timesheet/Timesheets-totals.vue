@@ -4,7 +4,7 @@
     <!-- Data table -->
     <v-data-table
       :headers="[
-        { text: 'Total', align: 'center', sortable: false },
+        { text: 'Grand Total', align: 'center', sortable: false },
         { text: 'Total Per Diem', align: 'center', sortable: false },
         { text: 'Total Hours Cost', align: 'center', sortable: false },
         { text: 'Total Equipment Cost', align: 'center', sortable: false },
@@ -71,8 +71,8 @@
       },
 
       totalHoursPay () {
-        var pay = parseFloat(this.totalHours) * this.$store.getters.user.hourly;
-        return pay.toFixed(2);
+        var pay = parseFloat(this.totalHours) * (parseFloat(this.$store.getters.user.hourly) * 100);
+        return (pay / 100).toFixed(2);
       },
 
       totalTravelDistance () {

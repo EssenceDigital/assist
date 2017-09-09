@@ -42,20 +42,26 @@
         var total = 0;
         this.projects.forEach((project) => {
           if(project.invoice_paid_date != null) {
-            total += parseFloat(project.invoice_amount);
+            total += (parseFloat(project.invoice_amount) * 100);
           }
         });
-        return total.toFixed(2);
+        return new Intl.NumberFormat('en-US', { 
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2 
+        }).format((total / 100));
       },
 
       invoicesOutstandingTotal () {
         var total = 0;
         this.projects.forEach((project) => {
           if(project.invoice_paid_date === null) {
-            total += parseFloat(project.invoice_amount);
+            total += (parseFloat(project.invoice_amount) * 100);
           }
         });
-        return total.toFixed(2);
+        return new Intl.NumberFormat('en-US', { 
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2 
+        }).format((total / 100));
       }            
     }
   }

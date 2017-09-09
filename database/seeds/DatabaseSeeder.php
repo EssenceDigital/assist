@@ -5,6 +5,12 @@ use Illuminate\Database\Seeder;
 use Faker\Generator;
 
 use App\Project;
+use App\User;
+use App\Timesheet;
+use App\WorkJob;
+use App\TravelJob;
+use App\EquipmentRental;
+use App\OtherCost;
 use App\Timeline;
 
 class DatabaseSeeder extends Seeder
@@ -30,7 +36,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Insert some fake users
-        for($i = 0; $i <= 7; $i++){
+        for($i = 0; $i <= 9; $i++){
             // Name
             $first = $faker->firstName;
             $last = $faker->lastName;
@@ -60,7 +66,7 @@ class DatabaseSeeder extends Seeder
         $workType = ['HRIA', 'Archaeology', 'Palaeontology'];
 
         // Insert some fake projects
-        for($i = 0; $i <= 45; $i++){
+        for($i = 0; $i <= 35; $i++){
 
             $project = new Project;
             // Seed
@@ -102,8 +108,50 @@ class DatabaseSeeder extends Seeder
             // Save project
             $project->save();
             $project->timeline()->save(new Timeline);
+
+            //Create an array of numbers from which the randoms
+            //should be choosen. (For raffle: the list of user id's)
+            /*$array = range(1, 10);
+             
+            //Initialize the random generator
+            srand ((double)microtime()*1000000);
+             
+            //A for-loop which selects every run a different random number
+            for($x = 0; $x < 5; $x++)
+            {
+                 //Generate a random number
+                 $y = rand(1, count($array))-1;
+             
+                 //Take the random number as index for the array
+                 $result[] = $array[$y];
+             
+                 //The chosen number will be removed from the array
+                 //so it can't be taken another time
+                 array_splice($array, $y, 1);
+            }
+
+            forEach($array as $q){
+                $user = User::find($q);  
+                $project->users()->save($user);
+            }
             
+
+            
+            for($t = 0; $t < 5; $t++)
+            // Insert some fake timesheets
+            $timesheet = new Timesheet;
+            $timesheet->project_id = $project->id;
+            $timesheet->user_id = rand(1, 10);
+            $timesheet->date = $baseDate->modify('+ 15 days')->format('Y-m-d');
+            $timesheet->per_diem = rand(75, 200);
+
+            $timesheet->save();*/
+         
         }
+
+
+
+
                               
     }
 }

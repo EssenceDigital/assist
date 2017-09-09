@@ -18,11 +18,28 @@ class DashboardController extends Controller
     }
 
     public function test(){
-        $faker = \Faker\Factory::create();
+        //Create an array of numbers from which the randoms
+        //should be choosen. (For raffle: the list of user id's)
+        $array = range(1, 10);
+         
+        //Initialize the random generator
+        srand ((double)microtime()*1000000);
+         
+        //A for-loop which selects every run a different random number
+        for($x = 0; $x < 2; $x++)
+        {
+             //Generate a random number
+             $i = rand(1, count($array))-1;
+         
+             //Take the random number as index for the array
+             $result[] = $array[$i];
+         
+             //The chosen number will be removed from the array
+             //so it can't be taken another time
+             array_splice($array, $i, 1);
+        }
 
-        $date = $faker->dateTimeBetween($startDate = '-2 years', $endDate = 'now', $timezone = date_default_timezone_get());
-        echo $date->format('Y-m-d') . '<br>';
-        echo $date->modify('+ 30 days')->format('Y-m-d');
+        print_r($array);
     }
 
 
