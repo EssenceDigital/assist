@@ -963,9 +963,9 @@ function applyToTag (styleElement, obj) {
 var disposed = false
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(60),
+  __webpack_require__(76),
   /* template */
-  __webpack_require__(61),
+  __webpack_require__(77),
   /* styles */
   null,
   /* scopeId */
@@ -11198,9 +11198,9 @@ module.exports = Vue$3;
 var disposed = false
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(73),
+  __webpack_require__(57),
   /* template */
-  __webpack_require__(74),
+  __webpack_require__(58),
   /* styles */
   null,
   /* scopeId */
@@ -11545,17 +11545,17 @@ var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(56),
   /* template */
-  __webpack_require__(79),
+  __webpack_require__(63),
   /* styles */
   injectStyle,
   /* scopeId */
-  "data-v-715eb46a",
+  "data-v-412f5819",
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Projects-table.vue"
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\timesheet\\Timesheets-table.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Projects-table.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] Timesheets-table.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -11564,9 +11564,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-715eb46a", Component.options)
+    hotAPI.createRecord("data-v-412f5819", Component.options)
   } else {
-    hotAPI.reload("data-v-715eb46a", Component.options)
+    hotAPI.reload("data-v-412f5819", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -11583,57 +11583,13 @@ module.exports = Component.exports
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(57)
+  __webpack_require__(59)
 }
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(59),
+  __webpack_require__(61),
   /* template */
-  __webpack_require__(75),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  "data-v-a4250e2e",
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Project-view.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Project-view.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-a4250e2e", Component.options)
-  } else {
-    hotAPI.reload("data-v-a4250e2e", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(94)
-}
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(96),
-  /* template */
-  __webpack_require__(97),
+  __webpack_require__(62),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -11655,6 +11611,50 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-0aedd5ab", Component.options)
   } else {
     hotAPI.reload("data-v-0aedd5ab", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(73)
+}
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(75),
+  /* template */
+  __webpack_require__(89),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  "data-v-a4250e2e",
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Project-view.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Project-view.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-a4250e2e", Component.options)
+  } else {
+    hotAPI.reload("data-v-a4250e2e", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -40974,18 +40974,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */]);
 
+/** 
+ * The Vuex store 
+*/
 var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
+	/** 
+  * The cache values to be centralized 
+ */
 	state: {
+		// Used by some methods to log data to the console
 		debug: true,
+		// The logged in user
 		authUser: {},
-		currentUser: { id: 0 },
+		// A user who has been selected to view/edit
+		currentUser: { id: -1 },
+		// Users returned by the server
 		users: [],
+		// Projects returned by the server
 		projects: [],
-		currentProject: { id: 0 },
+		// A project who has been selected to view/edit
+		currentProject: { id: -1 },
+		// Timesheets returned by the server
 		timesheets: [],
+		// A timesheet that has been selected to view/edit
+		currentTimesheet: false,
+		// All companies found within the project table
 		clients: []
 	},
 
+	/**
+  * Methods that directly change the state cache
+ */
 	mutations: {
 		// Update projects
 		updateProjects: function updateProjects(state, payload) {
@@ -41044,11 +41063,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		addTimesheet: function addTimesheet(state, payload) {
 			return state.timesheets.unshift(payload);
 		},
+		updateCurrentTimesheet: function updateCurrentTimesheet(state, payload) {
+			return state.currentTimesheet = payload;
+		},
 
 
 		// Update a timesheet
 		updateTimesheet: function updateTimesheet(state, payload) {
-			console.log(payload);
 			// The id of the timesheet
 			var id = 0;
 			// Set depending on which field is the timesheet id
@@ -41056,6 +41077,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			// Find timesheet to update
 			__WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].findTimesheet(state.timesheets, id).then(function (timesheetIndex) {
 				state.timesheets.splice(timesheetIndex, 1, payload);
+				state.currentTimesheet = payload;
 			});
 		},
 
@@ -41118,13 +41140,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 				if (payload.invoice != '') url += '/' + payload.invoice;else url += '/' + 'any';
 			}
 			// Use api to send the request
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, url, 'updateProjects');
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, url, 'updateProjects');
 		},
 
 		// Use api to retrieve a project and set it in the state
 		getProject: function getProject(context, payload) {
 			// Use api to send request
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/projects/' + payload, 'updateCurrentProject');
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/projects/' + payload, 'updateCurrentProject');
 		},
 
 
@@ -41149,7 +41171,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		// Use api to delete a comment and update the current project comments in the state
 		deleteProjectComment: function deleteProjectComment(context, payload) {
 			// Use api to send request
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/projects/delete-comment/' + payload.id, 'deleteProjectComment');
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/projects/delete-comment/' + payload.id, 'deleteProjectComment');
 		},
 
 		// Use api to add a crew member to a specific project and update the current project users in the state
@@ -41159,7 +41181,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 
 		// Use api to delete a crew member from a specific project and update the current project crew in the state
 		deleteProjectCrew: function deleteProjectCrew(context, payload) {
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/projects/' + payload.project_id + '/delete-crew/' + payload.id, 'deleteProjectCrew');
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/projects/' + payload.project_id + '/delete-crew/' + payload.id, 'deleteProjectCrew');
 		},
 		updateTimelineField: function updateTimelineField(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timelines/update-field', 'updateCurrentProjectTimeline');
@@ -41167,12 +41189,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 
 		// Use api to retrieve all of a users projects and set them in the state
 		getUsersProjects: function getUsersProjects(context, payload) {
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/users/' + payload.user_id + '/projects', 'updateProjects');
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/projects/auth-users', 'updateProjects');
 		},
 
 		// Use api to retrieve all of a users timesheets on a project
 		getProjectTimesheets: function getProjectTimesheets(context, payload) {
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/users/' + payload.user_id + '/projects/' + payload.project_id + '/timesheets', 'updateTimesheets');
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/users/' + payload.user_id + '/projects/' + payload.project_id + '/timesheets', 'updateTimesheets');
 		},
 
 		// Use api to retrieve all timesheets
@@ -41189,9 +41211,16 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 				if (payload.project_id != '') url += '/' + payload.project_id;else url += '/' + 0;
 				// Add user id to string
 				if (payload.user_id != '') url += '/' + payload.user_id;else url += '/' + 0;
+				if (payload.auth_user_only) url += '/' + 1;else url += '/' + 0;
 			}
 			// Use api to send request
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, url, 'updateTimesheets');
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, url, 'updateTimesheets');
+		},
+
+
+		// Use api to retrieve all of a users timehseets and set them in the state
+		getUsersTimesheets: function getUsersTimesheets(context, payload) {
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/timesheets/auth-users', 'updateTimesheets');
 		},
 
 
@@ -41210,7 +41239,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update', 'updateTimesheet');
 		}
 	}, _defineProperty(_actions, 'deleteProjectCrew', function deleteProjectCrew(context, payload) {
-		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/projects/' + payload.project_id + '/delete-crew/' + payload.id, 'deleteProjectCrew');
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/projects/' + payload.project_id + '/delete-crew/' + payload.id, 'deleteProjectCrew');
 	}), _defineProperty(_actions, 'addTimesheetHours', function addTimesheetHours(context, payload) {
 		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/add-hours', 'updateTimesheet');
 	}), _defineProperty(_actions, 'addTimesheetTravel', function addTimesheetTravel(context, payload) {
@@ -41228,18 +41257,18 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 	}), _defineProperty(_actions, 'updateTimesheetOther', function updateTimesheetOther(context, payload) {
 		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timesheets/update-other', 'updateTimesheet');
 	}), _defineProperty(_actions, 'deleteTimesheetHours', function deleteTimesheetHours(context, payload) {
-		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/timesheets/delete-hours/' + payload, 'updateTimesheet');
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/timesheets/delete-hours/' + payload, 'updateTimesheet');
 	}), _defineProperty(_actions, 'deleteTimesheetTravel', function deleteTimesheetTravel(context, payload) {
-		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/timesheets/delete-travel/' + payload, 'updateTimesheet');
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/timesheets/delete-travel/' + payload, 'updateTimesheet');
 	}), _defineProperty(_actions, 'deleteTimesheetEquipment', function deleteTimesheetEquipment(context, payload) {
-		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/timesheets/delete-equipment/' + payload, 'updateTimesheet');
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/timesheets/delete-equipment/' + payload, 'updateTimesheet');
 	}), _defineProperty(_actions, 'deleteTimesheetOther', function deleteTimesheetOther(context, payload) {
-		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, payload, '/timesheets/delete-other/' + payload, 'updateTimesheet');
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/timesheets/delete-other/' + payload, 'updateTimesheet');
 	}), _defineProperty(_actions, 'getUsers', function getUsers(context, payload) {
-		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/users', 'updateUsers');
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/users', 'updateUsers');
 	}), _defineProperty(_actions, 'getUser', function getUser(context, payload) {
 		// Use api to send request
-		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/users/' + payload, 'updateCurrentUser');
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/users/' + payload, 'updateCurrentUser');
 	}), _defineProperty(_actions, 'addUser', function addUser(context, payload) {
 		// Use api to send request
 		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/users/add', 'addUser');
@@ -41252,7 +41281,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/users/change-personal-password');
 	}), _defineProperty(_actions, 'getClients', function getClients(context, payload) {
 		// Use api to send request
-		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, payload, '/projects/clients', 'updateClients');
+		return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/projects/clients', 'updateClients');
 	}), _actions),
 
 	getters: {
@@ -41284,6 +41313,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		},
 		timesheets: function timesheets(state) {
 			return state.timesheets;
+		},
+		currentTimesheet: function currentTimesheet(state) {
+			return state.currentTimesheet;
 		},
 
 
@@ -42170,7 +42202,18 @@ var index_esm = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 
 
+/** 
+ * Several helper methods to assist in sending AJAX requests.
+ * Uses the axios library to send requests.
+*/
 /* harmony default export */ __webpack_exports__["a"] = ({
+
+	/** 
+  * Sends a GET request to the server.
+  * Uses axios to send AJAX request and resolves a promise with the server payload response.
+  *
+  * @param url (String) - the URL to send the request to.
+ */
 	get: function get(url) {
 		return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(url).then(function (response) {
 			return Promise.resolve(response.data.payload);
@@ -42178,14 +42221,26 @@ var index_esm = {
 			return Promise.reject(error);
 		});
 	},
-	getAction: function getAction(context, payload, url, mutation) {
+
+
+	/**
+  * Used by actions within the store and returns a promise that needs to be resolved the calling action.
+  * Uses the get method above and then commits a mutation to the store.
+  *
+  * @param context (Object) - the store action context.
+  * @param url (String) - the URL to send the request to.
+  * @param mutation (String) - the mutation to commit after a successfull request.
+ */
+	getAction: function getAction(context, url, mutation) {
 		var _this = this;
 
-		// Return a promise
+		// Return a promise to be resolved by the calling action
 		return new Promise(function (resolve, reject) {
-			// Use helper method to send GET request
-			_this.get(url).then(function (response) {
-				// Commit change to state
+			// Use method above to send GET request
+			_this.get(url)
+			// On success
+			.then(function (response) {
+				// Commit mutation to store
 				context.commit(mutation, response);
 				// Resolve promise
 				resolve();
@@ -42194,6 +42249,15 @@ var index_esm = {
 			});
 		});
 	},
+
+
+	/**
+  * Sends a POST request to the server.
+  * Uses axios to send AJAX request and resolves a promise with the server payload response.
+  *
+  * @param url (String) - the URL to send the request to.
+  * @param payload (Object) - a JS object that contains the POST data to send to server.
+ */
 	post: function post(url, payload) {
 		return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(url, payload).then(function (response) {
 			return Promise.resolve(response.data.payload);
@@ -42201,16 +42265,29 @@ var index_esm = {
 			return Promise.reject(error);
 		});
 	},
+
+
+	/**
+  * Used by actions within the store and returns a promise that needs to be resolved the calling action.
+  * Uses the post method above and then commits a mutation to the store.
+  *
+  * @param context (Object) - the store action context.
+  * @param payload (Object) - a JS object that contains the POST data to send to server.
+  * @param url (String) - the URL to send the request to.
+  * @param mutation (String) - the mutation to commit after a successfull request.
+ */
 	postAction: function postAction(context, payload, url, mutation) {
 		var _this2 = this;
 
-		// Return a promise
+		// Return a promise to be resolved by the calling action
 		return new Promise(function (resolve, reject) {
-			// Use api to send POST request
-			_this2.post(url, payload).then(function (response) {
+			// Use method above to send POST request
+			_this2.post(url, payload)
+			// On success
+			.then(function (response) {
 				// For debug
 				if (context.state.debug) console.log(response);
-				// Change state						
+				// Commit mutation to store					
 				if (mutation) context.commit(mutation, response);
 				// Resolve promise
 				resolve();
@@ -42219,6 +42296,14 @@ var index_esm = {
 			});
 		});
 	},
+
+
+	/**
+  * Sends a DELETE request to the server.
+  * Uses axios to send AJAX request and resolves a promise with the server payload response.
+  *
+  * @param url (String) - the URL to send the request to.
+ */
 	delete: function _delete(url) {
 		return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete(url).then(function (response) {
 			return Promise.resolve(response.data.payload);
@@ -42226,14 +42311,26 @@ var index_esm = {
 			return Promise.reject(error);
 		});
 	},
-	deleteAction: function deleteAction(context, payload, url, mutation) {
+
+
+	/**
+  * Used by actions within the store and returns a promise that needs to be resolved the calling action.
+  * Uses the delete method above and then commits a mutation to the store.
+  *
+  * @param context (Object) - the store action context.
+  * @param url (String) - the URL to send the request to.
+  * @param mutation (String) - the mutation to commit after a successfull request.
+ */
+	deleteAction: function deleteAction(context, url, mutation) {
 		var _this3 = this;
 
-		// Return a promise
+		// Return a promise to be resolved by the calling action
 		return new Promise(function (resolve, reject) {
-			// Use api to send DELETE request
-			_this3.delete(url).then(function (response) {
-				// Change state
+			// Use method above to send DELETE request
+			_this3.delete(url)
+			// On success
+			.then(function (response) {
+				// Commit mutation to store
 				context.commit(mutation, response);
 				// Resolve promise
 				resolve();
@@ -42252,11 +42349,11 @@ var index_esm = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_dashboard_Home__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_dashboard_Home___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_dashboard_Home__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_project_Projects__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_project_Projects__ = __webpack_require__(65);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_project_Projects___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_project_Projects__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_project_Project_view__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_project_Project_view__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_project_Project_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_project_Project_view__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_timesheet_Timesheets__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_timesheet_Timesheets__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_timesheet_Timesheets___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_timesheet_Timesheets__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_timesheet_Project_timesheets__ = __webpack_require__(100);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_timesheet_Project_timesheets___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_timesheet_Project_timesheets__);
@@ -44846,7 +44943,7 @@ var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(53),
   /* template */
-  __webpack_require__(80),
+  __webpack_require__(64),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -44956,8 +45053,8 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__project_Projects_table__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__project_Projects_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__project_Projects_table__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__timesheet_Timesheets_table__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__timesheet_Timesheets_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__timesheet_Timesheets_table__);
 //
 //
 //
@@ -45033,7 +45130,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    'projects-table': __WEBPACK_IMPORTED_MODULE_0__project_Projects_table___default.a
+    'timesheets-table': __WEBPACK_IMPORTED_MODULE_0__timesheet_Timesheets_table___default.a
   }
 
 });
@@ -45046,5102 +45143,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 // load the styles
 var content = __webpack_require__(55);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("3cca60a4", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-715eb46a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Projects-table.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-715eb46a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Projects-table.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 55 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(2)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n.center[data-v-715eb46a]{\n  margin-left: auto;\n  margin-right: auto;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 56 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Project_view__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Project_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Project_view__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Projects_totals__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Projects_totals___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Projects_totals__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  // Determines what headers and fields the table should display ("admin" or "user")
-  props: ['table_state'],
-
-  components: {
-    'project-view': __WEBPACK_IMPORTED_MODULE_0__Project_view___default.a,
-    'projects-totals': __WEBPACK_IMPORTED_MODULE_1__Projects_totals___default.a
-  },
-
-  data: function data() {
-    return {
-      // Loader
-      loading: false,
-      // Curret project id
-      currentProjectId: -1,
-      // For the table state switch (work or manage)
-      tableStateSwitch: false,
-      // The view project dialog window
-      viewProjectDialog: false,
-      // For data table pagination   
-      perPage: [15, 30, 45, { text: "All", value: -1 }],
-      // For provinces filter
-      provinces: [{ text: 'Province...', value: '' }, { text: 'Alberta', value: 'Alberta' }, { text: 'British Columbia', value: 'British Columbia' }, { text: 'Saskatchewan', value: 'Saskatchewan' }],
-      // Provinces filter
-      provinceFilter: '',
-      // Clients filter
-      clientFilter: '',
-      // For invoice status
-      invoiceStatus: [{ text: 'Invoice status...', value: '' }, { text: 'Not Invoiced', value: 'not-invoiced' }, { text: 'Paid', value: 'paid' }, { text: 'Outstanding', value: 'outstanding' }],
-      // Location filter
-      locationFilter: '',
-      // Invoice status filter
-      invoiceFilter: ''
-    };
-  },
-
-
-  computed: {
-    // Watch for projects state to update
-    projects: function projects() {
-      return this.$store.getters.projects;
-    },
-
-
-    // Watch for uniqueCLients state to update
-    clients: function clients() {
-      return this.$store.getters.clientsSelectList;
-    },
-    headers: function headers() {
-      if (this.table_state === 'admin_work') {
-        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Company Name', value: 'client_company_name', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Work Type', value: 'work_type', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
-      }
-      if (this.table_state === 'admin_manage') {
-        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Company Name', value: 'client_company_name', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Invoice Status', value: 'invoice_status', align: 'left' }, { text: 'Invoice Amount', value: 'invoice_amount', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
-      }
-      if (this.table_state === 'user') {
-        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Timesheets', value: 'timesheets', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
-      }
-      return headers;
-    }
-  },
-
-  methods: {
-    filterProjects: function filterProjects() {
-      var _this = this;
-
-      // Toggle loader
-      this.loading = true;
-      // Dispatch action to find projects
-      this.$store.dispatch('getProjects', {
-        client: this.clientFilter,
-        province: this.provinceFilter,
-        location: this.locationFilter,
-        invoice: this.invoiceFilter
-      }).then(function () {
-        // Toggle loader
-        _this.loading = false;
-      });
-    },
-    viewProject: function viewProject(id) {
-      // Admin state forward
-      if (this.table_state === 'admin_work' || this.table_state === 'admin_manage') this.$router.push('/projects/' + id + '/view');
-      // User state forward
-      if (this.table_state === 'user') this.$router.push('/projects/' + id + '/timesheets');
-    }
-  },
-
-  created: function created() {
-    var _this2 = this;
-
-    // For debug
-    if (this.$store.getters.debug) console.log("Projects table created");
-    // Toggle loader
-    this.loading = true;
-    // Set headers the data table will use based on the table state
-    var dispatchAction = '',
-        payload = false;
-    if (this.table_state === 'admin_work') {
-      dispatchAction = 'getProjects';
-    } else if (this.table_state === 'admin_manage') {
-      dispatchAction = 'getProjects';
-    } else if (this.table_state === 'user') {
-      dispatchAction = 'getUsersProjects';
-      payload = {
-        user_id: this.$store.getters.user.id
-      };
-    }
-
-    // Tell store to load projects
-    this.$store.dispatch(dispatchAction, payload).then(function () {
-      // Tell store to update unique clients
-      _this2.$store.dispatch('getClients');
-      // Toggle loader
-      _this2.loading = false;
-    });
-  }
-});
-
-/***/ }),
-/* 57 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(58);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("16f686ef", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a4250e2e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-view.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a4250e2e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-view.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 58 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(2)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n.center[data-v-a4250e2e]{\n\t\tmargin-left: auto;\n\t\tmargin-right: auto;\n}\n.card--flex-toolbar[data-v-a4250e2e] {\n    margin-top: -64px;\n}\t\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 59 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Project_notes_vue__ = __webpack_require__(62);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Project_notes_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Project_notes_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Project_crew_vue__ = __webpack_require__(67);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Project_crew_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Project_crew_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Project_timeline_vue__ = __webpack_require__(70);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Project_timeline_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__Project_timeline_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__timesheet_Timesheets_totals_vue__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__timesheet_Timesheets_totals_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__timesheet_Timesheets_totals_vue__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	props: ['id'],
-
-	components: {
-		'field-input-toggle': __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default.a,
-		'project-notes': __WEBPACK_IMPORTED_MODULE_1__Project_notes_vue___default.a,
-		'project-crew': __WEBPACK_IMPORTED_MODULE_2__Project_crew_vue___default.a,
-		'project-timeline': __WEBPACK_IMPORTED_MODULE_3__Project_timeline_vue___default.a,
-		'timesheets-totals': __WEBPACK_IMPORTED_MODULE_4__timesheet_Timesheets_totals_vue___default.a
-	},
-
-	data: function data() {
-		return {
-			loading: false
-		};
-	},
-
-
-	computed: {
-		// Watch for uniqueCLients state to update
-		clients: function clients() {
-			return this.$store.getters.clientsSelectList;
-		}
-	},
-
-	created: function created() {
-		var _this = this;
-
-		// Toggle loader
-		this.loading = true;
-		// Update the requested project
-		this.$store.dispatch('getProject', this.id).then(function () {
-			// Get unique clients
-			_this.$store.dispatch('getClients');
-			// Toggle loader
-			_this.loading = false;
-		});
-	}
-});
-
-/***/ }),
-/* 60 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-
-	props: {
-		// For a different looking toggle
-		alt_style: { type: Boolean, default: false },
-		// Required. Type of input to use
-		type: { type: String, required: true },
-		// Optional. If the type is a select then it should have options to populate with.
-		// Should be an object ready for a Vuetify select: { text: '...?', value: '...?' }
-		select_options: { type: Array },
-		// Required. The store action to dispatch when the save button is clicked
-		action: { type: String, required: true },
-		// Required. The db ID of the parent the field belongs to.
-		id: { type: Number, required: true, default: 0 },
-		// Required. The label text for the input and field view.
-		label: { type: String, required: true },
-		// Optional. Vuetify icon to prepend the input with
-		icon: { type: String },
-		// Optional. A character to prepend the value with.
-		prefix: { type: String },
-		// Required. The db field name.
-		field: { type: String, required: true },
-		// Required. The current value of the field.
-		value: { required: true },
-		// Optional. If the field value should be interpreted as a boolean.
-		bool_field: { type: Boolean, default: false },
-		// Optional. The max character count a textarea should contain. Shows the counter under textarea
-		char_count: { type: Number }
-	},
-
-	data: function data() {
-		return {
-			// Controls showing the field or the input
-			editState: false,
-			// For date picker
-			dateMenu: false,
-			// For loader
-			loading: false,
-			// The new field value
-			fieldValue: '',
-			fieldError: false,
-			fieldErrorMsg: '',
-			// For the char count check
-			charCount: false
-		};
-	},
-
-
-	methods: {
-		// Shows the field input
-		showEditInput: function showEditInput() {
-			// Adjust field value
-			this.fieldValue = this.value;
-			// Adjust state to edit
-			this.editState = true;
-			// Clear possible errors
-			this.fieldError = false;
-			this.fieldErrorMsg = '';
-		},
-
-
-		// Hides the field input
-		hideEditInput: function hideEditInput() {
-			// Toggle state
-			this.editState = false;
-			// Clear possible errors
-			this.fieldError = false;
-			this.fieldErrorMsg = '';
-		},
-
-
-		// Uses the store to update the field in the db
-		updateField: function updateField() {
-			var _this = this;
-
-			// Toggle loader
-			this.loading = true;
-			// Start the payload
-			var payload = {
-				id: this.id,
-				field: this.field
-			};
-			console.log(payload);
-			// Dynamically add field and value to payload
-			payload[this.field] = this.fieldValue;
-			// Dispatch action and run cb when complete
-			this.$store.dispatch(this.action, payload).then(function () {
-				// Only toggle state if alt_style is NOT true
-				if (!_this.alt_style) {
-					// Toggle state
-					_this.editState = false;
-				}
-				// Toggle loader
-				_this.loading = false;
-			}).catch(function (error) {
-				// Set error props
-				_this.fieldError = true;
-				_this.fieldErrorMsg = error.response.data[_this.field][0];
-				// Hide loader
-				_this.loading = false;
-			});
-		}
-	},
-
-	created: function created() {
-		// If alt_style is enabled then editState is engaged
-		if (this.alt_style) {
-			// Enable edit state
-			this.editState = true;
-			// Adjust field value
-			this.fieldValue = this.value;
-		}
-		// Set the char count check bool
-		if (this.char_count) this.charCount = true;
-	}
-});
-
-/***/ }),
-/* 61 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-card', {
-    staticClass: "grey lighten-5 mt-3",
-    attrs: {
-      "flat": _vm.alt_style
-    }
-  }, [(!_vm.editState) ? _c('v-container', [_c('v-toolbar', {
-    staticClass: "white",
-    attrs: {
-      "card": "",
-      "prominent": ""
-    }
-  }, [(!_vm.alt_style) ? _c('v-toolbar-title', {
-    staticClass: "subheading grey--text"
-  }, [_vm._v("\t\t\t\t         \n        \t" + _vm._s(_vm.label) + "\t\t\t          \t\n        ")]) : _vm._e(), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-btn', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:top",
-      value: ({
-        html: 'Edit Field'
-      }),
-      expression: "{ html: 'Edit Field' }",
-      arg: "top"
-    }],
-    attrs: {
-      "icon": ""
-    },
-    nativeOn: {
-      "click": function($event) {
-        _vm.showEditInput($event)
-      }
-    }
-  }, [_c('v-icon', [_vm._v("settings")])], 1)], 1), _vm._v(" "), _c('v-card-text', {
-    staticClass: "pt-0"
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [(!_vm.bool_field) ? _c('div', [(_vm.value) ? _c('div', {
-    staticClass: "pl-2"
-  }, [(_vm.prefix) ? _c('span', [_vm._v(_vm._s(_vm.prefix))]) : _vm._e(), _vm._v(" "), (_vm.type != 'date') ? _c('span', [_vm._v(_vm._s(_vm.value))]) : _c('span', [_vm._v(_vm._s(_vm._f("date")(_vm.value)))])]) : _vm._e(), _vm._v(" "), (!_vm.value && !_vm.alt_style) ? _c('div', {
-    staticClass: "pl-2 error--text"
-  }, [_vm._v("\n\t      \t\t\tN/A\n\t      \t\t")]) : _vm._e(), _vm._v(" "), (!_vm.value && _vm.alt_style) ? _c('div', {
-    staticClass: "pl-2 error--text"
-  }, [_vm._v("\n\t      \t\t\tMILESTONE NOT COMPLETE\n\t      \t\t")]) : _vm._e()]) : _c('div', [(_vm.value === 1) ? _c('div', [_vm._v("Yes")]) : _vm._e(), _vm._v(" "), (_vm.value === 0) ? _c('div', [_vm._v("No")]) : _vm._e()]), _vm._v(" "), (_vm.alt_style) ? _c('v-spacer') : _vm._e()], 1)], 1)], 1) : _vm._e(), _vm._v(" "), (_vm.editState) ? _c('v-container', {
-    staticClass: "pt-0 pb-0"
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-spacer'), _vm._v(" "), (!_vm.alt_style) ? _c('v-btn', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:top",
-      value: ({
-        html: 'Close Edit Mode'
-      }),
-      expression: "{ html: 'Close Edit Mode' }",
-      arg: "top"
-    }],
-    attrs: {
-      "icon": ""
-    },
-    nativeOn: {
-      "click": function($event) {
-        _vm.hideEditInput($event)
-      }
-    }
-  }, [_c('v-icon', [_vm._v("close")])], 1) : _vm._e()], 1), _vm._v(" "), _c('v-card-text', {
-    staticClass: "pt-0 pb-0"
-  }, [(_vm.type === 'text') ? _c('v-container', {
-    staticClass: "pt-0 pb-0"
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-text-field', {
-    staticClass: "pb-0",
-    attrs: {
-      "label": _vm.label + '...',
-      "prepend-icon": _vm.icon,
-      "prefix": _vm.prefix,
-      "error": _vm.fieldError
-    },
-    model: {
-      value: (_vm.fieldValue),
-      callback: function($$v) {
-        _vm.fieldValue = $$v
-      },
-      expression: "fieldValue"
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [(_vm.fieldError) ? _c('p', {
-    staticClass: "caption error--text"
-  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'textarea') ? _c('v-container', {
-    staticClass: "pt-0 pb-0"
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-text-field', {
-    staticClass: "pb-0",
-    attrs: {
-      "label": _vm.label + '...',
-      "prepend-icon": _vm.icon,
-      "error": _vm.fieldError,
-      "multi-line": "",
-      "counter": _vm.charCount,
-      "max": _vm.char_count
-    },
-    model: {
-      value: (_vm.fieldValue),
-      callback: function($$v) {
-        _vm.fieldValue = $$v
-      },
-      expression: "fieldValue"
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [(_vm.fieldError) ? _c('p', {
-    staticClass: "caption error--text"
-  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'select') ? _c('v-container', {
-    staticClass: "pt-0 pb-0"
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-select', {
-    staticClass: "pb-0",
-    attrs: {
-      "items": _vm.select_options,
-      "label": _vm.label + '...',
-      "single-line": "",
-      "bottom": "",
-      "error": _vm.fieldError
-    },
-    model: {
-      value: (_vm.fieldValue),
-      callback: function($$v) {
-        _vm.fieldValue = $$v
-      },
-      expression: "fieldValue"
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [(_vm.fieldError) ? _c('p', {
-    staticClass: "caption error--text"
-  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'bool') ? _c('v-container', {
-    staticClass: "pt-0 pb-0"
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-select', {
-    staticClass: "pb-0",
-    attrs: {
-      "items": [{
-          text: 'No',
-          value: 0
-        },
-        {
-          text: 'Yes',
-          value: 1
-        }
-      ],
-      "label": _vm.label + '...',
-      "single-line": "",
-      "bottom": "",
-      "error": _vm.fieldError
-    },
-    model: {
-      value: (_vm.fieldValue),
-      callback: function($$v) {
-        _vm.fieldValue = $$v
-      },
-      expression: "fieldValue"
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [(_vm.fieldError) ? _c('p', {
-    staticClass: "caption error--text"
-  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'date') ? _c('v-container', {
-    staticClass: "pt-0 pb-0"
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-menu', {
-    attrs: {
-      "lazy": "",
-      "close-on-content-click": false,
-      "transition": "scale-transition",
-      "offset-y": "",
-      "full-width": "",
-      "nudge-left": 40,
-      "max-width": "290px"
-    },
-    model: {
-      value: (_vm.dateMenu),
-      callback: function($$v) {
-        _vm.dateMenu = $$v
-      },
-      expression: "dateMenu"
-    }
-  }, [_c('v-text-field', {
-    attrs: {
-      "label": _vm.label + '...',
-      "prepend-icon": "event",
-      "readonly": ""
-    },
-    slot: "activator",
-    model: {
-      value: (_vm.fieldValue),
-      callback: function($$v) {
-        _vm.fieldValue = $$v
-      },
-      expression: "fieldValue"
-    }
-  }), _vm._v(" "), _c('v-date-picker', {
-    attrs: {
-      "no-title": "",
-      "scrollable": "",
-      "actions": ""
-    },
-    scopedSlots: _vm._u([{
-      key: "default",
-      fn: function(ref) {
-        var save = ref.save;
-        var cancel = ref.cancel;
-
-        return [_c('v-card-actions', [_c('v-btn', {
-          attrs: {
-            "flat": "",
-            "primary": ""
-          },
-          nativeOn: {
-            "click": function($event) {
-              cancel()
-            }
-          }
-        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
-          attrs: {
-            "flat": "",
-            "primary": ""
-          },
-          nativeOn: {
-            "click": function($event) {
-              save()
-            }
-          }
-        }, [_vm._v("Save")])], 1)]
-      }
-    }]),
-    model: {
-      value: (_vm.fieldValue),
-      callback: function($$v) {
-        _vm.fieldValue = $$v
-      },
-      expression: "fieldValue"
-    }
-  })], 1)], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-btn', {
-    attrs: {
-      "block": "",
-      "flat": "",
-      "outline": "",
-      "loading": _vm.loading,
-      "disabled": _vm.loading
-    },
-    nativeOn: {
-      "click": function($event) {
-        _vm.updateField($event)
-      }
-    }
-  }, [_vm._v("\n\t\t      Save\t\t\t\t\t\n\t\t\t\t\t")])], 1)], 1)], 1) : _vm._e()], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-bee3b1aa", module.exports)
-  }
-}
-
-/***/ }),
-/* 62 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(63)
-}
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(65),
-  /* template */
-  __webpack_require__(66),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  "data-v-4951cfa6",
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Project-notes.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Project-notes.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4951cfa6", Component.options)
-  } else {
-    hotAPI.reload("data-v-4951cfa6", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(64);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("e4daf34c", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4951cfa6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-notes.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4951cfa6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-notes.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(2)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n.chip[data-v-4951cfa6] {\n\theight: auto;\n\twhite-space: normal;\n\tpadding: 8px 16px 8px 16px;\n}\n.text-center[data-v-4951cfa6] {\n\ttext-align: center;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 65 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	data: function data() {
-		return {
-			// The note on que for deletion
-			selectedNoteId: '',
-			// For the delete dialog
-			deleteNoteDialog: false,
-			// To show when a note is deleting
-			deletingNote: false,
-			// To show when a note is saving
-			loading: false,
-			// The note value
-			note: '',
-			// If the server returned an error when saving
-			noteErr: false,
-			// The error message
-			noteErrMsg: ''
-		};
-	},
-
-
-	computed: {
-		// Retrieve notes for current project from store
-		notes: function notes() {
-			return this.$store.getters.currentProject.comments;
-		}
-	},
-
-	methods: {
-		// Opens the delete note dialog and sets the selected note id
-		openDeleteNoteDialog: function openDeleteNoteDialog(id) {
-			// Set the selected note id in que for deletion
-			this.selectedNoteId = id;
-			// Open the dialog
-			this.deleteNoteDialog = true;
-		},
-
-
-		// Uses the store to add a note to the current project
-		addNote: function addNote() {
-			var _this = this;
-
-			// Toggle loader
-			this.loading = true;
-			// Dispatch the action with post payload
-			this.$store.dispatch('addProjectComment', {
-				project_id: this.$store.getters.currentProject.id,
-				user_id: this.$store.getters.user.id,
-				comment: this.note
-			}).then(function () {
-				// Toggle loader
-				_this.loading = false;
-				// Clear data values
-				_this.note = '';
-				_this.noteErr = false;
-				_this.noteErrMsg = '';
-			}).catch(function (error) {
-				// Toggle error state and set error message
-				_this.noteErr = true;
-				_this.noteErrMsg = error.response.data.comment[0];
-				_this.loading = false;
-			});
-		},
-
-
-		// Uses the store to delete selected note from the db
-		deleteNote: function deleteNote(id) {
-			var _this2 = this;
-
-			console.log(id);
-			this.deletingNote = true;
-			// Dispatch action with note id as payload
-			this.$store.dispatch('deleteProjectComment', {
-				id: id
-			}).then(function () {
-				// Toggle loaderand dialog
-				_this2.deletingNote = false;
-				_this2.deleteNoteDialog = false;
-			});
-		}
-	}
-
-});
-
-/***/ }),
-/* 66 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-container', [(_vm.notes.length === 0) ? _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-alert', {
-    attrs: {
-      "info": "",
-      "value": "true"
-    }
-  }, [_vm._v("\n\t      No notes have been added to this project\n\t    ")])], 1) : _vm._l((_vm.$store.getters.currentProject.comments), function(note) {
-    return _c('v-card', {
-      key: note.id,
-      staticClass: "grey lighten-5",
-      attrs: {
-        "flat": ""
-      }
-    }, [_c('v-toolbar', {
-      staticClass: "white",
-      attrs: {
-        "card": "",
-        "prominent": ""
-      }
-    }, [_c('v-toolbar-title', {
-      staticClass: "subheading grey--text"
-    }, [_vm._v("\t\t\t\t         \n        \t" + _vm._s(note.user.first + ' ' + note.user.last) + " says:          \t\n        ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), (note.user.id == _vm.$store.getters.user.id) ? _c('v-btn', {
-      directives: [{
-        name: "tooltip",
-        rawName: "v-tooltip:top",
-        value: ({
-          html: 'Delete note'
-        }),
-        expression: "{ html: 'Delete note' }",
-        arg: "top"
-      }],
-      staticClass: "mr-0 red--text",
-      attrs: {
-        "icon": ""
-      },
-      nativeOn: {
-        "click": function($event) {
-          $event.stopPropagation();
-          _vm.openDeleteNoteDialog(note.id)
-        }
-      }
-    }, [_c('v-icon', [_vm._v("close")])], 1) : _vm._e()], 1), _vm._v(" "), _c('v-card-text', {
-      staticClass: "pt-0"
-    }, [_c('v-layout', {
-      attrs: {
-        "row": ""
-      }
-    }, [_c('v-flex', {
-      attrs: {
-        "xs12": ""
-      }
-    }, [_c('v-chip', {
-      staticClass: "info white--text",
-      attrs: {
-        "xs12": ""
-      }
-    }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(note.comment) + "\n\t\t\t\t\t\t")])], 1)], 1)], 1)], 1)
-  }), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5 mb-5"
-  }), _vm._v(" "), _c('v-layout', {
-    staticClass: "mr-0",
-    staticStyle: {
-      "position": "relative"
-    },
-    attrs: {
-      "row": "",
-      "justify-center": ""
-    }
-  }, [_c('v-dialog', {
-    attrs: {
-      "width": "365",
-      "lazy": "",
-      "absolute": ""
-    },
-    model: {
-      value: (_vm.deleteNoteDialog),
-      callback: function($$v) {
-        _vm.deleteNoteDialog = $$v
-      },
-      expression: "deleteNoteDialog"
-    }
-  }, [_c('v-card', [_c('v-card-title', [_c('div', {
-    staticClass: "headline grey--text"
-  }, [_vm._v("Delete Note?")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-card-text', [_vm._v("\n\t        \tDelete this note until the age that gave it birth comes again?\n\t        ")]), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
-    staticClass: "red--text darken-1",
-    attrs: {
-      "outline": "",
-      "flat": "flat"
-    },
-    nativeOn: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.deleteNoteDialog = false
-      }
-    }
-  }, [_vm._v("\n\t          \t\tMaybe not\n\t          ")]), _vm._v(" "), _c('v-btn', {
-    staticClass: "green--text darken-1",
-    attrs: {
-      "outline": "",
-      "flat": "flat",
-      "loading": _vm.deletingNote,
-      "disable": _vm.deletingNote
-    },
-    nativeOn: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.deleteNote(_vm.selectedNoteId)
-      }
-    }
-  }, [_vm._v("\n\t          \tDo it\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-card', {
-    staticClass: "grey lighten-5 mt-3"
-  }, [_c('v-container', [_c('v-toolbar', {
-    staticClass: "white",
-    attrs: {
-      "card": "",
-      "prominent": ""
-    }
-  }, [_c('v-toolbar-title', {
-    staticClass: "subheading grey--text"
-  }, [_vm._v("\t\t\t\t         \n\t        \tAdd a Note\t          \t\n\t        ")]), _vm._v(" "), _c('v-spacer')], 1), _vm._v(" "), _c('v-card-text', {
-    staticClass: "pt-0"
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-text-field', {
-    attrs: {
-      "error": _vm.noteErr,
-      "label": "Enter note...",
-      "counter": "",
-      "max": "255",
-      "textarea": ""
-    },
-    model: {
-      value: (_vm.note),
-      callback: function($$v) {
-        _vm.note = $$v
-      },
-      expression: "note"
-    }
-  })], 1)], 1), _vm._v(" "), (_vm.noteErr) ? _c('v-layout', {
-    staticClass: "caption error--text",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    staticClass: "text-center",
-    attrs: {
-      "xs12": ""
-    }
-  }, [_vm._v("\n      \t\t\t\t" + _vm._s(_vm.noteErrMsg) + "  \n      \t\t\t")])], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": "",
-      "offset-xs4": ""
-    }
-  }, [_c('v-btn', {
-    attrs: {
-      "block": "",
-      "flat": "",
-      "outline": "",
-      "loading": _vm.loading,
-      "disabled": _vm.loading
-    },
-    on: {
-      "click": _vm.addNote
-    }
-  }, [_vm._v("\n\t      \t\t\t\tAdd Note\n\t      \t\t\t")])], 1)], 1)], 1)], 1)], 1)], 2)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-4951cfa6", module.exports)
-  }
-}
-
-/***/ }),
-/* 67 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(68),
-  /* template */
-  __webpack_require__(69),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Project-crew.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Project-crew.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-57618cb6", Component.options)
-  } else {
-    hotAPI.reload("data-v-57618cb6", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 68 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	data: function data() {
-		return {
-			// Indicates when a crew member is saving to db
-			loading: false,
-			// For the add crew dialog
-			addCrewDialog: false,
-			// The selected user to add
-			selctedUserId: '',
-			// The selcted user to delete
-			userToDeleteId: '',
-			// For the remove crew dialog
-			deleteCrewDialog: false,
-			// Indicates when a crew member is deleting
-			deletingCrew: false,
-			// For the data table
-			headers: [{ text: 'Name', value: 'name', align: 'center' }, { text: 'Timesheets on Project', value: 'timesheets', align: 'center' }, { text: 'Actions', value: '', align: 'center' }]
-		};
-	},
-
-
-	computed: {
-		crew: function crew() {
-			return this.$store.getters.currentProject.users;
-		},
-		crewSelectList: function crewSelectList() {
-			var users = this.$store.getters.users,
-			    crew = this.$store.getters.currentProject.users,
-			    crewIdList = [],
-			    crewSelect = [{ text: "Select user...", value: "" }];
-			// Collect the IDs of all crew assigned to this project
-			crew.forEach(function (user) {
-				crewIdList.push(user.id);
-			});
-			// Create crew select array filtering out crew members already added to project
-			users.forEach(function (user) {
-				// If the current user id itteration is not in the crew ID list then push it
-				// to the select list
-				if (!crewIdList.includes(user.id)) {
-					crewSelect.push({ text: user.first + ' ' + user.last, value: user.id });
-				}
-			});
-			return crewSelect;
-		}
-	},
-
-	methods: {
-		// Dispatch event to store that adds a user to the project
-		addCrewMember: function addCrewMember() {
-			var _this = this;
-
-			console.log(this.selctedUserId);
-			// Toggle loader
-			this.loading = true;
-			// Dispatch action to add user to project crew
-			this.$store.dispatch('addProjectCrew', {
-				project_id: this.$store.getters.currentProject.id,
-				user_id: this.selctedUserId
-			}).then(function () {
-				// Toggle loader, close dialog, reset selected user id
-				_this.loading = false;
-				_this.addCrewDialog = false;
-				_this.selctedUserId = '';
-			});
-		},
-
-
-		// Shows the delete crew dialog and sets the user to delete id
-		showDeleteCrewDialog: function showDeleteCrewDialog(id) {
-			// Toggle dialog
-			this.deleteCrewDialog = true;
-			// Set selected user id
-			this.userToDeleteId = id;
-		},
-
-
-		// Dispatch event to store that delets the user from the project
-		deleteCrew: function deleteCrew() {
-			var _this2 = this;
-
-			// Toggle loader
-			this.deletingCrew = true;
-			// Dispatch even to store
-			this.$store.dispatch('deleteProjectCrew', {
-				project_id: this.$store.getters.currentProject.id,
-				id: this.userToDeleteId
-			}).then(function () {
-				// Toggle loader
-				_this2.deletingCrew = false;
-				// Toggle dialog
-				_this2.deleteCrewDialog = false;
-			});
-		}
-	},
-
-	created: function created() {
-		// Update the users in store state
-		this.$store.dispatch('getUsers');
-	}
-});
-
-/***/ }),
-/* 69 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-container', {
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tCrew\n\t\t\t")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-btn', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:top",
-      value: ({
-        html: 'Add crew member'
-      }),
-      expression: "{ html: 'Add crew member' }",
-      arg: "top"
-    }],
-    attrs: {
-      "icon": ""
-    },
-    nativeOn: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.addCrewDialog = true
-      }
-    }
-  }, [_c('v-icon', [_vm._v("add_circle")])], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('p', {
-    staticClass: "subheading info--text pl-4"
-  }, [_c('v-icon', {
-    staticClass: "info--text",
-    attrs: {
-      "left": ""
-    }
-  }, [_vm._v("help_outline")]), _vm._v("\n        You must add a user to the project crew before they can add timesheets.       \t\t\t\n  \t\t")], 1)]), _vm._v(" "), (_vm.crew.length === 0) ? _c('v-layout', {
-    staticClass: "mt-5",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-alert', {
-    attrs: {
-      "info": "",
-      "value": "true"
-    }
-  }, [_vm._v("\n\t      No crew members have been added to this project yet.\n\t    ")])], 1) : _vm._e(), _vm._v(" "), (_vm.crew.length > 0) ? _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-data-table', {
-    staticClass: "elevation-1 mt-5",
-    attrs: {
-      "headers": _vm.headers,
-      "items": _vm.crew,
-      "hide-actions": ""
-    },
-    scopedSlots: _vm._u([{
-      key: "items",
-      fn: function(props) {
-        return [_c('td', {
-          staticClass: "text-xs-center"
-        }, [_vm._v(_vm._s(props.item.first + ' ' + props.item.last))]), _vm._v(" "), _c('td', {
-          staticClass: "text-xs-center"
-        }, [_vm._v(_vm._s(props.item.timesheets.length))]), _vm._v(" "), _c('td', {
-          staticClass: "text-xs-center"
-        }, [_c('v-btn', {
-          directives: [{
-            name: "tooltip",
-            rawName: "v-tooltip:top",
-            value: ({
-              html: 'Remove crew'
-            }),
-            expression: "{ html: 'Remove crew'}",
-            arg: "top"
-          }],
-          staticClass: "red--text",
-          attrs: {
-            "icon": ""
-          },
-          nativeOn: {
-            "click": function($event) {
-              $event.stopPropagation();
-              _vm.showDeleteCrewDialog(props.item.id)
-            }
-          }
-        }, [_c('v-icon', [_vm._v("close")])], 1), _vm._v(" "), _c('v-btn', {
-          directives: [{
-            name: "tooltip",
-            rawName: "v-tooltip:top",
-            value: ({
-              html: 'View timesheets'
-            }),
-            expression: "{ html: 'View timesheets'}",
-            arg: "top"
-          }],
-          staticClass: "success--text",
-          attrs: {
-            "icon": ""
-          }
-        }, [_c('v-icon', [_vm._v("subdirectory_arrow_right")])], 1)], 1)]
-      }
-    }])
-  })], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
-    staticClass: "mr-0",
-    staticStyle: {
-      "position": "relative"
-    },
-    attrs: {
-      "row": "",
-      "justify-center": ""
-    }
-  }, [_c('v-dialog', {
-    attrs: {
-      "width": "365",
-      "lazy": "",
-      "absolute": ""
-    },
-    model: {
-      value: (_vm.addCrewDialog),
-      callback: function($$v) {
-        _vm.addCrewDialog = $$v
-      },
-      expression: "addCrewDialog"
-    }
-  }, [_c('v-card', [_c('v-card-title', [_c('div', {
-    staticClass: "headline grey--text"
-  }, [_vm._v("Add Crew Member")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-select', {
-    attrs: {
-      "items": _vm.crewSelectList,
-      "label": "User...",
-      "single-line": "",
-      "bottom": ""
-    },
-    model: {
-      value: (_vm.selctedUserId),
-      callback: function($$v) {
-        _vm.selctedUserId = $$v
-      },
-      expression: "selctedUserId"
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
-    staticClass: "red--text darken-1",
-    attrs: {
-      "outline": "",
-      "flat": "flat"
-    },
-    nativeOn: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.addCrewDialog = false
-      }
-    }
-  }, [_vm._v("\n\t          \t\tMaybe Not\n\t          ")]), _vm._v(" "), _c('v-btn', {
-    staticClass: "green--text darken-1",
-    attrs: {
-      "outline": "",
-      "flat": "flat",
-      "loading": _vm.loading,
-      "disable": _vm.loading
-    },
-    nativeOn: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.addCrewMember($event)
-      }
-    }
-  }, [_vm._v("\n\t          \tAdd\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
-    staticClass: "mr-0",
-    staticStyle: {
-      "position": "relative"
-    },
-    attrs: {
-      "row": "",
-      "justify-center": ""
-    }
-  }, [_c('v-dialog', {
-    attrs: {
-      "width": "365",
-      "lazy": "",
-      "absolute": ""
-    },
-    model: {
-      value: (_vm.deleteCrewDialog),
-      callback: function($$v) {
-        _vm.deleteCrewDialog = $$v
-      },
-      expression: "deleteCrewDialog"
-    }
-  }, [_c('v-card', [_c('v-card-title', [_c('div', {
-    staticClass: "headline grey--text"
-  }, [_vm._v("Delete crew?")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-card-text', [_vm._v("\n\t        \tDelete this crew member from the project?\n\t        ")]), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
-    staticClass: "red--text darken-1",
-    attrs: {
-      "outline": "",
-      "flat": "flat"
-    },
-    nativeOn: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.deleteCrewDialog = false
-      }
-    }
-  }, [_vm._v("\n\t          \t\tMaybe not\n\t          ")]), _vm._v(" "), _c('v-btn', {
-    staticClass: "green--text darken-1",
-    attrs: {
-      "outline": "",
-      "flat": "flat",
-      "loading": _vm.deletingCrew,
-      "disable": _vm.deletingCrew
-    },
-    nativeOn: {
-      "click": function($event) {
-        $event.stopPropagation();
-        _vm.deleteCrew($event)
-      }
-    }
-  }, [_vm._v("\n\t          \tDo it\n\t          ")])], 1)], 1)], 1)], 1)], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-57618cb6", module.exports)
-  }
-}
-
-/***/ }),
-/* 70 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(71),
-  /* template */
-  __webpack_require__(72),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Project-timeline.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Project-timeline.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2a59ee85", Component.options)
-  } else {
-    hotAPI.reload("data-v-2a59ee85", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 71 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		'field-input-toggle': __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default.a
-	},
-
-	computed: {
-		// The project timeline
-		timeline: function timeline() {
-			return this.$store.getters.currentProject.timeline;
-		},
-		usersSelectList: function usersSelectList() {
-			return this.$store.getters.usersSelectListNameBased;
-		},
-
-
-		// Date project was approved on (or not)
-		projectApprovalDate: function projectApprovalDate() {
-			return this.$store.getters.currentProject.approval_date;
-		}
-	},
-
-	data: function data() {
-		return {
-			// The current milestone the project is on
-			step: -1,
-			// The steps/milestones for the timeline
-			steps: [{
-				step: 1,
-				field: 'permit_advised_submit',
-				inputType: 'date',
-				label: 'Permit Advised To Submit',
-				heading: 'Applicant was advised to submit permit on:'
-			}, {
-				step: 2,
-				field: 'permit_applicant',
-				inputType: 'select',
-				items: [],
-				label: 'Permit Applicant',
-				heading: 'Permit was applied for by:'
-			}, {
-				step: 3,
-				field: 'permit_application_date',
-				inputType: 'date',
-				label: 'Permit Applicant Date',
-				heading: 'Permit was applied for on:'
-			}, {
-				step: 4,
-				field: 'permit_recieved_date',
-				inputType: 'date',
-				label: 'Permit Recieved On',
-				heading: 'Permit was recieved on:'
-			}, {
-				step: 5,
-				field: 'permit_number',
-				inputType: 'text',
-				label: 'Permit Number',
-				heading: 'Permit number is:'
-			}, {
-				step: 6,
-				field: 'site_number_application_date',
-				inputType: 'date',
-				label: 'Site Number Application Date',
-				heading: 'Site number was applied for on:'
-			}, {
-				step: 7,
-				field: 'site_number_recieved_date',
-				inputType: 'date',
-				label: 'Site Number Recieved Date',
-				heading: 'Site number was recieved on:'
-			}, {
-				step: 8,
-				field: 'site_number',
-				inputType: 'text',
-				label: 'Site Number',
-				heading: 'Site number is:'
-			}, {
-				step: 9,
-				field: 'completion_target',
-				inputType: 'date',
-				label: 'Completion Target',
-				heading: 'Completion target is:'
-			}, {
-				step: 10,
-				field: 'field_completion_target',
-				inputType: 'date',
-				label: 'Fieldwork Completion Target',
-				heading: 'Fieldwork completion target is:'
-			}, {
-				step: 11,
-				field: 'report_completion_target',
-				inputType: 'date',
-				label: 'Report Completion Target',
-				heading: 'Report completion target is:'
-			}, {
-				step: 12,
-				field: 'fieldwork_scheduled',
-				inputType: 'bool',
-				label: 'Fieldwork Scheduled',
-				heading: 'Fieldwork is scheduled?'
-			}, {
-				step: 13,
-				field: 'artifact_analysis',
-				inputType: 'bool',
-				label: 'Artifact Analysis Complete',
-				heading: 'Artifact analysis is complete?'
-			}, {
-				step: 14,
-				field: 'mapping',
-				inputType: 'bool',
-				label: 'Mapping Complete',
-				heading: 'Mapping is complete?'
-			}, {
-				step: 15,
-				field: 'writing',
-				inputType: 'bool',
-				label: 'Writing Complete',
-				heading: 'Writing is complete?'
-			}, {
-				step: 16,
-				field: 'draft_submitted',
-				inputType: 'bool',
-				label: 'Draft Sumbitted',
-				heading: 'Draft is submitted?'
-			}, {
-				step: 17,
-				field: 'draft_accepted',
-				inputType: 'bool',
-				label: 'Draft Accepted',
-				heading: 'Draft is accepted?'
-			}, {
-				step: 18,
-				field: 'final_approval',
-				inputType: 'bool',
-				label: 'Final Approval',
-				heading: 'Approval is final?'
-			}]
-		};
-	},
-	created: function created() {
-		var _this = this;
-
-		this.$store.dispatch('getUsers').then(function () {
-			// Determine the current step
-			var _iteratorNormalCompletion = true;
-			var _didIteratorError = false;
-			var _iteratorError = undefined;
-
-			try {
-				for (var _iterator = _this.steps[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-					var step = _step.value;
-
-					// Set select list for this step
-					if (step.step === 2) step.items = _this.usersSelectList;
-					// Determine current step
-					if (_this.timeline[step.field] === null || _this.timeline[step.field] === 0) {
-						_this.step = step.step;
-						break;
-					}
-				}
-			} catch (err) {
-				_didIteratorError = true;
-				_iteratorError = err;
-			} finally {
-				try {
-					if (!_iteratorNormalCompletion && _iterator.return) {
-						_iterator.return();
-					}
-				} finally {
-					if (_didIteratorError) {
-						throw _iteratorError;
-					}
-				}
-			}
-
-			console.log(_this.usersSelectList);
-		});
-	}
-});
-
-/***/ }),
-/* 72 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-container', [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\tTimeline\n\t\t")])]), _vm._v(" "), (_vm.projectApprovalDate === null) ? _c('v-layout', {
-    staticClass: "mt-5",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-alert', {
-    attrs: {
-      "info": "",
-      "value": "true"
-    }
-  }, [_vm._v("\n      Once the project has an approval date the timeline will become available.\n    ")])], 1) : _vm._e(), _vm._v(" "), (_vm.projectApprovalDate != null) ? _c('v-layout', {
-    staticClass: "mt-5",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-stepper', {
-    attrs: {
-      "vertical": "",
-      "non-linear": ""
-    },
-    model: {
-      value: (_vm.step),
-      callback: function($$v) {
-        _vm.step = $$v
-      },
-      expression: "step"
-    }
-  }, _vm._l((_vm.steps), function(current) {
-    return _c('v-container', {
-      key: _vm.step.field,
-      attrs: {
-        "fluid": ""
-      }
-    }, [_c('v-stepper-step', {
-      staticStyle: {
-        "cursor": "pointer"
-      },
-      attrs: {
-        "step": current.step,
-        "complete": _vm.timeline[current.field] != null && _vm.timeline[current.field] != 0
-      },
-      nativeOn: {
-        "click": function($event) {
-          $event.stopPropagation();
-          _vm.step = current.step
-        }
-      }
-    }, [_vm._v("\n\t\t\t      " + _vm._s(current.heading) + "\n\t\t\t      "), (_vm.timeline[current.field] != 0 && _vm.timeline[current.field] != 1) ? _c('small', [(current.inputType != 'date') ? _c('span', [_vm._v(_vm._s(_vm.timeline[current.field]))]) : _c('span', [_vm._v(_vm._s(_vm._f("date")(_vm.timeline[current.field])))])]) : _vm._e(), _vm._v(" "), (_vm.timeline[current.field] === null) ? _c('small', [_vm._v("Milestone Not Complete")]) : _vm._e(), _vm._v(" "), (_vm.timeline[current.field] === 0) ? _c('small', [_vm._v("No")]) : _vm._e(), _vm._v(" "), (_vm.timeline[current.field] === 1) ? _c('small', [_vm._v("Yes")]) : _vm._e()]), _vm._v(" "), _c('v-stepper-content', {
-      attrs: {
-        "step": current.step
-      }
-    }, [_c('v-flex', {
-      staticClass: "mt-2 mb-2",
-      attrs: {
-        "xs12": "",
-        "md6": ""
-      }
-    }, [_c('field-input-toggle', {
-      attrs: {
-        "alt_style": true,
-        "type": current.inputType,
-        "select_options": current.items,
-        "action": 'updateTimelineField',
-        "id": _vm.timeline.id,
-        "label": current.label,
-        "field": current.field,
-        "value": _vm.$store.getters.currentProject.timeline[current.field]
-      }
-    })], 1)], 1)], 1)
-  }))], 1)], 1) : _vm._e()], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-2a59ee85", module.exports)
-  }
-}
-
-/***/ }),
-/* 73 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(4);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['timesheets'],
-
-  computed: {
-    totalPerDiem: function totalPerDiem() {
-      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalPerDiem(this.timesheets);
-    },
-    totalHours: function totalHours() {
-      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalHours(this.timesheets);
-    },
-    totalHoursPay: function totalHoursPay() {
-      var pay = parseFloat(this.totalHours) * (parseFloat(this.$store.getters.user.hourly) * 100);
-      return (pay / 100).toFixed(2);
-    },
-    totalTravelDistance: function totalTravelDistance() {
-      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalTravelDistance(this.timesheets);
-    },
-    totalEquipmentCost: function totalEquipmentCost() {
-      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalEquipmentCost(this.timesheets);
-    },
-    totalOtherCosts: function totalOtherCosts() {
-      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalOtherCosts(this.timesheets);
-    },
-    timesheetsTotal: function timesheetsTotal() {
-      var total = parseFloat(this.totalPerDiem) + parseFloat(this.totalHoursPay) + parseFloat(this.totalEquipmentCost) + parseFloat(this.totalOtherCosts);
-      return total.toFixed(2);
-    }
-  }
-});
-
-/***/ }),
-/* 74 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-container', {
-    staticClass: "pl-0 pr-0",
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('v-data-table', {
-    staticClass: "elevation-1 mt-1 mb-4",
-    attrs: {
-      "headers": [{
-          text: 'Grand Total',
-          align: 'center',
-          sortable: false
-        },
-        {
-          text: 'Total Per Diem',
-          align: 'center',
-          sortable: false
-        },
-        {
-          text: 'Total Hours Cost',
-          align: 'center',
-          sortable: false
-        },
-        {
-          text: 'Total Equipment Cost',
-          align: 'center',
-          sortable: false
-        },
-        {
-          text: 'Total Other Costs',
-          align: 'center',
-          sortable: false
-        }
-      ],
-      "items": [{
-        timesheets_total: _vm.timesheetsTotal,
-        total_per_diem: _vm.totalPerDiem,
-        total_hours: _vm.totalHours,
-        total_hours_pay: _vm.totalHoursPay,
-        total_equipment_cost: _vm.totalEquipmentCost,
-        total_other_costs: _vm.totalOtherCosts
-      }],
-      "hide-actions": ""
-    },
-    scopedSlots: _vm._u([{
-      key: "items",
-      fn: function(props) {
-        return [_c('td', {
-          staticClass: "text-xs-center"
-        }, [_c('v-chip', {
-          staticClass: "success white--text"
-        }, [_vm._v("\n          $" + _vm._s(props.item.timesheets_total) + "\n        ")])], 1), _vm._v(" "), _c('td', {
-          staticClass: "text-xs-center"
-        }, [_c('v-chip', {
-          staticClass: "info white--text"
-        }, [_vm._v("\n          $" + _vm._s(props.item.total_per_diem) + "\n        ")])], 1), _vm._v(" "), _c('td', {
-          staticClass: "text-xs-center"
-        }, [_c('v-chip', {
-          staticClass: "info white--text"
-        }, [_vm._v("\n          $" + _vm._s(props.item.total_hours_pay) + " "), _c('small', [_vm._v("(" + _vm._s(props.item.total_hours) + " hrs)")])])], 1), _vm._v(" "), _c('td', {
-          staticClass: "text-xs-center"
-        }, [_c('v-chip', {
-          staticClass: "info white--text"
-        }, [_vm._v("\n          $" + _vm._s(props.item.total_equipment_cost) + "\n        ")])], 1), _vm._v(" "), _c('td', {
-          staticClass: "text-xs-center"
-        }, [_c('v-chip', {
-          staticClass: "info white--text"
-        }, [_vm._v("\n          $" + _vm._s(props.item.total_other_costs) + "\n        ")])], 1)]
-      }
-    }])
-  })], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-1807e674", module.exports)
-  }
-}
-
-/***/ }),
-/* 75 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-container', {
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('v-layout', {
-    staticClass: "mt-5",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": "",
-      "xl10": "",
-      "offset-xl1": ""
-    }
-  }, [_c('v-card', {
-    staticClass: "grey lighten-5",
-    attrs: {
-      "flat": ""
-    }
-  }, [_c('v-toolbar', {
-    staticClass: "primary elevation-0",
-    attrs: {
-      "dark": "",
-      "extended": ""
-    }
-  }, [_c('v-btn', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:top",
-      value: ({
-        html: 'Go Back'
-      }),
-      expression: "{ html: 'Go Back' }",
-      arg: "top"
-    }],
-    attrs: {
-      "icon": ""
-    },
-    on: {
-      "click": function($event) {
-        _vm.$router.go(-1)
-      }
-    }
-  }, [_c('v-icon', {
-    attrs: {
-      "dark": ""
-    }
-  }, [_vm._v("arrow_back")])], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": "",
-      "lg10": "",
-      "offset-lg1": ""
-    }
-  }, [_c('v-card', {
-    staticClass: "card--flex-toolbar"
-  }, [_c('v-container', [_c('v-toolbar', {
-    staticClass: "white",
-    attrs: {
-      "card": "",
-      "prominent": ""
-    }
-  }, [_c('v-toolbar-title', {
-    staticClass: "display-1"
-  }, [_vm._v("\t\t\t\t         \n\t\t\t\t          \tProject Details (" + _vm._s(_vm.$store.getters.currentProject.id) + ")\t\t\t          \t\n\t\t\t\t          ")])], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('p', {
-    staticClass: "subheading pl-4"
-  }, [_vm._v("\n\t\t\t\t\t          This is where you can edit and track the project you've selected.\t       \t\t\n\t\t\t\t        \t")])])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-4"
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('p', {
-    staticClass: "subheading info--text pl-4"
-  }, [_c('v-icon', {
-    staticClass: "info--text",
-    attrs: {
-      "left": ""
-    }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t          To edit a field just click the gear icon next to that field.       \t\t\t\n\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), (!_vm.loading) ? _c('v-card-text', [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-container', [_c('timesheets-totals', {
-    attrs: {
-      "timesheets": _vm.$store.getters.currentProject.timesheets
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-container', [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tClient\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'select',
-      "select_options": _vm.clients,
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Client Company',
-      "field": 'client_company_name',
-      "value": _vm.$store.getters.currentProject.client_company_name
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    staticClass: "mt-5",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Company Contact',
-      "field": 'client_contact_name',
-      "value": _vm.$store.getters.currentProject.client_contact_name
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Contact\'s Phone No.',
-      "icon": 'phone',
-      "field": 'client_contact_phone',
-      "value": _vm.$store.getters.currentProject.client_contact_phone
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Contact\'s Email',
-      "field": 'client_contact_email',
-      "value": _vm.$store.getters.currentProject.client_contact_email
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  }), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-5"
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tLocation\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'select',
-      "select_options": [{
-          text: 'Province...',
-          value: ''
-        },
-        {
-          text: 'Alberta',
-          value: 'Alberta'
-        },
-        {
-          text: 'British Columbia',
-          value: 'British Columbia'
-        },
-        {
-          text: 'Saskatchewan',
-          value: 'Saskatchewan'
-        }
-      ],
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Province',
-      "field": 'province',
-      "value": _vm.$store.getters.currentProject.province
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs8": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'textarea',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Specific Location',
-      "field": 'location',
-      "value": _vm.$store.getters.currentProject.location,
-      "char_count": 100
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  }), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-5"
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tBasics\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'textarea',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Basic Details',
-      "field": 'details',
-      "value": _vm.$store.getters.currentProject.details,
-      "char_count": 750
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  }), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-5"
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tWork Details\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'select',
-      "select_options": [{
-          text: 'Work type...',
-          value: ''
-        },
-        {
-          text: 'HRIA',
-          value: 'HRIA'
-        },
-        {
-          text: 'Archaeology',
-          value: 'Archaeology'
-        },
-        {
-          text: 'Paleaontology',
-          value: 'Paleaontology'
-        }
-      ],
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Work Type',
-      "field": 'work_type',
-      "value": _vm.$store.getters.currentProject.work_type
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'date',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Respond By',
-      "field": 'response_by',
-      "value": _vm.$store.getters.currentProject.response_by
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Estimate',
-      "field": 'estimate',
-      "prefix": '$',
-      "value": _vm.$store.getters.currentProject.estimate
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'textarea',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Work Overview',
-      "field": 'work_overview',
-      "value": _vm.$store.getters.currentProject.work_overview,
-      "char_count": 750
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'textarea',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Work Plans',
-      "field": 'plans',
-      "value": _vm.$store.getters.currentProject.plans,
-      "char_count": 750
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  }), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-5"
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tLand\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'select',
-      "select_options": [{
-          text: 'Land ownership...',
-          value: ''
-        },
-        {
-          text: 'Crown',
-          value: 'Crown'
-        },
-        {
-          text: 'Freehold',
-          value: 'Freehold'
-        }
-      ],
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Land Ownership',
-      "field": 'land_ownership',
-      "value": _vm.$store.getters.currentProject.land_ownership
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'select',
-      "select_options": [{
-          text: 'Land access granted...',
-          value: ''
-        },
-        {
-          text: 'No',
-          value: 0
-        },
-        {
-          text: 'Yes',
-          value: 1
-        }
-      ],
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Access Granted',
-      "field": 'land_access_granted',
-      "value": _vm.$store.getters.currentProject.land_access_granted,
-      "bool_field": true
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Access Granted By',
-      "field": 'land_access_granted_by',
-      "value": _vm.$store.getters.currentProject.land_access_granted_by
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Access Contact',
-      "field": 'land_access_contact',
-      "value": _vm.$store.getters.currentProject.land_access_contact
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "icon": 'phone',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Contact\'s Phone',
-      "field": 'land_access_phone',
-      "value": _vm.$store.getters.currentProject.land_access_phone
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  }), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-5"
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tApproval\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'date',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Approval Date',
-      "field": 'approval_date',
-      "value": _vm.$store.getters.currentProject.approval_date
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  }), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-5"
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tInvoicing\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'date',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Invoiced Date',
-      "field": 'invoiced_date',
-      "value": _vm.$store.getters.currentProject.invoiced_date
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'date',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Invoice Paid Date',
-      "field": 'invoice_paid_date',
-      "value": _vm.$store.getters.currentProject.invoice_paid_date
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "icon": 'attach_money',
-      "action": 'updateProjectField',
-      "id": _vm.$store.getters.currentProject.id,
-      "label": 'Invoice Amount',
-      "field": 'invoice_amount',
-      "prefix": '$',
-      "value": _vm.$store.getters.currentProject.invoice_amount
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-container', {
-    staticClass: "mt-5"
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tNotes\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('project-notes')], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-container', {
-    staticClass: "mt-5"
-  }, [_c('project-crew')], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-container', {
-    staticClass: "mt-5"
-  }, [_c('project-timeline')], 1)], 1)], 1)], 1) : _vm._e()], 1)], 1)], 1)], 1)], 1)], 1)], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-a4250e2e", module.exports)
-  }
-}
-
-/***/ }),
-/* 76 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(77),
-  /* template */
-  __webpack_require__(78),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Projects-totals.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Projects-totals.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-56104f02", Component.options)
-  } else {
-    hotAPI.reload("data-v-56104f02", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 77 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['projects'],
-
-  computed: {
-    invoicesPaidTotal: function invoicesPaidTotal() {
-      var total = 0;
-      this.projects.forEach(function (project) {
-        if (project.invoice_paid_date != null) {
-          total += parseFloat(project.invoice_amount) * 100;
-        }
-      });
-      return new Intl.NumberFormat('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }).format(total / 100);
-    },
-    invoicesOutstandingTotal: function invoicesOutstandingTotal() {
-      var total = 0;
-      this.projects.forEach(function (project) {
-        if (project.invoice_paid_date === null) {
-          total += parseFloat(project.invoice_amount) * 100;
-        }
-      });
-      return new Intl.NumberFormat('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }).format(total / 100);
-    }
-  }
-});
-
-/***/ }),
-/* 78 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-container', {
-    staticClass: "pl-0 pr-0",
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('v-data-table', {
-    staticClass: "elevation-1 mt-1 mb-4",
-    attrs: {
-      "headers": [{
-          text: 'Total Paid Invoices',
-          align: 'center',
-          sortable: false
-        },
-        {
-          text: 'Total Outstanding Invoices',
-          align: 'center',
-          sortable: false
-        } ],
-      "items": [{
-        invoices_paid_total: _vm.invoicesPaidTotal,
-        invoices_outstanding_total: _vm.invoicesOutstandingTotal
-      }],
-      "hide-actions": ""
-    },
-    scopedSlots: _vm._u([{
-      key: "items",
-      fn: function(props) {
-        return [_c('td', {
-          staticClass: "text-xs-center"
-        }, [_c('v-chip', {
-          staticClass: "success white--text"
-        }, [_vm._v("\n          $" + _vm._s(props.item.invoices_paid_total) + "\n        ")])], 1), _vm._v(" "), _c('td', {
-          staticClass: "text-xs-center"
-        }, [_c('v-chip', {
-          staticClass: "error white--text"
-        }, [_vm._v("\n          $" + _vm._s(props.item.invoices_outstanding_total) + "\n        ")])], 1)]
-      }
-    }])
-  })], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-56104f02", module.exports)
-  }
-}
-
-/***/ }),
-/* 79 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-container', {
-    attrs: {
-      "fluid": ""
-    }
-  }, [(_vm.loading) ? _c('v-layout', {
-    staticClass: "mt-5",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-spacer'), _vm._v(" "), _c('v-progress-linear', {
-    attrs: {
-      "indeterminate": true
-    }
-  })], 1) : _vm._e(), _vm._v(" "), (!_vm.loading) ? _c('v-container', {
-    attrs: {
-      "fluid": ""
-    }
-  }, [(_vm.table_state === 'admin_work' || _vm.table_state === 'admin_manage') ? _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-spacer'), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs2": ""
-    }
-  }, [_c('v-select', {
-    attrs: {
-      "items": _vm.provinces,
-      "label": "Province...",
-      "single-line": "",
-      "bottom": ""
-    },
-    model: {
-      value: (_vm.provinceFilter),
-      callback: function($$v) {
-        _vm.provinceFilter = $$v
-      },
-      expression: "provinceFilter"
-    }
-  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs2": ""
-    }
-  }, [_c('v-select', {
-    attrs: {
-      "items": _vm.clients,
-      "label": "Client...",
-      "single-line": "",
-      "bottom": ""
-    },
-    model: {
-      value: (_vm.clientFilter),
-      callback: function($$v) {
-        _vm.clientFilter = $$v
-      },
-      expression: "clientFilter"
-    }
-  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs3": ""
-    }
-  }, [_c('v-text-field', {
-    attrs: {
-      "label": "Enter part of location..."
-    },
-    model: {
-      value: (_vm.locationFilter),
-      callback: function($$v) {
-        _vm.locationFilter = $$v
-      },
-      expression: "locationFilter"
-    }
-  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('v-flex', {
-    attrs: {
-      "xs2": ""
-    }
-  }, [_c('v-select', {
-    attrs: {
-      "items": _vm.invoiceStatus,
-      "label": "Invoice status...",
-      "single-line": "",
-      "bottom": ""
-    },
-    model: {
-      value: (_vm.invoiceFilter),
-      callback: function($$v) {
-        _vm.invoiceFilter = $$v
-      },
-      expression: "invoiceFilter"
-    }
-  })], 1) : _vm._e(), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs1": ""
-    }
-  }, [_c('v-btn', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:top",
-      value: ({
-        html: 'Filter Projects'
-      }),
-      expression: "{ html: 'Filter Projects' }",
-      arg: "top"
-    }],
-    staticClass: "mt-3",
-    attrs: {
-      "icon": ""
-    },
-    on: {
-      "click": _vm.filterProjects
-    }
-  }, [_c('v-icon', [_vm._v("search")])], 1)], 1)], 1) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('projects-totals', {
-    attrs: {
-      "projects": _vm.projects
-    }
-  })], 1) : _vm._e(), _vm._v(" "), _c('v-data-table', {
-    staticClass: "elevation-1 mt-2",
-    attrs: {
-      "headers": _vm.headers,
-      "items": _vm.projects,
-      "rows-per-page-items": _vm.perPage
-    },
-    scopedSlots: _vm._u([{
-      key: "items",
-      fn: function(props) {
-        return [_c('td', [_vm._v(_vm._s(props.item.id))]), _vm._v(" "), (_vm.table_state === 'admin_work' || _vm.table_state === 'admin_manage') ? _c('td', [_vm._v(_vm._s(props.item.client_company_name))]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_work' || _vm.table_state === 'user') ? _c('td', [_vm._v(_vm._s(props.item.province))]) : _vm._e(), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.location))]), _vm._v(" "), (_vm.table_state === 'admin_work') ? _c('td', [_vm._v("\n          " + _vm._s(props.item.work_type) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [(props.item.invoiced_date === null) ? _c('v-chip', {
-          staticClass: "warning white--text"
-        }, [_vm._v("\n            Not Invoiced    \n          ")]) : _vm._e(), _vm._v(" "), (props.item.invoiced_date && props.item.invoice_paid_date === null) ? _c('v-chip', {
-          staticClass: "error white--text"
-        }, [_vm._v("\n            Not Paid   \n          ")]) : _vm._e(), _vm._v(" "), (props.item.invoice_paid_date) ? _c('v-chip', {
-          staticClass: "success white--text"
-        }, [_vm._v("\n            Paid   \n          ")]) : _vm._e()], 1) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_vm._v("\n          $" + _vm._s(props.item.invoice_amount) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'user') ? _c('td', [_vm._v(_vm._s(props.item.timesheets.length))]) : _vm._e(), _vm._v(" "), _c('td', [_c('v-btn', {
-          directives: [{
-            name: "tooltip",
-            rawName: "v-tooltip:top",
-            value: ({
-              html: 'View ' + props.item.id
-            }),
-            expression: "{ html: 'View ' + props.item.id }",
-            arg: "top"
-          }],
-          staticClass: "success--text",
-          attrs: {
-            "icon": ""
-          },
-          nativeOn: {
-            "click": function($event) {
-              $event.stopPropagation();
-              _vm.viewProject(props.item.id)
-            }
-          }
-        }, [_c('v-icon', [_vm._v("subdirectory_arrow_right")])], 1)], 1)]
-      }
-    }, {
-      key: "pageText",
-      fn: function(ref) {
-        var pageStart = ref.pageStart;
-        var pageStop = ref.pageStop;
-
-        return [_vm._v("\n        From " + _vm._s(pageStart) + " to " + _vm._s(pageStop) + "\n      ")]
-      }
-    }])
-  }), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": "",
-      "justify-center": ""
-    }
-  }, [_c('v-dialog', {
-    attrs: {
-      "fullscreen": "",
-      "transition": "dialog-bottom-transition",
-      "overlay": false
-    },
-    model: {
-      value: (_vm.viewProjectDialog),
-      callback: function($$v) {
-        _vm.viewProjectDialog = $$v
-      },
-      expression: "viewProjectDialog"
-    }
-  }, [_c('v-card', [_c('v-toolbar', {
-    staticClass: "primary",
-    attrs: {
-      "dark": ""
-    }
-  }, [_c('v-btn', {
-    attrs: {
-      "icon": "",
-      "dark": ""
-    },
-    nativeOn: {
-      "click": function($event) {
-        _vm.viewProjectDialog = false
-      }
-    }
-  }, [_c('v-icon', [_vm._v("close")])], 1), _vm._v(" "), _c('v-toolbar-title', [_vm._v("\n              Close\n            ")]), _vm._v(" "), _c('v-spacer')], 1), _vm._v(" "), (_vm.viewProjectDialog) ? _c('project-view', {
-    attrs: {
-      "id": _vm.currentProjectId
-    }
-  }) : _vm._e()], 1)], 1)], 1)], 1) : _vm._e()], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-715eb46a", module.exports)
-  }
-}
-
-/***/ }),
-/* 80 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-container', {
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('v-layout', {
-    staticClass: "mt-5",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": "",
-      "xl10": "",
-      "offset-xl1": ""
-    }
-  }, [_c('v-card', {
-    staticClass: "grey lighten-5",
-    attrs: {
-      "flat": ""
-    }
-  }, [_c('v-toolbar', {
-    staticClass: "primary elevation-0",
-    attrs: {
-      "dark": "",
-      "extended": ""
-    }
-  }, [_c('v-btn', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:top",
-      value: ({
-        html: 'Go Back'
-      }),
-      expression: "{ html: 'Go Back' }",
-      arg: "top"
-    }],
-    attrs: {
-      "icon": ""
-    },
-    on: {
-      "click": function($event) {
-        _vm.$router.go(-1)
-      }
-    }
-  }, [_c('v-icon', {
-    attrs: {
-      "dark": ""
-    }
-  }, [_vm._v("arrow_back")])], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": "",
-      "lg10": "",
-      "offset-lg1": ""
-    }
-  }, [_c('v-card', {
-    staticClass: "card--flex-toolbar"
-  }, [_c('v-container', [_c('v-toolbar', {
-    staticClass: "white",
-    attrs: {
-      "card": "",
-      "prominent": ""
-    }
-  }, [_c('v-toolbar-title', {
-    staticClass: "display-1"
-  }, [_vm._v("\t\t\t\t         \n\t\t\t\t\t          \tDashboard & Your Projects\t\t\t\t          \t\n\t\t\t\t\t          ")]), _vm._v(" "), _c('v-spacer')], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('p', {
-    staticClass: "subheading pl-4"
-  }, [_vm._v("\t\t\t\t\t\t          \n \t\t\t\t\t\t\t\t\t\t\tThis is where you'll find all of the projects that you're a part of.     \t\t\n\t\t\t\t\t        \t")])])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-4"
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('p', {
-    staticClass: "subheading info--text pl-4"
-  }, [_c('v-icon', {
-    staticClass: "info--text",
-    attrs: {
-      "left": ""
-    }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t          Use the view button on each project row to view your timesheets for that project or add new ones.       \t\t\t\n\t\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('projects-table', {
-    staticClass: "mt-2 mb-5",
-    attrs: {
-      "table_state": 'user'
-    }
-  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-8326d758", module.exports)
-  }
-}
-
-/***/ }),
-/* 81 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(82)
-}
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(84),
-  /* template */
-  __webpack_require__(85),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  "data-v-2c4a7c0a",
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Projects.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Projects.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2c4a7c0a", Component.options)
-  } else {
-    hotAPI.reload("data-v-2c4a7c0a", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 82 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(83);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("01d043de", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c4a7c0a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Projects.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c4a7c0a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Projects.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 83 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(2)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n.card--flex-toolbar[data-v-2c4a7c0a] {\n  margin-top: -64px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 84 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Projects_table__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Projects_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Projects_table__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    'projects-table': __WEBPACK_IMPORTED_MODULE_0__Projects_table___default.a
-  },
-
-  data: function data() {
-    return {
-      // For add project dialog
-      addProjectDialog: false,
-
-      tableState: 'admin_work',
-
-      // Project adding loader
-      startingProject: false,
-      // For project form inputs
-      client_company_name: { val: '', err: false, default: '' },
-      // For dual company name input
-      client_company_name_select: '',
-      disableClientCompanyInput: false
-    };
-  },
-
-
-  computed: {
-    // The unique clients for the select inputs (Uses the store)
-    clients: function clients() {
-      return this.$store.getters.clientsSelectList;
-    },
-
-
-    // If a project has just been added (Uses the store)
-    projectAdded: function projectAdded() {
-      return this.$store.getters.projectAdded;
-    }
-  },
-
-  watch: {
-    /* For the dual client company input setup. If a select option is selected then
-     * set the selected value to the form property and disable the text input. 
-    */
-    client_company_name_select: function client_company_name_select(value) {
-      // If a value is present
-      if (value != '') {
-        this.client_company_name.val = value;
-        this.disableClientCompanyInput = true;
-      } else {
-        // If empty string then enable text input again
-        this.disableClientCompanyInput = false;
-      }
-    }
-  },
-
-  methods: {
-    // Add a project to the db via a store action
-    startProject: function startProject() {
-      var _this = this;
-
-      // Toggle loader
-      this.startingProject = true;
-      // Dispatch action
-      this.$store.dispatch('addProject', {
-        client_company_name: this.client_company_name.val
-      }).then(function () {
-        // Toggle loader and dialog
-        _this.startingProject = false;
-        _this.addProjectDialog = false;
-        // Redirect
-        _this.$router.push('/projects/' + _this.$store.getters.currentProject.id + '/view');
-      });
-    }
-  },
-
-  created: function created() {
-    // For debug
-    if (this.$store.getters.debug) console.log("Projects component created");
-  }
-});
-
-/***/ }),
-/* 85 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-container', {
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('v-layout', {
-    staticClass: "mt-5",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": "",
-      "xl10": "",
-      "offset-xl1": ""
-    }
-  }, [_c('v-card', {
-    staticClass: "grey lighten-5",
-    attrs: {
-      "flat": ""
-    }
-  }, [_c('v-toolbar', {
-    staticClass: "primary elevation-0",
-    attrs: {
-      "dark": "",
-      "extended": ""
-    }
-  }, [_c('v-btn', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:top",
-      value: ({
-        html: 'Go Back'
-      }),
-      expression: "{ html: 'Go Back' }",
-      arg: "top"
-    }],
-    attrs: {
-      "icon": ""
-    },
-    on: {
-      "click": function($event) {
-        _vm.$router.go(-1)
-      }
-    }
-  }, [_c('v-icon', {
-    attrs: {
-      "dark": ""
-    }
-  }, [_vm._v("arrow_back")])], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": "",
-      "lg10": "",
-      "offset-lg1": ""
-    }
-  }, [_c('v-card', {
-    staticClass: "card--flex-toolbar"
-  }, [_c('v-container', [_c('v-toolbar', {
-    staticClass: "white",
-    attrs: {
-      "card": "",
-      "prominent": ""
-    }
-  }, [_c('v-toolbar-title', {
-    staticClass: "display-1"
-  }, [_vm._v("\t\t\t\t         \n\t\t\t\t          \tFind & Add Projects\t\t\t\t          \t\n\t\t\t\t          ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-layout', {
-    staticClass: "mr-0",
-    staticStyle: {
-      "position": "relative"
-    },
-    attrs: {
-      "row": "",
-      "justify-center": ""
-    }
-  }, [_c('v-dialog', {
-    attrs: {
-      "width": "765",
-      "lazy": "",
-      "absolute": ""
-    },
-    model: {
-      value: (_vm.addProjectDialog),
-      callback: function($$v) {
-        _vm.addProjectDialog = $$v
-      },
-      expression: "addProjectDialog"
-    }
-  }, [_c('v-btn', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:top",
-      value: ({
-        html: 'Add Project'
-      }),
-      expression: "{ html: 'Add Project' }",
-      arg: "top"
-    }],
-    attrs: {
-      "icon": ""
-    },
-    slot: "activator"
-  }, [_c('v-icon', [_vm._v("add_circle")])], 1), _vm._v(" "), _c('v-card', [_c('v-card-title', [_c('div', {
-    staticClass: "headline grey--text"
-  }, [_vm._v("Start a project")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', [_c('p', {
-    staticClass: "subheading info--text pl-2"
-  }, [_c('v-icon', {
-    staticClass: "info--text",
-    attrs: {
-      "left": ""
-    }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t\t\t          After starting the project you will be able to add more information.        \t\t\t\n\t\t\t\t\t\t\t        \t\t")], 1)]), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs5": ""
-    }
-  }, [_c('v-select', {
-    attrs: {
-      "items": _vm.clients,
-      "label": "Client...",
-      "single-line": "",
-      "bottom": ""
-    },
-    model: {
-      value: (_vm.client_company_name_select),
-      callback: function($$v) {
-        _vm.client_company_name_select = $$v
-      },
-      expression: "client_company_name_select"
-    }
-  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
-    staticClass: "mt-4",
-    attrs: {
-      "xs1": ""
-    }
-  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t      \t- OR -\n\t\t\t\t\t\t\t\t\t\t\t      ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs5": ""
-    }
-  }, [_c('v-text-field', {
-    attrs: {
-      "label": "Add a new client",
-      "disabled": _vm.disableClientCompanyInput
-    },
-    model: {
-      value: (_vm.client_company_name.val),
-      callback: function($$v) {
-        _vm.client_company_name.val = $$v
-      },
-      expression: "client_company_name.val"
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
-    staticClass: "red--text darken-1",
-    attrs: {
-      "outline": "",
-      "flat": "flat"
-    },
-    nativeOn: {
-      "click": function($event) {
-        _vm.addProjectDialog = false
-      }
-    }
-  }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
-    staticClass: "green--text darken-1",
-    attrs: {
-      "outline": "",
-      "flat": "flat",
-      "loading": _vm.startingProject,
-      "disabled": _vm.startingProject
-    },
-    nativeOn: {
-      "click": function($event) {
-        _vm.startProject($event)
-      }
-    }
-  }, [_vm._v("Start Project")])], 1)], 1)], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs9": ""
-    }
-  }, [_c('p', {
-    staticClass: "subheading pl-4 mt-2"
-  }, [_vm._v("\n\t\t\t\t\t          This is where you can find and filter all of the projects within the system.       \t\t\n\t\t\t\t        \t")])]), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs3": ""
-    }
-  }, [_c('v-select', {
-    staticClass: "pt-0 pr-3",
-    attrs: {
-      "items": [{
-          text: 'Work View',
-          value: 'admin_work'
-        },
-        {
-          text: 'Manage View',
-          value: 'admin_manage'
-        }
-      ],
-      "label": "Table State...",
-      "single-line": "",
-      "auto": "",
-      "prepend-icon": "find_in_page",
-      "hide-details": ""
-    },
-    model: {
-      value: (_vm.tableState),
-      callback: function($$v) {
-        _vm.tableState = $$v
-      },
-      expression: "tableState"
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-4"
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('p', {
-    staticClass: "subheading info--text pl-4"
-  }, [_c('v-icon', {
-    staticClass: "info--text",
-    attrs: {
-      "left": ""
-    }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t          Add a new project with the plus icon in the upper right corner of this card.        \t\t\t\n\t\t\t\t        \t\t")], 1), _vm._v(" "), _c('p', {
-    staticClass: "subheading info--text pl-4"
-  }, [_c('v-icon', {
-    staticClass: "info--text",
-    attrs: {
-      "left": ""
-    }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t          You can use all of the filters at once, or simply one at a time. In addition, clicking on a heading will sort the projects accordingly.\t\t        \t\t\t\n\t\t\t\t        \t\t")], 1), _vm._v(" "), _c('p', {
-    staticClass: "subheading info--text pl-4"
-  }, [_c('v-icon', {
-    staticClass: "info--text",
-    attrs: {
-      "left": ""
-    }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t          Click on the view projects arrow in the action column to see the entire project.\t\t        \t\t\t\n\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('projects-table', {
-    staticClass: "mt-2 mb-5",
-    attrs: {
-      "table_state": _vm.tableState
-    }
-  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-2c4a7c0a", module.exports)
-  }
-}
-
-/***/ }),
-/* 86 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(87)
-}
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(89),
-  /* template */
-  __webpack_require__(99),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  "data-v-567880d8",
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\timesheet\\Timesheets.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Timesheets.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-567880d8", Component.options)
-  } else {
-    hotAPI.reload("data-v-567880d8", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 87 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(88);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(3)("e3c9d2d2", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-567880d8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Timesheets.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-567880d8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Timesheets.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 88 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(2)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\n.card--flex-toolbar[data-v-567880d8] {\n  margin-top: -64px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 89 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheets_table__ = __webpack_require__(90);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheets_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Timesheets_table__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    'timesheets-table': __WEBPACK_IMPORTED_MODULE_0__Timesheets_table___default.a
-  }
-
-});
-
-/***/ }),
-/* 90 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(91)
-}
-var Component = __webpack_require__(0)(
-  /* script */
-  __webpack_require__(93),
-  /* template */
-  __webpack_require__(98),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  "data-v-412f5819",
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\timesheet\\Timesheets-table.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Timesheets-table.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-412f5819", Component.options)
-  } else {
-    hotAPI.reload("data-v-412f5819", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 91 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(92);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -50161,7 +45162,7 @@ if(false) {
 }
 
 /***/ }),
-/* 92 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(undefined);
@@ -50175,7 +45176,7 @@ exports.push([module.i, "\n.center[data-v-412f5819]{\n  margin-left: auto;\n  ma
 
 
 /***/ }),
-/* 93 */
+/* 56 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50183,7 +45184,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Timesheets_totals__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Timesheets_totals___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Timesheets_totals__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Timesheet__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Timesheet__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Timesheet___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Timesheet__);
 //
 //
@@ -50358,12 +45359,59 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+
+  props: ['table_state'],
 
   components: {
     'totals': __WEBPACK_IMPORTED_MODULE_1__Timesheets_totals___default.a,
@@ -50372,12 +45420,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   data: function data() {
     return {
+      invoiceDialog: false,
       // Loader
       loading: false,
       // For data table pagination   
       perPage: [15, 30, 45, { text: "All", value: -1 }],
       // The headers the data table will use
       headers: [{ text: 'Project', value: 'project_id', align: 'left' }, { text: 'Date', value: 'date', align: 'left' }, { text: 'Total', value: 'timesheet_total', align: 'left' }, { text: 'Per Diem', value: 'per_diem', align: 'left' }, { text: 'Hours', value: 'total_hours_pay', align: 'left' }, { text: 'Travel', value: 'total_travel_distance', align: 'left' }, { text: 'Equipment', value: 'total_equipment_cost', align: 'left' }, { text: 'Other', value: 'total_other_costs', align: 'left' }, { text: 'Actions', value: '', align: 'left' }],
+      pagination: {
+        sortBy: 'name'
+      },
+      selected: [],
       // For the date menus
       fromDateMenu: false,
       toDateMenu: false,
@@ -50388,7 +45441,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       userIdFilter: '',
       // For the view full timesheet dialog
       fullTimesheetDialog: false,
-      currentTimesheet: false
+      // Depending on table state
+      authUserOnly: false,
+      timesheetReadonly: true
     };
   },
 
@@ -50396,6 +45451,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   computed: {
     timesheets: function timesheets() {
       return this.$store.getters.timesheets;
+    },
+    currentTimesheet: function currentTimesheet() {
+      return this.$store.getters.currentTimesheet;
     },
     users: function users() {
       return this.$store.getters.usersSelectList;
@@ -50416,7 +45474,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         from_date: this.fromDateFilter,
         to_date: this.toDateFilter,
         project_id: this.projectIdFilter,
-        user_id: this.userIdFilter
+        user_id: this.userIdFilter,
+        auth_user_only: this.authUserOnly
       }).then(function () {
         // Toggle loader
         _this.loading = false;
@@ -50430,13 +45489,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return elem.id === timesheetId;
       });
       // Set current timesheet
-      this.currentTimesheet = timesheet;
+      this.$store.commit('updateCurrentTimesheet', timesheet);
     },
     closeFullTimesheetDialog: function closeFullTimesheetDialog() {
       // Toggle dialog
       this.fullTimesheetDialog = false;
       // Reset current timesheet
-      this.currentTimesheet = false;
+      this.$store.commit('updateCurrentTimesheet', false);
+    },
+    generateInvoice: function generateInvoice() {
+      // Will hold the timesheet ids for the invoice
+      var selectedIds = [];
+      // Populate the Ids
+      this.selected.forEach(function (timesheet) {
+        selectedIds.push(timesheet.id);
+      });
+      // Open invoice dialog
+      if (selectedIds.length > 0) {
+        this.invoiceDialog = true;
+      }
+      console.log(selectedIds);
     }
   },
 
@@ -50445,31 +45517,232 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // Toggle loader
     this.loading = true;
-
-    var payload = false;
+    // Cache
+    var initialAction = '',
+        secondAction = '',
+        payload = false;
+    // Set the action based on table state
+    if (this.table_state === 'admin') {
+      initialAction = 'getAllTimesheets';
+      secondAction = 'getProjects';
+    } else if (this.table_state === 'user') {
+      initialAction = 'getUsersTimesheets';
+      secondAction = 'getUsersProjects';
+      // Turn on flag for filter use
+      this.authUserOnly = true;
+      this.timesheetReadonly = false;
+    }
 
     // Tell store to load timesheets
-    this.$store.dispatch('getAllTimesheets', payload).then(function () {
-      // Tell store to update unique clients
-      _this2.$store.dispatch('getUsers').then(function () {
-        // Tell store to update all projects
-        _this2.$store.dispatch('getProjects').then(function () {
+    this.$store.dispatch(initialAction, payload).then(function () {
+      // Tell store to update projects
+      _this2.$store.dispatch(secondAction).then(function () {
+        // If the state is admin then dispatch another action
+        if (_this2.table_state == 'admin') {
+          // Tell store to update all users
+          _this2.$store.dispatch('getUsers').then(function () {
+            // Toggle loader
+            _this2.loading = false;
+          });
+        } else {
           // Toggle loader
           _this2.loading = false;
-        });
+        }
       });
     });
   }
 });
 
 /***/ }),
-/* 94 */
+/* 57 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(4);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['timesheets'],
+
+  computed: {
+    totalPerDiem: function totalPerDiem() {
+      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalPerDiem(this.timesheets);
+    },
+    totalHours: function totalHours() {
+      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalHours(this.timesheets);
+    },
+    totalHoursPay: function totalHoursPay() {
+      var pay = parseFloat(this.totalHours) * (parseFloat(this.$store.getters.user.hourly) * 100);
+      return (pay / 100).toFixed(2);
+    },
+    totalTravelDistance: function totalTravelDistance() {
+      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalTravelDistance(this.timesheets);
+    },
+    totalEquipmentCost: function totalEquipmentCost() {
+      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalEquipmentCost(this.timesheets);
+    },
+    totalOtherCosts: function totalOtherCosts() {
+      return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].timesheetsTotalOtherCosts(this.timesheets);
+    },
+    timesheetsTotal: function timesheetsTotal() {
+      var total = parseFloat(this.totalPerDiem) + parseFloat(this.totalHoursPay) + parseFloat(this.totalEquipmentCost) + parseFloat(this.totalOtherCosts);
+      return total.toFixed(2);
+    }
+  }
+});
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    staticClass: "pl-0 pr-0",
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-data-table', {
+    staticClass: "elevation-1 mt-1 mb-4",
+    attrs: {
+      "headers": [{
+          text: 'Grand Total',
+          align: 'center',
+          sortable: false
+        },
+        {
+          text: 'Total Per Diem',
+          align: 'center',
+          sortable: false
+        },
+        {
+          text: 'Total Hours Cost',
+          align: 'center',
+          sortable: false
+        },
+        {
+          text: 'Total Equipment Cost',
+          align: 'center',
+          sortable: false
+        },
+        {
+          text: 'Total Other Costs',
+          align: 'center',
+          sortable: false
+        }
+      ],
+      "items": [{
+        timesheets_total: _vm.timesheetsTotal,
+        total_per_diem: _vm.totalPerDiem,
+        total_hours: _vm.totalHours,
+        total_hours_pay: _vm.totalHoursPay,
+        total_equipment_cost: _vm.totalEquipmentCost,
+        total_other_costs: _vm.totalOtherCosts
+      }],
+      "hide-actions": ""
+    },
+    scopedSlots: _vm._u([{
+      key: "items",
+      fn: function(props) {
+        return [_c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "success white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.timesheets_total) + "\n        ")])], 1), _vm._v(" "), _c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "info white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.total_per_diem) + "\n        ")])], 1), _vm._v(" "), _c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "info white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.total_hours_pay) + " "), _c('small', [_vm._v("(" + _vm._s(props.item.total_hours) + " hrs)")])])], 1), _vm._v(" "), _c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "info white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.total_equipment_cost) + "\n        ")])], 1), _vm._v(" "), _c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "info white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.total_other_costs) + "\n        ")])], 1)]
+      }
+    }])
+  })], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-1807e674", module.exports)
+  }
+}
+
+/***/ }),
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(95);
+var content = __webpack_require__(60);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -50489,7 +45762,7 @@ if(false) {
 }
 
 /***/ }),
-/* 95 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(2)(undefined);
@@ -50497,13 +45770,13 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n.chip[data-v-0aedd5ab] {\n\theight: auto;\n\twhite-space: normal;\n\tpadding: 8px 16px 8px 16px;\n}\n", ""]);
+exports.push([module.i, "\n.chip[data-v-0aedd5ab] {\n\theight: auto;\n\twhite-space: normal;\n\tpadding: 8px 16px 8px 16px;\n}\n\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 96 */
+/* 61 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -51241,6 +46514,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	methods: {
 		closeDialog: function closeDialog(dialog) {
+			// Emit event to partent
+			this.$emit('dialog-closed', true);
 			// Close dialog
 			this[dialog + 'Dialog'] = false;
 			// Clear form
@@ -51263,12 +46538,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}
 			// Change the dispatch action
 			this[dialog + 'DispatchAction'] = 'updateTimesheet' + dialog.charAt(0).toUpperCase() + dialog.slice(1);
+			// Emit event to partent
+			this.$emit('dialog-opened', true);
 			// Toggle dialog
 			this[dialog + 'Dialog'] = true;
+		},
+		openDialog: function openDialog(dialog) {
+			// Emit event to partent
+			this.$emit('dialog-opened', true);
+			// Toggle dialog
+			this[dialog + 'Dialog'] = true;
+		},
+		closeAssetDialog: function closeAssetDialog(dialog) {
+			// Emit event to partent
+			this.$emit('dialog-closed', true);
+			// Toggle dialog
+			this[dialog + 'Dialog'] = false;
 		},
 		openDeleteDialog: function openDeleteDialog(dispatchAction, assetId) {
 			// Set the delete dispatch action
 			this.deleteDispatchAction = dispatchAction;
+			// Emit event to partent
+			this.$emit('dialog-opened', true);
 			// Toggle dialog
 			this.deleteDialog = true;
 			// Set asset id
@@ -51277,6 +46568,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		closeDeleteDialog: function closeDeleteDialog() {
 			// Set the delete dispatch action
 			this.deleteDispatchAction = '';
+			// Emit event to partent
+			this.$emit('dialog-closed', true);
 			// Toggle dialog
 			this.deleteDialog = false;
 			// Reset asset id
@@ -51295,6 +46588,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					_this[formPrefix + 'Dialog'] = false;
 					// Toggle loader
 					_this[formPrefix + 'Saving'] = false;
+					// Emit event to partent
+					_this.$emit('dialog-closed', true);
 					// Reset form
 					__WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].resetForm(_this[formPrefix + 'Form']);
 				});
@@ -51313,6 +46608,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					_this2.timesheetSaving = false;
 					// Close dialog
 					_this2.editTimesheetDialog = false;
+					// Emit event to partent
+					_this2.$emit('dialog-closed', true);
 				});
 			});
 		},
@@ -51325,6 +46622,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.$store.dispatch(this.deleteDispatchAction, this.assetId).then(function () {
 				// Toggle loader
 				_this3.deletingAsset = false;
+				// Emit event to partent
+				_this3.$emit('dialog-closed', true);
 				// Toggle dialog
 				_this3.deleteDialog = false;
 				// Reset asset id
@@ -51339,7 +46638,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 97 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -51379,7 +46678,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     nativeOn: {
       "click": function($event) {
         $event.stopPropagation();
-        _vm.editTimesheetDialog = true
+        _vm.openDialog('editTimesheet')
       }
     }
   }, [_c('v-icon', [_vm._v("settings")])], 1) : _vm._e()], 1)], 1), _vm._v(" "), _c('v-layout', {
@@ -51403,7 +46702,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     nativeOn: {
       "click": function($event) {
         $event.stopPropagation();
-        _vm.hoursDialog = true
+        _vm.openDialog('hours')
       }
     }
   }, [_c('v-icon', {
@@ -51419,7 +46718,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     nativeOn: {
       "click": function($event) {
         $event.stopPropagation();
-        _vm.travelDialog = true
+        _vm.openDialog('travel')
       }
     }
   }, [_c('v-icon', {
@@ -51435,7 +46734,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     nativeOn: {
       "click": function($event) {
         $event.stopPropagation();
-        _vm.equipmentDialog = true
+        _vm.openDialog('equipment')
       }
     }
   }, [_c('v-icon', {
@@ -51451,7 +46750,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     nativeOn: {
       "click": function($event) {
         $event.stopPropagation();
-        _vm.otherDialog = true
+        _vm.openDialog('other')
       }
     }
   }, [_c('v-icon', {
@@ -52351,7 +47650,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.deleteAsset($event)
       }
     }
-  }, [_vm._v("\n\t          \tDo it\n\t          ")])], 1)], 1)], 1)], 1) : _vm._e(), _vm._v(" "), (!_vm.readonly) ? _c('v-layout', {
+  }, [_vm._v("\n\t          \tDo it\n\t          ")])], 1)], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
     staticStyle: {
       "position": "relative"
     },
@@ -52359,7 +47658,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "row": "",
       "justify-center": ""
     }
-  }, [_c('v-dialog', {
+  }, [(!_vm.readonly) ? _c('v-dialog', {
     attrs: {
       "width": "765",
       "lazy": "",
@@ -52501,7 +47800,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     },
     nativeOn: {
       "click": function($event) {
-        _vm.editTimesheetDialog = false
+        _vm.closeDialog('editTimesheet')
       }
     }
   }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
@@ -52516,7 +47815,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.editTimesheet($event)
       }
     }
-  }, [_vm._v("\n\t          \tSave Timesheet\n\t          ")])], 1)], 1)], 1)], 1) : _vm._e()], 1)
+  }, [_vm._v("\n\t          \tSave Timesheet\n\t          ")])], 1)], 1)], 1) : _vm._e()], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -52527,7 +47826,7 @@ if (false) {
 }
 
 /***/ }),
-/* 98 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -52706,7 +48005,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "toDateFilter"
     }
-  })], 1)], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+  })], 1)], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), (_vm.table_state === 'admin') ? _c('v-flex', {
     attrs: {
       "xs3": ""
     }
@@ -52724,7 +48023,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "userIdFilter"
     }
-  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+  })], 1) : _vm._e(), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
     attrs: {
       "xs3": ""
     }
@@ -52771,17 +48070,46 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "timesheets": _vm.timesheets
     }
-  })], 1), _vm._v(" "), _c('v-data-table', {
+  })], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-btn', {
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.generateInvoice($event)
+      }
+    }
+  }, [_vm._v("\n        Generate Invoice\n        "), _c('v-icon', {
+    attrs: {
+      "right": ""
+    }
+  }, [_vm._v("input")])], 1)], 1), _vm._v(" "), _c('v-data-table', {
     staticClass: "elevation-1 mt-2",
     attrs: {
       "headers": _vm.headers,
       "items": _vm.timesheets,
-      "rows-per-page-items": _vm.perPage
+      "rows-per-page-items": _vm.perPage,
+      "select-all": "",
+      "selected-key": "id"
     },
     scopedSlots: _vm._u([{
       key: "items",
       fn: function(props) {
-        return [_c('td', [_vm._v(_vm._s(props.item.project_id))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.date))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(props.item.timesheet_total))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(props.item.per_diem))]), _vm._v(" "), _c('td', [_vm._v("\n          $" + _vm._s(props.item.total_hours_pay) + "\n          "), _c('small', [_vm._v("(" + _vm._s(props.item.total_hours) + " hrs)")])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.total_travel_distance) + " km")]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(props.item.total_equipment_cost))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(props.item.total_other_costs))]), _vm._v(" "), _c('td', [_c('v-btn', {
+        return [_c('tr', [_c('td', [_c('v-checkbox', {
+          attrs: {
+            "primary": "",
+            "hide-details": ""
+          },
+          model: {
+            value: (props.selected),
+            callback: function($$v) {
+              props.selected = $$v
+            },
+            expression: "props.selected"
+          }
+        })], 1), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.project_id))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.date))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(props.item.timesheet_total))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(props.item.per_diem))]), _vm._v(" "), _c('td', [_vm._v("\n            $" + _vm._s(props.item.total_hours_pay) + "\n            "), _c('small', [_vm._v("(" + _vm._s(props.item.total_hours) + " hrs)")])]), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.total_travel_distance) + " km")]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(props.item.total_equipment_cost))]), _vm._v(" "), _c('td', [_vm._v("$" + _vm._s(props.item.total_other_costs))]), _vm._v(" "), _c('td', [_c('v-btn', {
           directives: [{
             name: "tooltip",
             rawName: "v-tooltip:top",
@@ -52801,7 +48129,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
               _vm.showFullTimesheetDialog(props.item.id)
             }
           }
-        }, [_c('v-icon', [_vm._v("subdirectory_arrow_right")])], 1)], 1)]
+        }, [_c('v-icon', [_vm._v("subdirectory_arrow_right")])], 1)], 1)])]
       }
     }, {
       key: "pageText",
@@ -52811,7 +48139,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
         return [_vm._v("\n        From " + _vm._s(pageStart) + " to " + _vm._s(pageStop) + "\n      ")]
       }
-    }])
+    }]),
+    model: {
+      value: (_vm.selected),
+      callback: function($$v) {
+        _vm.selected = $$v
+      },
+      expression: "selected"
+    }
   })], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
     staticStyle: {
       "position": "relative"
@@ -52842,7 +48177,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [(_vm.currentTimesheet) ? _c('timesheet', {
     attrs: {
       "timesheet": _vm.currentTimesheet,
-      "readonly": "true"
+      "readonly": _vm.timesheetReadonly
+    },
+    on: {
+      "dialog-opened": function($event) {
+        _vm.fullTimesheetDialog = false
+      },
+      "dialog-closed": function($event) {
+        _vm.fullTimesheetDialog = true
+      }
     }
   }) : _vm._e()], 1)], 1), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
     staticClass: "red--text darken-1",
@@ -52855,7 +48198,56 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.closeFullTimesheetDialog($event)
       }
     }
-  }, [_vm._v("Cancel")])], 1)], 1)], 1)], 1)], 1)
+  }, [_vm._v("Close")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "fullscreen": "",
+      "transition": "dialog-bottom-transition",
+      "overlay": false
+    },
+    model: {
+      value: (_vm.invoiceDialog),
+      callback: function($$v) {
+        _vm.invoiceDialog = $$v
+      },
+      expression: "invoiceDialog"
+    }
+  }, [_c('v-btn', {
+    attrs: {
+      "primary": "",
+      "dark": ""
+    },
+    slot: "activator"
+  }, [_vm._v("Open Dialog")]), _vm._v(" "), _c('v-card', [_c('v-toolbar', {
+    staticClass: "primary",
+    attrs: {
+      "dark": ""
+    }
+  }, [_c('v-btn', {
+    attrs: {
+      "icon": "",
+      "dark": ""
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.invoiceDialog = false
+      }
+    }
+  }, [_c('v-icon', [_vm._v("close")])], 1), _vm._v(" "), _c('v-toolbar-title', [_vm._v("Create Invoice")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-toolbar-items', [_c('v-btn', {
+    attrs: {
+      "dark": "",
+      "flat": ""
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.invoiceDialog = false
+      }
+    }
+  }, [_vm._v("Create")])], 1)], 1)], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -52864,6 +48256,4921 @@ if (false) {
      require("vue-hot-reload-api").rerender("data-v-412f5819", module.exports)
   }
 }
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "xl10": "",
+      "offset-xl1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "grey lighten-5",
+    attrs: {
+      "flat": ""
+    }
+  }, [_c('v-toolbar', {
+    staticClass: "primary elevation-0",
+    attrs: {
+      "dark": "",
+      "extended": ""
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Go Back'
+      }),
+      expression: "{ html: 'Go Back' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    }
+  }, [_c('v-icon', {
+    attrs: {
+      "dark": ""
+    }
+  }, [_vm._v("arrow_back")])], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "lg10": "",
+      "offset-lg1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "card--flex-toolbar"
+  }, [_c('v-container', [_c('v-toolbar', {
+    staticClass: "white",
+    attrs: {
+      "card": "",
+      "prominent": ""
+    }
+  }, [_c('v-toolbar-title', {
+    staticClass: "display-1"
+  }, [_vm._v("\t\t\t\t         \n\t\t\t\t\t          \tDashboard & Your Timesheets\t\t\t          \t\n\t\t\t\t\t          ")]), _vm._v(" "), _c('v-spacer')], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading pl-4"
+  }, [_vm._v("\t\t\t\t\t\t          \n \t\t\t\t\t\t\t\t\t\t\tThis is where you'll find all of the projects that you're a part of.     \t\t\n\t\t\t\t\t        \t")])])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-4"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t          Use the view button on each project row to view your timesheets for that project or add new ones.       \t\t\t\n\t\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('timesheets-table', {
+    staticClass: "mt-2 mb-5",
+    attrs: {
+      "table_state": 'user'
+    }
+  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-8326d758", module.exports)
+  }
+}
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(66)
+}
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(68),
+  /* template */
+  __webpack_require__(94),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  "data-v-2c4a7c0a",
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Projects.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Projects.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2c4a7c0a", Component.options)
+  } else {
+    hotAPI.reload("data-v-2c4a7c0a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(67);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("01d043de", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c4a7c0a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Projects.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-2c4a7c0a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Projects.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.card--flex-toolbar[data-v-2c4a7c0a] {\n  margin-top: -64px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 68 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Projects_table__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Projects_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Projects_table__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    'projects-table': __WEBPACK_IMPORTED_MODULE_0__Projects_table___default.a
+  },
+
+  data: function data() {
+    return {
+      // For add project dialog
+      addProjectDialog: false,
+
+      tableState: 'admin_work',
+
+      // Project adding loader
+      startingProject: false,
+      // For project form inputs
+      client_company_name: { val: '', err: false, default: '' },
+      // For dual company name input
+      client_company_name_select: '',
+      disableClientCompanyInput: false
+    };
+  },
+
+
+  computed: {
+    // The unique clients for the select inputs (Uses the store)
+    clients: function clients() {
+      return this.$store.getters.clientsSelectList;
+    },
+
+
+    // If a project has just been added (Uses the store)
+    projectAdded: function projectAdded() {
+      return this.$store.getters.projectAdded;
+    }
+  },
+
+  watch: {
+    /* For the dual client company input setup. If a select option is selected then
+     * set the selected value to the form property and disable the text input. 
+    */
+    client_company_name_select: function client_company_name_select(value) {
+      // If a value is present
+      if (value != '') {
+        this.client_company_name.val = value;
+        this.disableClientCompanyInput = true;
+      } else {
+        // If empty string then enable text input again
+        this.disableClientCompanyInput = false;
+      }
+    }
+  },
+
+  methods: {
+    // Add a project to the db via a store action
+    startProject: function startProject() {
+      var _this = this;
+
+      // Toggle loader
+      this.startingProject = true;
+      // Dispatch action
+      this.$store.dispatch('addProject', {
+        client_company_name: this.client_company_name.val
+      }).then(function () {
+        // Toggle loader and dialog
+        _this.startingProject = false;
+        _this.addProjectDialog = false;
+        // Redirect
+        _this.$router.push('/projects/' + _this.$store.getters.currentProject.id + '/view');
+      });
+    }
+  },
+
+  created: function created() {
+    // For debug
+    if (this.$store.getters.debug) console.log("Projects component created");
+  }
+});
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(70)
+}
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(72),
+  /* template */
+  __webpack_require__(93),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  "data-v-715eb46a",
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Projects-table.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Projects-table.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-715eb46a", Component.options)
+  } else {
+    hotAPI.reload("data-v-715eb46a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(71);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("3cca60a4", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-715eb46a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Projects-table.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-715eb46a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Projects-table.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.center[data-v-715eb46a]{\n  margin-left: auto;\n  margin-right: auto;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 72 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Project_view__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Project_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Project_view__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Projects_totals__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Projects_totals___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Projects_totals__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  // Determines what headers and fields the table should display ("admin" or "user")
+  props: ['table_state'],
+
+  components: {
+    'project-view': __WEBPACK_IMPORTED_MODULE_0__Project_view___default.a,
+    'projects-totals': __WEBPACK_IMPORTED_MODULE_1__Projects_totals___default.a
+  },
+
+  data: function data() {
+    return {
+      // Loader
+      loading: false,
+      // Curret project id
+      currentProjectId: -1,
+      // For the table state switch (work or manage)
+      tableStateSwitch: false,
+      // The view project dialog window
+      viewProjectDialog: false,
+      // For data table pagination   
+      perPage: [15, 30, 45, { text: "All", value: -1 }],
+      // For provinces filter
+      provinces: [{ text: 'Province...', value: '' }, { text: 'Alberta', value: 'Alberta' }, { text: 'British Columbia', value: 'British Columbia' }, { text: 'Saskatchewan', value: 'Saskatchewan' }],
+      // Provinces filter
+      provinceFilter: '',
+      // Clients filter
+      clientFilter: '',
+      // For invoice status
+      invoiceStatus: [{ text: 'Invoice status...', value: '' }, { text: 'Not Invoiced', value: 'not-invoiced' }, { text: 'Paid', value: 'paid' }, { text: 'Outstanding', value: 'outstanding' }],
+      // Location filter
+      locationFilter: '',
+      // Invoice status filter
+      invoiceFilter: ''
+    };
+  },
+
+
+  computed: {
+    // Watch for projects state to update
+    projects: function projects() {
+      return this.$store.getters.projects;
+    },
+
+
+    // Watch for uniqueCLients state to update
+    clients: function clients() {
+      return this.$store.getters.clientsSelectList;
+    },
+    headers: function headers() {
+      if (this.table_state === 'admin_work') {
+        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Company Name', value: 'client_company_name', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Work Type', value: 'work_type', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+      }
+      if (this.table_state === 'admin_manage') {
+        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Company Name', value: 'client_company_name', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Invoice Status', value: 'invoice_status', align: 'left' }, { text: 'Invoice Amount', value: 'invoice_amount', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+      }
+      if (this.table_state === 'user') {
+        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Timesheets', value: 'timesheets', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+      }
+      return headers;
+    }
+  },
+
+  methods: {
+    filterProjects: function filterProjects() {
+      var _this = this;
+
+      // Toggle loader
+      this.loading = true;
+      // Dispatch action to find projects
+      this.$store.dispatch('getProjects', {
+        client: this.clientFilter,
+        province: this.provinceFilter,
+        location: this.locationFilter,
+        invoice: this.invoiceFilter
+      }).then(function () {
+        // Toggle loader
+        _this.loading = false;
+      });
+    },
+    viewProject: function viewProject(id) {
+      // Admin state forward
+      if (this.table_state === 'admin_work' || this.table_state === 'admin_manage') this.$router.push('/projects/' + id + '/view');
+      // User state forward
+      if (this.table_state === 'user') this.$router.push('/projects/' + id + '/timesheets');
+    }
+  },
+
+  created: function created() {
+    var _this2 = this;
+
+    // For debug
+    if (this.$store.getters.debug) console.log("Projects table created");
+    // Toggle loader
+    this.loading = true;
+    // Set headers the data table will use based on the table state
+    var dispatchAction = '',
+        payload = false;
+    if (this.table_state === 'admin_work') {
+      dispatchAction = 'getProjects';
+    } else if (this.table_state === 'admin_manage') {
+      dispatchAction = 'getProjects';
+    } else if (this.table_state === 'user') {
+      dispatchAction = 'getUsersProjects';
+      payload = {
+        user_id: this.$store.getters.user.id
+      };
+    }
+
+    // Tell store to load projects
+    this.$store.dispatch(dispatchAction, payload).then(function () {
+      // Tell store to update unique clients
+      _this2.$store.dispatch('getClients');
+      // Toggle loader
+      _this2.loading = false;
+    });
+  }
+});
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(74);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("16f686ef", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a4250e2e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-view.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a4250e2e\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-view.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.center[data-v-a4250e2e]{\n\t\tmargin-left: auto;\n\t\tmargin-right: auto;\n}\n.card--flex-toolbar[data-v-a4250e2e] {\n    margin-top: -64px;\n}\t\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 75 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Project_notes_vue__ = __webpack_require__(78);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Project_notes_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Project_notes_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Project_crew_vue__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Project_crew_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__Project_crew_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Project_timeline_vue__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Project_timeline_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__Project_timeline_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__timesheet_Timesheets_totals_vue__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__timesheet_Timesheets_totals_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__timesheet_Timesheets_totals_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	props: ['id'],
+
+	components: {
+		'field-input-toggle': __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default.a,
+		'project-notes': __WEBPACK_IMPORTED_MODULE_1__Project_notes_vue___default.a,
+		'project-crew': __WEBPACK_IMPORTED_MODULE_2__Project_crew_vue___default.a,
+		'project-timeline': __WEBPACK_IMPORTED_MODULE_3__Project_timeline_vue___default.a,
+		'timesheets-totals': __WEBPACK_IMPORTED_MODULE_4__timesheet_Timesheets_totals_vue___default.a
+	},
+
+	data: function data() {
+		return {
+			loading: false
+		};
+	},
+
+
+	computed: {
+		// Watch for uniqueCLients state to update
+		clients: function clients() {
+			return this.$store.getters.clientsSelectList;
+		}
+	},
+
+	created: function created() {
+		var _this = this;
+
+		// Toggle loader
+		this.loading = true;
+		// Update the requested project
+		this.$store.dispatch('getProject', this.id).then(function () {
+			// Get unique clients
+			_this.$store.dispatch('getClients');
+			// Toggle loader
+			_this.loading = false;
+		});
+	}
+});
+
+/***/ }),
+/* 76 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+	props: {
+		// For a different looking toggle
+		alt_style: { type: Boolean, default: false },
+		// Required. Type of input to use
+		type: { type: String, required: true },
+		// Optional. If the type is a select then it should have options to populate with.
+		// Should be an object ready for a Vuetify select: { text: '...?', value: '...?' }
+		select_options: { type: Array },
+		// Required. The store action to dispatch when the save button is clicked
+		action: { type: String, required: true },
+		// Required. The db ID of the parent the field belongs to.
+		id: { type: Number, required: true, default: 0 },
+		// Required. The label text for the input and field view.
+		label: { type: String, required: true },
+		// Optional. Vuetify icon to prepend the input with
+		icon: { type: String },
+		// Optional. A character to prepend the value with.
+		prefix: { type: String },
+		// Required. The db field name.
+		field: { type: String, required: true },
+		// Required. The current value of the field.
+		value: { required: true },
+		// Optional. If the field value should be interpreted as a boolean.
+		bool_field: { type: Boolean, default: false },
+		// Optional. The max character count a textarea should contain. Shows the counter under textarea
+		char_count: { type: Number }
+	},
+
+	data: function data() {
+		return {
+			// Controls showing the field or the input
+			editState: false,
+			// For date picker
+			dateMenu: false,
+			// For loader
+			loading: false,
+			// The new field value
+			fieldValue: '',
+			fieldError: false,
+			fieldErrorMsg: '',
+			// For the char count check
+			charCount: false
+		};
+	},
+
+
+	methods: {
+		// Shows the field input
+		showEditInput: function showEditInput() {
+			// Adjust field value
+			this.fieldValue = this.value;
+			// Adjust state to edit
+			this.editState = true;
+			// Clear possible errors
+			this.fieldError = false;
+			this.fieldErrorMsg = '';
+		},
+
+
+		// Hides the field input
+		hideEditInput: function hideEditInput() {
+			// Toggle state
+			this.editState = false;
+			// Clear possible errors
+			this.fieldError = false;
+			this.fieldErrorMsg = '';
+		},
+
+
+		// Uses the store to update the field in the db
+		updateField: function updateField() {
+			var _this = this;
+
+			// Toggle loader
+			this.loading = true;
+			// Start the payload
+			var payload = {
+				id: this.id,
+				field: this.field
+			};
+			console.log(payload);
+			// Dynamically add field and value to payload
+			payload[this.field] = this.fieldValue;
+			// Dispatch action and run cb when complete
+			this.$store.dispatch(this.action, payload).then(function () {
+				// Only toggle state if alt_style is NOT true
+				if (!_this.alt_style) {
+					// Toggle state
+					_this.editState = false;
+				}
+				// Toggle loader
+				_this.loading = false;
+			}).catch(function (error) {
+				// Set error props
+				_this.fieldError = true;
+				_this.fieldErrorMsg = error.response.data[_this.field][0];
+				// Hide loader
+				_this.loading = false;
+			});
+		}
+	},
+
+	created: function created() {
+		// If alt_style is enabled then editState is engaged
+		if (this.alt_style) {
+			// Enable edit state
+			this.editState = true;
+			// Adjust field value
+			this.fieldValue = this.value;
+		}
+		// Set the char count check bool
+		if (this.char_count) this.charCount = true;
+	}
+});
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-card', {
+    staticClass: "grey lighten-5 mt-3",
+    attrs: {
+      "flat": _vm.alt_style
+    }
+  }, [(!_vm.editState) ? _c('v-container', [_c('v-toolbar', {
+    staticClass: "white",
+    attrs: {
+      "card": "",
+      "prominent": ""
+    }
+  }, [(!_vm.alt_style) ? _c('v-toolbar-title', {
+    staticClass: "subheading grey--text"
+  }, [_vm._v("\t\t\t\t         \n        \t" + _vm._s(_vm.label) + "\t\t\t          \t\n        ")]) : _vm._e(), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Edit Field'
+      }),
+      expression: "{ html: 'Edit Field' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.showEditInput($event)
+      }
+    }
+  }, [_c('v-icon', [_vm._v("settings")])], 1)], 1), _vm._v(" "), _c('v-card-text', {
+    staticClass: "pt-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [(!_vm.bool_field) ? _c('div', [(_vm.value) ? _c('div', {
+    staticClass: "pl-2"
+  }, [(_vm.prefix) ? _c('span', [_vm._v(_vm._s(_vm.prefix))]) : _vm._e(), _vm._v(" "), (_vm.type != 'date') ? _c('span', [_vm._v(_vm._s(_vm.value))]) : _c('span', [_vm._v(_vm._s(_vm._f("date")(_vm.value)))])]) : _vm._e(), _vm._v(" "), (!_vm.value && !_vm.alt_style) ? _c('div', {
+    staticClass: "pl-2 error--text"
+  }, [_vm._v("\n\t      \t\t\tN/A\n\t      \t\t")]) : _vm._e(), _vm._v(" "), (!_vm.value && _vm.alt_style) ? _c('div', {
+    staticClass: "pl-2 error--text"
+  }, [_vm._v("\n\t      \t\t\tMILESTONE NOT COMPLETE\n\t      \t\t")]) : _vm._e()]) : _c('div', [(_vm.value === 1) ? _c('div', [_vm._v("Yes")]) : _vm._e(), _vm._v(" "), (_vm.value === 0) ? _c('div', [_vm._v("No")]) : _vm._e()]), _vm._v(" "), (_vm.alt_style) ? _c('v-spacer') : _vm._e()], 1)], 1)], 1) : _vm._e(), _vm._v(" "), (_vm.editState) ? _c('v-container', {
+    staticClass: "pt-0 pb-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-spacer'), _vm._v(" "), (!_vm.alt_style) ? _c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Close Edit Mode'
+      }),
+      expression: "{ html: 'Close Edit Mode' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.hideEditInput($event)
+      }
+    }
+  }, [_c('v-icon', [_vm._v("close")])], 1) : _vm._e()], 1), _vm._v(" "), _c('v-card-text', {
+    staticClass: "pt-0 pb-0"
+  }, [(_vm.type === 'text') ? _c('v-container', {
+    staticClass: "pt-0 pb-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-text-field', {
+    staticClass: "pb-0",
+    attrs: {
+      "label": _vm.label + '...',
+      "prepend-icon": _vm.icon,
+      "prefix": _vm.prefix,
+      "error": _vm.fieldError
+    },
+    model: {
+      value: (_vm.fieldValue),
+      callback: function($$v) {
+        _vm.fieldValue = $$v
+      },
+      expression: "fieldValue"
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [(_vm.fieldError) ? _c('p', {
+    staticClass: "caption error--text"
+  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'textarea') ? _c('v-container', {
+    staticClass: "pt-0 pb-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-text-field', {
+    staticClass: "pb-0",
+    attrs: {
+      "label": _vm.label + '...',
+      "prepend-icon": _vm.icon,
+      "error": _vm.fieldError,
+      "multi-line": "",
+      "counter": _vm.charCount,
+      "max": _vm.char_count
+    },
+    model: {
+      value: (_vm.fieldValue),
+      callback: function($$v) {
+        _vm.fieldValue = $$v
+      },
+      expression: "fieldValue"
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [(_vm.fieldError) ? _c('p', {
+    staticClass: "caption error--text"
+  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'select') ? _c('v-container', {
+    staticClass: "pt-0 pb-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-select', {
+    staticClass: "pb-0",
+    attrs: {
+      "items": _vm.select_options,
+      "label": _vm.label + '...',
+      "single-line": "",
+      "bottom": "",
+      "error": _vm.fieldError
+    },
+    model: {
+      value: (_vm.fieldValue),
+      callback: function($$v) {
+        _vm.fieldValue = $$v
+      },
+      expression: "fieldValue"
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [(_vm.fieldError) ? _c('p', {
+    staticClass: "caption error--text"
+  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'bool') ? _c('v-container', {
+    staticClass: "pt-0 pb-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-select', {
+    staticClass: "pb-0",
+    attrs: {
+      "items": [{
+          text: 'No',
+          value: 0
+        },
+        {
+          text: 'Yes',
+          value: 1
+        }
+      ],
+      "label": _vm.label + '...',
+      "single-line": "",
+      "bottom": "",
+      "error": _vm.fieldError
+    },
+    model: {
+      value: (_vm.fieldValue),
+      callback: function($$v) {
+        _vm.fieldValue = $$v
+      },
+      expression: "fieldValue"
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [(_vm.fieldError) ? _c('p', {
+    staticClass: "caption error--text"
+  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'date') ? _c('v-container', {
+    staticClass: "pt-0 pb-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-menu', {
+    attrs: {
+      "lazy": "",
+      "close-on-content-click": false,
+      "transition": "scale-transition",
+      "offset-y": "",
+      "full-width": "",
+      "nudge-left": 40,
+      "max-width": "290px"
+    },
+    model: {
+      value: (_vm.dateMenu),
+      callback: function($$v) {
+        _vm.dateMenu = $$v
+      },
+      expression: "dateMenu"
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": _vm.label + '...',
+      "prepend-icon": "event",
+      "readonly": ""
+    },
+    slot: "activator",
+    model: {
+      value: (_vm.fieldValue),
+      callback: function($$v) {
+        _vm.fieldValue = $$v
+      },
+      expression: "fieldValue"
+    }
+  }), _vm._v(" "), _c('v-date-picker', {
+    attrs: {
+      "no-title": "",
+      "scrollable": "",
+      "actions": ""
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function(ref) {
+        var save = ref.save;
+        var cancel = ref.cancel;
+
+        return [_c('v-card-actions', [_c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              cancel()
+            }
+          }
+        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              save()
+            }
+          }
+        }, [_vm._v("Save")])], 1)]
+      }
+    }]),
+    model: {
+      value: (_vm.fieldValue),
+      callback: function($$v) {
+        _vm.fieldValue = $$v
+      },
+      expression: "fieldValue"
+    }
+  })], 1)], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-btn', {
+    attrs: {
+      "block": "",
+      "flat": "",
+      "outline": "",
+      "loading": _vm.loading,
+      "disabled": _vm.loading
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.updateField($event)
+      }
+    }
+  }, [_vm._v("\n\t\t      Save\t\t\t\t\t\n\t\t\t\t\t")])], 1)], 1)], 1) : _vm._e()], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-bee3b1aa", module.exports)
+  }
+}
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(79)
+}
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(81),
+  /* template */
+  __webpack_require__(82),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  "data-v-4951cfa6",
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Project-notes.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Project-notes.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4951cfa6", Component.options)
+  } else {
+    hotAPI.reload("data-v-4951cfa6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(80);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("e4daf34c", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4951cfa6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-notes.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4951cfa6\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Project-notes.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.chip[data-v-4951cfa6] {\n\theight: auto;\n\twhite-space: normal;\n\tpadding: 8px 16px 8px 16px;\n}\n.text-center[data-v-4951cfa6] {\n\ttext-align: center;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 81 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {
+			// The note on que for deletion
+			selectedNoteId: '',
+			// For the delete dialog
+			deleteNoteDialog: false,
+			// To show when a note is deleting
+			deletingNote: false,
+			// To show when a note is saving
+			loading: false,
+			// The note value
+			note: '',
+			// If the server returned an error when saving
+			noteErr: false,
+			// The error message
+			noteErrMsg: ''
+		};
+	},
+
+
+	computed: {
+		// Retrieve notes for current project from store
+		notes: function notes() {
+			return this.$store.getters.currentProject.comments;
+		}
+	},
+
+	methods: {
+		// Opens the delete note dialog and sets the selected note id
+		openDeleteNoteDialog: function openDeleteNoteDialog(id) {
+			// Set the selected note id in que for deletion
+			this.selectedNoteId = id;
+			// Open the dialog
+			this.deleteNoteDialog = true;
+		},
+
+
+		// Uses the store to add a note to the current project
+		addNote: function addNote() {
+			var _this = this;
+
+			// Toggle loader
+			this.loading = true;
+			// Dispatch the action with post payload
+			this.$store.dispatch('addProjectComment', {
+				project_id: this.$store.getters.currentProject.id,
+				user_id: this.$store.getters.user.id,
+				comment: this.note
+			}).then(function () {
+				// Toggle loader
+				_this.loading = false;
+				// Clear data values
+				_this.note = '';
+				_this.noteErr = false;
+				_this.noteErrMsg = '';
+			}).catch(function (error) {
+				// Toggle error state and set error message
+				_this.noteErr = true;
+				_this.noteErrMsg = error.response.data.comment[0];
+				_this.loading = false;
+			});
+		},
+
+
+		// Uses the store to delete selected note from the db
+		deleteNote: function deleteNote(id) {
+			var _this2 = this;
+
+			console.log(id);
+			this.deletingNote = true;
+			// Dispatch action with note id as payload
+			this.$store.dispatch('deleteProjectComment', {
+				id: id
+			}).then(function () {
+				// Toggle loaderand dialog
+				_this2.deletingNote = false;
+				_this2.deleteNoteDialog = false;
+			});
+		}
+	}
+
+});
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', [(_vm.notes.length === 0) ? _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-alert', {
+    attrs: {
+      "info": "",
+      "value": "true"
+    }
+  }, [_vm._v("\n\t      No notes have been added to this project\n\t    ")])], 1) : _vm._l((_vm.$store.getters.currentProject.comments), function(note) {
+    return _c('v-card', {
+      key: note.id,
+      staticClass: "grey lighten-5",
+      attrs: {
+        "flat": ""
+      }
+    }, [_c('v-toolbar', {
+      staticClass: "white",
+      attrs: {
+        "card": "",
+        "prominent": ""
+      }
+    }, [_c('v-toolbar-title', {
+      staticClass: "subheading grey--text"
+    }, [_vm._v("\t\t\t\t         \n        \t" + _vm._s(note.user.first + ' ' + note.user.last) + " says:          \t\n        ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), (note.user.id == _vm.$store.getters.user.id) ? _c('v-btn', {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: ({
+          html: 'Delete note'
+        }),
+        expression: "{ html: 'Delete note' }",
+        arg: "top"
+      }],
+      staticClass: "mr-0 red--text",
+      attrs: {
+        "icon": ""
+      },
+      nativeOn: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.openDeleteNoteDialog(note.id)
+        }
+      }
+    }, [_c('v-icon', [_vm._v("close")])], 1) : _vm._e()], 1), _vm._v(" "), _c('v-card-text', {
+      staticClass: "pt-0"
+    }, [_c('v-layout', {
+      attrs: {
+        "row": ""
+      }
+    }, [_c('v-flex', {
+      attrs: {
+        "xs12": ""
+      }
+    }, [_c('v-chip', {
+      staticClass: "info white--text",
+      attrs: {
+        "xs12": ""
+      }
+    }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(note.comment) + "\n\t\t\t\t\t\t")])], 1)], 1)], 1)], 1)
+  }), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5 mb-5"
+  }), _vm._v(" "), _c('v-layout', {
+    staticClass: "mr-0",
+    staticStyle: {
+      "position": "relative"
+    },
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "width": "365",
+      "lazy": "",
+      "absolute": ""
+    },
+    model: {
+      value: (_vm.deleteNoteDialog),
+      callback: function($$v) {
+        _vm.deleteNoteDialog = $$v
+      },
+      expression: "deleteNoteDialog"
+    }
+  }, [_c('v-card', [_c('v-card-title', [_c('div', {
+    staticClass: "headline grey--text"
+  }, [_vm._v("Delete Note?")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-card-text', [_vm._v("\n\t        \tDelete this note until the age that gave it birth comes again?\n\t        ")]), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    staticClass: "red--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat"
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.deleteNoteDialog = false
+      }
+    }
+  }, [_vm._v("\n\t          \t\tMaybe not\n\t          ")]), _vm._v(" "), _c('v-btn', {
+    staticClass: "green--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat",
+      "loading": _vm.deletingNote,
+      "disable": _vm.deletingNote
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.deleteNote(_vm.selectedNoteId)
+      }
+    }
+  }, [_vm._v("\n\t          \tDo it\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-card', {
+    staticClass: "grey lighten-5 mt-3"
+  }, [_c('v-container', [_c('v-toolbar', {
+    staticClass: "white",
+    attrs: {
+      "card": "",
+      "prominent": ""
+    }
+  }, [_c('v-toolbar-title', {
+    staticClass: "subheading grey--text"
+  }, [_vm._v("\t\t\t\t         \n\t        \tAdd a Note\t          \t\n\t        ")]), _vm._v(" "), _c('v-spacer')], 1), _vm._v(" "), _c('v-card-text', {
+    staticClass: "pt-0"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "error": _vm.noteErr,
+      "label": "Enter note...",
+      "counter": "",
+      "max": "255",
+      "textarea": ""
+    },
+    model: {
+      value: (_vm.note),
+      callback: function($$v) {
+        _vm.note = $$v
+      },
+      expression: "note"
+    }
+  })], 1)], 1), _vm._v(" "), (_vm.noteErr) ? _c('v-layout', {
+    staticClass: "caption error--text",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    staticClass: "text-center",
+    attrs: {
+      "xs12": ""
+    }
+  }, [_vm._v("\n      \t\t\t\t" + _vm._s(_vm.noteErrMsg) + "  \n      \t\t\t")])], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": "",
+      "offset-xs4": ""
+    }
+  }, [_c('v-btn', {
+    attrs: {
+      "block": "",
+      "flat": "",
+      "outline": "",
+      "loading": _vm.loading,
+      "disabled": _vm.loading
+    },
+    on: {
+      "click": _vm.addNote
+    }
+  }, [_vm._v("\n\t      \t\t\t\tAdd Note\n\t      \t\t\t")])], 1)], 1)], 1)], 1)], 1)], 2)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-4951cfa6", module.exports)
+  }
+}
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(84),
+  /* template */
+  __webpack_require__(85),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Project-crew.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Project-crew.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-57618cb6", Component.options)
+  } else {
+    hotAPI.reload("data-v-57618cb6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 84 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {
+			// Indicates when a crew member is saving to db
+			loading: false,
+			// For the add crew dialog
+			addCrewDialog: false,
+			// The selected user to add
+			selctedUserId: '',
+			// The selcted user to delete
+			userToDeleteId: '',
+			// For the remove crew dialog
+			deleteCrewDialog: false,
+			// Indicates when a crew member is deleting
+			deletingCrew: false,
+			// For the data table
+			headers: [{ text: 'Name', value: 'name', align: 'center' }, { text: 'Timesheets on Project', value: 'timesheets', align: 'center' }, { text: 'Actions', value: '', align: 'center' }]
+		};
+	},
+
+
+	computed: {
+		crew: function crew() {
+			return this.$store.getters.currentProject.users;
+		},
+		crewSelectList: function crewSelectList() {
+			var users = this.$store.getters.users,
+			    crew = this.$store.getters.currentProject.users,
+			    crewIdList = [],
+			    crewSelect = [{ text: "Select user...", value: "" }];
+			// Collect the IDs of all crew assigned to this project
+			crew.forEach(function (user) {
+				crewIdList.push(user.id);
+			});
+			// Create crew select array filtering out crew members already added to project
+			users.forEach(function (user) {
+				// If the current user id itteration is not in the crew ID list then push it
+				// to the select list
+				if (!crewIdList.includes(user.id)) {
+					crewSelect.push({ text: user.first + ' ' + user.last, value: user.id });
+				}
+			});
+			return crewSelect;
+		}
+	},
+
+	methods: {
+		// Dispatch event to store that adds a user to the project
+		addCrewMember: function addCrewMember() {
+			var _this = this;
+
+			console.log(this.selctedUserId);
+			// Toggle loader
+			this.loading = true;
+			// Dispatch action to add user to project crew
+			this.$store.dispatch('addProjectCrew', {
+				project_id: this.$store.getters.currentProject.id,
+				user_id: this.selctedUserId
+			}).then(function () {
+				// Toggle loader, close dialog, reset selected user id
+				_this.loading = false;
+				_this.addCrewDialog = false;
+				_this.selctedUserId = '';
+			});
+		},
+
+
+		// Shows the delete crew dialog and sets the user to delete id
+		showDeleteCrewDialog: function showDeleteCrewDialog(id) {
+			// Toggle dialog
+			this.deleteCrewDialog = true;
+			// Set selected user id
+			this.userToDeleteId = id;
+		},
+
+
+		// Dispatch event to store that delets the user from the project
+		deleteCrew: function deleteCrew() {
+			var _this2 = this;
+
+			// Toggle loader
+			this.deletingCrew = true;
+			// Dispatch even to store
+			this.$store.dispatch('deleteProjectCrew', {
+				project_id: this.$store.getters.currentProject.id,
+				id: this.userToDeleteId
+			}).then(function () {
+				// Toggle loader
+				_this2.deletingCrew = false;
+				// Toggle dialog
+				_this2.deleteCrewDialog = false;
+			});
+		}
+	},
+
+	created: function created() {
+		// Update the users in store state
+		this.$store.dispatch('getUsers');
+	}
+});
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\tCrew\n\t\t\t")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Add crew member'
+      }),
+      expression: "{ html: 'Add crew member' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.addCrewDialog = true
+      }
+    }
+  }, [_c('v-icon', [_vm._v("add_circle")])], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n        You must add a user to the project crew before they can add timesheets.       \t\t\t\n  \t\t")], 1)]), _vm._v(" "), (_vm.crew.length === 0) ? _c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-alert', {
+    attrs: {
+      "info": "",
+      "value": "true"
+    }
+  }, [_vm._v("\n\t      No crew members have been added to this project yet.\n\t    ")])], 1) : _vm._e(), _vm._v(" "), (_vm.crew.length > 0) ? _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-data-table', {
+    staticClass: "elevation-1 mt-5",
+    attrs: {
+      "headers": _vm.headers,
+      "items": _vm.crew,
+      "hide-actions": ""
+    },
+    scopedSlots: _vm._u([{
+      key: "items",
+      fn: function(props) {
+        return [_c('td', {
+          staticClass: "text-xs-center"
+        }, [_vm._v(_vm._s(props.item.first + ' ' + props.item.last))]), _vm._v(" "), _c('td', {
+          staticClass: "text-xs-center"
+        }, [_vm._v(_vm._s(props.item.timesheets.length))]), _vm._v(" "), _c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-btn', {
+          directives: [{
+            name: "tooltip",
+            rawName: "v-tooltip:top",
+            value: ({
+              html: 'Remove crew'
+            }),
+            expression: "{ html: 'Remove crew'}",
+            arg: "top"
+          }],
+          staticClass: "red--text",
+          attrs: {
+            "icon": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              $event.stopPropagation();
+              _vm.showDeleteCrewDialog(props.item.id)
+            }
+          }
+        }, [_c('v-icon', [_vm._v("close")])], 1), _vm._v(" "), _c('v-btn', {
+          directives: [{
+            name: "tooltip",
+            rawName: "v-tooltip:top",
+            value: ({
+              html: 'View timesheets'
+            }),
+            expression: "{ html: 'View timesheets'}",
+            arg: "top"
+          }],
+          staticClass: "success--text",
+          attrs: {
+            "icon": ""
+          }
+        }, [_c('v-icon', [_vm._v("subdirectory_arrow_right")])], 1)], 1)]
+      }
+    }])
+  })], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
+    staticClass: "mr-0",
+    staticStyle: {
+      "position": "relative"
+    },
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "width": "365",
+      "lazy": "",
+      "absolute": ""
+    },
+    model: {
+      value: (_vm.addCrewDialog),
+      callback: function($$v) {
+        _vm.addCrewDialog = $$v
+      },
+      expression: "addCrewDialog"
+    }
+  }, [_c('v-card', [_c('v-card-title', [_c('div', {
+    staticClass: "headline grey--text"
+  }, [_vm._v("Add Crew Member")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-select', {
+    attrs: {
+      "items": _vm.crewSelectList,
+      "label": "User...",
+      "single-line": "",
+      "bottom": ""
+    },
+    model: {
+      value: (_vm.selctedUserId),
+      callback: function($$v) {
+        _vm.selctedUserId = $$v
+      },
+      expression: "selctedUserId"
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    staticClass: "red--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat"
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.addCrewDialog = false
+      }
+    }
+  }, [_vm._v("\n\t          \t\tMaybe Not\n\t          ")]), _vm._v(" "), _c('v-btn', {
+    staticClass: "green--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat",
+      "loading": _vm.loading,
+      "disable": _vm.loading
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.addCrewMember($event)
+      }
+    }
+  }, [_vm._v("\n\t          \tAdd\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+    staticClass: "mr-0",
+    staticStyle: {
+      "position": "relative"
+    },
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "width": "365",
+      "lazy": "",
+      "absolute": ""
+    },
+    model: {
+      value: (_vm.deleteCrewDialog),
+      callback: function($$v) {
+        _vm.deleteCrewDialog = $$v
+      },
+      expression: "deleteCrewDialog"
+    }
+  }, [_c('v-card', [_c('v-card-title', [_c('div', {
+    staticClass: "headline grey--text"
+  }, [_vm._v("Delete crew?")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-card-text', [_vm._v("\n\t        \tDelete this crew member from the project?\n\t        ")]), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    staticClass: "red--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat"
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.deleteCrewDialog = false
+      }
+    }
+  }, [_vm._v("\n\t          \t\tMaybe not\n\t          ")]), _vm._v(" "), _c('v-btn', {
+    staticClass: "green--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat",
+      "loading": _vm.deletingCrew,
+      "disable": _vm.deletingCrew
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.deleteCrew($event)
+      }
+    }
+  }, [_vm._v("\n\t          \tDo it\n\t          ")])], 1)], 1)], 1)], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-57618cb6", module.exports)
+  }
+}
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(87),
+  /* template */
+  __webpack_require__(88),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Project-timeline.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Project-timeline.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2a59ee85", Component.options)
+  } else {
+    hotAPI.reload("data-v-2a59ee85", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 87 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	components: {
+		'field-input-toggle': __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default.a
+	},
+
+	computed: {
+		// The project timeline
+		timeline: function timeline() {
+			return this.$store.getters.currentProject.timeline;
+		},
+		usersSelectList: function usersSelectList() {
+			return this.$store.getters.usersSelectListNameBased;
+		},
+
+
+		// Date project was approved on (or not)
+		projectApprovalDate: function projectApprovalDate() {
+			return this.$store.getters.currentProject.approval_date;
+		}
+	},
+
+	data: function data() {
+		return {
+			// The current milestone the project is on
+			step: -1,
+			// The steps/milestones for the timeline
+			steps: [{
+				step: 1,
+				field: 'permit_advised_submit',
+				inputType: 'date',
+				label: 'Permit Advised To Submit',
+				heading: 'Applicant was advised to submit permit on:'
+			}, {
+				step: 2,
+				field: 'permit_applicant',
+				inputType: 'select',
+				items: [],
+				label: 'Permit Applicant',
+				heading: 'Permit was applied for by:'
+			}, {
+				step: 3,
+				field: 'permit_application_date',
+				inputType: 'date',
+				label: 'Permit Applicant Date',
+				heading: 'Permit was applied for on:'
+			}, {
+				step: 4,
+				field: 'permit_recieved_date',
+				inputType: 'date',
+				label: 'Permit Recieved On',
+				heading: 'Permit was recieved on:'
+			}, {
+				step: 5,
+				field: 'permit_number',
+				inputType: 'text',
+				label: 'Permit Number',
+				heading: 'Permit number is:'
+			}, {
+				step: 6,
+				field: 'site_number_application_date',
+				inputType: 'date',
+				label: 'Site Number Application Date',
+				heading: 'Site number was applied for on:'
+			}, {
+				step: 7,
+				field: 'site_number_recieved_date',
+				inputType: 'date',
+				label: 'Site Number Recieved Date',
+				heading: 'Site number was recieved on:'
+			}, {
+				step: 8,
+				field: 'site_number',
+				inputType: 'text',
+				label: 'Site Number',
+				heading: 'Site number is:'
+			}, {
+				step: 9,
+				field: 'completion_target',
+				inputType: 'date',
+				label: 'Completion Target',
+				heading: 'Completion target is:'
+			}, {
+				step: 10,
+				field: 'field_completion_target',
+				inputType: 'date',
+				label: 'Fieldwork Completion Target',
+				heading: 'Fieldwork completion target is:'
+			}, {
+				step: 11,
+				field: 'report_completion_target',
+				inputType: 'date',
+				label: 'Report Completion Target',
+				heading: 'Report completion target is:'
+			}, {
+				step: 12,
+				field: 'fieldwork_scheduled',
+				inputType: 'bool',
+				label: 'Fieldwork Scheduled',
+				heading: 'Fieldwork is scheduled?'
+			}, {
+				step: 13,
+				field: 'artifact_analysis',
+				inputType: 'bool',
+				label: 'Artifact Analysis Complete',
+				heading: 'Artifact analysis is complete?'
+			}, {
+				step: 14,
+				field: 'mapping',
+				inputType: 'bool',
+				label: 'Mapping Complete',
+				heading: 'Mapping is complete?'
+			}, {
+				step: 15,
+				field: 'writing',
+				inputType: 'bool',
+				label: 'Writing Complete',
+				heading: 'Writing is complete?'
+			}, {
+				step: 16,
+				field: 'draft_submitted',
+				inputType: 'bool',
+				label: 'Draft Sumbitted',
+				heading: 'Draft is submitted?'
+			}, {
+				step: 17,
+				field: 'draft_accepted',
+				inputType: 'bool',
+				label: 'Draft Accepted',
+				heading: 'Draft is accepted?'
+			}, {
+				step: 18,
+				field: 'final_approval',
+				inputType: 'bool',
+				label: 'Final Approval',
+				heading: 'Approval is final?'
+			}]
+		};
+	},
+	created: function created() {
+		var _this = this;
+
+		this.$store.dispatch('getUsers').then(function () {
+			// Determine the current step
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+
+			try {
+				for (var _iterator = _this.steps[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var step = _step.value;
+
+					// Set select list for this step
+					if (step.step === 2) step.items = _this.usersSelectList;
+					// Determine current step
+					if (_this.timeline[step.field] === null || _this.timeline[step.field] === 0) {
+						_this.step = step.step;
+						break;
+					}
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
+
+			console.log(_this.usersSelectList);
+		});
+	}
+});
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\tTimeline\n\t\t")])]), _vm._v(" "), (_vm.projectApprovalDate === null) ? _c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-alert', {
+    attrs: {
+      "info": "",
+      "value": "true"
+    }
+  }, [_vm._v("\n      Once the project has an approval date the timeline will become available.\n    ")])], 1) : _vm._e(), _vm._v(" "), (_vm.projectApprovalDate != null) ? _c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-stepper', {
+    attrs: {
+      "vertical": "",
+      "non-linear": ""
+    },
+    model: {
+      value: (_vm.step),
+      callback: function($$v) {
+        _vm.step = $$v
+      },
+      expression: "step"
+    }
+  }, _vm._l((_vm.steps), function(current) {
+    return _c('v-container', {
+      key: _vm.step.field,
+      attrs: {
+        "fluid": ""
+      }
+    }, [_c('v-stepper-step', {
+      staticStyle: {
+        "cursor": "pointer"
+      },
+      attrs: {
+        "step": current.step,
+        "complete": _vm.timeline[current.field] != null && _vm.timeline[current.field] != 0
+      },
+      nativeOn: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.step = current.step
+        }
+      }
+    }, [_vm._v("\n\t\t\t      " + _vm._s(current.heading) + "\n\t\t\t      "), (_vm.timeline[current.field] != 0 && _vm.timeline[current.field] != 1) ? _c('small', [(current.inputType != 'date') ? _c('span', [_vm._v(_vm._s(_vm.timeline[current.field]))]) : _c('span', [_vm._v(_vm._s(_vm._f("date")(_vm.timeline[current.field])))])]) : _vm._e(), _vm._v(" "), (_vm.timeline[current.field] === null) ? _c('small', [_vm._v("Milestone Not Complete")]) : _vm._e(), _vm._v(" "), (_vm.timeline[current.field] === 0) ? _c('small', [_vm._v("No")]) : _vm._e(), _vm._v(" "), (_vm.timeline[current.field] === 1) ? _c('small', [_vm._v("Yes")]) : _vm._e()]), _vm._v(" "), _c('v-stepper-content', {
+      attrs: {
+        "step": current.step
+      }
+    }, [_c('v-flex', {
+      staticClass: "mt-2 mb-2",
+      attrs: {
+        "xs12": "",
+        "md6": ""
+      }
+    }, [_c('field-input-toggle', {
+      attrs: {
+        "alt_style": true,
+        "type": current.inputType,
+        "select_options": current.items,
+        "action": 'updateTimelineField',
+        "id": _vm.timeline.id,
+        "label": current.label,
+        "field": current.field,
+        "value": _vm.$store.getters.currentProject.timeline[current.field]
+      }
+    })], 1)], 1)], 1)
+  }))], 1)], 1) : _vm._e()], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-2a59ee85", module.exports)
+  }
+}
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "xl10": "",
+      "offset-xl1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "grey lighten-5",
+    attrs: {
+      "flat": ""
+    }
+  }, [_c('v-toolbar', {
+    staticClass: "primary elevation-0",
+    attrs: {
+      "dark": "",
+      "extended": ""
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Go Back'
+      }),
+      expression: "{ html: 'Go Back' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    }
+  }, [_c('v-icon', {
+    attrs: {
+      "dark": ""
+    }
+  }, [_vm._v("arrow_back")])], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "lg10": "",
+      "offset-lg1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "card--flex-toolbar"
+  }, [_c('v-container', [_c('v-toolbar', {
+    staticClass: "white",
+    attrs: {
+      "card": "",
+      "prominent": ""
+    }
+  }, [_c('v-toolbar-title', {
+    staticClass: "display-1"
+  }, [_vm._v("\t\t\t\t         \n\t\t\t\t          \tProject Details (" + _vm._s(_vm.$store.getters.currentProject.id) + ")\t\t\t          \t\n\t\t\t\t          ")])], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading pl-4"
+  }, [_vm._v("\n\t\t\t\t\t          This is where you can edit and track the project you've selected.\t       \t\t\n\t\t\t\t        \t")])])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-4"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t          To edit a field just click the gear icon next to that field.       \t\t\t\n\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), (!_vm.loading) ? _c('v-card-text', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-container', [_c('timesheets-totals', {
+    attrs: {
+      "timesheets": _vm.$store.getters.currentProject.timesheets
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-container', [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tClient\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'select',
+      "select_options": _vm.clients,
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Client Company',
+      "field": 'client_company_name',
+      "value": _vm.$store.getters.currentProject.client_company_name
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Company Contact',
+      "field": 'client_contact_name',
+      "value": _vm.$store.getters.currentProject.client_contact_name
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Contact\'s Phone No.',
+      "icon": 'phone',
+      "field": 'client_contact_phone',
+      "value": _vm.$store.getters.currentProject.client_contact_phone
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Contact\'s Email',
+      "field": 'client_contact_email',
+      "value": _vm.$store.getters.currentProject.client_contact_email
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  }), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5"
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tLocation\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'select',
+      "select_options": [{
+          text: 'Province...',
+          value: ''
+        },
+        {
+          text: 'Alberta',
+          value: 'Alberta'
+        },
+        {
+          text: 'British Columbia',
+          value: 'British Columbia'
+        },
+        {
+          text: 'Saskatchewan',
+          value: 'Saskatchewan'
+        }
+      ],
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Province',
+      "field": 'province',
+      "value": _vm.$store.getters.currentProject.province
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs8": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'textarea',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Specific Location',
+      "field": 'location',
+      "value": _vm.$store.getters.currentProject.location,
+      "char_count": 100
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  }), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5"
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tBasics\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'textarea',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Basic Details',
+      "field": 'details',
+      "value": _vm.$store.getters.currentProject.details,
+      "char_count": 750
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  }), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5"
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tWork Details\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'select',
+      "select_options": [{
+          text: 'Work type...',
+          value: ''
+        },
+        {
+          text: 'HRIA',
+          value: 'HRIA'
+        },
+        {
+          text: 'Archaeology',
+          value: 'Archaeology'
+        },
+        {
+          text: 'Paleaontology',
+          value: 'Paleaontology'
+        }
+      ],
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Work Type',
+      "field": 'work_type',
+      "value": _vm.$store.getters.currentProject.work_type
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'date',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Respond By',
+      "field": 'response_by',
+      "value": _vm.$store.getters.currentProject.response_by
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Estimate',
+      "field": 'estimate',
+      "prefix": '$',
+      "value": _vm.$store.getters.currentProject.estimate
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'textarea',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Work Overview',
+      "field": 'work_overview',
+      "value": _vm.$store.getters.currentProject.work_overview,
+      "char_count": 750
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'textarea',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Work Plans',
+      "field": 'plans',
+      "value": _vm.$store.getters.currentProject.plans,
+      "char_count": 750
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  }), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5"
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tLand\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'select',
+      "select_options": [{
+          text: 'Land ownership...',
+          value: ''
+        },
+        {
+          text: 'Crown',
+          value: 'Crown'
+        },
+        {
+          text: 'Freehold',
+          value: 'Freehold'
+        }
+      ],
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Land Ownership',
+      "field": 'land_ownership',
+      "value": _vm.$store.getters.currentProject.land_ownership
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'select',
+      "select_options": [{
+          text: 'Land access granted...',
+          value: ''
+        },
+        {
+          text: 'No',
+          value: 0
+        },
+        {
+          text: 'Yes',
+          value: 1
+        }
+      ],
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Access Granted',
+      "field": 'land_access_granted',
+      "value": _vm.$store.getters.currentProject.land_access_granted,
+      "bool_field": true
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Access Granted By',
+      "field": 'land_access_granted_by',
+      "value": _vm.$store.getters.currentProject.land_access_granted_by
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Access Contact',
+      "field": 'land_access_contact',
+      "value": _vm.$store.getters.currentProject.land_access_contact
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "icon": 'phone',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Contact\'s Phone',
+      "field": 'land_access_phone',
+      "value": _vm.$store.getters.currentProject.land_access_phone
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  }), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5"
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tApproval\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'date',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Approval Date',
+      "field": 'approval_date',
+      "value": _vm.$store.getters.currentProject.approval_date
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  }), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5"
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tInvoicing\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'date',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Invoiced Date',
+      "field": 'invoiced_date',
+      "value": _vm.$store.getters.currentProject.invoiced_date
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'date',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Invoice Paid Date',
+      "field": 'invoice_paid_date',
+      "value": _vm.$store.getters.currentProject.invoice_paid_date
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "icon": 'attach_money',
+      "action": 'updateProjectField',
+      "id": _vm.$store.getters.currentProject.id,
+      "label": 'Invoice Amount',
+      "field": 'invoice_amount',
+      "prefix": '$',
+      "value": _vm.$store.getters.currentProject.invoice_amount
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-container', {
+    staticClass: "mt-5"
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\tNotes\n\t\t\t\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c('project-notes')], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-container', {
+    staticClass: "mt-5"
+  }, [_c('project-crew')], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-container', {
+    staticClass: "mt-5"
+  }, [_c('project-timeline')], 1)], 1)], 1)], 1) : _vm._e()], 1)], 1)], 1)], 1)], 1)], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-a4250e2e", module.exports)
+  }
+}
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(91),
+  /* template */
+  __webpack_require__(92),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\project\\Projects-totals.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Projects-totals.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-56104f02", Component.options)
+  } else {
+    hotAPI.reload("data-v-56104f02", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 91 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['projects'],
+
+  computed: {
+    invoicesPaidTotal: function invoicesPaidTotal() {
+      var total = 0;
+      this.projects.forEach(function (project) {
+        if (project.invoice_paid_date != null) {
+          total += parseFloat(project.invoice_amount) * 100;
+        }
+      });
+      return new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(total / 100);
+    },
+    invoicesOutstandingTotal: function invoicesOutstandingTotal() {
+      var total = 0;
+      this.projects.forEach(function (project) {
+        if (project.invoice_paid_date === null) {
+          total += parseFloat(project.invoice_amount) * 100;
+        }
+      });
+      return new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(total / 100);
+    }
+  }
+});
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    staticClass: "pl-0 pr-0",
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-data-table', {
+    staticClass: "elevation-1 mt-1 mb-4",
+    attrs: {
+      "headers": [{
+          text: 'Total Paid Invoices',
+          align: 'center',
+          sortable: false
+        },
+        {
+          text: 'Total Outstanding Invoices',
+          align: 'center',
+          sortable: false
+        } ],
+      "items": [{
+        invoices_paid_total: _vm.invoicesPaidTotal,
+        invoices_outstanding_total: _vm.invoicesOutstandingTotal
+      }],
+      "hide-actions": ""
+    },
+    scopedSlots: _vm._u([{
+      key: "items",
+      fn: function(props) {
+        return [_c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "success white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.invoices_paid_total) + "\n        ")])], 1), _vm._v(" "), _c('td', {
+          staticClass: "text-xs-center"
+        }, [_c('v-chip', {
+          staticClass: "error white--text"
+        }, [_vm._v("\n          $" + _vm._s(props.item.invoices_outstanding_total) + "\n        ")])], 1)]
+      }
+    }])
+  })], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-56104f02", module.exports)
+  }
+}
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [(_vm.loading) ? _c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-spacer'), _vm._v(" "), _c('v-progress-linear', {
+    attrs: {
+      "indeterminate": true
+    }
+  })], 1) : _vm._e(), _vm._v(" "), (!_vm.loading) ? _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [(_vm.table_state === 'admin_work' || _vm.table_state === 'admin_manage') ? _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('v-select', {
+    attrs: {
+      "items": _vm.provinces,
+      "label": "Province...",
+      "single-line": "",
+      "bottom": ""
+    },
+    model: {
+      value: (_vm.provinceFilter),
+      callback: function($$v) {
+        _vm.provinceFilter = $$v
+      },
+      expression: "provinceFilter"
+    }
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('v-select', {
+    attrs: {
+      "items": _vm.clients,
+      "label": "Client...",
+      "single-line": "",
+      "bottom": ""
+    },
+    model: {
+      value: (_vm.clientFilter),
+      callback: function($$v) {
+        _vm.clientFilter = $$v
+      },
+      expression: "clientFilter"
+    }
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "Enter part of location..."
+    },
+    model: {
+      value: (_vm.locationFilter),
+      callback: function($$v) {
+        _vm.locationFilter = $$v
+      },
+      expression: "locationFilter"
+    }
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('v-flex', {
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('v-select', {
+    attrs: {
+      "items": _vm.invoiceStatus,
+      "label": "Invoice status...",
+      "single-line": "",
+      "bottom": ""
+    },
+    model: {
+      value: (_vm.invoiceFilter),
+      callback: function($$v) {
+        _vm.invoiceFilter = $$v
+      },
+      expression: "invoiceFilter"
+    }
+  })], 1) : _vm._e(), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs1": ""
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Filter Projects'
+      }),
+      expression: "{ html: 'Filter Projects' }",
+      arg: "top"
+    }],
+    staticClass: "mt-3",
+    attrs: {
+      "icon": ""
+    },
+    on: {
+      "click": _vm.filterProjects
+    }
+  }, [_c('v-icon', [_vm._v("search")])], 1)], 1)], 1) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('projects-totals', {
+    attrs: {
+      "projects": _vm.projects
+    }
+  })], 1) : _vm._e(), _vm._v(" "), _c('v-data-table', {
+    staticClass: "elevation-1 mt-2",
+    attrs: {
+      "headers": _vm.headers,
+      "items": _vm.projects,
+      "rows-per-page-items": _vm.perPage
+    },
+    scopedSlots: _vm._u([{
+      key: "items",
+      fn: function(props) {
+        return [_c('td', [_vm._v(_vm._s(props.item.id))]), _vm._v(" "), (_vm.table_state === 'admin_work' || _vm.table_state === 'admin_manage') ? _c('td', [_vm._v(_vm._s(props.item.client_company_name))]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_work' || _vm.table_state === 'user') ? _c('td', [_vm._v(_vm._s(props.item.province))]) : _vm._e(), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.location))]), _vm._v(" "), (_vm.table_state === 'admin_work') ? _c('td', [_vm._v("\n          " + _vm._s(props.item.work_type) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [(props.item.invoiced_date === null) ? _c('v-chip', {
+          staticClass: "warning white--text"
+        }, [_vm._v("\n            Not Invoiced    \n          ")]) : _vm._e(), _vm._v(" "), (props.item.invoiced_date && props.item.invoice_paid_date === null) ? _c('v-chip', {
+          staticClass: "error white--text"
+        }, [_vm._v("\n            Not Paid   \n          ")]) : _vm._e(), _vm._v(" "), (props.item.invoice_paid_date) ? _c('v-chip', {
+          staticClass: "success white--text"
+        }, [_vm._v("\n            Paid   \n          ")]) : _vm._e()], 1) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_vm._v("\n          $" + _vm._s(props.item.invoice_amount) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'user') ? _c('td', [_vm._v(_vm._s(props.item.timesheets.length))]) : _vm._e(), _vm._v(" "), _c('td', [_c('v-btn', {
+          directives: [{
+            name: "tooltip",
+            rawName: "v-tooltip:top",
+            value: ({
+              html: 'View ' + props.item.id
+            }),
+            expression: "{ html: 'View ' + props.item.id }",
+            arg: "top"
+          }],
+          staticClass: "success--text",
+          attrs: {
+            "icon": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              $event.stopPropagation();
+              _vm.viewProject(props.item.id)
+            }
+          }
+        }, [_c('v-icon', [_vm._v("subdirectory_arrow_right")])], 1)], 1)]
+      }
+    }, {
+      key: "pageText",
+      fn: function(ref) {
+        var pageStart = ref.pageStart;
+        var pageStop = ref.pageStop;
+
+        return [_vm._v("\n        From " + _vm._s(pageStart) + " to " + _vm._s(pageStop) + "\n      ")]
+      }
+    }])
+  }), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "fullscreen": "",
+      "transition": "dialog-bottom-transition",
+      "overlay": false
+    },
+    model: {
+      value: (_vm.viewProjectDialog),
+      callback: function($$v) {
+        _vm.viewProjectDialog = $$v
+      },
+      expression: "viewProjectDialog"
+    }
+  }, [_c('v-card', [_c('v-toolbar', {
+    staticClass: "primary",
+    attrs: {
+      "dark": ""
+    }
+  }, [_c('v-btn', {
+    attrs: {
+      "icon": "",
+      "dark": ""
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.viewProjectDialog = false
+      }
+    }
+  }, [_c('v-icon', [_vm._v("close")])], 1), _vm._v(" "), _c('v-toolbar-title', [_vm._v("\n              Close\n            ")]), _vm._v(" "), _c('v-spacer')], 1), _vm._v(" "), (_vm.viewProjectDialog) ? _c('project-view', {
+    attrs: {
+      "id": _vm.currentProjectId
+    }
+  }) : _vm._e()], 1)], 1)], 1)], 1) : _vm._e()], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-715eb46a", module.exports)
+  }
+}
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "xl10": "",
+      "offset-xl1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "grey lighten-5",
+    attrs: {
+      "flat": ""
+    }
+  }, [_c('v-toolbar', {
+    staticClass: "primary elevation-0",
+    attrs: {
+      "dark": "",
+      "extended": ""
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Go Back'
+      }),
+      expression: "{ html: 'Go Back' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    }
+  }, [_c('v-icon', {
+    attrs: {
+      "dark": ""
+    }
+  }, [_vm._v("arrow_back")])], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "lg10": "",
+      "offset-lg1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "card--flex-toolbar"
+  }, [_c('v-container', [_c('v-toolbar', {
+    staticClass: "white",
+    attrs: {
+      "card": "",
+      "prominent": ""
+    }
+  }, [_c('v-toolbar-title', {
+    staticClass: "display-1"
+  }, [_vm._v("\t\t\t\t         \n\t\t\t\t          \tFind & Add Projects\t\t\t\t          \t\n\t\t\t\t          ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-layout', {
+    staticClass: "mr-0",
+    staticStyle: {
+      "position": "relative"
+    },
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "width": "765",
+      "lazy": "",
+      "absolute": ""
+    },
+    model: {
+      value: (_vm.addProjectDialog),
+      callback: function($$v) {
+        _vm.addProjectDialog = $$v
+      },
+      expression: "addProjectDialog"
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Add Project'
+      }),
+      expression: "{ html: 'Add Project' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    slot: "activator"
+  }, [_c('v-icon', [_vm._v("add_circle")])], 1), _vm._v(" "), _c('v-card', [_c('v-card-title', [_c('div', {
+    staticClass: "headline grey--text"
+  }, [_vm._v("Start a project")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', [_c('p', {
+    staticClass: "subheading info--text pl-2"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t\t\t          After starting the project you will be able to add more information.        \t\t\t\n\t\t\t\t\t\t\t        \t\t")], 1)]), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs5": ""
+    }
+  }, [_c('v-select', {
+    attrs: {
+      "items": _vm.clients,
+      "label": "Client...",
+      "single-line": "",
+      "bottom": ""
+    },
+    model: {
+      value: (_vm.client_company_name_select),
+      callback: function($$v) {
+        _vm.client_company_name_select = $$v
+      },
+      expression: "client_company_name_select"
+    }
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    staticClass: "mt-4",
+    attrs: {
+      "xs1": ""
+    }
+  }, [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t      \t- OR -\n\t\t\t\t\t\t\t\t\t\t\t      ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs5": ""
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "Add a new client",
+      "disabled": _vm.disableClientCompanyInput
+    },
+    model: {
+      value: (_vm.client_company_name.val),
+      callback: function($$v) {
+        _vm.client_company_name.val = $$v
+      },
+      expression: "client_company_name.val"
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    staticClass: "red--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat"
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.addProjectDialog = false
+      }
+    }
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+    staticClass: "green--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat",
+      "loading": _vm.startingProject,
+      "disabled": _vm.startingProject
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.startProject($event)
+      }
+    }
+  }, [_vm._v("Start Project")])], 1)], 1)], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs9": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading pl-4 mt-2"
+  }, [_vm._v("\n\t\t\t\t\t          This is where you can find and filter all of the projects within the system.       \t\t\n\t\t\t\t        \t")])]), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('v-select', {
+    staticClass: "pt-0 pr-3",
+    attrs: {
+      "items": [{
+          text: 'Work View',
+          value: 'admin_work'
+        },
+        {
+          text: 'Manage View',
+          value: 'admin_manage'
+        }
+      ],
+      "label": "Table State...",
+      "single-line": "",
+      "auto": "",
+      "prepend-icon": "find_in_page",
+      "hide-details": ""
+    },
+    model: {
+      value: (_vm.tableState),
+      callback: function($$v) {
+        _vm.tableState = $$v
+      },
+      expression: "tableState"
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-4"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t          Add a new project with the plus icon in the upper right corner of this card.        \t\t\t\n\t\t\t\t        \t\t")], 1), _vm._v(" "), _c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t          You can use all of the filters at once, or simply one at a time. In addition, clicking on a heading will sort the projects accordingly.\t\t        \t\t\t\n\t\t\t\t        \t\t")], 1), _vm._v(" "), _c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t          Click on the view projects arrow in the action column to see the entire project.\t\t        \t\t\t\n\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('projects-table', {
+    staticClass: "mt-2 mb-5",
+    attrs: {
+      "table_state": _vm.tableState
+    }
+  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-2c4a7c0a", module.exports)
+  }
+}
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(96)
+}
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(98),
+  /* template */
+  __webpack_require__(99),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  "data-v-567880d8",
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\arrowassist\\resources\\assets\\js\\components\\timesheet\\Timesheets.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Timesheets.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-567880d8", Component.options)
+  } else {
+    hotAPI.reload("data-v-567880d8", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(97);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("e3c9d2d2", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-567880d8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Timesheets.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-567880d8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Timesheets.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.card--flex-toolbar[data-v-567880d8] {\n  margin-top: -64px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 98 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheets_table__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheets_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Timesheets_table__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    'timesheets-table': __WEBPACK_IMPORTED_MODULE_0__Timesheets_table___default.a
+  }
+
+});
 
 /***/ }),
 /* 99 */
@@ -52977,7 +53284,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "xs12": ""
     }
   }, [_c('timesheets-table', {
-    staticClass: "mt-2 mb-5"
+    staticClass: "mt-2 mb-5",
+    attrs: {
+      "table_state": "admin"
+    }
   })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
@@ -53078,7 +53388,7 @@ exports.push([module.i, "\n.card--flex-toolbar[data-v-4285ff0c] {\n  margin-top:
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheet__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheet__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Timesheet___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Timesheet__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store_helpers__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Timesheets_totals__ = __webpack_require__(8);

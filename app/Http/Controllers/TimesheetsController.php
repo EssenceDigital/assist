@@ -60,7 +60,7 @@ class TimesheetsController extends Controller
         ], 200);        
     } 
 
-    public function filter($from_date = false, $to_date = false, $project_id = false, $user_id = false){
+    public function filter($from_date = false, $to_date = false, $project_id = false, $user_id = false, $auth_user_only = false){
 
         // Construct where array for query
         $queryArray = [];  
@@ -78,11 +78,17 @@ class TimesheetsController extends Controller
             array_push($queryArray, ['date', '=', $from_date]);
         }
 
-        // Add user id field or not
-        if($user_id){
-            // Push array clause
-            array_push($queryArray, ['user_id', '=', $user_id]);
+        if(!$auth_user_only){
+            // Add user id field or not
+            if($user_id){
+                // Push array clause
+                array_push($queryArray, ['user_id', '=', $user_id]);
+            }            
+        } else {
+            array_push($queryArray, ['user_id', '=', Auth::id()]);
         }
+
+
 
         // Add where queries
         $query->where($queryArray);
@@ -102,6 +108,21 @@ class TimesheetsController extends Controller
             'result' => 'success',
             'payload' => $talliedTimesheets
         ], 200); 
+    }
+
+    public function authUsersTimesheets(){
+        // Find all timesheets
+        $timesheets = Timesheet
+            ::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user'])
+            ->where('user_id', '=', Auth::id())
+            ->get();
+        // Tally timesheet totals
+        $talliedTimesheets = $this->tallyTimesheets($timesheets);
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'payload' => $talliedTimesheets
+        ], 200);         
     }
 
     /**

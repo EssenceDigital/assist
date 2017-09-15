@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 use App\Project;
 use App\ProjectUser;
@@ -98,6 +99,32 @@ class ProjectsController extends Controller
    
        $projects = Project::where($queryArray)->get();  
 
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'payload' => $projects
+        ], 200);          
+    }
+
+    public function authUsersProjects(){
+        $userId = Auth::id();
+
+        // Construct query to find all projects user is a part of
+        $projects = Project::whereHas('users', function ($q) use ($userId) {
+            $q->where('user_id', $userId);
+        // Now, only select the timesheets that belongs to this user
+        })->with(['timesheets' => function($q) use ($userId)  {
+            $q->where('user_id', $userId);
+        }])->get();
+
+        // Return failed response if collection empty
+        if(! $projects){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false,
+            ], 404);
+        }   
+        
         // Return response for ajax call
         return response()->json([
             'result' => 'success',

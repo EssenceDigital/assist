@@ -9,7 +9,7 @@
 		        	v-if="!readonly"
 		        	icon 
 		        	v-tooltip:top="{ html: 'Edit Timesheet' }"
-		        	@click.native.stop="editTimesheetDialog = true"
+		        	@click.native.stop="openDialog('editTimesheet')"
 		        >
 		          <v-icon>settings</v-icon>
 		        </v-btn>	        		
@@ -30,25 +30,25 @@
         <v-card-actions v-if="!readonly">
         	<v-spacer></v-spacer>
           <v-btn flat class="orange--text"
-          	@click.native.stop="hoursDialog = true"
+          	@click.native.stop="openDialog('hours')"
           >
           	<v-icon left class="orange--text">add_circle</v-icon>
           	Hours
           </v-btn>
           <v-btn flat class="orange--text"
-          	@click.native.stop="travelDialog = true"
+          	@click.native.stop="openDialog('travel')"
           >
           	<v-icon left class="orange--text">add_circle</v-icon>
           	Travel
           </v-btn>
           <v-btn flat class="orange--text"
-          	@click.native.stop="equipmentDialog = true"
+          	@click.native.stop="openDialog('equipment')"
           >
           	<v-icon left class="orange--text">add_circle</v-icon>
           	Equipment
           </v-btn> 
           <v-btn flat class="orange--text"
-          	@click.native.stop="otherDialog = true"
+          	@click.native.stop="openDialog('other')"
           >
           	<v-icon left class="orange--text">add_circle</v-icon>
           	Other
@@ -583,8 +583,8 @@
 	  </v-layout><!-- Remove asset dialog and button -->
 
     <!-- Edit timesheet dialog -->
-		<v-layout v-if="!readonly" row justify-center style="position: relative;">
-	    <v-dialog v-model="editTimesheetDialog" width="765" lazy absolute persistent>	    
+		<v-layout  row justify-center style="position: relative;">
+	    <v-dialog v-if="!readonly" v-model="editTimesheetDialog" width="765" lazy absolute persistent>	    
 	      <v-card>
 	        <v-card-title>
 	          <div class="headline grey--text">Edit a timesheet</div>									          
@@ -643,7 +643,7 @@
 	        </v-card-text>
 	        <v-card-actions>
 	          <v-spacer></v-spacer>
-	          <v-btn outline class="red--text darken-1" flat="flat" @click.native="editTimesheetDialog = false">Cancel</v-btn>
+	          <v-btn outline class="red--text darken-1" flat="flat" @click.native="closeDialog('editTimesheet')">Cancel</v-btn>
 	          <v-btn outline class="green--text darken-1" flat="flat" 
 	          	@click.native="editTimesheet" 
 	          	:loading="timesheetSaving"
@@ -730,6 +730,8 @@
 		methods: {
 
 			closeDialog (dialog) {
+				// Emit event to partent
+				this.$emit('dialog-closed', true);				
 				// Close dialog
 				this[dialog + 'Dialog'] = false;				
 				// Clear form
@@ -750,14 +752,32 @@
 					this[dialog + 'Form'][key].val = data[key];
 				}
 				// Change the dispatch action
-				this[dialog + 'DispatchAction'] = 'updateTimesheet' + dialog.charAt(0).toUpperCase()+ dialog.slice(1);				
+				this[dialog + 'DispatchAction'] = 'updateTimesheet' + dialog.charAt(0).toUpperCase()+ dialog.slice(1);
+				// Emit event to partent
+				this.$emit('dialog-opened', true);				
 				// Toggle dialog
 				this[dialog + 'Dialog'] = true;
+			},
+
+			openDialog(dialog) {
+				// Emit event to partent
+				this.$emit('dialog-opened', true);		
+				// Toggle dialog
+				this[dialog + 'Dialog'] = true;				
+			},
+
+			closeAssetDialog(dialog) {
+				// Emit event to partent
+				this.$emit('dialog-closed', true);		
+				// Toggle dialog
+				this[dialog + 'Dialog'] = false;						
 			},
 
 			openDeleteDialog (dispatchAction, assetId) {
 				// Set the delete dispatch action
 				this.deleteDispatchAction = dispatchAction;
+				// Emit event to partent
+				this.$emit('dialog-opened', true);				
 				// Toggle dialog
 				this.deleteDialog = true;
 				// Set asset id
@@ -767,6 +787,8 @@
 			closeDeleteDialog () {
 				// Set the delete dispatch action
 				this.deleteDispatchAction = '';
+				// Emit event to partent
+				this.$emit('dialog-closed', true);				
 				// Toggle dialog
 				this.deleteDialog = false;
 				// Reset asset id
@@ -783,7 +805,9 @@
 						// Toggle dialog
 						this[formPrefix + 'Dialog'] = false;
 						// Toggle loader
-						this[formPrefix + 'Saving'] = false;	
+						this[formPrefix + 'Saving'] = false;
+						// Emit event to partent
+						this.$emit('dialog-closed', true);								
 						// Reset form
 						Helpers.resetForm(this[formPrefix + 'Form']);
 					});
@@ -801,6 +825,8 @@
 						this.timesheetSaving = false;
 						// Close dialog
 						this.editTimesheetDialog = false;
+						// Emit event to partent
+						this.$emit('dialog-closed', true);							
 					});					
 				});
 
@@ -814,6 +840,8 @@
 				this.$store.dispatch(this.deleteDispatchAction, this.assetId).then( () => {
 					// Toggle loader
 					this.deletingAsset = false;
+					// Emit event to partent
+					this.$emit('dialog-closed', true);						
 					// Toggle dialog
 					this.deleteDialog = false;
 					// Reset asset id
@@ -836,4 +864,5 @@
 		white-space: normal;
 		padding: 8px 16px 8px 16px;
 	}
+
 </style>

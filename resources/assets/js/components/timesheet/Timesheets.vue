@@ -57,6 +57,7 @@
 										<v-flex xs12>
 											<!-- Timesheets table component -->
 											<timesheets-table 
+												table_state="admin"
 												class="mt-2 mb-5"
 											></timesheets-table>
 										</v-flex>

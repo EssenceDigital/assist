@@ -25,7 +25,7 @@ class DashboardController extends Controller
 
         for($z = 0; $z < rand(1, 2); $z++){
             $assetName = $assets[rand(0, 3)];
-            echo $assetName . '<br>';
+            
         }  
     }
 

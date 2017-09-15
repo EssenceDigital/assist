@@ -5,20 +5,37 @@ import Helpers from './helpers';
 
 Vue.use(Vuex);
 
+/** 
+ * The Vuex store 
+*/
 export const store = new Vuex.Store({
+	/** 
+	 * The cache values to be centralized 
+	*/
 	state: {
+		// Used by some methods to log data to the console
 		debug: true,
-		authUser: {
-
-		},
-		currentUser: { id: 0 },
+		// The logged in user
+		authUser: {},
+		// A user who has been selected to view/edit
+		currentUser: { id: -1 },
+		// Users returned by the server
 		users: [],
+		// Projects returned by the server
 		projects: [],
-		currentProject: { id: 0 },
+		// A project who has been selected to view/edit
+		currentProject: { id: -1 },
+		// Timesheets returned by the server
 		timesheets: [],
+		// A timesheet that has been selected to view/edit
+		currentTimesheet: false,
+		// All companies found within the project table
 		clients: []
 	},
 
+	/**
+	 * Methods that directly change the state cache
+	*/
 	mutations: {
 		// Update projects
 		updateProjects (state, payload) {
@@ -70,9 +87,12 @@ export const store = new Vuex.Store({
 			return state.timesheets.unshift(payload);
 		},
 
+		updateCurrentTimesheet (state, payload) {
+			return state.currentTimesheet = payload;
+		},
+
 		// Update a timesheet
 		updateTimesheet (state, payload) {
-			console.log(payload);
 			// The id of the timesheet
 			var id = 0;
 			// Set depending on which field is the timesheet id
@@ -82,6 +102,7 @@ export const store = new Vuex.Store({
 			Helpers.findTimesheet(state.timesheets, id)
 				.then( (timesheetIndex) => {
 					state.timesheets.splice(timesheetIndex, 1, payload);
+					state.currentTimesheet = payload;
 				});
 		},
 
@@ -148,12 +169,12 @@ export const store = new Vuex.Store({
 					else url += '/' + 'any';
 			}
 			// Use api to send the request
-			return api.getAction(context, payload, url, 'updateProjects');
+			return api.getAction(context, url, 'updateProjects');
 		},
 		// Use api to retrieve a project and set it in the state
 		getProject (context, payload) {
 			// Use api to send request
-			return api.getAction(context, payload, '/projects/'+payload, 'updateCurrentProject');
+			return api.getAction(context, '/projects/'+payload, 'updateCurrentProject');
 		},
 
 		// Use api to add a new project to the db and update the current project in the state
@@ -174,7 +195,7 @@ export const store = new Vuex.Store({
 		// Use api to delete a comment and update the current project comments in the state
 		deleteProjectComment (context, payload) {
 			// Use api to send request
-			return api.deleteAction(context, payload, '/projects/delete-comment/'+payload.id, 'deleteProjectComment');
+			return api.deleteAction(context, '/projects/delete-comment/'+payload.id, 'deleteProjectComment');
 		},
 		// Use api to add a crew member to a specific project and update the current project users in the state
 		addProjectCrew (context, payload) {
@@ -182,7 +203,7 @@ export const store = new Vuex.Store({
 		},
 		// Use api to delete a crew member from a specific project and update the current project crew in the state
 		deleteProjectCrew (context, payload) {
-			return api.deleteAction(context, payload, '/projects/'+payload.project_id+'/delete-crew/'+ payload.id, 'deleteProjectCrew');
+			return api.deleteAction(context, '/projects/'+payload.project_id+'/delete-crew/'+ payload.id, 'deleteProjectCrew');
 		},
 
 		updateTimelineField (context, payload) {
@@ -190,11 +211,11 @@ export const store = new Vuex.Store({
 		},
 		// Use api to retrieve all of a users projects and set them in the state
 		getUsersProjects (context, payload) {
-			 return api.getAction(context, payload, '/users/'+payload.user_id+'/projects', 'updateProjects');
+			 return api.getAction(context, '/projects/auth-users', 'updateProjects');
 		},
 		// Use api to retrieve all of a users timesheets on a project
 		getProjectTimesheets (context, payload) {
-			return api.getAction(context, payload, '/users/'+payload.user_id+'/projects/'+payload.project_id+'/timesheets', 'updateTimesheets');
+			return api.getAction(context, '/users/'+payload.user_id+'/projects/'+payload.project_id+'/timesheets', 'updateTimesheets');
 		},
 		// Use api to retrieve all timesheets
 		getAllTimesheets (context, payload) {
@@ -213,16 +234,23 @@ export const store = new Vuex.Store({
 					else url += '/' + 0;
 				// Add user id to string
 				if(payload.user_id != '') url += '/' + payload.user_id;
+					else url += '/' + 0;
+				if(payload.auth_user_only) url += '/' + 1
 					else url += '/' + 0;					
 			}
 			// Use api to send request
-			return api.getAction(context, payload, url, 'updateTimesheets');
+			return api.getAction(context, url, 'updateTimesheets');
+		},
+
+		// Use api to retrieve all of a users timehseets and set them in the state
+		getUsersTimesheets (context, payload) {
+			 return api.getAction(context, '/timesheets/auth-users', 'updateTimesheets');
 		},
 
 		/* 
 			TIMESHEET ACTIONS
 		*/
-		
+	
 		// Use api to add a timesheet to a project
 		addTimesheet (context, payload) {
 			console.log(payload);
@@ -234,7 +262,7 @@ export const store = new Vuex.Store({
 		},
 		// Use api to delete an entire timesheet
 		deleteProjectCrew (context, payload) {
-			return api.deleteAction(context, payload, '/projects/'+payload.project_id+'/delete-crew/'+ payload.id, 'deleteProjectCrew');
+			return api.deleteAction(context, '/projects/'+payload.project_id+'/delete-crew/'+ payload.id, 'deleteProjectCrew');
 		},		
 		// Use api to add hours to a timesheet
 		addTimesheetHours (context, payload) {
@@ -274,19 +302,19 @@ export const store = new Vuex.Store({
 
 		// Use api to delete hours on a timesheet
 		deleteTimesheetHours (context, payload) {
-			return api.deleteAction(context, payload, '/timesheets/delete-hours/'+payload, 'updateTimesheet');
+			return api.deleteAction(context, '/timesheets/delete-hours/'+payload, 'updateTimesheet');
 		},		
 		// Use api to delete travel on a timesheet
 		deleteTimesheetTravel (context, payload) {
-			return api.deleteAction(context, payload, '/timesheets/delete-travel/'+payload, 'updateTimesheet');
+			return api.deleteAction(context, '/timesheets/delete-travel/'+payload, 'updateTimesheet');
 		},	
 		// Use api to delete equipment on a timesheet
 		deleteTimesheetEquipment (context, payload) {
-			return api.deleteAction(context, payload, '/timesheets/delete-equipment/'+payload, 'updateTimesheet');
+			return api.deleteAction(context, '/timesheets/delete-equipment/'+payload, 'updateTimesheet');
 		},	
 		// Use api to delete other cost on a timesheet
 		deleteTimesheetOther (context, payload) {
-			return api.deleteAction(context, payload, '/timesheets/delete-other/'+payload, 'updateTimesheet');
+			return api.deleteAction(context, '/timesheets/delete-other/'+payload, 'updateTimesheet');
 		},	
 
 		/* 
@@ -295,13 +323,13 @@ export const store = new Vuex.Store({
 
 		// Use api to retrieve all users and set them in the store
 		getUsers (context, payload) {
-			return api.getAction(context, payload, '/users', 'updateUsers');
+			return api.getAction(context, '/users', 'updateUsers');
 		},
 
 		// Use api to retrieve a user and set it in the state
 		getUser (context, payload) {
 			// Use api to send request
-			return api.getAction(context, payload, '/users/'+payload, 'updateCurrentUser');
+			return api.getAction(context, '/users/'+payload, 'updateCurrentUser');
 		},
 		// Use api to add a new user to the db
 		addUser (context, payload) {
@@ -328,7 +356,7 @@ export const store = new Vuex.Store({
 		// Use api to retrieve all the unique clients (from projects)
 		getClients (context, payload) {
 			// Use api to send request
-			return api.getAction(context, payload, '/projects/clients', 'updateClients');
+			return api.getAction(context, '/projects/clients', 'updateClients');
 		},
 
 
@@ -364,6 +392,10 @@ export const store = new Vuex.Store({
 
 		timesheets (state) {
 			return state.timesheets;
+		},
+
+		currentTimesheet (state) {
+			return state.currentTimesheet;
 		},
 
 		// Return all users

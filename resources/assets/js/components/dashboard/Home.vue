@@ -23,7 +23,7 @@
 					      	<!-- Card toolbar -->
 					        <v-toolbar card class="white" prominent>
 					          <v-toolbar-title class="display-1">				         
-					          	Dashboard &amp; Your Projects				          	
+					          	Dashboard &amp; Your Timesheets			          	
 					          </v-toolbar-title>				          				          
 					          <v-spacer></v-spacer>
 					        </v-toolbar><!-- /Card toolbar -->	
@@ -51,11 +51,11 @@
 				        <v-card-text>				 
 									<v-layout row>
 										<v-flex xs12>
-											<!-- Projects table component -->
-											<projects-table 
+											<!-- Timesheets table component -->
+											<timesheets-table 
 												:table_state="'user'"
 												class="mt-2 mb-5"
-											></projects-table>
+											></timesheets-table>
 										</v-flex>
 									</v-layout>					        	
 				        </v-card-text><!-- /Card body -->
@@ -69,11 +69,11 @@
 </template>
 
 <script>
-	import ProjectsTable from './../project/Projects-table';
+	import TimesheetsTable from './../timesheet/Timesheets-table';
 
   export default {
   	components: {
-  		'projects-table': ProjectsTable
+  		'timesheets-table': TimesheetsTable
   	}
 
   }
