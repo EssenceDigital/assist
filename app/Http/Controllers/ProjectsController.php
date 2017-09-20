@@ -56,7 +56,7 @@ class ProjectsController extends Controller
      */
     public function all()
     {
-        $projects = Project::with(['timesheets', 'timesheets.workJobs', 'timesheets.travelJobs', 'timesheets.equipmentRentals', 'timesheets.otherCosts'])->get();
+        $projects = Project::all();
 
         // Return response for ajax call
         return response()->json([
@@ -112,10 +112,7 @@ class ProjectsController extends Controller
         // Construct query to find all projects user is a part of
         $projects = Project::whereHas('users', function ($q) use ($userId) {
             $q->where('user_id', $userId);
-        // Now, only select the timesheets that belongs to this user
-        })->with(['timesheets' => function($q) use ($userId)  {
-            $q->where('user_id', $userId);
-        }])->get();
+        })->get();
 
         // Return failed response if collection empty
         if(! $projects){
@@ -141,7 +138,7 @@ class ProjectsController extends Controller
     public function single($id)
     {
         // With all foreign keys / children
-        $project = Project::with(['comments', 'comments.user', 'timeline', 'users', 'users.timesheets', 'timesheets', 'timesheets.workJobs', 'timesheets.travelJobs', 'timesheets.equipmentRentals', 'timesheets.otherCosts'])->find($id);
+        $project = Project::with(['comments', 'comments.user', 'timeline', 'users'])->find($id);
 
         // Return response for ajax call
         return response()->json([

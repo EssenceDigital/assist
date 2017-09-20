@@ -14,7 +14,9 @@ Vue.component('login', require('./Login.vue'));
 
 /** Register Vue filters */
 import DateFilter from './filters/date';
+import DateMinusYearFilter from './filters/dateMinusYear';
 Vue.filter('date', DateFilter);
+Vue.filter('dateMinusYear', DateMinusYearFilter);
 
 Vue.config.productionTip = false;
 

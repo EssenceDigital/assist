@@ -10,14 +10,6 @@ class Project extends Model
     /**
      * Get the comments for the project.
      */
-    public function timesheets()
-    {
-        return $this->hasMany('App\Timesheet');
-    }
-
-    /**
-     * Get the comments for the project.
-     */
     public function comments()
     {
         return $this->hasMany('App\ProjectComment');
@@ -37,6 +29,14 @@ class Project extends Model
     public function users()
     {
         return $this->belongsToMany('App\User');
+    }
+
+    /**
+     * Get the work items assigned to the project.
+     */
+    public function workItems()
+    {
+        return $this->hasMany('App\WorkItem', 'work_item_id');
     }
 
 }

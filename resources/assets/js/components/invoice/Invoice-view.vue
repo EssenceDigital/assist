@@ -1,0 +1,590 @@
+<template>
+	<v-container fluid>
+		<v-layout row class="mt-5">
+			<v-flex xs12 xl10 offset-xl1>
+				<!-- Top most card -->
+				<v-card class="grey lighten-5" flat>
+					<!-- Red top toolbar -->
+				  <v-toolbar dark class="primary elevation-0" extended>
+				  	<!-- Back button -->
+				    <v-btn 
+				    	icon 
+				    	v-tooltip:top="{ html: 'Go Back' }"
+				    	@click="$router.go(-1)"
+				    >
+				    	<v-icon dark>arrow_back</v-icon>
+				    </v-btn>
+				  </v-toolbar><!-- / Red top toolbar -->
+				  <!-- Main card container -->
+				  <v-layout row>
+				    <v-flex xs12 lg10 offset-lg1>
+				      <v-card class="card--flex-toolbar">
+				      	<v-container>
+					      	<!-- Card toolbar -->
+					        <v-toolbar card class="white" prominent>
+					          <v-toolbar-title class="display-1">				         
+					          	Invoice 
+					          	<small><span class="grey--text">
+					          		({{ currentInvoice.from_date | date }} - {{ currentInvoice.to_date | date }})
+					          	</span></small>		          	
+					          </v-toolbar-title>				          				          
+					          <v-spacer></v-spacer>
+					          <v-btn flat class="success--text" v-tooltip:top="{ html: 'Add Work Item' }"
+					          	@click.native.stop="workItemDialog = true"
+					          >
+					          	<v-icon left class="success--text">add_circle</v-icon>
+					          	Work Item
+					          </v-btn>
+					        </v-toolbar><!-- /Card toolbar -->	
+					      </v-container>			        
+					      <v-container>
+					      	<v-layout row>
+				      			<p class="subheading pl-4">						          
+ 											This is where you can add your hours and costs to the invoice.  		
+					        	</p>
+					      	</v-layout>
+					      </v-container>
+				        <v-divider></v-divider>
+				        <!-- Container for helpful tips -->
+				        <v-container class="mt-4">				        	
+					        <v-layout row>
+					        	<v-flex xs12>	
+			        				<p class="subheading info--text pl-4">
+												<v-icon left class="info--text">help_outline</v-icon>
+							          Use the toolbar below to adjust the invoice      			
+					        		</p>					        						        							        							        				        		
+					        	</v-flex>				        	
+					        </v-layout>		        	
+				        </v-container><!-- / Container for helpful tips -->	
+				        <!-- Card body -->
+				        <v-card-text>		
+
+					        <!-- Work items -->
+					        <v-container
+					        	v-for="item in currentInvoice.work_items" :key="item.id"
+					        	class="mt-3"
+					        >
+					        	<!-- Edit button container -->
+					        	<v-layout row class="mb-2">
+					        		<v-spacer></v-spacer>
+					        		<v-flex xs1 class="text-xs-right">
+						       			<!-- Edit button -->
+								        <v-btn 
+								        	class="mr-0"
+								        	icon 
+								        	v-tooltip:top="{ html: 'Edit Item' }"
+								        	@click.native.stop="editDialog(item.id)"
+								        >
+								          <v-icon right>settings</v-icon>
+								        </v-btn>					        		
+					        		</v-flex>
+					        		<v-flex xs1 class="text-xs-right">					        						        		
+								        <!-- Delete button -->
+								        <v-btn 
+								        	icon 
+								        	class="mr-0 red--text" 
+								        	v-tooltip:top="{ html: 'Remove' }"
+								        	@click.native.stop="openDeleteDialog('deleteWorkItem', item.id)"
+								        >
+								          <v-icon>close</v-icon>
+								        </v-btn>					        			
+					        		</v-flex>								        
+					        	</v-layout>
+					        	<!-- Work Item -->
+						        <v-layout row>
+						        	<v-flex xs3>
+						        		<p>
+						        			{{ item.from_date | dateMinusYear }} - {{ item.to_date | dateMinusYear }}
+						        		</p>
+						        	</v-flex>
+						        	<v-spacer></v-spacer>
+						        	<v-flex xs3>
+						        		<p class="mb-1">
+						        			<strong>{{ item.project.client_company_name }}</strong>
+						        		</p>
+						        		<p>
+						        			{{ item.desc }}
+						        		</p>
+						        	</v-flex>
+						        	<v-spacer></v-spacer>
+						        	<v-flex xs1>
+						        		<p>
+						        			{{ item.hours }} Hrs
+						        		</p>
+						        		
+						        	</v-flex>
+						        	<v-spacer></v-spacer>
+						        	<v-flex xs1 class="text-xs-right">
+							        	<p>
+							        		${{ (parseFloat(item.hours) * parseFloat(item.hourly_rate)).toFixed(2) }}
+							        	</p>						        		
+						        	</v-flex>
+						        </v-layout><!-- / Work Item -->
+						      </v-container><!-- / Work items -->
+
+						      <v-container>
+						        <v-divider class="mb-2"></v-divider>		
+						        <v-layout row>
+						        	<v-flex xs2>
+						        		<span class="title">SUBTOTAL:</span>
+						        	</v-flex>
+						        	<v-spacer></v-spacer>
+						        	<v-flex xs2 class="text-xs-right">
+						        		<span class="title">${{ workItemsTotal }}</span>
+						        	</v-flex>
+						        </v-layout>
+						        <v-divider class="mt-2"></v-divider>		        	
+					        </v-container>
+
+
+				        </v-card-text><!-- /Card body -->
+				      </v-card>
+				    </v-flex>
+				  </v-layout><!-- / Main card container -->
+				</v-card><!-- / Top most card -->
+			</v-flex>
+		</v-layout>
+
+		<!--
+ 		 * Invoice asset DIALOGS
+		 -->
+
+    <!-- Work item dialog -->
+		<v-layout row justify-center>
+		  <v-dialog v-model="workItemDialog" fullscreen transition="dialog-bottom-transition" :overlay=false>
+		    <v-card>
+		      <v-toolbar dark class="primary">
+		        <v-btn icon @click.native="closeDialog" dark>
+		          <v-icon>close</v-icon>
+		        </v-btn>
+		        <v-toolbar-title>
+		        	Work Item
+		        </v-toolbar-title>
+		        <v-spacer></v-spacer>
+	          <v-toolbar-items>
+	            <v-btn dark flat @click.native="saveWorkItem" :loading="workItemSaving" :disabled="workItemSaving">Save</v-btn>
+	          </v-toolbar-items>		        
+		      </v-toolbar>
+		 			<v-card-text>
+
+		 				
+		 				<v-layout row>
+		 					<!-- Work item container -->
+		 					<v-flex xs6>
+				 				<!-- Work item form card container -->
+				 				<v-card>
+					        <v-card-title>
+					          <div class="headline">Basic Details</div>									          
+					        </v-card-title>
+					        <v-divider></v-divider>	
+									<v-card-text>
+					        	<!-- Dates row -->
+						        <v-layout row class="mt-3">
+							        <v-flex xs5>
+							          <v-menu
+							            lazy
+							            :close-on-content-click="false"
+							            v-model="fromDateMenu"
+							            transition="scale-transition"
+							            offset-y
+							            full-width
+							            :nudge-left="40"
+							            max-width="290px"
+							          >
+							            <v-text-field
+							              slot="activator"
+							              v-model="workItemForm.from_date.val"
+							              label="From Date..."
+							              prepend-icon="event"
+							              readonly
+							              :error="workItemForm.from_date.err"
+							            ></v-text-field>
+							            <v-date-picker v-model="workItemForm.from_date.val" no-title scrollable actions>
+							              <template scope="{ save, cancel }">
+							                <v-card-actions>
+							                  <v-btn flat primary @click.native="cancel()">Cancel</v-btn>
+							                  <v-btn flat primary @click.native="save()">Save</v-btn>
+							                </v-card-actions>
+							              </template>
+							            </v-date-picker>
+							          </v-menu>               
+							        </v-flex>  
+							        <v-spacer></v-spacer>       
+							        <v-flex xs5>
+							          <v-menu
+							            lazy
+							            :close-on-content-click="false"
+							            v-model="toDateMenu"
+							            transition="scale-transition"
+							            offset-y
+							            full-width
+							            :nudge-left="40"
+							            max-width="290px"
+							          >
+							            <v-text-field
+							              slot="activator"
+							              v-model="workItemForm.to_date.val"
+							              label="To Date..."
+							              prepend-icon="event"
+							              readonly
+							              :error="workItemForm.to_date.err"
+							            ></v-text-field>
+							            <v-date-picker v-model="workItemForm.to_date.val" no-title scrollable actions>
+							              <template scope="{ save, cancel }">
+							                <v-card-actions>
+							                  <v-btn flat primary @click.native="cancel()">Cancel</v-btn>
+							                  <v-btn flat primary @click.native="save()">Save</v-btn>
+							                </v-card-actions>
+							              </template>
+							            </v-date-picker>
+							          </v-menu>               
+							        </v-flex>		        	
+						        </v-layout><!-- / Dates row -->
+
+						        <!-- Project row -->
+						        <v-layout row class="mt-3">
+							        <v-flex xs12>
+							          <v-select
+							            v-model="workItemForm.project_id.val"
+							            :items="projectsSelectList"
+							            label="Projects..."
+							            single-line
+							            bottom
+							            :error="workItemForm.project_id.err"
+							          ></v-select>        
+							        </v-flex>		        	
+						        </v-layout><!-- / Project row -->
+
+						        <!-- Desc row -->
+						        <v-layout row class="mt-3">
+						        	<v-flex xs12>
+						        		<v-text-field
+						        			v-model="workItemForm.desc.val"
+						        			label="Very brief description of work..."
+						        			multi-line
+						        			:error="workItemForm.desc.err"
+						        		></v-text-field>
+						        	</v-flex>
+						        </v-layout><!-- / Desc row -->
+
+						        <!-- Hours row  -->
+						        <v-layout row class="mt-3">
+						        	<v-flex xs5>
+						            <v-text-field
+						            	v-model="workItemForm.hours.val"
+						              label="Total Hours"
+						              suffix="Hrs"
+						              :error="workItemForm.hours.err"
+						            ></v-text-field>
+						        	</v-flex>	
+						        	<v-spacer></v-spacer>
+								      <v-flex xs5>
+						            <v-text-field
+						            	v-model="workItemForm.hourly_rate.val"
+						              label="Hourly Rate"
+						              prefix="$"
+						              :error="workItemForm.hourly_rate.err"
+						            ></v-text-field>												      	
+								      </v-flex>			        		        	
+						        </v-layout><!-- /Hours row  -->
+						        	
+						        <!-- Per diem row  -->
+						        <v-layout row class="mt-3">
+						        	<v-flex xs5>
+						            <v-text-field
+						            	v-model="workItemForm.per_diem.val"
+						              label="Total Per Diem"
+						              prefix="$"
+						              :error="workItemForm.per_diem.err"
+						            ></v-text-field>
+						        	</v-flex>	
+						        	<v-spacer></v-spacer>
+								      <v-flex xs5>
+						            <v-text-field
+						            	v-model="workItemForm.per_diem_desc.val"
+						              label="Per Diem Description"
+						              :error="workItemForm.per_diem_desc.err"
+						            ></v-text-field>												      	
+								      </v-flex>			        		        	
+						        </v-layout><!-- /Per diem row  -->										
+									</v-card-text>														       
+				 				</v-card>	 						
+		 					</v-flex><!--/ Work item form card container -->	
+
+		 					<v-spacer></v-spacer>
+
+		 					<!-- Travel item container -->
+		 					<v-flex xs5>
+				 				<!-- Travel item form card container -->
+				 				<v-card>
+					        <v-card-title>
+					          <div class="headline">Travel Mileage</div>									          
+					        </v-card-title>
+					        <v-divider></v-divider>	
+									<v-card-text>
+						        <!-- Travel mileage row  -->
+						        <v-layout row class="mt-3">
+						        	<v-flex xs5>
+						            <v-text-field
+						            	v-model="workItemForm.travel_mileage.val"
+						              label="Travel Mileage"
+						              suffix="km"
+						              :error="workItemForm.travel_mileage.err"
+						            ></v-text-field>
+						        	</v-flex>	
+						        	<v-spacer></v-spacer>
+								      <v-flex xs5>
+						            <v-text-field
+						            	v-model="workItemForm.mileage_rate.val"
+						              label="Mileage Rate"
+						              prefix="$"
+						              :error="workItemForm.mileage_rate.err"
+						            ></v-text-field>												      	
+								      </v-flex>			        		        	
+						        </v-layout><!-- /Travel mileage row  -->									
+									</v-card-text>					       
+				 				</v-card><!--/ Travel item form card container -->		 	
+
+				 				<!-- Other cost form card container -->
+				 				<v-card class="mt-3">
+					        <v-card-title>
+					          <div class="headline">Lodging</div>									          
+					        </v-card-title>
+					        <v-divider></v-divider>	
+									<v-card-text>
+
+						        <!-- Lodging row  -->
+						        <v-layout row class="mt-3">
+						        	<v-flex xs5>
+						            <v-text-field
+						            	v-model="workItemForm.lodging_desc.val"
+						              label="Description"
+						              :error="workItemForm.lodging_desc.err"
+						            ></v-text-field>
+						        	</v-flex>	
+						        	<v-spacer></v-spacer>
+								      <v-flex xs5>
+						            <v-text-field
+						            	v-model="workItemForm.lodging_cost.val"
+						              label="Cost"
+						              prefix="$"
+						              :error="workItemForm.lodging_cost.err"
+						            ></v-text-field>												      	
+								      </v-flex>			        		        	
+						        </v-layout><!-- /Lodging row  -->										
+									</v-card-text>					       
+				 				</v-card><!--/ Other cost form card container -->		 				 									
+		 					</v-flex><!--/ Other cost container -->
+
+		 				</v-layout> 
+
+
+		 			</v-card-text>
+		    </v-card>
+		  </v-dialog>
+		</v-layout>    
+
+    <!-- Remove asset dialog and button -->
+		<v-layout row justify-center 
+			class="mr-0" 
+			style="position: relative;"
+		>
+	    <v-dialog v-model="deleteDialog" width="365" lazy absolute persistent>	    
+	      <v-card>
+	        <v-card-title>
+	          <div class="headline grey--text">Delete this?</div>									          
+	        </v-card-title>
+	        <v-divider></v-divider>
+	        <v-card-text>
+	        	Are you sure you want to delete this?
+	        </v-card-text>
+	        <v-card-actions>
+	          <v-spacer></v-spacer>
+	          <!-- Cancel delete button-->
+	          <v-btn outline 
+	          	class="red--text darken-1" 
+	          	flat="flat" 
+	          	@click.native.stop="closeDeleteDialog">
+	          		Maybe not
+	          </v-btn>
+	          <!-- Confirm delete button -->
+	          <v-btn outline 
+	          class="green--text darken-1" 
+	          flat="flat" 
+	          :loading="deletingAsset" 
+	          :disable="deletingAsset" 
+	          @click.native.stop="deleteAsset">
+	          	Do it
+	          </v-btn>
+	        </v-card-actions>
+	      </v-card>
+	    </v-dialog>
+	  </v-layout><!-- Remove asset dialog and button -->	  
+
+	</v-container>	
+</template>
+
+<script>
+	import Helpers from './../../store/helpers';
+
+	export default {
+		props: ['id'],
+
+		computed: {
+			currentInvoice () {
+				return this.$store.getters.currentInvoice;
+			},
+
+			projectsSelectList () {
+				return this.$store.getters.projectsSelectList;
+			},
+
+			workItemsTotal () {
+				if(this.currentInvoice){
+					// Cache items
+					var workItems = this.currentInvoice.work_items,
+							total = 0;
+					// Itterate and calculate
+					workItems.forEach((item) => {
+						total += (parseFloat(item.hours) * parseFloat(item.hourly_rate));
+					});
+					return total.toFixed(2);					
+				}
+			}
+		},
+
+		data () {
+			return {
+				// For the delete dialog
+				deleteDialog: false,
+				deleteDispatchAction: '',
+				deletingAsset: false,
+				assetId: '',
+				// The work item form and dialog
+        fromDateMenu: false,
+        toDateMenu: false,				
+				workItemDialog: false,
+				workItemSaving: false,
+				workItemDispatchAction: 'addWorkItem',
+				workItemForm: {
+					id: {val: '', err: false, errMsg: '', dflt: ''},
+					project_id: {val: '', err: false, errMsg: '', dflt: ''},
+					invoice_id: {val: this.id, err: false, errMsg: '', dflt: this.id},	
+					from_date: {val: '', err: false, errMsg: '', dflt: ''},
+					to_date: {val: '', err: false, errMsg: '', dflt: ''},					
+					desc: {val: '', err: false, errMsg: '', dflt: ''},
+					hours: {val: '', err: false, errMsg: '', dflt: ''},
+					hourly_rate: {val: '', err: false, errMsg: '', dflt: ''},
+					per_diem: {val: '', err: false, errMsg: '', dflt: ''},
+					per_diem_desc: {val: '', err: false, errMsg: '', dflt: ''},
+					travel_mileage: {val: '', err: false, errMsg: '', dflt: ''},
+					mileage_rate: {val: '', err: false, errMsg: '', dflt: ''},
+					lodging_desc: {val: '', err: false, errMsg: '', dflt: ''},
+					lodging_cost: {val: '', err: false, errMsg: '', dflt: ''}
+				}
+			}
+		},
+
+		methods: {
+
+			editDialog (work_item_id) {
+				// Find the requested work item
+				var data = this.currentInvoice.work_items.find(elem => elem.id === work_item_id);
+				// Populate form
+				for(var key in this.workItemForm) {
+					this.workItemForm[key].val = data[key];
+				}		
+				// Toggle dialog
+				this.workItemDialog = true;
+				// Change action
+				this.workItemDispatchAction = 'updateWorkItem';
+			},
+
+			closeDialog () {
+				// Reset the form
+				Helpers.resetForm(this.workItemForm);
+				// Toggle dialog
+				this.workItemDialog = false;
+				// Revert action to default
+				this.workItemDispatchAction = 'addWorkItem';				
+			},
+
+			openDeleteDialog (dispatchAction, assetId) {
+				// Set the delete dispatch action
+				this.deleteDispatchAction = dispatchAction;			
+				// Toggle dialog
+				this.deleteDialog = true;
+				// Set asset id
+				this.assetId = assetId;
+				console.log(this.assetId);
+			},
+
+			closeDeleteDialog () {
+				// Set the delete dispatch action
+				this.deleteDispatchAction = '';			
+				// Toggle dialog
+				this.deleteDialog = false;
+				// Reset asset id
+				this.assetId = '';				
+			},
+
+			saveWorkItem (work_item_id) {
+				// Toggle loader
+				this.workItemSaving = true;
+				// Use helper to create post object then dispatch event to add hours
+				Helpers.populatePostData(this.workItemForm)
+					.then((data) => {
+						// Dispatch event
+						this.$store.dispatch(this.workItemDispatchAction, data)
+							.then((response) => {
+								// Toggle dialog
+								this.workItemDialog = false;
+								// Toggle loader
+								this.workItemSaving = false;								
+								// Reset form
+								Helpers.resetForm(this.workItemForm);
+							})
+							.catch((errors) => {
+								Helpers.populateFormErrors(this.workItemForm, errors.response.data).
+									then(() => {
+										// Toggle loader
+										this.workItemSaving = false;							
+									});							
+							});
+					});
+			},	
+
+			deleteAsset () {
+				// Toggle loader
+				this.deletingAsset = true;
+				// Dispatch event
+				this.$store.dispatch(this.deleteDispatchAction, this.assetId)
+					.then(() => {
+						// Toggle loader
+						this.deletingAsset = false;						
+						// Toggle dialog
+						this.deleteDialog = false;
+						// Reset asset id
+						this.assetId = '';
+					});
+			}							
+
+		},
+
+		created () {
+			// If no current invoice then get the requested invoice
+			if(!this.currentInvoice){
+				// Dispatch event to retrieve invoice
+				this.$store.dispatch('getInvoice', this.id);
+			}
+
+			this.$store.dispatch('getUsersProjects');
+		}
+	}
+</script>
+
+<style scoped>
+  .card--flex-toolbar {
+    margin-top: -64px;
+  }
+</style>

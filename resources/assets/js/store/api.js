@@ -70,13 +70,13 @@ export default {
 			// Use method above to send POST request
 			this.post(url, payload)
 				// On success
-				.then( (response) => {
+				.then((response) => {
 					// For debug
 					if(context.state.debug) console.log(response);
 					// Commit mutation to store					
 					if(mutation) context.commit(mutation, response);
 					// Resolve promise
-					resolve();
+					resolve(response);
 				})
 				.catch((error) => reject(error));				
 		});		

@@ -75,63 +75,23 @@ class Controller extends BaseController
         }
     }
 
-    protected function tallyTimesheets($timesheets){
-        $talliedTimesheets = [];
+    protected function storeInvoiceAsset(Request $request, $model, $validationFields) {
+        // Validate and populate the request
+        $asset = $this->validateAndPopulate($request, $model, $validationFields);
+        // Attempt to store model
+        $result = $asset->save();
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }  
 
-        forEach($timesheets as $timesheet){
-            // Push tallied timesheet to array
-            array_push($talliedTimesheets, $this->tallyTimesheet($timesheet));
-       }
-
-       return $talliedTimesheets;
+        return $asset;      
     }
 
-    protected function tallyTimesheet($timesheet){
-        // Total hours on timesheet
-        $totalHours = 0;
-        // Calculate total hours
-        forEach($timesheet->workJobs as $job){
-            $totalHours += $job->hours_worked;
-        }
-        // Add total hours to timesheet
-        $timesheet->total_hours = number_format($totalHours, 2, '.', '');
-        // Total hour pay
-        $totalHourPay = $totalHours * $timesheet->user->hourly_rate_one;
-        // Add total pay to timesheet (rounding up and showing 2 decimal places)
-        $timesheet->total_hours_pay = number_format(round($totalHourPay, 2, PHP_ROUND_HALF_UP), 2, '.', '');
-        // Total travel distance on timesheet
-        $totalTravel = 0;
-        forEach($timesheet->travelJobs as $job){
-            $totalTravel += $job->travel_distance;
-        }
-        // Add total travel to timesheet
-        $timesheet->total_travel_distance = round($totalTravel, 0, PHP_ROUND_HALF_UP);
-        // Total equipment rentals on timesheet
-        $totalEquipment = 0;
-        forEach($timesheet->equipmentRentals as $rental){
-            $totalEquipment += $rental->rental_fee;
-        }
-        // Add total equipment rentals to timesheet (rounding up and showing 2 decimal places)
-        $timesheet->total_equipment_cost = number_format(round($totalEquipment, 2, PHP_ROUND_HALF_UP), 2, '.', '');
-        // Total other costs on timesheet
-        $totalOther = 0;
-        forEach($timesheet->otherCosts as $cost){
-            $totalOther += $cost->cost;
-        }
-        // Add total other costs to timesheet (rounding up and showing 2 decimal places)
-        $timesheet->total_other_costs = number_format(round($totalOther, 2, PHP_ROUND_HALF_UP), 2, '.', '');
-        // Tally total of everything on timesheet
-        $timesheetTotal = number_format(round($totalHourPay, 2, PHP_ROUND_HALF_UP), 2, '.', '') +
-            number_format(round($totalEquipment, 2, PHP_ROUND_HALF_UP), 2, '.', '') +
-            number_format(round($totalOther, 2, PHP_ROUND_HALF_UP), 2, '.', '') +
-            $timesheet->per_diem;
-        // Add timesheet total to timesheet
-        $timesheet->timesheet_total = number_format(round($timesheetTotal, 2, PHP_ROUND_HALF_UP), 2, '.', '');
-
-        return $timesheet;
-    }
-
-    protected function storeTimesheetAsset(Request $request, $model, $validationFields) {
+    protected function updateInvoiceAsset(Request $request, $model, $validationFields) {
         // Validate and populate the request
         $asset = $this->validateAndPopulate($request, $model, $validationFields);
         // Attempt to store model
@@ -143,37 +103,11 @@ class Controller extends BaseController
                 'result' => false
             ], 404);
         }
-        // Get parent timesheet
-        $timesheet = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user'])->find($request->timesheet_id);      
-        // Tally timesheet
-        $talliedTimesheet = $this->tallyTimesheet($timesheet);  
 
-        return $talliedTimesheet;      
+        return $asset;        
     }
 
-    protected function updateTimesheetAsset(Request $request, $model, $validationFields) {
-        // Validate and populate the request
-        $asset = $this->validateAndPopulate($request, $model, $validationFields);
-        // Attempt to store model
-        $result = $asset->save();
-        // Verify success on store
-        if(! $result){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }
-        // Get timesheet
-        $timesheet = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user'])->find($asset->timesheet_id);
-        // Tally timesheet
-        $talliedTimesheet = $this->tallyTimesheet($timesheet);
-
-        return $talliedTimesheet;        
-    }
-
-    protected function deleteTimesheetAsset($model) {
-        // Cache timesheet id
-        $timesheetId = $model->timesheet_id;        
+    protected function deleteInvoiceAsset($model) {      
         // Attempt to remove 
         $result = $model->delete();
         // Verify success on store
@@ -182,13 +116,9 @@ class Controller extends BaseController
             return response()->json([
                 'result' => false
             ], 404);
-        }
-        // Get timesheet
-        $timesheet = Timesheet::with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts', 'user'])->find($timesheetId);
-        // Tally timesheet
-        $talliedTimesheet = $this->tallyTimesheet($timesheet);    
+        }   
 
-        return $talliedTimesheet;    
+        return;    
     }
 
 

@@ -94,9 +94,8 @@
 			return{
 				navDrawer: false,
 				menuItems: [
-					{ icon: 'dashboard', title: 'Dashboard', link: '/' },
+					{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' },
 					{ icon: 'assignment', title: 'Projects', link: '/projects' },
-					{ icon: 'today', title: 'Timesheets', link: '/timesheets' },
 					{ icon: 'group', title: 'Users', link: '/users' }
 				]				
 			}

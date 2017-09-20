@@ -25,10 +25,10 @@ export const store = new Vuex.Store({
 		projects: [],
 		// A project who has been selected to view/edit
 		currentProject: { id: -1 },
-		// Timesheets returned by the server
-		timesheets: [],
-		// A timesheet that has been selected to view/edit
-		currentTimesheet: false,
+		// Invoices returned by the server
+		invoices: [],		
+		// An invoice that has been selected to view/edit
+		currentInvoice: false,
 		// All companies found within the project table
 		clients: []
 	},
@@ -77,33 +77,32 @@ export const store = new Vuex.Store({
 			return state.currentProject.timeline = payload;
 		},
 
-		// Update the timesheets
-		updateTimesheets (state, payload) {
-			return state.timesheets = payload;
+		updateInvoices (state, payload) {
+			return state.invoices = payload;
 		},
 
-		// Add a timesheet
-		addTimesheet (state, payload) {
-			return state.timesheets.unshift(payload);
+		updateCurrentInvoice (state, payload) {
+			return state.currentInvoice = payload;
 		},
 
-		updateCurrentTimesheet (state, payload) {
-			return state.currentTimesheet = payload;
+		addWorkItem (state, payload) {
+			return state.currentInvoice.work_items.push(payload);
 		},
 
-		// Update a timesheet
-		updateTimesheet (state, payload) {
-			// The id of the timesheet
-			var id = 0;
-			// Set depending on which field is the timesheet id
-			if(payload.timesheet_id) id = payload.timesheet_id
-					else id = payload.id
-			// Find timesheet to update
-			Helpers.findTimesheet(state.timesheets, id)
-				.then( (timesheetIndex) => {
-					state.timesheets.splice(timesheetIndex, 1, payload);
-					state.currentTimesheet = payload;
-				});
+		updateWorkItem (state, payload) {
+			// Find item in current store cache, then find the index of that item
+			var item = state.currentInvoice.work_items.find(elem => elem.id === payload.id),
+					itemIndex = state.currentInvoice.work_items.indexOf(item);
+			// Replace item in store cache
+			return state.currentInvoice.work_items[itemIndex] = payload;
+		},
+
+		deleteWorkItem (state, payload) {
+			// Find item in current store cache, then find the index of that item
+			var item = state.currentInvoice.work_items.find(elem => elem.id === payload),
+					itemIndex = state.currentInvoice.work_items.indexOf(item);
+			// Remove item in store cache
+			return state.currentInvoice.work_items.splice(itemIndex, 1);		
 		},
 
 		// Update users
@@ -213,10 +212,7 @@ export const store = new Vuex.Store({
 		getUsersProjects (context, payload) {
 			 return api.getAction(context, '/projects/auth-users', 'updateProjects');
 		},
-		// Use api to retrieve all of a users timesheets on a project
-		getProjectTimesheets (context, payload) {
-			return api.getAction(context, '/users/'+payload.user_id+'/projects/'+payload.project_id+'/timesheets', 'updateTimesheets');
-		},
+
 		// Use api to retrieve all timesheets
 		getAllTimesheets (context, payload) {
 			var url = '/timesheets';
@@ -242,80 +238,35 @@ export const store = new Vuex.Store({
 			return api.getAction(context, url, 'updateTimesheets');
 		},
 
-		// Use api to retrieve all of a users timehseets and set them in the state
-		getUsersTimesheets (context, payload) {
-			 return api.getAction(context, '/timesheets/auth-users', 'updateTimesheets');
+		// Use api to retrieve all of a users invoices and set them in the state
+		getUsersInvoices (context, payload) {
+			 return api.getAction(context, '/invoices/auth-users', 'updateInvoices');
 		},
 
 		/* 
-			TIMESHEET ACTIONS
+			INVOICE ACTIONS
 		*/
 	
-		// Use api to add a timesheet to a project
-		addTimesheet (context, payload) {
-			console.log(payload);
-			return api.postAction(context, payload, '/timesheets/add', 'addTimesheet');
+		// Use api to add an invoice
+		addInvoice (context, payload) {
+			return api.postAction(context, payload, '/invoices/add', 'updateCurrentInvoice');
 		},
-		// Use api to update a timesheet on a project
-		updateTimesheet (context, payload) {
-			return api.postAction(context, payload, '/timesheets/update', 'updateTimesheet');
+
+		getInvoice (context, payload) {
+			return api.getAction(context, '/invoices/'+payload, 'updateCurrentInvoice');
 		},
-		// Use api to delete an entire timesheet
-		deleteProjectCrew (context, payload) {
-			return api.deleteAction(context, '/projects/'+payload.project_id+'/delete-crew/'+ payload.id, 'deleteProjectCrew');
-		},		
 		// Use api to add hours to a timesheet
-		addTimesheetHours (context, payload) {
-			return api.postAction(context, payload, '/timesheets/add-hours', 'updateTimesheet');
-		},		
-		// Use api to add travel to a timesheet
-		addTimesheetTravel (context, payload) {
-			return api.postAction(context, payload, '/timesheets/add-travel', 'updateTimesheet');
+		addWorkItem (context, payload) {
+			return api.postAction(context, payload, '/invoices/add-item', 'addWorkItem');
 		},
-		
-		// Use api to add equipment to a timesheet
-		addTimesheetEquipment (context, payload) {
-			return api.postAction(context, payload, '/timesheets/add-equipment', 'updateTimesheet');
-		},
-		
-		// Use api to add other costs to a timesheet
-		addTimesheetOther (context, payload) {
-			return api.postAction(context, payload, '/timesheets/add-other', 'updateTimesheet');
-		},
-
-		// Use api to update hours on a timesheet
-		updateTimesheetHours (context, payload) {
-			return api.postAction(context, payload, '/timesheets/update-hours', 'updateTimesheet');
-		},			
-		// Use api to update travel on a timesheet
-		updateTimesheetTravel (context, payload) {
-			return api.postAction(context, payload, '/timesheets/update-travel', 'updateTimesheet');
-		},
-		// Use api to update equipment on a timesheet
-		updateTimesheetEquipment (context, payload) {
-			return api.postAction(context, payload, '/timesheets/update-equipment', 'updateTimesheet');
-		},		
-		// Use api to update other cost on a timesheet
-		updateTimesheetOther (context, payload) {
-			return api.postAction(context, payload, '/timesheets/update-other', 'updateTimesheet');
+		// Use api to add hours to a timesheet
+		updateWorkItem (context, payload) {
+			return api.postAction(context, payload, '/invoices/edit-item', 'updateWorkItem');
 		},	
-
-		// Use api to delete hours on a timesheet
-		deleteTimesheetHours (context, payload) {
-			return api.deleteAction(context, '/timesheets/delete-hours/'+payload, 'updateTimesheet');
-		},		
-		// Use api to delete travel on a timesheet
-		deleteTimesheetTravel (context, payload) {
-			return api.deleteAction(context, '/timesheets/delete-travel/'+payload, 'updateTimesheet');
-		},	
-		// Use api to delete equipment on a timesheet
-		deleteTimesheetEquipment (context, payload) {
-			return api.deleteAction(context, '/timesheets/delete-equipment/'+payload, 'updateTimesheet');
-		},	
-		// Use api to delete other cost on a timesheet
-		deleteTimesheetOther (context, payload) {
-			return api.deleteAction(context, '/timesheets/delete-other/'+payload, 'updateTimesheet');
-		},	
+		// Use api to delete an entire timesheet
+		deleteWorkItem (context, payload) {
+			return api.deleteAction(context, '/invoices/delete-item/'+ payload, 'deleteWorkItem');
+		},				
 
 		/* 
 			USER ACTIONS
@@ -390,12 +341,12 @@ export const store = new Vuex.Store({
       return projectsSelect;	
 		},
 
-		timesheets (state) {
-			return state.timesheets;
+		invoices (state) {
+			return state.invoices;
 		},
 
-		currentTimesheet (state) {
-			return state.currentTimesheet;
+		currentInvoice (state) {
+			return state.currentInvoice;
 		},
 
 		// Return all users

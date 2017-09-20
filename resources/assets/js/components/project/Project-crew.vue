@@ -39,7 +39,6 @@
         >    
         <template slot="items" scope="props">
           <td class="text-xs-center">{{ props.item.first + ' ' + props.item.last }}</td>
-          <td class="text-xs-center">{{ props.item.timesheets.length }}</td>
           <td class="text-xs-center">
           	<!-- Remove crew button -->
             <v-btn 
@@ -169,7 +168,6 @@
 				// For the data table
 	      headers: [
 	        { text: 'Name', value: 'name', align: 'center' },
-	        { text: 'Timesheets on Project', value: 'timesheets', align: 'center' },
 	        { text: 'Actions', value: '', align: 'center' }
 	      ]				
 			}

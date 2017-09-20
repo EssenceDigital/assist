@@ -5,8 +5,7 @@ import VueRouter from 'vue-router';
 import Home from './components/dashboard/Home';
 import Projects from './components/project/Projects';
 import ProjectView from './components/project/Project-view'
-import Timesheets from './components/timesheet/Timesheets';
-import ProjectTimesheets from './components/timesheet/Project-timesheets';
+import InvoiceView from './components/invoice/Invoice-view';
 import Users from './components/user/Users';
 import UserView from './components/user/User-view';
 import UserSettings from './components/user/User-settings';
@@ -17,11 +16,10 @@ Vue.use(VueRouter);
 export default new VueRouter({
 	routes: [
 		{
-			path: '/',
+			path: '/dashboard',
 			name: 'Home',
 			component: Home
 		},
-
 		{
 			path: '/projects',
 			name: 'Projects',
@@ -34,15 +32,10 @@ export default new VueRouter({
 			props: true
 		},	
 		{
-			path: '/projects/:id/timesheets',
-			name: 'ProjectTimesheets',
-			component: ProjectTimesheets,
+			path: '/invoices/:id/view',
+			name: 'InvoiceView',
+			component: InvoiceView,
 			props: true
-		},	
-		{
-			path: '/timesheets',
-			name: 'Timesheets',
-			component: Timesheets
 		},
 		{
 			path: '/users',

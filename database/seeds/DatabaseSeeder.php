@@ -133,66 +133,8 @@ class DatabaseSeeder extends Seeder
                 $user = User::find($q);  
                 $project->users()->save($user);
             }
-            
-            
-            for($t = 0; $t < rand(1, 10); $t++){
-                // Insert some fake timesheets
-                $timesheet = new Timesheet;
-                $timesheet->project_id = $project->id;
-                $timesheet->user_id = $usersArray[rand(1, sizeof($usersArray) -1)];
-                $timesheet->date = $baseDate->modify('+ 15 days')->format('Y-m-d');
-                $timesheet->per_diem = rand(75, 200);
-                $timesheet->save(); 
 
-                $jobTypes = ['Fieldwork', 'Documentation', 'Report Writting'];
-
-                // Add some work hours
-                for($z = 0; $z < rand(1, 2); $z++){
-                    $job = new WorkJob;
-                    $job->job_type = $jobTypes[rand(0,2)];
-                    $job->hours_worked = rand(2, 8);
-                    $job->timesheet_id = $timesheet->id;
-                    $job->save();
-                }
-
-                $addEquipmentRental = rand(0,1);
-                if($addEquipmentRental){
-                    $rental = new EquipmentRental;
-                    $rental->equipment_type = $faker->text(10);
-                    $rental->rental_fee = rand(50, 250);
-                    $rental->comment = $faker->text(25);
-                    $rental->timesheet_id = $timesheet->id;
-                    $rental->save();
-                } 
-
-                $addTravel = rand(0,1);
-                if($addTravel){
-                    $travel = new TravelJob;
-                    $travel->travel_distance = rand(50, 375);
-                    $travel->travel_time = rand(1, 5);
-                    $travel->comment = $faker->text(25);
-                    $travel->timesheet_id = $timesheet->id;
-                    $travel->save();
-                }
-
-                $addOtherCost = rand(0,1);
-                if($addOtherCost){
-                    $other = new OtherCost;
-                    $other->cost_name = $faker->text(20);
-                    $other->cost = rand(200, 650);
-                    $other->comment = $faker->text(28);
-                    $other->timesheet_id = $timesheet->id;
-                    $other->save(); 
-                }
-
-            }
-
-         
         }
-
-
-
-
                               
     }
 }

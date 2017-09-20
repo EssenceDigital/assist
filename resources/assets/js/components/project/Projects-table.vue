@@ -5,12 +5,6 @@
 */
 <template>
   <v-container fluid>
-    <!-- Loading container -->
-    <v-layout v-if="loading" row class="mt-5">
-      <v-spacer></v-spacer>
-      <v-progress-linear v-bind:indeterminate="true"></v-progress-linear>        
-    </v-layout>
-
     <!-- Container for table and filter -->
     <v-container v-if="!loading" fluid >
       <!-- Row for project filter -->

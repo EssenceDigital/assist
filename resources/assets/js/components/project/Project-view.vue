@@ -49,16 +49,6 @@
 				        </v-container><!-- / Container for helpful tips -->	
 				        <!-- Card body -->
 				        <v-card-text v-if="!loading">				 
-				        	<v-layout row>
-				        		<v-flex xs12>
-				        			<v-container>
-		
-												<timesheets-totals :timesheets="$store.getters.currentProject.timesheets"></timesheets-totals>
-				        				
-				        			</v-container>
-				        			
-				        		</v-flex>
-				        	</v-layout>
 									<v-layout row>
 										<v-flex xs12>
 											<!-- Client details -->
@@ -444,7 +434,6 @@
 	import ProjectNotes from './Project-notes.vue';
 	import ProjectCrew from './Project-crew.vue';
 	import ProjectTimeline from './Project-timeline.vue';
-	import TimesheetTotals from './../timesheet/Timesheets-totals.vue';
 
 	export default {
 		props: ['id'],
@@ -453,8 +442,7 @@
 			'field-input-toggle': FieldInputToggle,
 			'project-notes': ProjectNotes,
 			'project-crew': ProjectCrew,
-			'project-timeline': ProjectTimeline,
-			'timesheets-totals': TimesheetTotals
+			'project-timeline': ProjectTimeline
 		},
 
 		data () {
