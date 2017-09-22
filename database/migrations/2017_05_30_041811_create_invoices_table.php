@@ -21,6 +21,8 @@ class CreateInvoicesTable extends Migration
             // Fields                     
             $table->date('from_date');
             $table->date('to_date');
+            // Paid flag
+            $table->date('paid_date')->nullable();
             $table->timestamps();
         });
     }

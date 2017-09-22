@@ -3,6 +3,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 /** Load Project components needed by routes */
 import Home from './components/dashboard/Home';
+import YourInvoices from './components/invoice/Your-invoices';
+import CrewInvoices from './components/invoice/Crew-invoices';
 import Projects from './components/project/Projects';
 import ProjectView from './components/project/Project-view'
 import InvoiceView from './components/invoice/Invoice-view';
@@ -19,6 +21,32 @@ export default new VueRouter({
 			path: '/dashboard',
 			name: 'Home',
 			component: Home
+		},
+		{
+			path: '/your-invoices',
+			name: 'YourInvoices',
+			component: YourInvoices
+		},
+		{
+			path: '/your-invoices/:id/view',
+			name: 'YourInvoiceView',
+			component: InvoiceView,
+			props: (route) => (
+				{ id: route.params.id, invoice_state: 'full' }
+			)
+		},		
+		{
+			path: '/crew-invoices',
+			name: 'CrewInvoices',
+			component: CrewInvoices
+		},
+		{
+			path: '/crew-invoices/:id/view',
+			name: 'CrewInvoiceView',
+			component: InvoiceView,
+			props: (route) => (
+				{ id: route.params.id, invoice_state: 'readonly' }
+			)
 		},
 		{
 			path: '/projects',

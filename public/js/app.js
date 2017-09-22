@@ -45406,6 +45406,19 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		},
 
 
+		// Use api to retrieve all invocies
+		getAllInvoices: function getAllInvoices(context, payload) {
+			var url = '/invoices';
+			// Create payload 
+			if (payload) {
+				// Add from date to string
+				if (payload.user_id != '') url += '/user/' + payload.user_id;else url += '/' + 0;
+			}
+			// Use api to send request		
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, url, 'updateInvoices');
+		},
+
+
 		// Use api to retrieve all of a users invoices and set them in the state
 		getUsersInvoices: function getUsersInvoices(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/invoices/auth-users', 'updateInvoices');
@@ -46635,22 +46648,28 @@ var index_esm = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_dashboard_Home__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_dashboard_Home___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_dashboard_Home__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_project_Projects__ = __webpack_require__(57);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_project_Projects___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_project_Projects__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_project_Project_view__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_project_Project_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_project_Project_view__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_invoice_Invoice_view__ = __webpack_require__(87);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_invoice_Invoice_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_invoice_Invoice_view__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_user_Users__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_user_Users___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_user_Users__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_user_User_view__ = __webpack_require__(102);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_user_User_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_user_User_view__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_user_User_settings__ = __webpack_require__(107);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_user_User_settings___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_user_User_settings__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_invoice_Your_invoices__ = __webpack_require__(135);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_invoice_Your_invoices___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_invoice_Your_invoices__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_invoice_Crew_invoices__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_invoice_Crew_invoices___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_invoice_Crew_invoices__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_project_Projects__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_project_Projects___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_project_Projects__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_project_Project_view__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_project_Project_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_project_Project_view__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_invoice_Invoice_view__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_invoice_Invoice_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_invoice_Invoice_view__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_user_Users__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_user_Users___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_user_Users__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_user_User_view__ = __webpack_require__(102);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_user_User_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__components_user_User_view__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_user_User_settings__ = __webpack_require__(107);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_user_User_settings___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__components_user_User_settings__);
 /** Load Vue based dependencies */
 
 
 /** Load Project components needed by routes */
+
+
 
 
 
@@ -46668,32 +46687,54 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 		name: 'Home',
 		component: __WEBPACK_IMPORTED_MODULE_2__components_dashboard_Home___default.a
 	}, {
+		path: '/your-invoices',
+		name: 'YourInvoices',
+		component: __WEBPACK_IMPORTED_MODULE_3__components_invoice_Your_invoices___default.a
+	}, {
+		path: '/your-invoices/:id/view',
+		name: 'YourInvoiceView',
+		component: __WEBPACK_IMPORTED_MODULE_7__components_invoice_Invoice_view___default.a,
+		props: function props(route) {
+			return { id: route.params.id, invoice_state: 'full' };
+		}
+	}, {
+		path: '/crew-invoices',
+		name: 'CrewInvoices',
+		component: __WEBPACK_IMPORTED_MODULE_4__components_invoice_Crew_invoices___default.a
+	}, {
+		path: '/crew-invoices/:id/view',
+		name: 'CrewInvoiceView',
+		component: __WEBPACK_IMPORTED_MODULE_7__components_invoice_Invoice_view___default.a,
+		props: function props(route) {
+			return { id: route.params.id, invoice_state: 'readonly' };
+		}
+	}, {
 		path: '/projects',
 		name: 'Projects',
-		component: __WEBPACK_IMPORTED_MODULE_3__components_project_Projects___default.a
+		component: __WEBPACK_IMPORTED_MODULE_5__components_project_Projects___default.a
 	}, {
 		path: '/projects/:id/view',
 		name: 'ProjectView',
-		component: __WEBPACK_IMPORTED_MODULE_4__components_project_Project_view___default.a,
+		component: __WEBPACK_IMPORTED_MODULE_6__components_project_Project_view___default.a,
 		props: true
 	}, {
 		path: '/invoices/:id/view',
 		name: 'InvoiceView',
-		component: __WEBPACK_IMPORTED_MODULE_5__components_invoice_Invoice_view___default.a,
+		component: __WEBPACK_IMPORTED_MODULE_7__components_invoice_Invoice_view___default.a,
 		props: true
 	}, {
 		path: '/users',
 		name: 'Users',
-		component: __WEBPACK_IMPORTED_MODULE_6__components_user_Users___default.a
+		component: __WEBPACK_IMPORTED_MODULE_8__components_user_Users___default.a
 	}, {
 		path: '/users/:id/view',
 		name: 'UserView',
-		component: __WEBPACK_IMPORTED_MODULE_7__components_user_User_view___default.a,
+		component: __WEBPACK_IMPORTED_MODULE_9__components_user_User_view___default.a,
 		props: true
 	}, {
 		path: '/user-settings',
 		name: 'UserProfile',
-		component: __WEBPACK_IMPORTED_MODULE_8__components_user_User_settings___default.a
+		component: __WEBPACK_IMPORTED_MODULE_10__components_user_User_settings___default.a
 	}]
 }));
 
@@ -49332,107 +49373,6 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__invoice_Invoices_table__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__invoice_Invoices_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__invoice_Invoices_table__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -49503,57 +49443,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    'invoices-table': __WEBPACK_IMPORTED_MODULE_1__invoice_Invoices_table___default.a
-  },
-
-  data: function data() {
-    return {
-      // For invoice dialog and loading
-      addInvoiceDialog: false,
-      startingInvoice: false,
-      // For the date menus
-      fromDateMenu: false,
-      toDateMenu: false,
-      // The start invoice form  			
-      form: {
-        from_date: { val: '', err: false, errMsg: '', dflt: '' },
-        to_date: { val: '', err: false, errMsg: '', dflt: '' }
-      }
-    };
-  },
-
-
-  methods: {
-    startInvoice: function startInvoice() {
-      var _this = this;
-
-      // Toggle loader
-      this.startingInvoice = true;
-      // Dispatch event to store
-      this.$store.dispatch('addInvoice', {
-        from_date: this.form.from_date.val,
-        to_date: this.form.to_date.val
-      }).then(function (response) {
-        // Toggle loader
-        _this.startingInvoice = false;
-        _this.addInvoiceDialog = false;
-        // Forward view
-        _this.$router.push('/invoices/' + response.id + '/view');
-      }).catch(function (errors) {
-        __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].populateFormErrors(_this.form, errors.response.data).then(function () {
-          // Toggle loader
-          _this.startingInvoice = false;
-        });
-      });
-    }
-  }
-
-});
+/* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
 /* 51 */
@@ -49681,6 +49571,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -49695,7 +49610,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       loading: false,
       // For data table pagination   
       perPage: [15, 30, 45, { text: "All", value: -1 }],
-      headers: [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'From Date', value: 'from_date', align: 'left' }, { text: 'To Date', value: 'to_date', align: 'left' }, { text: 'Actions', value: '', align: 'left' }]
+      // For the invoice filter
+      userFilter: ''
     };
   },
 
@@ -49704,18 +49620,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     // Watch for invoices in state to update
     invoices: function invoices() {
       return this.$store.getters.invoices;
+    },
+    usersSelectList: function usersSelectList() {
+      return this.$store.getters.usersSelectList;
+    },
+    headers: function headers() {
+      if (this.table_state === 'admin') {
+        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'User', value: 'user', align: 'left' }, { text: 'From Date', value: 'from_date', align: 'left' }, { text: 'To Date', value: 'to_date', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+      }
+      if (this.table_state === 'user') {
+        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'From Date', value: 'from_date', align: 'left' }, { text: 'To Date', value: 'to_date', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+      }
+
+      return headers;
     }
   },
 
   methods: {
     viewInvoice: function viewInvoice(id) {
+      // User state forward
+      if (this.table_state === 'user') this.$router.push('/your-invoices/' + id + '/view');
       // Admin state forward
-      if (this.table_state === 'user') this.$router.push('/invoices/' + id + '/view');
+      if (this.table_state === 'admin') this.$router.push('/crew-invoices/' + id + '/view');
+    },
+    filterInvoices: function filterInvoices() {
+      var _this = this;
+
+      // Toggle loader
+      this.loading = true;
+      // Dispatch action to find projects
+      this.$store.dispatch('getAllInvoices', {
+        user_id: this.userFilter
+      }).then(function () {
+        // Toggle loader
+        _this.loading = false;
+      });
     }
   },
 
   created: function created() {
-    var _this = this;
+    var _this2 = this;
 
     // Toggle loader
     this.loading = true;
@@ -49726,13 +49670,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     if (this.table_state === 'user') {
       dispatchAction = 'getUsersInvoices';
     } else if (this.table_state === 'admin') {
-      dispatchAction = 'getInvoices';
+      dispatchAction = 'getAllInvoices';
     }
 
     // Tell store to load projects
     this.$store.dispatch(dispatchAction, payload).then(function () {
-      // Toggle loader
-      _this.loading = false;
+      if (dispatchAction === 'getAllInvoices') {
+        _this2.$store.dispatch('getUsers').then(function () {
+          // Toggle loader
+          _this2.loading = false;
+        });
+      } else {
+        // Toggle loader
+        _this2.loading = false;
+      }
     });
   }
 });
@@ -49746,8 +49697,52 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "fluid": ""
     }
-  }, [_c('v-data-table', {
-    staticClass: "elevation-1 mt-2",
+  }, [(_vm.table_state === 'admin') ? _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    staticClass: "ml-2",
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('v-select', {
+    attrs: {
+      "items": _vm.usersSelectList,
+      "label": "User...",
+      "single-line": "",
+      "bottom": ""
+    },
+    model: {
+      value: (_vm.userFilter),
+      callback: function($$v) {
+        _vm.userFilter = $$v
+      },
+      expression: "userFilter"
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs1": ""
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Filter Invoices'
+      }),
+      expression: "{ html: 'Filter Invoices' }",
+      arg: "top"
+    }],
+    staticClass: "mt-3",
+    attrs: {
+      "icon": ""
+    },
+    on: {
+      "click": _vm.filterInvoices
+    }
+  }, [_c('v-icon', [_vm._v("search")])], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('v-data-table', {
+    staticClass: "elevation-1 mt-3",
     attrs: {
       "headers": _vm.headers,
       "items": _vm.invoices,
@@ -49757,7 +49752,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     scopedSlots: _vm._u([{
       key: "items",
       fn: function(props) {
-        return [_c('td', [_vm._v(_vm._s(props.item.id))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("date")(props.item.from_date)))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("date")(props.item.to_date)))]), _vm._v(" "), _c('td', [_c('v-btn', {
+        return [_c('td', [_vm._v(_vm._s(props.item.id))]), _vm._v(" "), (_vm.table_state === 'admin') ? _c('td', [_vm._v(_vm._s(props.item.user.first))]) : _vm._e(), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("date")(props.item.from_date)))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("date")(props.item.to_date)))]), _vm._v(" "), _c('td', [_c('v-btn', {
           directives: [{
             name: "tooltip",
             rawName: "v-tooltip:top",
@@ -49871,259 +49866,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('v-toolbar-title', {
     staticClass: "display-1"
-  }, [_vm._v("\t\t\t\t         \n\t\t\t\t\t          \tDashboard & Your Invoicing\t\t\t          \t\n\t\t\t\t\t          ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-layout', {
-    staticClass: "mr-0",
-    staticStyle: {
-      "position": "relative"
-    },
-    attrs: {
-      "row": "",
-      "justify-center": ""
-    }
-  }, [_c('v-dialog', {
-    attrs: {
-      "width": "765",
-      "lazy": "",
-      "absolute": ""
-    },
-    model: {
-      value: (_vm.addInvoiceDialog),
-      callback: function($$v) {
-        _vm.addInvoiceDialog = $$v
-      },
-      expression: "addInvoiceDialog"
-    }
-  }, [_c('v-btn', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:top",
-      value: ({
-        html: 'Add Invoice'
-      }),
-      expression: "{ html: 'Add Invoice' }",
-      arg: "top"
-    }],
-    staticClass: "success--text",
-    attrs: {
-      "slot": "activator",
-      "flat": ""
-    },
-    slot: "activator"
-  }, [_c('v-icon', {
-    staticClass: "success--text",
-    attrs: {
-      "left": ""
-    }
-  }, [_vm._v("add_circle")]), _vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\t\tInvoice\n\t\t\t\t\t\t\t\t\t\t\t\t")], 1), _vm._v(" "), _c('v-card', [_c('v-card-title', [_c('div', {
-    staticClass: "headline grey--text"
-  }, [_vm._v("Start an invoice")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', [_c('p', {
-    staticClass: "subheading info--text pl-2"
-  }, [_c('v-icon', {
-    staticClass: "info--text",
-    attrs: {
-      "left": ""
-    }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t\t\t\t          After starting the invoice you will be able to add your hours and other costs.        \t\t\t\n\t\t\t\t\t\t\t\t        \t\t")], 1)]), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs5": ""
-    }
-  }, [_c('v-menu', {
-    attrs: {
-      "lazy": "",
-      "close-on-content-click": false,
-      "transition": "scale-transition",
-      "offset-y": "",
-      "full-width": "",
-      "nudge-left": 40,
-      "max-width": "290px"
-    },
-    model: {
-      value: (_vm.fromDateMenu),
-      callback: function($$v) {
-        _vm.fromDateMenu = $$v
-      },
-      expression: "fromDateMenu"
-    }
-  }, [_c('v-text-field', {
-    attrs: {
-      "slot": "activator",
-      "label": "From Date...",
-      "prepend-icon": "event",
-      "readonly": "",
-      "error": _vm.form.from_date.err
-    },
-    slot: "activator",
-    model: {
-      value: (_vm.form.from_date.val),
-      callback: function($$v) {
-        _vm.form.from_date.val = $$v
-      },
-      expression: "form.from_date.val"
-    }
-  }), _vm._v(" "), _c('v-date-picker', {
-    attrs: {
-      "no-title": "",
-      "scrollable": "",
-      "actions": ""
-    },
-    scopedSlots: _vm._u([{
-      key: "default",
-      fn: function(ref) {
-        var save = ref.save;
-        var cancel = ref.cancel;
-
-        return [_c('v-card-actions', [_c('v-btn', {
-          attrs: {
-            "flat": "",
-            "primary": ""
-          },
-          nativeOn: {
-            "click": function($event) {
-              cancel()
-            }
-          }
-        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
-          attrs: {
-            "flat": "",
-            "primary": ""
-          },
-          nativeOn: {
-            "click": function($event) {
-              save()
-            }
-          }
-        }, [_vm._v("Save")])], 1)]
-      }
-    }]),
-    model: {
-      value: (_vm.form.from_date.val),
-      callback: function($$v) {
-        _vm.form.from_date.val = $$v
-      },
-      expression: "form.from_date.val"
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs5": ""
-    }
-  }, [_c('v-menu', {
-    attrs: {
-      "lazy": "",
-      "close-on-content-click": false,
-      "transition": "scale-transition",
-      "offset-y": "",
-      "full-width": "",
-      "nudge-left": 40,
-      "max-width": "290px"
-    },
-    model: {
-      value: (_vm.toDateMenu),
-      callback: function($$v) {
-        _vm.toDateMenu = $$v
-      },
-      expression: "toDateMenu"
-    }
-  }, [_c('v-text-field', {
-    attrs: {
-      "slot": "activator",
-      "label": "To Date...",
-      "prepend-icon": "event",
-      "readonly": "",
-      "error": _vm.form.to_date.err
-    },
-    slot: "activator",
-    model: {
-      value: (_vm.form.to_date.val),
-      callback: function($$v) {
-        _vm.form.to_date.val = $$v
-      },
-      expression: "form.to_date.val"
-    }
-  }), _vm._v(" "), _c('v-date-picker', {
-    attrs: {
-      "no-title": "",
-      "scrollable": "",
-      "actions": ""
-    },
-    scopedSlots: _vm._u([{
-      key: "default",
-      fn: function(ref) {
-        var save = ref.save;
-        var cancel = ref.cancel;
-
-        return [_c('v-card-actions', [_c('v-btn', {
-          attrs: {
-            "flat": "",
-            "primary": ""
-          },
-          nativeOn: {
-            "click": function($event) {
-              cancel()
-            }
-          }
-        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
-          attrs: {
-            "flat": "",
-            "primary": ""
-          },
-          nativeOn: {
-            "click": function($event) {
-              save()
-            }
-          }
-        }, [_vm._v("Save")])], 1)]
-      }
-    }]),
-    model: {
-      value: (_vm.form.to_date.val),
-      callback: function($$v) {
-        _vm.form.to_date.val = $$v
-      },
-      expression: "form.to_date.val"
-    }
-  })], 1)], 1)], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
-    staticClass: "red--text darken-1",
-    attrs: {
-      "outline": "",
-      "flat": "flat"
-    },
-    nativeOn: {
-      "click": function($event) {
-        _vm.addInvoiceDialog = false
-      }
-    }
-  }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
-    staticClass: "green--text darken-1",
-    attrs: {
-      "outline": "",
-      "flat": "flat",
-      "loading": _vm.startingInvoice,
-      "disabled": _vm.startingInvoice
-    },
-    nativeOn: {
-      "click": function($event) {
-        _vm.startInvoice($event)
-      }
-    }
-  }, [_vm._v("Start Invoice")])], 1)], 1)], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
+  }, [_vm._v("\t\t\t\t         \n\t\t\t\t\t          \tCentral Dashboard\t\t\t          \t\n\t\t\t\t\t          ")]), _vm._v(" "), _c('v-spacer')], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
     attrs: {
       "row": ""
     }
   }, [_c('p', {
     staticClass: "subheading pl-4"
-  }, [_vm._v("\t\t\t\t\t\t          \n \t\t\t\t\t\t\t\t\t\t\tThis is where you can create invoices for the work you've done.   \t\t\n\t\t\t\t\t        \t")])])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
+  }, [_vm._v("\t\t\t\t\t\t          \n \t\t\t\t\t\t\t\t\t\t\tWelcome to your Arrow Archaeology dashboard.   \t\t\n\t\t\t\t\t        \t")])])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
     staticClass: "mt-4"
   }, [_c('v-layout', {
     attrs: {
@@ -50140,7 +49889,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "left": ""
     }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t          Use the view button on each project row to view your timesheets for that project or add new ones.       \t\t\t\n\t\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t          Use the top menu to navigate the application.      \t\t\t\n\t\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -50148,11 +49897,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "xs12": ""
     }
-  }, [_c('invoices-table', {
-    attrs: {
-      "table_state": 'user'
-    }
-  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
+  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -55256,11 +55001,129 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	props: ['id'],
+	props: ['id', 'invoice_state'],
 
 	computed: {
 		currentInvoice: function currentInvoice() {
@@ -55269,7 +55132,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		projectsSelectList: function projectsSelectList() {
 			return this.$store.getters.projectsSelectList;
 		},
-		workItemsTotal: function workItemsTotal() {
+		workHoursTotal: function workHoursTotal() {
 			if (this.currentInvoice) {
 				// Cache items
 				var workItems = this.currentInvoice.work_items,
@@ -55280,11 +55143,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				});
 				return total.toFixed(2);
 			}
+		},
+		extraCostsTotal: function extraCostsTotal() {
+			if (this.currentInvoice) {
+				// Cache items
+				var workItems = this.currentInvoice.work_items,
+				    total = 0;
+				// Itterate and calculate
+				workItems.forEach(function (item) {
+					total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate);
+					total += parseFloat(item.per_diem);
+					if (item.lodging_cost) total += parseFloat(item.lodging_cost);
+				});
+				return total.toFixed(2);
+			}
+		},
+		invoiceTotal: function invoiceTotal() {
+			return (parseFloat(this.workHoursTotal) + parseFloat(this.extraCostsTotal)).toFixed(2);
 		}
 	},
 
 	data: function data() {
 		return {
+			// Loading
+			loading: false,
 			// For the delete dialog
 			deleteDialog: false,
 			deleteDispatchAction: '',
@@ -55397,13 +55279,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	},
 
 	created: function created() {
-		// If no current invoice then get the requested invoice
-		if (!this.currentInvoice) {
-			// Dispatch event to retrieve invoice
-			this.$store.dispatch('getInvoice', this.id);
-		}
+		var _this3 = this;
 
-		this.$store.dispatch('getUsersProjects');
+		// Toggle loader
+		this.loading = true;
+		// Dispatch event to retrieve invoice
+		this.$store.dispatch('getInvoice', this.id).then(function () {
+			_this3.$store.dispatch('getUsersProjects').then(function () {
+				// Toggle loader
+				_this3.loading = false;
+			});
+		});
 	}
 });
 
@@ -55482,7 +55368,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "display-1"
   }, [_vm._v("\t\t\t\t         \n\t\t\t\t\t          \tInvoice \n\t\t\t\t\t          \t"), _c('small', [_c('span', {
     staticClass: "grey--text"
-  }, [_vm._v("\n\t\t\t\t\t          \t\t(" + _vm._s(_vm._f("date")(_vm.currentInvoice.from_date)) + " - " + _vm._s(_vm._f("date")(_vm.currentInvoice.to_date)) + ")\n\t\t\t\t\t          \t")])])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-btn', {
+  }, [_vm._v("\n\t\t\t\t\t          \t\t(" + _vm._s(_vm._f("date")(_vm.currentInvoice.from_date)) + " - " + _vm._s(_vm._f("date")(_vm.currentInvoice.to_date)) + ")\n\t\t\t\t\t          \t")])])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), (_vm.invoice_state != 'readonly') ? _c('v-btn', {
     directives: [{
       name: "tooltip",
       rawName: "v-tooltip:top",
@@ -55507,7 +55393,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "left": ""
     }
-  }, [_vm._v("add_circle")]), _vm._v("\n\t\t\t\t\t          \tWork Item\n\t\t\t\t\t          ")], 1)], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
+  }, [_vm._v("add_circle")]), _vm._v("\n\t\t\t\t\t          \tWork Item\n\t\t\t\t\t          ")], 1) : _vm._e()], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -55530,11 +55416,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "left": ""
     }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t          Use the toolbar below to adjust the invoice      \t\t\t\n\t\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', [_vm._l((_vm.currentInvoice.work_items), function(item) {
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t          Use the toolbar below to adjust the invoice      \t\t\t\n\t\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), (!_vm.loading) ? _c('v-card-text', [_vm._l((_vm.currentInvoice.work_items), function(item) {
     return _c('v-container', {
       key: item.id,
       staticClass: "mt-3"
-    }, [_c('v-layout', {
+    }, [(_vm.invoice_state != 'readonly') ? _c('v-layout', {
       staticClass: "mb-2",
       attrs: {
         "row": ""
@@ -55593,17 +55479,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.openDeleteDialog('deleteWorkItem', item.id)
         }
       }
-    }, [_c('v-icon', [_vm._v("close")])], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+    }, [_c('v-icon', [_vm._v("close")])], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
       attrs: {
         "row": ""
       }
     }, [_c('v-flex', {
       attrs: {
-        "xs3": ""
+        "xs2": ""
       }
     }, [_c('p', [_vm._v("\n\t\t\t\t\t\t        \t\t\t" + _vm._s(_vm._f("dateMinusYear")(item.from_date)) + " - " + _vm._s(_vm._f("dateMinusYear")(item.to_date)) + "\n\t\t\t\t\t\t        \t\t")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
       attrs: {
-        "xs3": ""
+        "xs4": ""
       }
     }, [_c('p', {
       staticClass: "mb-1"
@@ -55636,9 +55522,153 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "title"
-  }, [_vm._v("$" + _vm._s(_vm.workItemsTotal))])])], 1), _vm._v(" "), _c('v-divider', {
+  }, [_vm._v("$" + _vm._s(_vm.workHoursTotal))])])], 1), _vm._v(" "), _c('v-divider', {
     staticClass: "mt-2"
-  })], 1)], 2)], 1)], 1)], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+  })], 1), _vm._v(" "), _vm._l((_vm.currentInvoice.work_items), function(item) {
+    return _c('v-container', {
+      key: item.id,
+      staticClass: "mt-3"
+    }, [(_vm.invoice_state != 'readonly') ? _c('v-layout', {
+      staticClass: "mb-2",
+      attrs: {
+        "row": ""
+      }
+    }, [_c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      staticClass: "text-xs-right",
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('v-btn', {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: ({
+          html: 'Edit Item'
+        }),
+        expression: "{ html: 'Edit Item' }",
+        arg: "top"
+      }],
+      staticClass: "mr-0",
+      attrs: {
+        "icon": ""
+      },
+      nativeOn: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.editDialog(item.id)
+        }
+      }
+    }, [_c('v-icon', {
+      attrs: {
+        "right": ""
+      }
+    }, [_vm._v("settings")])], 1)], 1), _vm._v(" "), _c('v-flex', {
+      staticClass: "text-xs-right",
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('v-btn', {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:top",
+        value: ({
+          html: 'Remove'
+        }),
+        expression: "{ html: 'Remove' }",
+        arg: "top"
+      }],
+      staticClass: "mr-0 red--text",
+      attrs: {
+        "icon": ""
+      },
+      nativeOn: {
+        "click": function($event) {
+          $event.stopPropagation();
+          _vm.openDeleteDialog('deleteWorkItem', item.id)
+        }
+      }
+    }, [_c('v-icon', [_vm._v("close")])], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
+      attrs: {
+        "row": ""
+      }
+    }, [_c('v-flex', {
+      attrs: {
+        "xs2": ""
+      }
+    }, [_c('p', [_vm._v("\n\t\t\t\t\t\t        \t\t\t" + _vm._s(_vm._f("dateMinusYear")(item.from_date)) + " - " + _vm._s(_vm._f("dateMinusYear")(item.to_date)) + "\n\t\t\t\t\t\t        \t\t")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs4": ""
+      }
+    }, [_c('p', {
+      staticClass: "mb-1"
+    }, [_c('strong', [_vm._v("Mileage:")])]), _vm._v(" "), _c('p', {
+      staticClass: "mb-1"
+    }, [_c('strong', [_vm._v("Per Diem:")]), _vm._v(" " + _vm._s(item.per_diem_desc) + "\n\t\t\t\t\t\t        \t\t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', [_c('strong', [_vm._v("Lodging:")]), _vm._v(" " + _vm._s(item.lodging_desc) + "\n\t\t\t\t\t\t        \t\t")]) : _vm._e()]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('p', [_vm._v("\n\t\t\t\t\t\t        \t\t\t" + _vm._s(item.travel_mileage) + " kms\n\t\t\t\t\t\t        \t\t")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      staticClass: "text-xs-right",
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('p', {
+      staticClass: "mb-1"
+    }, [_vm._v("\n\t\t\t\t\t\t\t        \t\t$" + _vm._s((parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate)).toFixed(2)) + "\n\t\t\t\t\t\t\t        \t")]), _vm._v(" "), _c('p', {
+      staticClass: "mb-1"
+    }, [_vm._v("\n\t\t\t\t\t\t\t        \t\t$" + _vm._s(item.per_diem) + "\n\t\t\t\t\t\t\t        \t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', [_vm._v("\n\t\t\t\t\t\t\t        \t\t$" + _vm._s(item.lodging_cost) + "\n\t\t\t\t\t\t\t        \t")]) : _vm._e()])], 1)], 1)
+  }), _vm._v(" "), _c('v-container', [_c('v-divider', {
+    staticClass: "mb-2"
+  }), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "title"
+  }, [_vm._v("SUBTOTAL:")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    staticClass: "text-xs-right",
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "title"
+  }, [_vm._v("$" + _vm._s(_vm.extraCostsTotal))])])], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-2"
+  })], 1), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-3"
+  }, [_c('v-divider', {
+    staticClass: "mb-2 black"
+  }), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "title"
+  }, [_vm._v("TOTAL:")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    staticClass: "text-xs-right",
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "headline"
+  }, [_vm._v("$" + _vm._s(_vm.invoiceTotal))])])], 1), _vm._v(" "), _c('v-layout', {
+    staticClass: "mt-3",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('p', [_c('strong', [_vm._v("Cheque payable to:")]), _vm._v(" " + _vm._s(_vm.$store.getters.user.company) + "\n\t\t\t\t\t        \t\t\t")])])], 1)], 1)], 2) : _vm._e()], 1)], 1)], 1)], 1)], 1)], 1), _vm._v(" "), (_vm.invoice_state != 'readonly') ? _c('v-layout', {
     attrs: {
       "row": "",
       "justify-center": ""
@@ -56066,7 +56096,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "workItemForm.lodging_cost.val"
     }
-  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-layout', {
+  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1) : _vm._e(), _vm._v(" "), (_vm.invoice_state != 'readonly') ? _c('v-layout', {
     staticClass: "mr-0",
     staticStyle: {
       "position": "relative"
@@ -56117,7 +56147,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.deleteAsset($event)
       }
     }
-  }, [_vm._v("\n\t          \tDo it\n\t          ")])], 1)], 1)], 1)], 1)], 1)
+  }, [_vm._v("\n\t          \tDo it\n\t          ")])], 1)], 1)], 1)], 1) : _vm._e()], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -58545,10 +58575,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+
+	computed: {
+		authUser: function authUser() {
+			return this.$store.getters.user;
+		},
+		menuItems: function menuItems() {
+			if (this.authUser.permissions === 'admin') {
+				var menuItems = [{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' }, { icon: 'receipt', title: 'Your Invoices', link: '/your-invoices' }, { icon: 'receipt', title: 'Crew Invoices', link: '/crew-invoices' }, { icon: 'assignment', title: 'Projects', link: '/projects' }, { icon: 'group', title: 'Users', link: '/users' }];
+			}
+
+			if (this.authUser.permissions === 'user') {
+				var menuItems = [{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' }, { icon: 'receipt', title: 'Your Invoices', link: '/your-invoices' }];
+			}
+
+			return menuItems;
+		}
+	},
+
 	data: function data() {
 		return {
-			navDrawer: false,
-			menuItems: [{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' }, { icon: 'assignment', title: 'Projects', link: '/projects' }, { icon: 'group', title: 'Users', link: '/users' }]
+			navDrawer: false
 		};
 	},
 
@@ -58993,6 +59040,992 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 122 */,
+/* 123 */,
+/* 124 */,
+/* 125 */,
+/* 126 */,
+/* 127 */,
+/* 128 */,
+/* 129 */,
+/* 130 */,
+/* 131 */,
+/* 132 */,
+/* 133 */,
+/* 134 */,
+/* 135 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(136)
+}
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(138),
+  /* template */
+  __webpack_require__(139),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  "data-v-755c5771",
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\assist\\resources\\assets\\js\\components\\invoice\\Your-invoices.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Your-invoices.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-755c5771", Component.options)
+  } else {
+    hotAPI.reload("data-v-755c5771", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(137);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("6abd8c94", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-755c5771\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Your-invoices.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-755c5771\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Your-invoices.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.card--flex-toolbar[data-v-755c5771] {\n  margin-top: -64px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 138 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__invoice_Invoices_table__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__invoice_Invoices_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__invoice_Invoices_table__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    'invoices-table': __WEBPACK_IMPORTED_MODULE_1__invoice_Invoices_table___default.a
+  },
+
+  data: function data() {
+    return {
+      // For invoice dialog and loading
+      addInvoiceDialog: false,
+      startingInvoice: false,
+      // For the date menus
+      fromDateMenu: false,
+      toDateMenu: false,
+      // The start invoice form  			
+      form: {
+        from_date: { val: '', err: false, errMsg: '', dflt: '' },
+        to_date: { val: '', err: false, errMsg: '', dflt: '' }
+      }
+    };
+  },
+
+
+  methods: {
+    startInvoice: function startInvoice() {
+      var _this = this;
+
+      // Toggle loader
+      this.startingInvoice = true;
+      // Dispatch event to store
+      this.$store.dispatch('addInvoice', {
+        from_date: this.form.from_date.val,
+        to_date: this.form.to_date.val
+      }).then(function (response) {
+        // Toggle loader
+        _this.startingInvoice = false;
+        _this.addInvoiceDialog = false;
+        // Forward view
+        _this.$router.push('/invoices/' + response.id + '/view');
+      }).catch(function (errors) {
+        __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].populateFormErrors(_this.form, errors.response.data).then(function () {
+          // Toggle loader
+          _this.startingInvoice = false;
+        });
+      });
+    }
+  }
+
+});
+
+/***/ }),
+/* 139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "xl10": "",
+      "offset-xl1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "grey lighten-5",
+    attrs: {
+      "flat": ""
+    }
+  }, [_c('v-toolbar', {
+    staticClass: "primary elevation-0",
+    attrs: {
+      "dark": "",
+      "extended": ""
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Go Back'
+      }),
+      expression: "{ html: 'Go Back' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    }
+  }, [_c('v-icon', {
+    attrs: {
+      "dark": ""
+    }
+  }, [_vm._v("arrow_back")])], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "lg10": "",
+      "offset-lg1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "card--flex-toolbar"
+  }, [_c('v-container', [_c('v-toolbar', {
+    staticClass: "white",
+    attrs: {
+      "card": "",
+      "prominent": ""
+    }
+  }, [_c('v-toolbar-title', {
+    staticClass: "display-1"
+  }, [_vm._v("\t\t\t\t         \n\t\t\t\t\t          \tDashboard & Your Invoicing\t\t\t          \t\n\t\t\t\t\t          ")]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-layout', {
+    staticClass: "mr-0",
+    staticStyle: {
+      "position": "relative"
+    },
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "width": "765",
+      "lazy": "",
+      "absolute": ""
+    },
+    model: {
+      value: (_vm.addInvoiceDialog),
+      callback: function($$v) {
+        _vm.addInvoiceDialog = $$v
+      },
+      expression: "addInvoiceDialog"
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Add Invoice'
+      }),
+      expression: "{ html: 'Add Invoice' }",
+      arg: "top"
+    }],
+    staticClass: "success--text",
+    attrs: {
+      "slot": "activator",
+      "flat": ""
+    },
+    slot: "activator"
+  }, [_c('v-icon', {
+    staticClass: "success--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("add_circle")]), _vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\t\tInvoice\n\t\t\t\t\t\t\t\t\t\t\t\t")], 1), _vm._v(" "), _c('v-card', [_c('v-card-title', [_c('div', {
+    staticClass: "headline grey--text"
+  }, [_vm._v("Start an invoice")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', [_c('p', {
+    staticClass: "subheading info--text pl-2"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t\t\t\t          After starting the invoice you will be able to add your hours and other costs.        \t\t\t\n\t\t\t\t\t\t\t\t        \t\t")], 1)]), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs5": ""
+    }
+  }, [_c('v-menu', {
+    attrs: {
+      "lazy": "",
+      "close-on-content-click": false,
+      "transition": "scale-transition",
+      "offset-y": "",
+      "full-width": "",
+      "nudge-left": 40,
+      "max-width": "290px"
+    },
+    model: {
+      value: (_vm.fromDateMenu),
+      callback: function($$v) {
+        _vm.fromDateMenu = $$v
+      },
+      expression: "fromDateMenu"
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "slot": "activator",
+      "label": "From Date...",
+      "prepend-icon": "event",
+      "readonly": "",
+      "error": _vm.form.from_date.err
+    },
+    slot: "activator",
+    model: {
+      value: (_vm.form.from_date.val),
+      callback: function($$v) {
+        _vm.form.from_date.val = $$v
+      },
+      expression: "form.from_date.val"
+    }
+  }), _vm._v(" "), _c('v-date-picker', {
+    attrs: {
+      "no-title": "",
+      "scrollable": "",
+      "actions": ""
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function(ref) {
+        var save = ref.save;
+        var cancel = ref.cancel;
+
+        return [_c('v-card-actions', [_c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              cancel()
+            }
+          }
+        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              save()
+            }
+          }
+        }, [_vm._v("Save")])], 1)]
+      }
+    }]),
+    model: {
+      value: (_vm.form.from_date.val),
+      callback: function($$v) {
+        _vm.form.from_date.val = $$v
+      },
+      expression: "form.from_date.val"
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs5": ""
+    }
+  }, [_c('v-menu', {
+    attrs: {
+      "lazy": "",
+      "close-on-content-click": false,
+      "transition": "scale-transition",
+      "offset-y": "",
+      "full-width": "",
+      "nudge-left": 40,
+      "max-width": "290px"
+    },
+    model: {
+      value: (_vm.toDateMenu),
+      callback: function($$v) {
+        _vm.toDateMenu = $$v
+      },
+      expression: "toDateMenu"
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "slot": "activator",
+      "label": "To Date...",
+      "prepend-icon": "event",
+      "readonly": "",
+      "error": _vm.form.to_date.err
+    },
+    slot: "activator",
+    model: {
+      value: (_vm.form.to_date.val),
+      callback: function($$v) {
+        _vm.form.to_date.val = $$v
+      },
+      expression: "form.to_date.val"
+    }
+  }), _vm._v(" "), _c('v-date-picker', {
+    attrs: {
+      "no-title": "",
+      "scrollable": "",
+      "actions": ""
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function(ref) {
+        var save = ref.save;
+        var cancel = ref.cancel;
+
+        return [_c('v-card-actions', [_c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              cancel()
+            }
+          }
+        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              save()
+            }
+          }
+        }, [_vm._v("Save")])], 1)]
+      }
+    }]),
+    model: {
+      value: (_vm.form.to_date.val),
+      callback: function($$v) {
+        _vm.form.to_date.val = $$v
+      },
+      expression: "form.to_date.val"
+    }
+  })], 1)], 1)], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    staticClass: "red--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat"
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.addInvoiceDialog = false
+      }
+    }
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+    staticClass: "green--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat",
+      "loading": _vm.startingInvoice,
+      "disabled": _vm.startingInvoice
+    },
+    nativeOn: {
+      "click": function($event) {
+        _vm.startInvoice($event)
+      }
+    }
+  }, [_vm._v("Start Invoice")])], 1)], 1)], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading pl-4"
+  }, [_vm._v("\t\t\t\t\t\t          \n \t\t\t\t\t\t\t\t\t\t\tThis is where you can create invoices for the work you've done.   \t\t\n\t\t\t\t\t        \t")])])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-4"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t          Use the view button on each project row to view your timesheets for that project or add new ones.       \t\t\t\n\t\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('invoices-table', {
+    attrs: {
+      "table_state": 'user'
+    }
+  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-755c5771", module.exports)
+  }
+}
+
+/***/ }),
+/* 140 */,
+/* 141 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(142)
+}
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(144),
+  /* template */
+  __webpack_require__(145),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  "data-v-11d1adfa",
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\assist\\resources\\assets\\js\\components\\invoice\\Crew-invoices.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Crew-invoices.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-11d1adfa", Component.options)
+  } else {
+    hotAPI.reload("data-v-11d1adfa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 142 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(143);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("b669de72", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-11d1adfa\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Crew-invoices.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-11d1adfa\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Crew-invoices.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 143 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.card--flex-toolbar[data-v-11d1adfa] {\n  margin-top: -64px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 144 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__invoice_Invoices_table__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__invoice_Invoices_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__invoice_Invoices_table__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    'invoices-table': __WEBPACK_IMPORTED_MODULE_1__invoice_Invoices_table___default.a
+  },
+
+  data: function data() {
+    return {};
+  },
+
+
+  methods: {}
+
+});
+
+/***/ }),
+/* 145 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "xl10": "",
+      "offset-xl1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "grey lighten-5",
+    attrs: {
+      "flat": ""
+    }
+  }, [_c('v-toolbar', {
+    staticClass: "primary elevation-0",
+    attrs: {
+      "dark": "",
+      "extended": ""
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Go Back'
+      }),
+      expression: "{ html: 'Go Back' }",
+      arg: "top"
+    }],
+    attrs: {
+      "icon": ""
+    },
+    on: {
+      "click": function($event) {
+        _vm.$router.go(-1)
+      }
+    }
+  }, [_c('v-icon', {
+    attrs: {
+      "dark": ""
+    }
+  }, [_vm._v("arrow_back")])], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": "",
+      "lg10": "",
+      "offset-lg1": ""
+    }
+  }, [_c('v-card', {
+    staticClass: "card--flex-toolbar"
+  }, [_c('v-container', [_c('v-toolbar', {
+    staticClass: "white",
+    attrs: {
+      "card": "",
+      "prominent": ""
+    }
+  }, [_c('v-toolbar-title', {
+    staticClass: "display-1"
+  }, [_vm._v("\t\t\t\t         \n\t\t\t\t\t          \tCrew Invoices\t\t\t          \t\n\t\t\t\t\t          ")]), _vm._v(" "), _c('v-spacer')], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading pl-4"
+  }, [_vm._v("\t\t\t\t\t\t          \n \t\t\t\t\t\t\t\t\t\t\tThis is where you can view and interact with your crew's invoices. \t\t\n\t\t\t\t\t        \t")])])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-4"
+  }, [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t          Use the view button on each invoice row to view the full invoice.   \t\t\t\n\t\t\t\t\t        \t\t")], 1)])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('invoices-table', {
+    attrs: {
+      "table_state": 'admin'
+    }
+  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-11d1adfa", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

@@ -43,12 +43,12 @@ Route::get('/users/{id}', 'UsersController@single');
 Route::post('/users/change-password', 'UsersController@changePassword');
 Route::post('/users/change-personal-password', 'DashboardController@changePersonalPassword');
 Route::post('/users/update-field', 'UsersController@updateField');
-Route::get('/users/{user_id}/projects', 'UsersController@projects');
-Route::get('/users/{user_id}/projects/{project_id}/timesheets', 'UsersController@projectTimesheets');
 
+Route::get('/invoices', 'InvoicesController@all');
 Route::post('/invoices/add', 'InvoicesController@store');
 Route::post('/invoices/add-item', 'InvoicesController@storeWorkItem');
 Route::post('/invoices/edit-item', 'InvoicesController@updateWorkItem');
 Route::delete('/invoices/delete-item/{id}', 'InvoicesController@deleteWorkItem');
 Route::get('/invoices/auth-users', 'InvoicesController@authUsersInvoices');
+Route::get('/invoices/user/{user_id}', 'InvoicesController@filter');
 Route::get('/invoices/{id}', 'InvoicesController@single');

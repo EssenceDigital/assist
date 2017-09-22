@@ -29,7 +29,11 @@
 					          	</span></small>		          	
 					          </v-toolbar-title>				          				          
 					          <v-spacer></v-spacer>
-					          <v-btn flat class="success--text" v-tooltip:top="{ html: 'Add Work Item' }"
+					          <v-btn 
+					          	v-if="invoice_state != 'readonly'"
+					          	flat 
+					          	class="success--text" 
+					          	v-tooltip:top="{ html: 'Add Work Item' }"
 					          	@click.native.stop="workItemDialog = true"
 					          >
 					          	<v-icon left class="success--text">add_circle</v-icon>
@@ -57,15 +61,15 @@
 					        </v-layout>		        	
 				        </v-container><!-- / Container for helpful tips -->	
 				        <!-- Card body -->
-				        <v-card-text>		
+				        <v-card-text v-if="!loading">		
 
-					        <!-- Work items -->
+					        <!-- Work items (Hours and desc) -->
 					        <v-container
 					        	v-for="item in currentInvoice.work_items" :key="item.id"
 					        	class="mt-3"
 					        >
 					        	<!-- Edit button container -->
-					        	<v-layout row class="mb-2">
+					        	<v-layout row class="mb-2" v-if="invoice_state != 'readonly'">
 					        		<v-spacer></v-spacer>
 					        		<v-flex xs1 class="text-xs-right">
 						       			<!-- Edit button -->
@@ -92,13 +96,13 @@
 					        	</v-layout>
 					        	<!-- Work Item -->
 						        <v-layout row>
-						        	<v-flex xs3>
+						        	<v-flex xs2>
 						        		<p>
 						        			{{ item.from_date | dateMinusYear }} - {{ item.to_date | dateMinusYear }}
 						        		</p>
 						        	</v-flex>
 						        	<v-spacer></v-spacer>
-						        	<v-flex xs3>
+						        	<v-flex xs4>
 						        		<p class="mb-1">
 						        			<strong>{{ item.project.client_company_name }}</strong>
 						        		</p>
@@ -111,7 +115,6 @@
 						        		<p>
 						        			{{ item.hours }} Hrs
 						        		</p>
-						        		
 						        	</v-flex>
 						        	<v-spacer></v-spacer>
 						        	<v-flex xs1 class="text-xs-right">
@@ -120,8 +123,9 @@
 							        	</p>						        		
 						        	</v-flex>
 						        </v-layout><!-- / Work Item -->
-						      </v-container><!-- / Work items -->
+						      </v-container><!-- / Work items (Hours and desc) -->
 
+						      <!-- Sub total for hours -->
 						      <v-container>
 						        <v-divider class="mb-2"></v-divider>		
 						        <v-layout row>
@@ -130,12 +134,119 @@
 						        	</v-flex>
 						        	<v-spacer></v-spacer>
 						        	<v-flex xs2 class="text-xs-right">
-						        		<span class="title">${{ workItemsTotal }}</span>
+						        		<span class="title">${{ workHoursTotal }}</span>
 						        	</v-flex>
 						        </v-layout>
 						        <v-divider class="mt-2"></v-divider>		        	
-					        </v-container>
+					        </v-container><!-- / Sub total for hours -->
 
+					        <!-- Work items (Travel and Per diem) -->
+					        <v-container
+					        	v-for="item in currentInvoice.work_items" :key="item.id"
+					        	class="mt-3"
+					        >
+					        	<!-- Edit button container -->
+					        	<v-layout row class="mb-2" v-if="invoice_state != 'readonly'">
+					        		<v-spacer></v-spacer>
+					        		<v-flex xs1 class="text-xs-right">
+						       			<!-- Edit button -->
+								        <v-btn 
+								        	class="mr-0"
+								        	icon 
+								        	v-tooltip:top="{ html: 'Edit Item' }"
+								        	@click.native.stop="editDialog(item.id)"
+								        >
+								          <v-icon right>settings</v-icon>
+								        </v-btn>					        		
+					        		</v-flex>
+					        		<v-flex xs1 class="text-xs-right">					        						        		
+								        <!-- Delete button -->
+								        <v-btn 
+								        	icon 
+								        	class="mr-0 red--text" 
+								        	v-tooltip:top="{ html: 'Remove' }"
+								        	@click.native.stop="openDeleteDialog('deleteWorkItem', item.id)"
+								        >
+								          <v-icon>close</v-icon>
+								        </v-btn>					        			
+					        		</v-flex>								        
+					        	</v-layout>
+					        	<!-- Work Item -->
+						        <v-layout row>
+						        	<v-flex xs2>
+						        		<p>
+						        			{{ item.from_date | dateMinusYear }} - {{ item.to_date | dateMinusYear }}
+						        		</p>
+						        	</v-flex>
+						        	<v-spacer></v-spacer>
+						        	<v-flex xs4>
+						        		<p class="mb-1">
+						        			<strong>Mileage:</strong>
+						        		</p>
+						        		<p class="mb-1">
+						        			<strong>Per Diem:</strong> {{ item.per_diem_desc }}
+						        		</p>
+						        		<p v-if="item.lodging_cost">
+						        			<strong>Lodging:</strong> {{ item.lodging_desc }}
+						        		</p>
+						        	</v-flex>
+						        	<v-spacer></v-spacer>
+						        	<v-flex xs1>
+						        		<p>
+						        			{{ item.travel_mileage }} kms
+						        		</p>
+						        		
+						        	</v-flex>
+						        	<v-spacer></v-spacer>
+						        	<v-flex xs1 class="text-xs-right">
+							        	<p class="mb-1">
+							        		${{ (parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate)).toFixed(2) }}
+							        	</p>
+							        	<p class="mb-1">
+							        		${{ item.per_diem }}
+							        	</p>	
+							        	<p v-if="item.lodging_cost">
+							        		${{ item.lodging_cost }}
+							        	</p>						        							        		
+						        	</v-flex>
+						        </v-layout><!-- / Work Item -->
+						      </v-container><!-- Work items (Travel and Per diem) -->
+
+						      <!-- Sub total for travel and per diem -->
+						      <v-container>
+						        <v-divider class="mb-2"></v-divider>		
+						        <v-layout row>
+						        	<v-flex xs2>
+						        		<span class="title">SUBTOTAL:</span>
+						        	</v-flex>
+						        	<v-spacer></v-spacer>
+						        	<v-flex xs2 class="text-xs-right">
+						        		<span class="title">${{ extraCostsTotal }}</span>
+						        	</v-flex>
+						        </v-layout>
+						        <v-divider class="mt-2"></v-divider>		        	
+					        </v-container><!-- / Sub total for travel and per diem -->
+
+					        <!-- Total container -->
+					        <v-container class="mt-3">
+					        	<v-divider class="mb-2 black"></v-divider>	
+					        	<v-layout row>
+						        	<v-flex xs2>
+						        		<span class="title">TOTAL:</span>
+						        	</v-flex>
+						        	<v-spacer></v-spacer>
+						        	<v-flex xs2 class="text-xs-right">
+						        		<span class="headline">${{ invoiceTotal }}</span>
+						        	</v-flex>					        		
+					        	</v-layout>
+					        	<v-layout row class="mt-3">
+					        		<v-flex xs12>
+					        			<p>
+					        				<strong>Cheque payable to:</strong> {{ $store.getters.user.company }}
+					        			</p>
+					        		</v-flex>
+					        	</v-layout>
+					        </v-container><!-- / Total container -->
 
 				        </v-card-text><!-- /Card body -->
 				      </v-card>
@@ -150,7 +261,11 @@
 		 -->
 
     <!-- Work item dialog -->
-		<v-layout row justify-center>
+		<v-layout 
+			v-if="invoice_state != 'readonly'"
+			row 
+			justify-center 
+		>
 		  <v-dialog v-model="workItemDialog" fullscreen transition="dialog-bottom-transition" :overlay=false>
 		    <v-card>
 		      <v-toolbar dark class="primary">
@@ -385,7 +500,10 @@
 		</v-layout>    
 
     <!-- Remove asset dialog and button -->
-		<v-layout row justify-center 
+		<v-layout 
+			v-if="invoice_state != 'readonly'"
+			row 
+			justify-center 
 			class="mr-0" 
 			style="position: relative;"
 		>
@@ -428,7 +546,7 @@
 	import Helpers from './../../store/helpers';
 
 	export default {
-		props: ['id'],
+		props: ['id', 'invoice_state'],
 
 		computed: {
 			currentInvoice () {
@@ -439,7 +557,7 @@
 				return this.$store.getters.projectsSelectList;
 			},
 
-			workItemsTotal () {
+			workHoursTotal () {
 				if(this.currentInvoice){
 					// Cache items
 					var workItems = this.currentInvoice.work_items,
@@ -450,11 +568,32 @@
 					});
 					return total.toFixed(2);					
 				}
+			},
+
+			extraCostsTotal () {
+				if(this.currentInvoice){
+					// Cache items
+					var workItems = this.currentInvoice.work_items,
+							total = 0;
+					// Itterate and calculate
+					workItems.forEach((item) => {
+						total += (parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate));
+						total += parseFloat(item.per_diem);
+						if(item.lodging_cost) total += parseFloat(item.lodging_cost);						
+					});
+					return total.toFixed(2);				
+				}		
+			},
+
+			invoiceTotal () {
+				return (parseFloat(this.workHoursTotal) + parseFloat(this.extraCostsTotal)).toFixed(2);
 			}
 		},
 
 		data () {
 			return {
+				// Loading
+				loading: false,
 				// For the delete dialog
 				deleteDialog: false,
 				deleteDispatchAction: '',
@@ -572,13 +711,18 @@
 		},
 
 		created () {
-			// If no current invoice then get the requested invoice
-			if(!this.currentInvoice){
-				// Dispatch event to retrieve invoice
-				this.$store.dispatch('getInvoice', this.id);
-			}
-
-			this.$store.dispatch('getUsersProjects');
+			// Toggle loader
+			this.loading = true;
+			// Dispatch event to retrieve invoice
+			this.$store.dispatch('getInvoice', this.id)
+				.then(() => {
+					this.$store.dispatch('getUsersProjects')
+						.then(() => {
+							// Toggle loader
+							this.loading = false;
+						});
+				});
+			
 		}
 	}
 </script>

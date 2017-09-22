@@ -16,7 +16,7 @@ class CreateWorkItemsTable extends Migration
         Schema::create('work_items', function (Blueprint $table) {
             $table->increments('id');
             // Foreign key for project
-            $table->integer('project_id')->unsigned();
+            $table->integer('project_id')->unsigned()->nullable();
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             // Foreign key for invoice
             $table->integer('invoice_id')->unsigned();

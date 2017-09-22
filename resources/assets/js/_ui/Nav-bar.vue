@@ -90,14 +90,37 @@
 
 <script>
 	export default {
+
+		computed: {
+			authUser () {
+				return this.$store.getters.user
+			},
+
+			menuItems () {
+				if(this.authUser.permissions === 'admin') {
+					var menuItems = [
+						{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' },
+						{ icon: 'receipt', title: 'Your Invoices', link: '/your-invoices' },
+						{ icon: 'receipt', title: 'Crew Invoices', link: '/crew-invoices' },
+						{ icon: 'assignment', title: 'Projects', link: '/projects' },
+						{ icon: 'group', title: 'Users', link: '/users' }
+					];
+				}
+
+				if(this.authUser.permissions === 'user') {
+					var menuItems = [
+						{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' },
+						{ icon: 'receipt', title: 'Your Invoices', link: '/your-invoices' }
+					];					
+				}
+
+				return menuItems;
+			}
+		},
+
 		data () {
 			return{
-				navDrawer: false,
-				menuItems: [
-					{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' },
-					{ icon: 'assignment', title: 'Projects', link: '/projects' },
-					{ icon: 'group', title: 'Users', link: '/users' }
-				]				
+				navDrawer: false			
 			}
 		},
 

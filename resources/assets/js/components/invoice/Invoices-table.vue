@@ -1,5 +1,29 @@
 <template>
   <v-container fluid>
+      <!-- Row for invoice filter -->
+      <v-layout row v-if="table_state === 'admin'">
+        <!-- Province filter -->
+        <v-flex xs3 class="ml-2">
+          <v-select
+            v-model="userFilter"
+            :items="usersSelectList"
+            label="User..."
+            single-line
+            bottom
+          ></v-select>        
+        </v-flex>
+        <!-- Filter button -->        
+        <v-flex xs1>
+          <v-btn 
+            icon
+            class="mt-3" 
+            v-tooltip:top="{ html: 'Filter Invoices' }"
+            @click="filterInvoices"
+          >
+            <v-icon>search</v-icon>
+          </v-btn>
+        </v-flex> 
+      </v-layout><!-- /Row for invoice filter -->
 
     <!-- Data table -->
     <v-data-table
@@ -7,10 +31,11 @@
       :items="invoices"
       :rows-per-page-items="perPage"
       :loading="loading"
-      class="elevation-1 mt-2"
+      class="elevation-1 mt-3"
     >    
       <template slot="items" scope="props">
       	<td>{{ props.item.id }}</td>
+        <td v-if="table_state === 'admin'">{{ props.item.user.first }}</td>
       	<td>{{ props.item.from_date | date }}</td>
       	<td>{{ props.item.to_date | date }}</td>
       	<td>
@@ -50,12 +75,8 @@
         loading: false,
         // For data table pagination   
         perPage: [15, 30, 45, { text: "All", value: -1 }],
-				headers: [
-            { text: 'Identifier', value: 'id', align: 'left' },
-            { text: 'From Date', value: 'from_date', align: 'left' },
-            { text: 'To Date', value: 'to_date', align: 'left' },
-            { text: 'Actions', value: '', align: 'left' }
-          ]        
+        // For the invoice filter
+        userFilter: ''       
       }
     },
 
@@ -63,14 +84,55 @@
       // Watch for invoices in state to update
       invoices () {
         return this.$store.getters.invoices;
-      }
+      },
+
+      usersSelectList () {
+        return this.$store.getters.usersSelectList;
+      },
+
+      headers () {
+        if(this.table_state === 'admin') {
+          var headers = [
+            { text: 'Identifier', value: 'id', align: 'left' },
+            { text: 'User', value: 'user', align: 'left' },            
+            { text: 'From Date', value: 'from_date', align: 'left' },
+            { text: 'To Date', value: 'to_date', align: 'left' },
+            { text: 'Actions', value: '', align: 'left' }
+          ];
+        }
+        if(this.table_state === 'user') {
+          var headers = [
+            { text: 'Identifier', value: 'id', align: 'left' },
+            { text: 'From Date', value: 'from_date', align: 'left' },
+            { text: 'To Date', value: 'to_date', align: 'left' },
+            { text: 'Actions', value: '', align: 'left' }
+          ];          
+        }
+
+        return headers;
+      }      
 
     },
 
     methods: {
       viewInvoice (id) {
+        // User state forward
+        if(this.table_state === 'user') this.$router.push('/your-invoices/'+id+'/view');
         // Admin state forward
-        if(this.table_state === 'user') this.$router.push('/invoices/'+id+'/view');       
+        if(this.table_state === 'admin') this.$router.push('/crew-invoices/'+id+'/view');  
+      },
+
+      filterInvoices () {
+        // Toggle loader
+        this.loading = true;
+        // Dispatch action to find projects
+        this.$store.dispatch('getAllInvoices', {
+          user_id: this.userFilter
+        })
+          .then(() => {
+            // Toggle loader
+            this.loading = false;
+          });        
       }
     },
 
@@ -84,14 +146,23 @@
       if(this.table_state === 'user') {
         dispatchAction = 'getUsersInvoices';
       } else if(this.table_state === 'admin'){
-        dispatchAction = 'getInvoices';        
+        dispatchAction = 'getAllInvoices';        
       }
 
       // Tell store to load projects
       this.$store.dispatch(dispatchAction, payload)
 	      .then(() => {   
-	      	// Toggle loader
-	      	this.loading = false;  
+          if(dispatchAction === 'getAllInvoices'){
+            this.$store.dispatch('getUsers')
+              .then(() => {
+                // Toggle loader
+                this.loading = false;                 
+              })
+          } else {
+            // Toggle loader
+            this.loading = false;             
+          }
+ 
 	      });
     }
 

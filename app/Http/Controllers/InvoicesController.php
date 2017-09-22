@@ -35,7 +35,6 @@ class InvoicesController extends Controller
     /**
      * Finds all invoices belonging to the authenticated user
      *
-     * @param Int - The primary key
      * @return \Illuminate\Http\JsonResponse
      */
     public function authUsersInvoices()
@@ -44,6 +43,23 @@ class InvoicesController extends Controller
         $invoices = Invoice::with(['workItems', 'workItems.project'])
         	->where('user_id', '=', Auth::id())
         	->get();
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'payload' => $invoices
+        ], 200);        
+    }
+
+    /**
+     * Finds all invoices
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function all()
+    {
+        // With all foreign keys / children
+        $invoices = Invoice::with(['workItems', 'workItems.project', 'user'])->get();
 
         // Return response for ajax call
         return response()->json([
@@ -68,6 +84,28 @@ class InvoicesController extends Controller
             'result' => 'success',
             'payload' => $invoice
         ], 200);        
+    }
+
+    public function filter($user_id) {
+
+        // Construct where array for query
+        $queryArray = [];  
+        $query = Invoice::with(['user', 'workItems', 'workItems.project']);
+
+        // Add project id field or not
+        if($user_id){
+            // Push array clause
+            array_push($queryArray, ['user_id', '=', $user_id]);
+        }      
+        // Add where queries
+        $query->where($queryArray);
+        // Get results
+        $invoices = $query->get();
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'payload' => $invoices
+        ], 200); 
     }
 
     /**

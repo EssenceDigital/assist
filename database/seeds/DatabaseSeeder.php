@@ -5,13 +5,10 @@ use Illuminate\Database\Seeder;
 use Faker\Generator;
 
 use App\Project;
-use App\User;
-use App\Timesheet;
-use App\WorkJob;
-use App\TravelJob;
-use App\EquipmentRental;
-use App\OtherCost;
 use App\Timeline;
+use App\User;
+use App\Invoice;
+use App\WorkItem;
 
 class DatabaseSeeder extends Seeder
 {
@@ -132,9 +129,53 @@ class DatabaseSeeder extends Seeder
             forEach($usersArray as $q){
                 $user = User::find($q);  
                 $project->users()->save($user);
+            }           
+        }
+
+        // For invoice  dates
+        $InvYear = '2017';
+        $InvMonth = 1;
+        $InvFromDay = '01';
+        $InvToDay = '28';
+
+        for($t = 0; $t < rand(7, 15); $t++){
+            // Insert some fake invoices
+            $invoice = new Invoice;
+            $invoice->user_id = rand(1, 10);
+            // Adjust month if needed
+            if($InvMonth == 13){
+                $InvMonth = 1;
+                $InvYear = '2016';
+            }
+            // Populate years
+            $invoice->from_date = $InvYear . '-' . sprintf("%02d", $InvMonth) . '-' . $InvFromDay;
+            $invoice->to_date = $InvYear . '-' . sprintf("%02d", $InvMonth) . '-' . $InvToDay;
+            $invoice->save(); 
+
+            // Add some work items
+            for($z = 0; $z < rand(1, 5); $z++){
+                $item = new WorkItem;
+                $item->project_id = rand(1, 25);
+                $item->invoice_id = $invoice->id;
+                // For the dates
+                $itemFromDay = rand(1, 23);
+                // Populate dates based on invoice date rang
+                $item->from_date = $InvYear . '-' . sprintf("%02d", $InvMonth) . '-' . $itemFromDay;
+                $item->to_date = $InvYear . '-' . sprintf("%02d", $InvMonth) . '-' . ($itemFromDay + rand(2, 5));
+                $item->desc = $faker->text(rand(10, 25));
+                $item->hours = rand(15, 65);
+                $item->hourly_rate = 27.5;
+                $item->per_diem = rand(75, 200);
+                $item->per_diem_desc = $faker->text(rand(10, 12));
+                $item->travel_mileage = rand(225, 1400);
+                $item->mileage_rate = 0.65;
+                $item->lodging_desc = $faker->text(rand(10, 15));
+                $item->lodging_cost = rand(400, 1000);
+                $item->save();
             }
 
-        }
-                              
+            $InvMonth++;
+        }         
+                          
     }
 }

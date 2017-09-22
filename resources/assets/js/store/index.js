@@ -238,6 +238,19 @@ export const store = new Vuex.Store({
 			return api.getAction(context, url, 'updateTimesheets');
 		},
 
+		// Use api to retrieve all invocies
+		getAllInvoices (context, payload) {
+			var url = '/invoices';
+			// Create payload 
+			if(payload){
+				// Add from date to string
+				if(payload.user_id != '') url += '/user/' + payload.user_id;
+					else url += '/' + 0;				
+			}
+			// Use api to send request		
+			return api.getAction(context, url, 'updateInvoices');
+		},
+
 		// Use api to retrieve all of a users invoices and set them in the state
 		getUsersInvoices (context, payload) {
 			 return api.getAction(context, '/invoices/auth-users', 'updateInvoices');

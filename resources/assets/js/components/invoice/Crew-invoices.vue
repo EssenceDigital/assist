@@ -23,16 +23,15 @@
 					      	<!-- Card toolbar -->
 					        <v-toolbar card class="white" prominent>
 					          <v-toolbar-title class="display-1">				         
-					          	Central Dashboard			          	
+					          	Crew Invoices			          	
 					          </v-toolbar-title>				          				          
 					          <v-spacer></v-spacer>
-
 					        </v-toolbar><!-- /Card toolbar -->	
 					      </v-container>			        
 					      <v-container>
 					      	<v-layout row>
 				      			<p class="subheading pl-4">						          
- 											Welcome to your Arrow Archaeology dashboard.   		
+ 											This is where you can view and interact with your crew's invoices. 		
 					        	</p>
 					      	</v-layout>
 					      </v-container>
@@ -43,7 +42,7 @@
 					        	<v-flex xs12>	
 			        				<p class="subheading info--text pl-4">
 												<v-icon left class="info--text">help_outline</v-icon>
-							          Use the top menu to navigate the application.      			
+							          Use the view button on each invoice row to view the full invoice.   			
 					        		</p>					        						        							        							        				        		
 					        	</v-flex>				        	
 					        </v-layout>		        	
@@ -52,9 +51,7 @@
 				        <v-card-text>				 
 				        	<v-layout row>
 				        		<v-flex xs12>
-				        			
-
-
+				        			<invoices-table :table_state="'admin'"></invoices-table>
 				        		</v-flex>
 				        	</v-layout>
 				        </v-card-text><!-- /Card body -->
@@ -64,13 +61,29 @@
 				</v-card><!-- / Top most card -->
 			</v-flex>
 		</v-layout>
-	</v-container>	
+	</v-container>
 </template>
 
 <script>
-	export default {
+	import Helpers from './../../store/helpers';
+	import InvoicesTable from './../invoice/Invoices-table';
 
-	}
+  export default {
+  	components: {
+  		'invoices-table': InvoicesTable
+  	},
+
+  	data () {
+  		return {
+
+  		}
+  	},
+
+  	methods: {
+
+  	}
+
+  }
 </script>
 
 <style scoped>
