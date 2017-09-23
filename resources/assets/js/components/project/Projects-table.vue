@@ -150,11 +150,6 @@
               </v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
-            <!-- Use the project view component to display project info -->
-            <project-view 
-            v-if="viewProjectDialog"
-            :id="currentProjectId"
-            ></project-view>
           </v-card>
         </v-dialog>
       </v-layout><!-- Dialog to view a full project -->
@@ -165,7 +160,6 @@
 </template>
 
 <script>
-  import ProjectView from './Project-view';
   import ProjectsTotals from './Projects-totals';
 
   export default {
@@ -173,7 +167,6 @@
     props: ['table_state'],
 
     components: {
-      'project-view': ProjectView,
       'projects-totals': ProjectsTotals
     },
 

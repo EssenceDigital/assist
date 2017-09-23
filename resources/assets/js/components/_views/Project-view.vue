@@ -431,9 +431,9 @@
 
 <script>
 	import FieldInputToggle from './../form/Field-input-toggle';
-	import ProjectNotes from './Project-notes.vue';
-	import ProjectCrew from './Project-crew.vue';
-	import ProjectTimeline from './Project-timeline.vue';
+	import ProjectNotes from './../project/Project-notes.vue';
+	import ProjectCrew from './../project/Project-crew.vue';
+	import ProjectTimeline from './../project/Project-timeline.vue';
 
 	export default {
 		props: ['id'],

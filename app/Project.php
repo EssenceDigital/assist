@@ -36,7 +36,7 @@ class Project extends Model
      */
     public function workItems()
     {
-        return $this->hasMany('App\WorkItem', 'work_item_id');
+        return $this->hasMany('App\WorkItem');
     }
 
 }

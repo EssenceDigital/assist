@@ -23,7 +23,7 @@
 					      	<!-- Card toolbar -->
 					        <v-toolbar card class="white" prominent>
 					          <v-toolbar-title class="display-1">				         
-					          	Dashboard &amp; Your Invoicing			          	
+					          	Invoices You've Created			          	
 					          </v-toolbar-title>				          				          
 					          <v-spacer></v-spacer>
 

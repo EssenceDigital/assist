@@ -184,7 +184,7 @@
 
 
 <script>
-  import UsersTable from './Users-table';
+  import UsersTable from './../user/Users-table';
   import Helpers from './../../store/helpers'; 
 
   export default {

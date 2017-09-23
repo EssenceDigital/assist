@@ -138,7 +138,7 @@ class ProjectsController extends Controller
     public function single($id)
     {
         // With all foreign keys / children
-        $project = Project::with(['comments', 'comments.user', 'timeline', 'users'])->find($id);
+        $project = Project::with(['comments', 'comments.user', 'timeline', 'users', 'workItems'])->find($id);
 
         // Return response for ajax call
         return response()->json([

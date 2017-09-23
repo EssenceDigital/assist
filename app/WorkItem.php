@@ -30,19 +30,11 @@ class WorkItem extends Model
     }
 
     /**
-     * Get associated travel item.
+     * Get the parent invoice.
      */
-    public function travelItem()
+    public function user()
     {
-        return $this->hasOne('App\TravelItem', 'travel_item_id');
-    } 
-
-    /**
-     * Get associated other cost.
-     */
-    public function otherCost()
-    {
-        return $this->hasOne('App\OtherCost', 'other_cost_id');
-    }
+        return $this->belongsTo('App\User');
+    }    
 
 }

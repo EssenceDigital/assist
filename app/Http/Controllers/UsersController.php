@@ -91,16 +91,6 @@ class UsersController extends Controller
     }
 
     /**
-     * Find all users and paginates
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function allPages()
-    {
-        return User::paginate(15);        
-    }
-
-    /**
      * Find a user
      *
      * @return \Illuminate\Http\JsonResponse

@@ -218,19 +218,17 @@
 		},
 
 		created () {
-			this.$store.dispatch('getUsers').then( () => {
-				// Determine the current step
-				for(let step of this.steps){
-					// Set select list for this step
-					if(step.step === 2) step.items = this.usersSelectList;
-					// Determine current step
-					if(this.timeline[step.field] === null || this.timeline[step.field] === 0){
-						this.step = step.step;
-						break;
-					}
-				}	
-				console.log(this.usersSelectList);			
-			});
+
+			// Determine the current step
+			for(let step of this.steps){
+				// Set select list for this step
+				if(step.step === 2) step.items = this.usersSelectList;
+				// Determine current step
+				if(this.timeline[step.field] === null || this.timeline[step.field] === 0){
+					this.step = step.step;
+					break;
+				}
+			}		
 		}
 	}
 </script>

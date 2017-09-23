@@ -40,11 +40,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the comments by the user.
+     * Get the work items by the user.
      */
-    public function timesheets()
+    public function invoices()
     {
-        return $this->hasMany('App\Timesheet');
+        return $this->hasMany('App\Invoice');
     }
 
     /**

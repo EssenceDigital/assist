@@ -2,15 +2,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 /** Load Project components needed by routes */
-import Home from './components/dashboard/Home';
-import YourInvoices from './components/invoice/Your-invoices';
-import CrewInvoices from './components/invoice/Crew-invoices';
-import Projects from './components/project/Projects';
-import ProjectView from './components/project/Project-view'
-import InvoiceView from './components/invoice/Invoice-view';
-import Users from './components/user/Users';
-import UserView from './components/user/User-view';
-import UserSettings from './components/user/User-settings';
+import Home from './components/_views/Home';
+import YourInvoices from './components/_views/Your-invoices';
+import CrewInvoices from './components/_views/Crew-invoices';
+import Projects from './components/_views/Projects';
+import ProjectView from './components/_views/Project-view';
+import InvoiceView from './components/_views/Invoice-view';
+import Users from './components/_views/Users';
+import UserView from './components/_views/User-view';
+import UserSettings from './components/_views/User-settings';
 
 /** Register router with Vue */
 Vue.use(VueRouter);

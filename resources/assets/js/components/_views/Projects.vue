@@ -156,7 +156,7 @@
 </template>
 
 <script>
-	import ProjectsTable from './Projects-table';
+	import ProjectsTable from './../project/Projects-table';
 
   export default {
   	components: {
