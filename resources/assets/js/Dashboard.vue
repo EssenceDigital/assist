@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import NavBar from './_ui/Nav-bar';
+  import NavBar from './components/_views/_ui/Nav-bar';
 
   export default {
 

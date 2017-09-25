@@ -25,8 +25,10 @@ export const store = new Vuex.Store({
 		projects: [],
 		// A project who has been selected to view/edit
 		currentProject: { id: -1 },
-		// Invoices returned by the server
-		invoices: [],		
+		// 'My 'Invoices returned by the server
+		invoices: [],
+		// Crew Invoices returned by the server
+		crewInvoices: [],
 		// An invoice that has been selected to view/edit
 		currentInvoice: false,
 		// All companies found within the project table
@@ -79,6 +81,10 @@ export const store = new Vuex.Store({
 
 		updateInvoices (state, payload) {
 			return state.invoices = payload;
+		},
+
+		updateCrewInvoices (state, payload) {
+			return state.crewInvoices = payload;
 		},
 
 		updateCurrentInvoice (state, payload) {
@@ -213,31 +219,6 @@ export const store = new Vuex.Store({
 			 return api.getAction(context, '/projects/auth-users', 'updateProjects');
 		},
 
-		// Use api to retrieve all timesheets
-		getAllTimesheets (context, payload) {
-			var url = '/timesheets';
-			
-			// Create payload 
-			if(payload){
-				// Add from date to string
-				if(payload.from_date != '') url += '/' + payload.from_date;
-					else url += '/' + 0;
-				// Add to date to string
-				if(payload.to_date != '') url += '/' + payload.to_date;
-					else url += '/' + 0;					
-				// Add project id to string
-				if(payload.project_id != '') url += '/' + payload.project_id;
-					else url += '/' + 0;
-				// Add user id to string
-				if(payload.user_id != '') url += '/' + payload.user_id;
-					else url += '/' + 0;
-				if(payload.auth_user_only) url += '/' + 1
-					else url += '/' + 0;					
-			}
-			// Use api to send request
-			return api.getAction(context, url, 'updateTimesheets');
-		},
-
 		// Use api to retrieve all invocies
 		getAllInvoices (context, payload) {
 			var url = '/invoices';
@@ -248,7 +229,7 @@ export const store = new Vuex.Store({
 					else url += '/' + 0;				
 			}
 			// Use api to send request		
-			return api.getAction(context, url, 'updateInvoices');
+			return api.getAction(context, url, 'updateCrewInvoices');
 		},
 
 		// Use api to retrieve all of a users invoices and set them in the state
@@ -356,6 +337,10 @@ export const store = new Vuex.Store({
 
 		invoices (state) {
 			return state.invoices;
+		},
+
+		crewInvoices (state) {
+			return state.crewInvoices;
 		},
 
 		currentInvoice (state) {

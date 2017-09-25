@@ -1,5 +1,5 @@
 <template>
-	<v-container fluid>
+	<v-container fluid v-if="crew">
 
 		<!-- Heading and add crew member button -->
 		<v-layout row>
@@ -151,6 +151,8 @@
 
 <script>
 	export default {
+		props: ["crew"],
+		
 		data () {
 			return {
 				// Indicates when a crew member is saving to db
@@ -174,10 +176,6 @@
 		},
 
 		computed: {
-			crew () {
-				return this.$store.getters.currentProject.users;
-			},
-
 			crewSelectList () {
 				var users = this.$store.getters.users,
 						crew = this.$store.getters.currentProject.users,

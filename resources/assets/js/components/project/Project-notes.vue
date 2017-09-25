@@ -1,5 +1,5 @@
 <template>
-	<v-container>
+	<v-container v-if="notes">
 
 		<!-- No notes info -->
 		<v-layout row v-if="notes.length === 0">
@@ -140,6 +140,7 @@
 
 <script>
 	export default {
+		props: ['notes'],
 
 		data () {
 			return {
@@ -157,13 +158,6 @@
 				noteErr: false,
 				// The error message
 				noteErrMsg: ''
-			}
-		},
-
-		computed: {
-			// Retrieve notes for current project from store
-			notes () {
-				return this.$store.getters.currentProject.comments
 			}
 		},
 

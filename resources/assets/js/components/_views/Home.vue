@@ -6,10 +6,14 @@
 <template>
 	<!-- Uses a card layout -->
 	<card-layout
-		title="Central Dashboard"
-		description="Welcome to your Arrow Archaeology dashboard."
 		:tips="tips"
 	>
+		<div slot="title">
+			Central Dashboard
+		</div>
+		<div slot="description">
+			Welcome to your Arrow Archaeology dashboard.
+		</div>
 		<div slot="content">
 			<p>
 				Notifications Here

@@ -100,7 +100,7 @@
 				if(this.authUser.permissions === 'admin') {
 					var menuItems = [
 						{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' },
-						{ icon: 'receipt', title: 'Your Invoices', link: '/your-invoices' },
+						{ icon: 'receipt', title: 'My Invoices', link: '/my-invoices' },
 						{ icon: 'receipt', title: 'Crew Invoices', link: '/crew-invoices' },
 						{ icon: 'assignment', title: 'Projects', link: '/projects' },
 						{ icon: 'group', title: 'Users', link: '/users' }

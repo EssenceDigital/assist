@@ -228,7 +228,7 @@ class ProjectsController extends Controller
         // Find project
         $project = Project::find($request->project_id);
         // Find the user now
-        $user = User::with(['timesheets'])->find($request->user_id);        
+        $user = User::find($request->user_id);        
         // Attempt to store association
         $result = $project->users()->save($user);
         // Verify success on store

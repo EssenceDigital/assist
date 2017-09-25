@@ -36,10 +36,16 @@
 											 * The title of the page (prop)
 						        	-->
 						          <v-toolbar-title class="display-1">				         
-						          	{{ title }}		          	
+						          	<slot name="title"></slot>	          	
 						          </v-toolbar-title>	
 
 						          <v-spacer></v-spacer>
+
+						        	<!-- 
+											 * A possible dialog
+						        	-->
+						          <slot name="dialog"></slot>
+
 						        </v-toolbar><!-- /Card toolbar -->	
 						      </v-container>			        
 						      <v-container>
@@ -49,7 +55,7 @@
 											 * The description of the page (prop)
 						        	-->						      	
 					      			<p class="subheading pl-4">						          
-	 											{{ description }}   		
+	 											<slot name="description"></slot>  		
 						        	</p>
 
 						      	</v-layout>
@@ -99,7 +105,7 @@
 	import NotifyWrapper from './_Notify-wrapper';
 
 	export default{
-		props: ['title', 'description', 'tips'],
+		props: ['tips'],
 
 		components: {
 			'notify-wrapper': NotifyWrapper

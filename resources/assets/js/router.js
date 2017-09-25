@@ -3,7 +3,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 /** Load Project components needed by routes */
 import Home from './components/_views/Home';
-import YourInvoices from './components/_views/Your-invoices';
+import MyInvoices from './components/_views/My-invoices';
 import CrewInvoices from './components/_views/Crew-invoices';
 import Projects from './components/_views/Projects';
 import ProjectView from './components/_views/Project-view';
@@ -23,9 +23,9 @@ export default new VueRouter({
 			component: Home
 		},
 		{
-			path: '/your-invoices',
-			name: 'YourInvoices',
-			component: YourInvoices
+			path: '/my-invoices',
+			name: 'MyInvoices',
+			component: MyInvoices
 		},
 		{
 			path: '/your-invoices/:id/view',

@@ -1,5 +1,5 @@
 <template>
-	<v-container>
+	<v-container v-if="timeline">
 		<!-- Heading and add crew member button -->
 		<v-layout row>
 			<div class="headline">
@@ -18,7 +18,7 @@
 			<v-flex xs12>
 			 	<v-stepper v-model="step" vertical non-linear>
 			 		<!-- Steps -->
-			 		<v-container fluid v-for="current in steps" :key="step.field">
+			 		<v-container fluid v-for="current in steps" :key="current.field">
 				    <v-stepper-step :step="current.step" 
 				    	style="cursor:pointer;"
 				    	:complete="timeline[current.field] != null && timeline[current.field] != 0" 
@@ -44,7 +44,7 @@
 									:id="timeline.id"
 									:label="current.label"
 									:field="current.field"
-									:value="$store.getters.currentProject.timeline[current.field]"
+									:value="timeline[current.field]"
 								></field-input-toggle>														
 							</v-flex>			    	
 				    </v-stepper-content>			 			
@@ -60,23 +60,15 @@
 	import FieldInputToggle from './../form/Field-input-toggle';
 
 	export default {
+		props: ["timeline", "projectApprovalDate"],
+
 		components: {
 			'field-input-toggle': FieldInputToggle
 		},
 
 		computed: {
-			// The project timeline
-			timeline () {
-				return this.$store.getters.currentProject.timeline;
-			},
-
 			usersSelectList () {
 				return this.$store.getters.usersSelectListNameBased;
-			},
-
-			// Date project was approved on (or not)
-			projectApprovalDate () {
-				return this.$store.getters.currentProject.approval_date;
 			}
 		},
 
@@ -218,17 +210,18 @@
 		},
 
 		created () {
-
-			// Determine the current step
-			for(let step of this.steps){
-				// Set select list for this step
-				if(step.step === 2) step.items = this.usersSelectList;
-				// Determine current step
-				if(this.timeline[step.field] === null || this.timeline[step.field] === 0){
-					this.step = step.step;
-					break;
-				}
-			}		
+			if(this.timeline){
+				// Determine the current step
+				for(let step of this.steps){
+					// Set select list for this step
+					if(step.step === 2) step.items = this.usersSelectList;
+					// Determine current step
+					if(this.timeline[step.field] === null || this.timeline[step.field] === 0){
+						this.step = step.step;
+						break;
+					}
+				}					
+			}
 		}
 	}
 </script>

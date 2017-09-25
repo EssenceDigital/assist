@@ -83,7 +83,14 @@
     computed: {
       // Watch for invoices in state to update
       invoices () {
-        return this.$store.getters.invoices;
+        if(this.table_state){
+          if(this.table_state === 'user'){
+            return this.$store.getters.invoices;
+          }
+          if(this.table_state === 'admin'){
+            return this.$store.getters.crewInvoices;
+          }
+        }
       },
 
       usersSelectList () {
