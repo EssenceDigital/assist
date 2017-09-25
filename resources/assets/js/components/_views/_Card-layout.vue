@@ -53,10 +53,19 @@
 
 						        	<!-- 
 											 * The description of the page (prop)
-						        	-->						      	
-					      			<p class="subheading pl-4">						          
-	 											<slot name="description"></slot>  		
-						        	</p>
+						        	-->	
+						        	<v-flex xs9>
+						      			<p class="subheading pl-4">						          
+		 											<slot name="description"></slot>  		
+							        	</p>						        		
+						        	</v-flex>		
+
+						        	<!-- 
+											 * An optional additional slot (prop)
+						        	-->	
+						        	<v-flex xs3>
+						        		<slot name="additional"></slot>
+						        	</v-flex>			      	
 
 						      	</v-layout>
 						      </v-container>

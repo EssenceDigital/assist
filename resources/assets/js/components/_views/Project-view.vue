@@ -42,6 +42,13 @@
 		        >
 		          Timeline
 		        </v-tabs-item><!-- / Timeline tab link -->	
+		        <!-- Hours / costs tab link -->
+		        <v-tabs-item
+		          key="5"
+		          href="#tab-hours"
+		        >
+		          Hours / Costs
+		        </v-tabs-item><!-- / Hours / costs tab link -->			        
 		        <!-- Active tab indicator -->
 		       	<v-tabs-slider class="primary"></v-tabs-slider>			        				        		        
 		      </v-tabs-bar><!-- / Tab links -->
@@ -101,7 +108,20 @@
 			          	></project-timeline>
 			          </v-card-text>
 			        </v-card>
-			      </v-tabs-content><!-- / Timeline tab content -->				      			      	      
+			      </v-tabs-content><!-- / Timeline tab content -->	
+			    	<!-- Hours / costs tab content -->
+			      <v-tabs-content
+			        key="5"
+			        id="tab-hours"
+			      >
+			        <v-card flat>
+			          <v-card-text>
+			          	<project-hours-costs
+			          		:workItems="currentProject.work_items"
+			          	></project-hours-costs>
+			          </v-card-text>
+			        </v-card>
+			      </v-tabs-content><!-- / Hours / costs tab content -->			      			      			      	      
 			    </v-tabs-items><!-- / Tab items content -->
 				</v-tabs><!-- / Tabs for displaying project info -->				
 			</v-layout>				
@@ -111,10 +131,11 @@
 
 <script>
 	import CardLayout from './_Card-layout';
-	import ProjectDetails from './../project/Project-details.vue';
-	import ProjectNotes from './../project/Project-notes.vue';
-	import ProjectCrew from './../project/Project-crew.vue';
-	import ProjectTimeline from './../project/Project-timeline.vue';
+	import ProjectDetails from './../project/Project-details';
+	import ProjectNotes from './../project/Project-notes';
+	import ProjectCrew from './../project/Project-crew';
+	import ProjectTimeline from './../project/Project-timeline';
+	import ProjectHoursCosts from './../project/Project-hours-costs';
 
 	export default {
 		props: ['id'],
@@ -124,7 +145,8 @@
 			'project-details': ProjectDetails,
 			'project-notes': ProjectNotes,
 			'project-crew': ProjectCrew,
-			'project-timeline': ProjectTimeline
+			'project-timeline': ProjectTimeline,
+			'project-hours-costs': ProjectHoursCosts
 		},
 
 		data () {

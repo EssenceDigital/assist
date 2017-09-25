@@ -829,130 +829,75 @@ module.exports = {
 			resolve(form);
 		});
 	},
-	findTimesheet: function findTimesheet(timesheets, timesheetId) {
-		return new Promise(function (resolve, reject) {
-			// Find timesheet
-			timesheets.forEach(function (timesheet) {
-				if (timesheet.id === timesheetId) {
-					var index = timesheets.indexOf(timesheet);
-					resolve(index);
-				}
+	tallyProjectInvoices: function tallyProjectInvoices(workItems) {
+		if (workItems.length != 0) {
+			// Cache total
+			var total = 0,
+			    invoiceIds = [];
+			// Itterate and calculate
+			workItems.forEach(function (item) {
+				// Push this items invoice id to the cached array
+				invoiceIds.push(item.invoice.id);
 			});
-		});
+			// Return unique invoice IDs in array
+			return Array.from(new Set(invoiceIds)).length;
+		}
 	},
-	findTimesheetAsset: function findTimesheetAsset(timesheets, timesheetId, assetName, assetId) {
-		var _this = this;
-
-		return new Promise(function (resolve, reject) {
-			_this.findTimesheet(timesheets, timesheetId).then(function (timesheet) {
-				timesheet[assetName].forEach(function (asset) {
-					if (asset.id === assetId) {
-						resolve(asset);
-					}
-				});
-			});
-		});
-	},
-	deleteTimesheetAsset: function deleteTimesheetAsset(timesheets, timesheetId, assetName, assetId) {
-		var _this2 = this;
-
-		return new Promise(function (resolve, reject) {
-			_this2.findTimesheet(timesheets, timesheetId).then(function (timesheet) {
-				timesheet[assetName].forEach(function (asset) {
-					if (asset.id === assetId) {
-						var index = timesheet[assetName].indexOf(asset);
-						timesheet[assetName].splice(index, 1);
-						resolve();
-					}
-				});
-			});
-		});
-	},
-	calcTimesheetHours: function calcTimesheetHours(workJobs) {
-		var totalHours = 0;
-		// Calculate hours
-		workJobs.forEach(function (job) {
-			totalHours += parseFloat(job.hours_worked);
-		});
-		return +totalHours.toFixed(2);
-	},
-	calcTimesheetTravel: function calcTimesheetTravel(travelJobs) {
-		var totalTravel = 0;
-		// Calculate hours
-		travelJobs.forEach(function (job) {
-			totalTravel += parseFloat(job.travel_distance);
-		});
-		return totalTravel;
-	},
-	calcTimesheetEquipment: function calcTimesheetEquipment(equipmentRentals) {
-		var totalEquipment = 0;
-		// Calculate total
-		equipmentRentals.forEach(function (rental) {
-			totalEquipment += parseFloat(rental.rental_fee) * 100;
-		});
-		return (totalEquipment / 100).toFixed(2);
-	},
-	calcTimesheetOther: function calcTimesheetOther(otherCosts) {
-		var totalOther = 0;
-		// Calculate total
-		otherCosts.forEach(function (cost) {
-			totalOther += parseFloat(cost.cost) * 100;
-		});
-		return (totalOther / 100).toFixed(2);
-	},
-	timesheetsTotalPerDiem: function timesheetsTotalPerDiem(timesheets) {
+	tallyWorkItemsHours: function tallyWorkItemsHours(workItems) {
+		// Cache total
 		var total = 0;
-		timesheets.forEach(function (timesheet) {
-			// Calculate real money by converting to cents and add to total
-			total += parseFloat(timesheet.per_diem) * 100;
-		});
-		return (total / 100).toFixed(2);
-	},
-	timesheetsTotalHours: function timesheetsTotalHours(timesheets) {
-		var _this3 = this;
-
-		var total = 0;
-		timesheets.forEach(function (timesheet) {
-			total += _this3.calcTimesheetHours(timesheet.work_jobs);
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			total += parseFloat(item.hours);
 		});
 		return total;
 	},
-	timesheetsTotalHoursPay: function timesheetsTotalHoursPay(timesheets, wage) {
-		var hours = this.timesheetsTotalHours(timesheets),
-		    pay = parseFloat(hours) * (parseFloat(wage) * 100);
-
-		return (pay / 100).toFixed(2);
-	},
-	timesheetsTotalTravelDistance: function timesheetsTotalTravelDistance(timesheets) {
-		var _this4 = this;
-
+	tallyWorkItemsHoursPay: function tallyWorkItemsHoursPay(workItems) {
+		// Cache total
 		var total = 0;
-		timesheets.forEach(function (timesheet) {
-			total += parseFloat(_this4.calcTimesheetTravel(timesheet.travel_jobs));
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			total += parseFloat(item.hours) * parseFloat(item.hourly_rate);
 		});
-		return total.toFixed(2);
+		return total;
 	},
-	timesheetsTotalEquipmentCost: function timesheetsTotalEquipmentCost(timesheets) {
-		var _this5 = this;
-
+	tallyWorkItemsTravelMileageCost: function tallyWorkItemsTravelMileageCost(workItems) {
+		// Cache total
 		var total = 0;
-		timesheets.forEach(function (timesheet) {
-			total += parseFloat(_this5.calcTimesheetEquipment(timesheet.equipment_rentals)) * 100;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			if (item.travel_mileage) total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate);
 		});
-		return (total / 100).toFixed(2);
+		return total;
 	},
-	timesheetsTotalOtherCosts: function timesheetsTotalOtherCosts(timesheets) {
-		var _this6 = this;
-
+	tallyWorkItemsPerDiemCost: function tallyWorkItemsPerDiemCost(workItems) {
+		// Cache total
 		var total = 0;
-		timesheets.forEach(function (timesheet) {
-			total += parseFloat(_this6.calcTimesheetOther(timesheet.other_costs)) * 100;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			if (item.per_diem) total += parseFloat(item.per_diem);
 		});
-		return (total / 100).toFixed(2);
+		return total;
 	},
-	timesheetsTotal: function timesheetsTotal(timesheets) {
-		var total = parseFloat(this.totalPerDiem(timesheets)) * 100 + parseFloat(this.totalHoursPay(timesheets)) * 100 + parseFloat(this.totalEquipmentCost(timesheets)) * 100 + parseFloat(this.totalOtherCosts(timesheets)) * 100;
-		return (total / 100).toFixed(2);
+	tallyWorkItemsLodgingCost: function tallyWorkItemsLodgingCost(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			if (item.lodging_cost) total += parseFloat(item.lodging_cost);
+		});
+		return total;
+	},
+	tallyWorkItemsExtraCosts: function tallyWorkItemsExtraCosts(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate);
+			total += parseFloat(item.per_diem);
+			if (item.lodging_cost) total += parseFloat(item.lodging_cost);
+		});
+		return total;
 	}
 });
 
@@ -1007,9 +952,9 @@ module.exports = Component.exports
 var disposed = false
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(91),
+  __webpack_require__(93),
   /* template */
-  __webpack_require__(92),
+  __webpack_require__(94),
   /* styles */
   null,
   /* scopeId */
@@ -11690,7 +11635,7 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(18);
-module.exports = __webpack_require__(139);
+module.exports = __webpack_require__(142);
 
 
 /***/ }),
@@ -11705,8 +11650,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuetify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vuetify__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store_index__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__router__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__filters_date__ = __webpack_require__(137);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__filters_dateMinusYear__ = __webpack_require__(138);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__filters_date__ = __webpack_require__(140);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__filters_dateMinusYear__ = __webpack_require__(141);
 /** Load general dependencies from a file */
 __webpack_require__(19);
 /** Load Vue based dependencies */
@@ -11718,8 +11663,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuet
 /** Set up Router */
 
 /** Register Vue components */
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('dashboard', __webpack_require__(128));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('login', __webpack_require__(134));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('dashboard', __webpack_require__(131));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('login', __webpack_require__(137));
 
 /** Register Vue filters */
 
@@ -46687,13 +46632,13 @@ var index_esm = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_views_Projects___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_views_Projects__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_views_Project_view__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_views_Project_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_views_Project_view__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_views_Invoice_view__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_views_Invoice_view__ = __webpack_require__(108);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_views_Invoice_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__components_views_Invoice_view__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_views_Users__ = __webpack_require__(110);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_views_Users__ = __webpack_require__(113);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_views_Users___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__components_views_Users__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_views_User_view__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_views_User_view__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_views_User_view___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__components_views_User_view__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_views_User_settings__ = __webpack_require__(125);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_views_User_settings__ = __webpack_require__(128);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_views_User_settings___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__components_views_User_settings__);
 /** Load Vue based dependencies */
 
@@ -49597,6 +49542,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -49770,9 +49724,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "row": ""
     }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs9": ""
+    }
   }, [_c('p', {
     staticClass: "subheading pl-4"
-  }, [_vm._t("description")], 2)])], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
+  }, [_vm._t("description")], 2)]), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_vm._t("additional")], 2)], 1)], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
     staticClass: "mt-4"
   }, [_c('v-layout', {
     attrs: {
@@ -51058,6 +51020,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -52026,6 +52004,36 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     slot: "description"
   }, [_vm._v("\n\t\t\tThis is where you can find and filter all of the projects within the system.\n\t\t")]), _vm._v(" "), _c('div', {
     attrs: {
+      "slot": "additional"
+    },
+    slot: "additional"
+  }, [_c('v-select', {
+    staticClass: "pt-0 pr-3",
+    attrs: {
+      "items": [{
+          text: 'Work View',
+          value: 'admin_work'
+        },
+        {
+          text: 'Manage View',
+          value: 'admin_manage'
+        }
+      ],
+      "label": "Table State...",
+      "single-line": "",
+      "auto": "",
+      "prepend-icon": "find_in_page",
+      "hide-details": ""
+    },
+    model: {
+      value: (_vm.tableState),
+      callback: function($$v) {
+        _vm.tableState = $$v
+      },
+      expression: "tableState"
+    }
+  })], 1), _vm._v(" "), _c('div', {
+    attrs: {
       "slot": "content"
     },
     slot: "content"
@@ -52057,7 +52065,7 @@ var Component = __webpack_require__(0)(
   /* script */
   __webpack_require__(90),
   /* template */
-  __webpack_require__(104),
+  __webpack_require__(107),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -52136,14 +52144,16 @@ exports.push([module.i, "\n.center[data-v-1c0e868c]{\n\t\tmargin-left: auto;\n\t
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Card_layout__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__project_Project_details_vue__ = __webpack_require__(143);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__project_Project_details_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__project_Project_details_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__project_Project_notes_vue__ = __webpack_require__(93);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__project_Project_notes_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__project_Project_notes_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__project_Project_crew_vue__ = __webpack_require__(98);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__project_Project_crew_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__project_Project_crew_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__project_Project_timeline_vue__ = __webpack_require__(101);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__project_Project_timeline_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__project_Project_timeline_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__project_Project_details__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__project_Project_details___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__project_Project_details__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__project_Project_notes__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__project_Project_notes___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__project_Project_notes__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__project_Project_crew__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__project_Project_crew___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__project_Project_crew__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__project_Project_timeline__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__project_Project_timeline___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__project_Project_timeline__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__project_Project_hours_costs__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__project_Project_hours_costs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__project_Project_hours_costs__);
 //
 //
 //
@@ -52255,6 +52265,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -52267,10 +52298,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	components: {
 		'card-layout': __WEBPACK_IMPORTED_MODULE_0__Card_layout___default.a,
-		'project-details': __WEBPACK_IMPORTED_MODULE_1__project_Project_details_vue___default.a,
-		'project-notes': __WEBPACK_IMPORTED_MODULE_2__project_Project_notes_vue___default.a,
-		'project-crew': __WEBPACK_IMPORTED_MODULE_3__project_Project_crew_vue___default.a,
-		'project-timeline': __WEBPACK_IMPORTED_MODULE_4__project_Project_timeline_vue___default.a
+		'project-details': __WEBPACK_IMPORTED_MODULE_1__project_Project_details___default.a,
+		'project-notes': __WEBPACK_IMPORTED_MODULE_2__project_Project_notes___default.a,
+		'project-crew': __WEBPACK_IMPORTED_MODULE_3__project_Project_crew___default.a,
+		'project-timeline': __WEBPACK_IMPORTED_MODULE_4__project_Project_timeline___default.a,
+		'project-hours-costs': __WEBPACK_IMPORTED_MODULE_5__project_Project_hours_costs___default.a
 	},
 
 	data: function data() {
@@ -52315,6 +52347,405 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 /* 91 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var Component = __webpack_require__(0)(
+  /* script */
+  __webpack_require__(92),
+  /* template */
+  __webpack_require__(95),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Users\\Matt\\Projects\\assist\\resources\\assets\\js\\components\\project\\Project-details.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Project-details.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-720cd06b", Component.options)
+  } else {
+    hotAPI.reload("data-v-720cd06b", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 92 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	props: ['project', 'clientsSelectList'],
+
+	components: {
+		'field-input-toggle': __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default.a
+	}
+});
+
+/***/ }),
+/* 93 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -52669,7 +53100,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 92 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -52990,19 +53421,493 @@ if (false) {
 }
 
 /***/ }),
-/* 93 */
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\tClient\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'select',
+      "select_options": _vm.clientsSelectList,
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Client Company',
+      "field": 'client_company_name',
+      "value": _vm.project.client_company_name
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Company Contact',
+      "field": 'client_contact_name',
+      "value": _vm.project.client_contact_name
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Contact\'s Phone No.',
+      "icon": 'phone',
+      "field": 'client_contact_phone',
+      "value": _vm.project.client_contact_phone
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Contact\'s Email',
+      "field": 'client_contact_email',
+      "value": _vm.project.client_contact_email
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  }), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5",
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\tLocation\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'select',
+      "select_options": [{
+          text: 'Province...',
+          value: ''
+        },
+        {
+          text: 'Alberta',
+          value: 'Alberta'
+        },
+        {
+          text: 'British Columbia',
+          value: 'British Columbia'
+        },
+        {
+          text: 'Saskatchewan',
+          value: 'Saskatchewan'
+        }
+      ],
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Province',
+      "field": 'province',
+      "value": _vm.project.province
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs8": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'textarea',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Specific Location',
+      "field": 'location',
+      "value": _vm.project.location,
+      "char_count": 100
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  }), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5",
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\tBasics\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'textarea',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Basic Details',
+      "field": 'details',
+      "value": _vm.project.details,
+      "char_count": 750
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  }), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5",
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\tWork Details\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'select',
+      "select_options": [{
+          text: 'Work type...',
+          value: ''
+        },
+        {
+          text: 'HRIA',
+          value: 'HRIA'
+        },
+        {
+          text: 'Archaeology',
+          value: 'Archaeology'
+        },
+        {
+          text: 'Paleaontology',
+          value: 'Paleaontology'
+        }
+      ],
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Work Type',
+      "field": 'work_type',
+      "value": _vm.project.work_type
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'date',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Respond By',
+      "field": 'response_by',
+      "value": _vm.project.response_by
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Estimate',
+      "field": 'estimate',
+      "prefix": '$',
+      "value": _vm.project.estimate
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'textarea',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Work Overview',
+      "field": 'work_overview',
+      "value": _vm.project.work_overview,
+      "char_count": 750
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'textarea',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Work Plans',
+      "field": 'plans',
+      "value": _vm.project.plans,
+      "char_count": 750
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  }), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5",
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\tLand\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'select',
+      "select_options": [{
+          text: 'Land ownership...',
+          value: ''
+        },
+        {
+          text: 'Crown',
+          value: 'Crown'
+        },
+        {
+          text: 'Freehold',
+          value: 'Freehold'
+        }
+      ],
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Land Ownership',
+      "field": 'land_ownership',
+      "value": _vm.project.land_ownership
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'select',
+      "select_options": [{
+          text: 'Land access granted...',
+          value: ''
+        },
+        {
+          text: 'No',
+          value: 0
+        },
+        {
+          text: 'Yes',
+          value: 1
+        }
+      ],
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Access Granted',
+      "field": 'land_access_granted',
+      "value": _vm.project.land_access_granted,
+      "bool_field": true
+    }
+  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Access Granted By',
+      "field": 'land_access_granted_by',
+      "value": _vm.project.land_access_granted_by
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Access Contact',
+      "field": 'land_access_contact',
+      "value": _vm.project.land_access_contact
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "icon": 'phone',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Contact\'s Phone',
+      "field": 'land_access_phone',
+      "value": _vm.project.land_access_phone
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  }), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5",
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\tApproval\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'date',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Approval Date',
+      "field": 'approval_date',
+      "value": _vm.project.approval_date
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  }), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-5",
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("\n\t\t\t\tInvoicing\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'date',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Invoiced Date',
+      "field": 'invoiced_date',
+      "value": _vm.project.invoiced_date
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'date',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Invoice Paid Date',
+      "field": 'invoice_paid_date',
+      "value": _vm.project.invoice_paid_date
+    }
+  })], 1), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs4": ""
+    }
+  }, [_c('field-input-toggle', {
+    attrs: {
+      "type": 'text',
+      "icon": 'attach_money',
+      "action": 'updateProjectField',
+      "id": _vm.project.id,
+      "label": 'Invoice Amount',
+      "field": 'invoice_amount',
+      "prefix": '$',
+      "value": _vm.project.invoice_amount
+    }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-5"
+  })], 1)], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-720cd06b", module.exports)
+  }
+}
+
+/***/ }),
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(94)
+  __webpack_require__(97)
 }
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(96),
+  __webpack_require__(99),
   /* template */
-  __webpack_require__(97),
+  __webpack_require__(100),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -53034,13 +53939,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 94 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(95);
+var content = __webpack_require__(98);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -53060,7 +53965,7 @@ if(false) {
 }
 
 /***/ }),
-/* 95 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -53074,7 +53979,7 @@ exports.push([module.i, "\n.chip[data-v-0b35c5aa] {\n\theight: auto;\n\twhite-sp
 
 
 /***/ }),
-/* 96 */
+/* 99 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -53300,7 +54205,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 97 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -53492,15 +54397,15 @@ if (false) {
 }
 
 /***/ }),
-/* 98 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(99),
+  __webpack_require__(102),
   /* template */
-  __webpack_require__(100),
+  __webpack_require__(103),
   /* styles */
   null,
   /* scopeId */
@@ -53532,7 +54437,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 99 */
+/* 102 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -53790,7 +54695,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 100 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -54032,15 +54937,15 @@ if (false) {
 }
 
 /***/ }),
-/* 101 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(102),
+  __webpack_require__(105),
   /* template */
-  __webpack_require__(103),
+  __webpack_require__(106),
   /* styles */
   null,
   /* scopeId */
@@ -54072,7 +54977,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 102 */
+/* 105 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54308,7 +55213,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 103 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -54402,7 +55307,7 @@ if (false) {
 }
 
 /***/ }),
-/* 104 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -54464,7 +55369,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "href": "#tab-timeline"
     }
-  }, [_vm._v("\n\t          Timeline\n\t        ")]), _vm._v(" "), _c('v-tabs-slider', {
+  }, [_vm._v("\n\t          Timeline\n\t        ")]), _vm._v(" "), _c('v-tabs-item', {
+    key: "5",
+    attrs: {
+      "href": "#tab-hours"
+    }
+  }, [_vm._v("\n\t          Hours / Costs\n\t        ")]), _vm._v(" "), _c('v-tabs-slider', {
     staticClass: "primary"
   })], 1), _vm._v(" "), _c('v-tabs-items', [_c('v-tabs-content', {
     key: "1",
@@ -54520,6 +55430,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "timeline": _vm.currentProject.timeline,
       "projectApprovalDate": _vm.currentProject.approval_date
     }
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-tabs-content', {
+    key: "5",
+    attrs: {
+      "id": "tab-hours"
+    }
+  }, [_c('v-card', {
+    attrs: {
+      "flat": ""
+    }
+  }, [_c('v-card-text', [_c('project-hours-costs', {
+    attrs: {
+      "workItems": _vm.currentProject.work_items
+    }
   })], 1)], 1)], 1)], 1)], 1)], 1)], 1)])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
@@ -54531,19 +55454,19 @@ if (false) {
 }
 
 /***/ }),
-/* 105 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(106)
+  __webpack_require__(109)
 }
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(108),
+  __webpack_require__(111),
   /* template */
-  __webpack_require__(109),
+  __webpack_require__(112),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -54575,13 +55498,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 106 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(107);
+var content = __webpack_require__(110);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -54601,7 +55524,7 @@ if(false) {
 }
 
 /***/ }),
-/* 107 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -54615,7 +55538,7 @@ exports.push([module.i, "\n.card--flex-toolbar[data-v-2dbc64f8] {\n  margin-top:
 
 
 /***/ }),
-/* 108 */
+/* 111 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -55138,38 +56061,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 		workHoursTotal: function workHoursTotal() {
 			if (this.currentInvoice) {
-				// Cache items
-				var workItems = this.currentInvoice.work_items,
-				    total = 0;
-				// Itterate and calculate
-				workItems.forEach(function (item) {
-					total += parseFloat(item.hours) * parseFloat(item.hourly_rate);
-				});
+				// Tally with helper
+				var total = __WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].tallyWorkItemsHoursPay(this.currentInvoice.work_items);
+
 				return total.toFixed(2);
 			}
 		},
 		extraCostsTotal: function extraCostsTotal() {
 			if (this.currentInvoice) {
-				// Cache items
-				var workItems = this.currentInvoice.work_items,
-				    total = 0;
-				// Itterate and calculate
-				workItems.forEach(function (item) {
-					total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate);
-					total += parseFloat(item.per_diem);
-					if (item.lodging_cost) total += parseFloat(item.lodging_cost);
-				});
+				// Tally with helper
+				var total = __WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].tallyWorkItemsExtraCosts(this.currentInvoice.work_items);
+
 				return total.toFixed(2);
 			}
 		},
 		invoiceSubTotal: function invoiceSubTotal() {
-			return parseFloat(this.workHoursTotal) + parseFloat(this.extraCostsTotal);
+			if (this.currentInvoice) {
+				return parseFloat(this.workHoursTotal) + parseFloat(this.extraCostsTotal);
+			}
 		},
 		gstTotal: function gstTotal() {
-			return (parseFloat(this.invoiceSubTotal) * 0.05).toFixed(2);
+			if (this.currentInvoice) {
+				return (parseFloat(this.invoiceSubTotal) * 0.05).toFixed(2);
+			}
 		},
 		invoiceTotal: function invoiceTotal() {
-			return (parseFloat(this.gstTotal) + parseFloat(this.invoiceSubTotal)).toFixed(2);
+			if (this.currentInvoice) {
+				return (parseFloat(this.gstTotal) + parseFloat(this.invoiceSubTotal)).toFixed(2);
+			}
 		}
 	},
 
@@ -55306,7 +56225,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 109 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -56092,19 +57011,19 @@ if (false) {
 }
 
 /***/ }),
-/* 110 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(111)
+  __webpack_require__(114)
 }
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(113),
+  __webpack_require__(116),
   /* template */
-  __webpack_require__(119),
+  __webpack_require__(122),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -56136,13 +57055,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 111 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(112);
+var content = __webpack_require__(115);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -56162,7 +57081,7 @@ if(false) {
 }
 
 /***/ }),
-/* 112 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -56176,14 +57095,14 @@ exports.push([module.i, "\n.card--flex-toolbar[data-v-64ceb565] {\n  margin-top:
 
 
 /***/ }),
-/* 113 */
+/* 116 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Card_layout__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_Users_table__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_Users_table__ = __webpack_require__(117);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user_Users_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__user_Users_table__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store_helpers__ = __webpack_require__(4);
 //
@@ -56387,19 +57306,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 114 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(115)
+  __webpack_require__(118)
 }
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(117),
+  __webpack_require__(120),
   /* template */
-  __webpack_require__(118),
+  __webpack_require__(121),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -56431,13 +57350,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 115 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(116);
+var content = __webpack_require__(119);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -56457,7 +57376,7 @@ if(false) {
 }
 
 /***/ }),
-/* 116 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -56471,7 +57390,7 @@ exports.push([module.i, "\n.center[data-v-177e1282]{\n  margin-left: auto;\n  ma
 
 
 /***/ }),
-/* 117 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -56559,7 +57478,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 118 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -56632,7 +57551,7 @@ if (false) {
 }
 
 /***/ }),
-/* 119 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -56918,19 +57837,19 @@ if (false) {
 }
 
 /***/ }),
-/* 120 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(121)
+  __webpack_require__(124)
 }
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(123),
+  __webpack_require__(126),
   /* template */
-  __webpack_require__(124),
+  __webpack_require__(127),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -56962,13 +57881,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 121 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(122);
+var content = __webpack_require__(125);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -56988,7 +57907,7 @@ if(false) {
 }
 
 /***/ }),
-/* 122 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(undefined);
@@ -57002,7 +57921,7 @@ exports.push([module.i, "\n.center[data-v-2caf8cc4]{\n\t\tmargin-left: auto;\n\t
 
 
 /***/ }),
-/* 123 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -57262,7 +58181,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 124 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -57505,15 +58424,15 @@ if (false) {
 }
 
 /***/ }),
-/* 125 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(126),
+  __webpack_require__(129),
   /* template */
-  __webpack_require__(127),
+  __webpack_require__(130),
   /* styles */
   null,
   /* scopeId */
@@ -57545,7 +58464,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 126 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -57750,7 +58669,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 127 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -57946,15 +58865,15 @@ if (false) {
 }
 
 /***/ }),
-/* 128 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(129),
+  __webpack_require__(132),
   /* template */
-  __webpack_require__(133),
+  __webpack_require__(136),
   /* styles */
   null,
   /* scopeId */
@@ -57986,12 +58905,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 129 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_views_ui_Nav_bar__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_views_ui_Nav_bar__ = __webpack_require__(133);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_views_ui_Nav_bar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_views_ui_Nav_bar__);
 //
 //
@@ -58028,15 +58947,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 130 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(131),
+  __webpack_require__(134),
   /* template */
-  __webpack_require__(132),
+  __webpack_require__(135),
   /* styles */
   null,
   /* scopeId */
@@ -58068,7 +58987,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 131 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58209,7 +59128,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 132 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -58316,7 +59235,7 @@ if (false) {
 }
 
 /***/ }),
-/* 133 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -58337,15 +59256,15 @@ if (false) {
 }
 
 /***/ }),
-/* 134 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(135),
+  __webpack_require__(138),
   /* template */
-  __webpack_require__(136),
+  __webpack_require__(139),
   /* styles */
   null,
   /* scopeId */
@@ -58377,7 +59296,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 135 */
+/* 138 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58497,7 +59416,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 136 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -58606,7 +59525,7 @@ if (false) {
 }
 
 /***/ }),
-/* 137 */
+/* 140 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58615,7 +59534,7 @@ if (false) {
 });
 
 /***/ }),
-/* 138 */
+/* 141 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58626,24 +59545,24 @@ if (false) {
 });
 
 /***/ }),
-/* 139 */
+/* 142 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 140 */,
-/* 141 */,
-/* 142 */,
-/* 143 */
+/* 143 */,
+/* 144 */,
+/* 145 */,
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var Component = __webpack_require__(0)(
   /* script */
-  __webpack_require__(144),
+  __webpack_require__(147),
   /* template */
-  __webpack_require__(145),
+  __webpack_require__(148),
   /* styles */
   null,
   /* scopeId */
@@ -58651,9 +59570,9 @@ var Component = __webpack_require__(0)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Users\\Matt\\Projects\\assist\\resources\\assets\\js\\components\\project\\Project-details.vue"
+Component.options.__file = "C:\\Users\\Matt\\Projects\\assist\\resources\\assets\\js\\components\\project\\Project-hours-costs.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Project-details.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] Project-hours-costs.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -58662,9 +59581,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-720cd06b", Component.options)
+    hotAPI.createRecord("data-v-40b58e9e", Component.options)
   } else {
-    hotAPI.reload("data-v-720cd06b", Component.options)
+    hotAPI.reload("data-v-40b58e9e", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -58675,173 +59594,12 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 144 */
+/* 147 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(4);
 //
 //
 //
@@ -59026,19 +59784,258 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	props: ['project', 'clientsSelectList'],
+	props: ["workItems"],
 
-	components: {
-		'field-input-toggle': __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default.a
+	computed: {
+		totalInvoicesNum: function totalInvoicesNum() {
+			if (this.workItems) {
+				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyProjectInvoices(this.workItems);
+			}
+		},
+		totalWorkHours: function totalWorkHours() {
+			if (this.workItems) {
+				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsHours(this.workItems).toFixed(2);
+			}
+		},
+		totalWorkHoursPay: function totalWorkHoursPay() {
+			if (this.workItems) {
+				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsHoursPay(this.workItems).toFixed(2);
+			}
+		},
+		totalTravelMileageCost: function totalTravelMileageCost() {
+			if (this.workItems) {
+				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsTravelMileageCost(this.workItems).toFixed(2);
+			}
+		},
+		totalPerDiemCost: function totalPerDiemCost() {
+			if (this.workItems) {
+				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsPerDiemCost(this.workItems).toFixed(2);
+			}
+		},
+		totalLodgingCost: function totalLodgingCost() {
+			if (this.workItems) {
+				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsLodgingCost(this.workItems).toFixed(2);
+			}
+		},
+		totalExtraCosts: function totalExtraCosts() {
+			if (this.workItems) {
+				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsExtraCosts(this.workItems).toFixed(2);
+			}
+		}
 	}
 });
 
 /***/ }),
-/* 145 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-layout', {
+  return _c('div', [_vm._l((_vm.workItems), function(item) {
+    return _c('v-container', {
+      key: item.id,
+      staticClass: "mt-3"
+    }, [_c('v-layout', {
+      attrs: {
+        "row": ""
+      }
+    }, [_c('v-flex', {
+      attrs: {
+        "xs3": ""
+      }
+    }, [_c('p', [_vm._v("\n\t    \t\t\t" + _vm._s(_vm._f("dateMinusYear")(item.from_date)) + " - " + _vm._s(_vm._f("dateMinusYear")(item.to_date)) + "\n\t    \t\t")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs2": ""
+      }
+    }, [_c('strong', [_vm._v("User Name")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs4": ""
+      }
+    }, [_c('p', [_vm._v("\n\t    \t\t\t" + _vm._s(item.desc) + "\n\t    \t\t")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('p', [_vm._v("\n\t    \t\t\t" + _vm._s(item.hours) + " Hrs\n\t    \t\t")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      staticClass: "text-xs-right",
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('p', [_vm._v("\n\t      \t\t$" + _vm._s((parseFloat(item.hours) * parseFloat(item.hourly_rate)).toFixed(2)) + "\n\t      \t")])])], 1)], 1)
+  }), _vm._v(" "), _c('v-container', [_c('v-divider', {
+    staticClass: "mb-2"
+  }), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('span', {
+    staticClass: "title"
+  }, [_vm._v("TOTAL HOURS COST:")]), _vm._v(" "), _c('small', [_vm._v("(Not including GST)")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    staticClass: "text-xs-right",
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "title"
+  }, [_vm._v("$" + _vm._s(_vm.totalWorkHoursPay))])])], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-2"
+  })], 1), _vm._v(" "), _vm._l((this.workItems), function(item) {
+    return _c('v-container', {
+      key: item.id,
+      staticClass: "mt-3"
+    }, [_c('v-layout', {
+      attrs: {
+        "row": ""
+      }
+    }, [_c('v-flex', {
+      attrs: {
+        "xs3": ""
+      }
+    }, [_c('p', [_vm._v("\n      \t\t\t" + _vm._s(_vm._f("dateMinusYear")(item.from_date)) + " - " + _vm._s(_vm._f("dateMinusYear")(item.to_date)) + "\n      \t\t")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs2": ""
+      }
+    }, [_c('strong', [_vm._v("User Name")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs4": ""
+      }
+    }, [_c('p', {
+      staticClass: "mb-1"
+    }, [_c('strong', [_vm._v("Mileage:")])]), _vm._v(" "), _c('p', {
+      staticClass: "mb-1"
+    }, [_c('strong', [_vm._v("Per Diem:")]), _vm._v(" " + _vm._s(item.per_diem_desc) + "\n      \t\t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', [_c('strong', [_vm._v("Lodging:")]), _vm._v(" " + _vm._s(item.lodging_desc) + "\n      \t\t")]) : _vm._e()]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('p', [_vm._v("\n      \t\t\t" + _vm._s(item.travel_mileage) + " kms\n      \t\t")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+      staticClass: "text-xs-right",
+      attrs: {
+        "xs1": ""
+      }
+    }, [_c('p', {
+      staticClass: "mb-1"
+    }, [_vm._v("\n        \t\t$" + _vm._s((parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate)).toFixed(2)) + "\n        \t")]), _vm._v(" "), _c('p', {
+      staticClass: "mb-1"
+    }, [_vm._v("\n        \t\t$" + _vm._s(item.per_diem) + "\n        \t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', [_vm._v("\n        \t\t$" + _vm._s(item.lodging_cost) + "\n        \t")]) : _vm._e()])], 1)], 1)
+  }), _vm._v(" "), _c('v-container', [_c('v-divider', {
+    staticClass: "mb-2"
+  }), _vm._v(" "), _c('v-layout', {
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('span', {
+    staticClass: "subheading"
+  }, [_vm._v("TRAVEL MILEAGE COST:")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    staticClass: "text-xs-right",
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "subheading"
+  }, [_vm._v("$" + _vm._s(_vm.totalTravelMileageCost))])])], 1), _vm._v(" "), _c('v-layout', {
+    staticClass: "mt-3",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('span', {
+    staticClass: "subheading"
+  }, [_vm._v("PER DIEM COST:")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    staticClass: "text-xs-right",
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "subheading"
+  }, [_vm._v("$" + _vm._s(_vm.totalPerDiemCost))])])], 1), _vm._v(" "), _c('v-layout', {
+    staticClass: "mt-3",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('span', {
+    staticClass: "subheading"
+  }, [_vm._v("LODGING COST:")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    staticClass: "text-xs-right",
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "subheading"
+  }, [_vm._v("$" + _vm._s(_vm.totalLodgingCost))])])], 1), _vm._v(" "), _c('v-layout', {
+    staticClass: "mt-4",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('span', {
+    staticClass: "title"
+  }, [_vm._v("TOTAL OTHER COSTS:")]), _vm._v(" "), _c('small', [_vm._v("(Not including GST)")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    staticClass: "text-xs-right",
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "title"
+  }, [_vm._v("$" + _vm._s(_vm.totalExtraCosts))])])], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-2"
+  })], 1), _vm._v(" "), _c('v-container', {
+    staticClass: "mt-3"
+  }, [_c('v-divider', {
+    staticClass: "black"
+  }), _vm._v(" "), _c('v-layout', {
+    staticClass: "mt-3",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "title"
+  }, [_vm._v("GST TOTAL:")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    staticClass: "text-xs-right",
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "title"
+  }, [_vm._v("$" + _vm._s(_vm.gstTotal))])])], 1), _vm._v(" "), _c('v-layout', {
+    staticClass: "mt-5",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "title"
+  }, [_vm._v("TOTAL:")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    staticClass: "text-xs-right",
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "headline"
+  }, [_vm._v("$" + _vm._s(_vm.invoiceTotal))])])], 1), _vm._v(" "), _c('v-layout', {
+    staticClass: "mt-3",
     attrs: {
       "row": ""
     }
@@ -59046,464 +60043,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "xs12": ""
     }
-  }, [_c('v-container', {
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tClient\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'select',
-      "select_options": _vm.clientsSelectList,
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Client Company',
-      "field": 'client_company_name',
-      "value": _vm.project.client_company_name
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    staticClass: "mt-5",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Company Contact',
-      "field": 'client_contact_name',
-      "value": _vm.project.client_contact_name
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Contact\'s Phone No.',
-      "icon": 'phone',
-      "field": 'client_contact_phone',
-      "value": _vm.project.client_contact_phone
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Contact\'s Email',
-      "field": 'client_contact_email',
-      "value": _vm.project.client_contact_email
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  }), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-5",
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tLocation\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'select',
-      "select_options": [{
-          text: 'Province...',
-          value: ''
-        },
-        {
-          text: 'Alberta',
-          value: 'Alberta'
-        },
-        {
-          text: 'British Columbia',
-          value: 'British Columbia'
-        },
-        {
-          text: 'Saskatchewan',
-          value: 'Saskatchewan'
-        }
-      ],
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Province',
-      "field": 'province',
-      "value": _vm.project.province
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs8": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'textarea',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Specific Location',
-      "field": 'location',
-      "value": _vm.project.location,
-      "char_count": 100
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  }), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-5",
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tBasics\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'textarea',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Basic Details',
-      "field": 'details',
-      "value": _vm.project.details,
-      "char_count": 750
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  }), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-5",
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tWork Details\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'select',
-      "select_options": [{
-          text: 'Work type...',
-          value: ''
-        },
-        {
-          text: 'HRIA',
-          value: 'HRIA'
-        },
-        {
-          text: 'Archaeology',
-          value: 'Archaeology'
-        },
-        {
-          text: 'Paleaontology',
-          value: 'Paleaontology'
-        }
-      ],
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Work Type',
-      "field": 'work_type',
-      "value": _vm.project.work_type
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'date',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Respond By',
-      "field": 'response_by',
-      "value": _vm.project.response_by
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Estimate',
-      "field": 'estimate',
-      "prefix": '$',
-      "value": _vm.project.estimate
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'textarea',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Work Overview',
-      "field": 'work_overview',
-      "value": _vm.project.work_overview,
-      "char_count": 750
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs12": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'textarea',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Work Plans',
-      "field": 'plans',
-      "value": _vm.project.plans,
-      "char_count": 750
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  }), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-5",
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tLand\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'select',
-      "select_options": [{
-          text: 'Land ownership...',
-          value: ''
-        },
-        {
-          text: 'Crown',
-          value: 'Crown'
-        },
-        {
-          text: 'Freehold',
-          value: 'Freehold'
-        }
-      ],
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Land Ownership',
-      "field": 'land_ownership',
-      "value": _vm.project.land_ownership
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'select',
-      "select_options": [{
-          text: 'Land access granted...',
-          value: ''
-        },
-        {
-          text: 'No',
-          value: 0
-        },
-        {
-          text: 'Yes',
-          value: 1
-        }
-      ],
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Access Granted',
-      "field": 'land_access_granted',
-      "value": _vm.project.land_access_granted,
-      "bool_field": true
-    }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Access Granted By',
-      "field": 'land_access_granted_by',
-      "value": _vm.project.land_access_granted_by
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Access Contact',
-      "field": 'land_access_contact',
-      "value": _vm.project.land_access_contact
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "icon": 'phone',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Contact\'s Phone',
-      "field": 'land_access_phone',
-      "value": _vm.project.land_access_phone
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  }), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-5",
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tApproval\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'date',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Approval Date',
-      "field": 'approval_date',
-      "value": _vm.project.approval_date
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  }), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-5",
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('div', {
-    staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tInvoicing\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'date',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Invoiced Date',
-      "field": 'invoiced_date',
-      "value": _vm.project.invoiced_date
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'date',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Invoice Paid Date',
-      "field": 'invoice_paid_date',
-      "value": _vm.project.invoice_paid_date
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "icon": 'attach_money',
-      "action": 'updateProjectField',
-      "id": _vm.project.id,
-      "label": 'Invoice Amount',
-      "field": 'invoice_amount',
-      "prefix": '$',
-      "value": _vm.project.invoice_amount
-    }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
-    staticClass: "mt-5"
-  })], 1)], 1)
+  }, [_c('p', [_c('strong', [_vm._v("Cheque payable to:")]), _vm._v(" " + _vm._s(_vm.$store.getters.user.company) + "\n    \t\t\t")])])], 1)], 1)], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-720cd06b", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-40b58e9e", module.exports)
   }
 }
 

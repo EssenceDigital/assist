@@ -515,42 +515,38 @@
 
 			workHoursTotal () {
 				if(this.currentInvoice){
-					// Cache items
-					var workItems = this.currentInvoice.work_items,
-							total = 0;
-					// Itterate and calculate
-					workItems.forEach((item) => {
-						total += (parseFloat(item.hours) * parseFloat(item.hourly_rate));
-					});
+					// Tally with helper
+					var total = Helpers.tallyWorkItemsHoursPay(this.currentInvoice.work_items);
+
 					return total.toFixed(2);					
 				}
 			},
 
 			extraCostsTotal () {
 				if(this.currentInvoice){
-					// Cache items
-					var workItems = this.currentInvoice.work_items,
-							total = 0;
-					// Itterate and calculate
-					workItems.forEach((item) => {
-						total += (parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate));
-						total += parseFloat(item.per_diem);
-						if(item.lodging_cost) total += parseFloat(item.lodging_cost);						
-					});
+					// Tally with helper
+					var total = Helpers.tallyWorkItemsExtraCosts(this.currentInvoice.work_items);
+
 					return total.toFixed(2);				
 				}		
 			},
 
 			invoiceSubTotal () {
-				return (parseFloat(this.workHoursTotal) + parseFloat(this.extraCostsTotal));
+				if(this.currentInvoice){
+					return (parseFloat(this.workHoursTotal) + parseFloat(this.extraCostsTotal));
+				}	
 			},
 
 			gstTotal () {
-				return (parseFloat(this.invoiceSubTotal) * 0.05).toFixed(2);
+				if(this.currentInvoice){
+					return (parseFloat(this.invoiceSubTotal) * 0.05).toFixed(2);
+				}				
 			},
 
 			invoiceTotal () {
-				return (parseFloat(this.gstTotal) + parseFloat(this.invoiceSubTotal)).toFixed(2);
+				if(this.currentInvoice){
+					return (parseFloat(this.gstTotal) + parseFloat(this.invoiceSubTotal)).toFixed(2);
+				}				
 			}
 		},
 

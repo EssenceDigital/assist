@@ -70,6 +70,22 @@
 		<div slot="description">
 			This is where you can find and filter all of the projects within the system.
 		</div>
+    <div slot="additional">
+      <v-select
+        :items="[
+          { text: 'Work View', value: 'admin_work' },
+          { text: 'Manage View', value: 'admin_manage' }
+        ]"
+        v-model="tableState"
+        label="Table State..."
+        single-line
+        auto
+        prepend-icon="find_in_page"
+        hide-details
+        class="pt-0 pr-3"
+      >
+      </v-select>       
+    </div>
 		<div slot="content">
 			<!-- Projects table component -->
 			<projects-table 
