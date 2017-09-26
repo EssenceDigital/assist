@@ -25,15 +25,39 @@
         </v-flex> 
       </v-layout><!-- /Row for invoice filter -->
 
+      <!-- Row for action buttons -->
+      <v-layout row v-if="table_state === 'admin'">
+        <!-- Province filter -->
+        <v-flex xs3 class="ml-2">
+          <v-btn 
+          @click="markPaid"
+          class="success"
+          >
+            <v-icon left>check_circle</v-icon>
+            Mark Paid
+          </v-btn>       
+        </v-flex>
+      </v-layout><!-- /Row for action buttons -->
+
     <!-- Data table -->
     <v-data-table
       :headers="headers"
       :items="invoices"
       :rows-per-page-items="perPage"
       :loading="loading"
+      v-model="selected"
+      select-all
+      selected-key="id"      
       class="elevation-1 mt-3"
     >    
       <template slot="items" scope="props">
+        <td>
+          <v-checkbox
+            primary
+            hide-details
+            v-model="props.selected"
+          ></v-checkbox>
+        </td>      
       	<td>{{ props.item.id }}</td>
         <td v-if="table_state === 'admin'">{{ props.item.user.first }}</td>
       	<td>{{ props.item.from_date | date }}</td>
@@ -76,7 +100,9 @@
         // For data table pagination   
         perPage: [15, 30, 45, { text: "All", value: -1 }],
         // For the invoice filter
-        userFilter: ''       
+        userFilter: '' ,
+        // Selected items
+        selected: []      
       }
     },
 
@@ -124,9 +150,9 @@
     methods: {
       viewInvoice (id) {
         // User state forward
-        if(this.table_state === 'user') this.$router.push('/your-invoices/'+id+'/view');
+        if(this.table_state === 'user') this.$router.push('/my-invoices/'+id+'/view');
         // Admin state forward
-        if(this.table_state === 'admin') this.$router.push('/crew-invoices/'+id+'/view');  
+        if(this.table_state === 'admin') this.$router.push('/my-invoices/'+id+'/view');  
       },
 
       filterInvoices () {
@@ -140,6 +166,17 @@
             // Toggle loader
             this.loading = false;
           });        
+      },
+
+      markPaid () {
+        // Will hold the invoice ids to be marked paid
+        var selectedIds = [];
+        // Populate the Ids
+        this.selected.forEach((timesheet) => {
+          selectedIds.push(timesheet.id);
+        });
+
+        console.log(selectedIds);
       }
     },
 

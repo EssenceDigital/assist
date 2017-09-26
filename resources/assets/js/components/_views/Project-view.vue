@@ -118,6 +118,8 @@
 			          <v-card-text>
 			          	<project-hours-costs
 			          		:workItems="currentProject.work_items"
+			          		:clientInvoicedAmount="currentProject.invoice_amount"
+			          		:invoicePaidDate="currentProject.invoice_paid_date"
 			          	></project-hours-costs>
 			          </v-card-text>
 			        </v-card>

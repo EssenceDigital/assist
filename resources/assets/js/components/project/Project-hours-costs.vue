@@ -1,5 +1,15 @@
 <template>
 	<div>
+		<v-container class="mt-5">
+			<v-divider class="mb-4"></v-divider>	
+			<v-layout row>
+				<v-flex xs12>
+      		<p class="mb-1">
+      			<span class="title">HOURS</span>
+      		</p>					
+				</v-flex>
+			</v-layout>			 
+		</v-container>
 	  <!-- Work items (Hours and desc) -->
 	  <v-container
 	  	v-for="item in workItems" :key="item.id"
@@ -38,21 +48,34 @@
   	</v-container><!-- / Work items (Hours and desc) -->		
 
     <!-- Sub total for hours -->
-    <v-container>
-      <v-divider class="mb-2"></v-divider>		
+    <v-container>	
       <v-layout row>
       	<v-flex xs3>
-      		<span class="title">TOTAL HOURS COST:</span>
-      		<small>(Not including GST)</small>
+      		<p class="mb-1">
+      			<span class="title"><em>SUBTOTAL:</em></span>
+      		</p>
+      		<p>
+      			<small>(Not including GST)</small>
+      		</p>      		
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
-      		<span class="title">${{ totalWorkHoursPay }}</span>
+      		<span class="title red--text">${{ totalWorkHoursPay }}</span>
       	</v-flex>
       </v-layout>
       <v-divider class="mt-2"></v-divider>		        	
     </v-container><!-- / Sub total for hours -->  
 
+		<v-container class="mt-2">
+			<v-divider class="mb-4"></v-divider>	
+			<v-layout row>
+				<v-flex xs12>
+      		<p class="mb-1">
+      			<span class="title">Travel, Per Diem, &amp; Other</span>
+      		</p>					
+				</v-flex>
+			</v-layout>			 
+		</v-container>
     <!-- Work items (Travel and Per diem) -->
     <v-container
     	v-for="item in this.workItems" :key="item.id"
@@ -105,10 +128,9 @@
 
     <!-- Sub total for travel and per diem -->
     <v-container>
-      <v-divider class="mb-2"></v-divider>	
       <v-layout row>
       	<v-flex xs3>
-      		<span class="subheading">TRAVEL MILEAGE COST:</span>
+      		<span class="subheading"><em>MILEAGE (SUBTOTAL):</em></span>
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
@@ -117,7 +139,7 @@
       </v-layout>	
       <v-layout row class="mt-3">
       	<v-flex xs3>
-      		<span class="subheading">PER DIEM COST:</span>
+      		<span class="subheading"><em>PER DIEM (SUBTOTAL):</em></span>
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
@@ -126,7 +148,7 @@
       </v-layout>	 
       <v-layout row class="mt-3">
       	<v-flex xs3>
-      		<span class="subheading">LODGING COST:</span>
+      		<span class="subheading"><em>LODGING (SUBTOTAL):</em></span>
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
@@ -135,46 +157,88 @@
       </v-layout>                 
       <v-layout row class="mt-4">
       	<v-flex xs3>
-      		<span class="title">TOTAL OTHER COSTS:</span>
-      		<small>(Not including GST)</small>
+	      	<p class="mb-1">
+	      		<span class="title"><em>SUBTOTAL:</em></span>
+	      	</p>
+      		<p>
+      			<small>(Not including GST)</small>
+      		</p>      		
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
-      		<span class="title">${{ totalExtraCosts }}</span>
+      		<span class="title red--text">${{ totalExtraCosts }}</span>
       	</v-flex>
       </v-layout>
       <v-divider class="mt-2"></v-divider>		        	
     </v-container><!-- / Sub total for travel and per diem -->
 
     <!-- Total container -->
-    <v-container class="mt-3">
+    <v-container class="mt-2">
     	<v-divider class="black"></v-divider>	
-      <v-layout row class="mt-3">
-      	<v-flex xs2>
-      		<span class="title">GST TOTAL:</span>
-      	</v-flex>
-      	<v-spacer></v-spacer>
-      	<v-flex xs2 class="text-xs-right">
-      		<span class="title">${{ gstTotal }}</span>
-      	</v-flex>
-      </v-layout>					        	
+
     	<v-layout row class="mt-5">
-      	<v-flex xs2>
-      		<span class="title">TOTAL:</span>
+      	<v-flex xs3>
+      		<span class="title">TOTAL COST:</span>
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
-      		<span class="headline">${{ invoiceTotal }}</span>
+      		<span class="headline red--text">${{ totalProjectCost }}</span>
       	</v-flex>					        		
     	</v-layout>
+
     	<v-layout row class="mt-3">
-    		<v-flex xs12>
-    			<p>
-    				<strong>Cheque payable to:</strong> {{ $store.getters.user.company }}
-    			</p>
-    		</v-flex>
-    	</v-layout>
-		</v-container><!-- / Total container -->	           	
+      	<v-flex xs3>
+      		<p class="mb-1">
+      			<span class="title">CLIENT INVOICE:</span>
+      		</p>
+      		<p v-if="!invoicePaidDate">
+      			<small class="warning--text">
+      				<v-icon left class="warning--text">clear</v-icon>
+      				(NOT PAID)
+      			</small>
+      		</p> 
+      		<p v-else>
+      			<small class="green--text">
+      				<v-icon left class="green--text">done</v-icon>
+      				(PAID)
+      			</small>
+      		</p>      		
+      	</v-flex>
+      	<v-spacer></v-spacer>
+      	<v-flex xs2 
+      		v-if="clientInvoicedAmount != 0"
+      		class="text-xs-right"       		
+      	>
+      		<span v-if="invoicePaidDate" class="headline green--text">${{ clientInvoicedAmount }}</span>
+      		<span v-else class="headline">${{ clientInvoicedAmount }}</span>
+      	</v-flex>	
+      	<v-flex xs2 
+      		v-else
+      		class="text-xs-right"
+      	>
+					<v-chip class="info white--text">
+			      NOT INVOICED
+			    </v-chip>	      		
+      	</v-flex>				        		
+    	</v-layout>     	   	
+		</v-container><!-- / Total container -->	  
+
+    <!-- Profit or loss container -->
+    <v-container class="mt-0">
+    	<v-divider class="black"></v-divider>	
+    	<v-layout row class="mt-3">
+      	<v-flex xs3>
+      		<p class="mb-1">
+      			<span class="title">BOTTOM LINE:</span>
+      		</p>       		
+      	</v-flex>
+      	<v-spacer></v-spacer>
+      	<v-flex xs2 class="text-xs-right">
+      		<span v-if="totalBottomLine > 0" class="headline green--text">+${{ totalBottomLine}}</span>
+      		<span v-else class="headline red--text">-${{ (totalBottomLine * -1).toFixed(2) }}</span>
+      	</v-flex>					        		
+    	</v-layout>     	   	
+		</v-container><!-- / Profit or loss container -->			         	
 	</div>	
 </template>
 
@@ -182,7 +246,7 @@
 	import Helpers from './../../store/helpers';
 
 	export default {
-		props: ["workItems"],
+		props: ["workItems", "clientInvoicedAmount", "invoicePaidDate"],
 
 		computed: {
 			totalInvoicesNum () {
@@ -225,6 +289,19 @@
 				if(this.workItems){
 					return Helpers.tallyWorkItemsExtraCosts(this.workItems).toFixed(2);
 				}
+			},
+
+			totalProjectCost () {
+				return (parseFloat(this.totalWorkHoursPay) + parseFloat(this.totalExtraCosts)).toFixed(2);
+			},
+
+			totalBottomLine () {
+				var invoiceAmount = 0;
+				// Determine invoice amount
+				if(this.invoicePaidDate){
+					invoiceAmount = this.clientInvoicedAmount;
+				} 
+				return (parseFloat(invoiceAmount) - parseFloat(this.totalProjectCost)).toFixed(2);
 			}
 		}
 	}

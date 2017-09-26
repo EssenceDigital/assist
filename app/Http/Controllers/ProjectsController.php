@@ -361,7 +361,7 @@ class ProjectsController extends Controller
         // Use the parent method to update
         return $this->updateModelField(
             $request,
-            Project::with(['comments', 'comments.user', 'timeline', 'users', 'users.timesheets', 'timesheets'])->find($request->id),
+            Project::with(['comments', 'comments.user', 'timeline', 'users', 'workItems', 'workItems.invoice'])->find($request->id),
             $this->validationFields
         );        
     }

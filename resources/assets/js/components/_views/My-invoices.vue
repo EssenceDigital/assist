@@ -161,7 +161,7 @@
 						this.startingInvoice = false;
 						this.addInvoiceDialog = false;
 						// Forward view
-						this.$router.push('/invoices/'+response.id+'/view');
+						this.$router.push('/my-invoices/'+response.id+'/view');
 					})  
 					.catch((errors) => {
 						Helpers.populateFormErrors(this.form, errors.response.data).then(() => {

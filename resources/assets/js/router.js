@@ -28,8 +28,8 @@ export default new VueRouter({
 			component: MyInvoices
 		},
 		{
-			path: '/your-invoices/:id/view',
-			name: 'YourInvoiceView',
+			path: '/my-invoices/:id/view',
+			name: 'MyInvoiceView',
 			component: InvoiceView,
 			props: (route) => (
 				{ id: route.params.id, invoice_state: 'full' }

@@ -13,6 +13,14 @@
 		<div slot="description">
 			This is where you can add your hours and costs to the invoice.
 		</div>
+		<div slot="additional">
+      <v-btn flat class="success--text" v-tooltip:top="{ html: 'Add Work Item' }"
+      	@click.native.stop="workItemDialog = true"
+      >
+      	<v-icon left class="success--text">add_circle</v-icon>
+      	Work Item
+      </v-btn>			
+		</div>
 		<div slot="content">
       <!-- Work items (Hours and desc) -->
       <v-container
