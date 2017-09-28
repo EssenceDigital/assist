@@ -29,7 +29,8 @@
   	data () {
   		return {
   			tips: [
-  				{ text: "Use the view button on each invoice row to view the full invoice." }
+  				{ text: "Use the view button on each invoice row to view the full invoice." },
+          { text: 'You can use all of the filters at once, or simply one at a time. In addition, clicking on a heading will sort the invoices accordingly.' }       
   			]
   		}
   	},

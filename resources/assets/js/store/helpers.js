@@ -122,14 +122,25 @@ export default {
 		return total;			
 	},
 
+	tallyWorkItemsEquipmentCost (workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach((item) => {
+			if(item.equipment_cost) total += parseFloat(item.equipment_cost);						
+		});
+		return total;			
+	},
+
 	tallyWorkItemsExtraCosts (workItems) {
 		// Cache total
 		var total = 0;
 		// Itterate and calculate
 		workItems.forEach((item) => {
-			total += (parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate));
-			total += parseFloat(item.per_diem);
-			if(item.lodging_cost) total += parseFloat(item.lodging_cost);						
+			if(item.travel_mileage) total += (parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate));
+			if(item.per_diem) total += parseFloat(item.per_diem);
+			if(item.lodging_cost) total += parseFloat(item.lodging_cost);		
+			if(item.equipment_cost) total += parseFloat(item.equipment_cost);					
 		});
 		return total;			
 	}

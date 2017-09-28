@@ -12,8 +12,9 @@
         <v-spacer></v-spacer>
         <!-- Province filter -->
         <v-flex xs2>
-          <v-select
-            v-model="provinceFilter"
+          <v-select            
+            :value="projectsFilter.province"
+            @input="updateProvinceFilter"
             :items="provinces"
             label="Province..."
             single-line
@@ -23,8 +24,9 @@
         <v-spacer></v-spacer>
         <!-- Client filter -->
         <v-flex xs2>
-          <v-select
-            v-model="clientFilter"
+          <v-select            
+            :value="projectsFilter.client"
+            @input="updateClientFilter"
             :items="clients"
             label="Client..."
             single-line
@@ -35,15 +37,17 @@
         <!-- Location filter -->
         <v-flex xs3>
             <v-text-field
-              label="Enter part of location..."
-              v-model="locationFilter"
+              label="Enter part of location..."              
+              :value="projectsFilter.location"
+              @input="updateLocationFilter"
             ></v-text-field>        
         </v-flex> 
         <v-spacer></v-spacer>        
         <!-- Invoice status filter -->
         <v-flex xs2 v-if="table_state === 'admin_manage'">
-          <v-select
-            v-model="invoiceFilter"
+          <v-select            
+            :value="projectsFilter.invoice"
+            @input="updateInvoiceFilter"
             :items="invoiceStatus"
             label="Invoice status..."
             single-line
@@ -189,21 +193,13 @@
           { text: 'British Columbia', value: 'British Columbia' },
           { text: 'Saskatchewan', value: 'Saskatchewan' }
         ],
-        // Provinces filter
-        provinceFilter: '',
-        // Clients filter
-        clientFilter: '',
         // For invoice status
         invoiceStatus: [
           { text: 'Invoice status...', value: '' },
           { text: 'Not Invoiced', value: 'not-invoiced' },
           { text: 'Paid', value: 'paid' },
           { text: 'Outstanding', value: 'outstanding' }                 
-        ],
-        // Location filter
-        locationFilter: '',        
-        // Invoice status filter
-        invoiceFilter: ''
+        ]
       }
     },
 
@@ -216,6 +212,10 @@
       // Watch for uniqueCLients state to update
       clients () {
         return this.$store.getters.clientsSelectList;
+      },
+
+      projectsFilter () {
+        return this.$store.getters.projectsFilter;
       },
 
       headers () {
@@ -254,16 +254,27 @@
     },
 
     methods: {
+      updateProvinceFilter (value) {
+        return this.$store.commit('updateProjectsProvinceFilter', value);
+      },
+
+      updateClientFilter (value) {
+        return this.$store.commit('updateProjectsClientFilter', value);
+      },
+
+      updateLocationFilter (value) {
+        return this.$store.commit('updateProjectsLocationFilter', value);
+      },
+
+      updateInvoiceFilter (value) {
+        return this.$store.commit('updateProjectsInvoiceFilter', value);
+      },
+
       filterProjects () {
         // Toggle loader
         this.loading = true;
         // Dispatch action to find projects
-        this.$store.dispatch('getProjects', {
-          client: this.clientFilter,
-          province: this.provinceFilter,
-          location: this.locationFilter,
-          invoice: this.invoiceFilter
-        }).then( () => {
+        this.$store.dispatch('getProjects', this.projectsFilter).then( () => {
           // Toggle loader
           this.loading = false;
         });
@@ -287,8 +298,12 @@
           payload = false;
       if(this.table_state === 'admin_work') {
         dispatchAction = 'getProjects';
+        // Populate payload
+        payload = this.projectsFilter;
       } else if(this.table_state === 'admin_manage'){
-        dispatchAction = 'getProjects';        
+        dispatchAction = 'getProjects'; 
+        // Populate payload
+        payload = this.projectsFilter;     
       } else if(this.table_state === 'user') {
         dispatchAction = 'getUsersProjects';
         payload = {

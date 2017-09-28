@@ -100,9 +100,12 @@
       		<p class="mb-1">
       			<strong>Per Diem:</strong> {{ item.per_diem_desc }}
       		</p>
-      		<p v-if="item.lodging_cost">
+      		<p v-if="item.lodging_cost" class="mb-1">
       			<strong>Lodging:</strong> {{ item.lodging_desc }}
       		</p>
+          <p v-if="item.equipment_cost">
+            <strong>Equipment:</strong> {{ item.equipment_desc }}
+          </p>          
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs1>
@@ -119,9 +122,12 @@
         	<p class="mb-1">
         		${{ item.per_diem }}
         	</p>	
-        	<p v-if="item.lodging_cost">
+        	<p v-if="item.lodging_cost" class="mb-1">
         		${{ item.lodging_cost }}
-        	</p>						        							        		
+        	</p>
+          <p v-if="item.equipment_cost">
+            ${{ item.equipment_cost }}
+          </p>          						        							        		
       	</v-flex>
       </v-layout><!-- / Work Item -->
     </v-container><!-- Work items (Travel and Per diem) --> 
@@ -154,7 +160,16 @@
       	<v-flex xs2 class="text-xs-right">
       		<span class="subheading">${{ totalLodgingCost }}</span>
       	</v-flex>
-      </v-layout>                 
+      </v-layout> 
+      <v-layout row class="mt-3">
+        <v-flex xs3>
+          <span class="subheading"><em>EQUIPMENT (SUBTOTAL):</em></span>
+        </v-flex>
+        <v-spacer></v-spacer>
+        <v-flex xs2 class="text-xs-right">
+          <span class="subheading">${{ totalEquipmentCost }}</span>
+        </v-flex>
+      </v-layout>                      
       <v-layout row class="mt-4">
       	<v-flex xs3>
 	      	<p class="mb-1">
@@ -284,6 +299,12 @@
 					return Helpers.tallyWorkItemsLodgingCost(this.workItems).toFixed(2);
 				}
 			},
+
+      totalEquipmentCost () {
+        if(this.workItems) {
+          return Helpers.tallyWorkItemsEquipmentCost(this.workItems).toFixed(2);
+        }
+      },
 
 			totalExtraCosts () {
 				if(this.workItems){

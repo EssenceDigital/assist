@@ -2,16 +2,101 @@
   <v-container fluid>
       <!-- Row for invoice filter -->
       <v-layout row v-if="table_state === 'admin'">
-        <!-- Province filter -->
-        <v-flex xs3 class="ml-2">
+        <!-- User filter -->
+        <v-flex xs2 class="ml-2">
           <v-select
-            v-model="userFilter"
+            :value="invoicesFilter.user"
+            @input="updateUserFilter"
             :items="usersSelectList"
             label="User..."
             single-line
             bottom
           ></v-select>        
         </v-flex>
+        <v-spacer></v-spacer>
+        <v-flex xs3>
+          <v-menu
+            lazy
+            :close-on-content-click="false"
+            v-model="fromDateFilterMenu"
+            transition="scale-transition"
+            offset-y
+            full-width
+            :nudge-left="40"
+            max-width="290px"
+          >
+            <v-text-field
+              slot="activator"
+              :value="invoicesFilter.from_date"
+              @input="updateFromDateFilter"
+              label="From Date..."
+              prepend-icon="event"
+              readonly
+            ></v-text-field>
+            <v-date-picker
+              :value="invoicesFilter.from_date"
+              @input="updateFromDateFilter"            
+              no-title 
+              scrollable 
+              actions
+            >
+              <template scope="{ save, cancel }">
+                <v-card-actions>
+                  <v-btn flat primary @click.native="cancel()">Cancel</v-btn>
+                  <v-btn flat primary @click.native="save()">Save</v-btn>
+                </v-card-actions>
+              </template>
+            </v-date-picker>
+          </v-menu>               
+        </v-flex> 
+        <v-spacer></v-spacer>
+        <v-flex xs3>
+          <v-menu
+            lazy
+            :close-on-content-click="false"
+            v-model="toDateFilterMenu"
+            transition="scale-transition"
+            offset-y
+            full-width
+            :nudge-left="40"
+            max-width="290px"
+          >
+            <v-text-field
+              slot="activator"
+              :value="invoicesFilter.to_date"
+              @input="updateToDateFilter"
+              label="To Date..."
+              prepend-icon="event"
+              readonly
+            ></v-text-field>
+            <v-date-picker
+              :value="invoicesFilter.to_date"
+              @input="updateToDateFilter"            
+              no-title 
+              scrollable 
+              actions
+            >
+              <template scope="{ save, cancel }">
+                <v-card-actions>
+                  <v-btn flat primary @click.native="cancel()">Cancel</v-btn>
+                  <v-btn flat primary @click.native="save()">Save</v-btn>
+                </v-card-actions>
+              </template>
+            </v-date-picker>
+          </v-menu>               
+        </v-flex>         
+        <v-spacer></v-spacer>
+        <!-- Invoice status filter -->
+        <v-flex xs2>
+          <v-select            
+            :value="invoicesFilter.invoice"
+            @input="updateInvoiceFilter"
+            :items="invoiceStatus"
+            label="Invoice status..."
+            single-line
+            bottom
+          ></v-select>        
+        </v-flex>                
         <!-- Filter button -->        
         <v-flex xs1>
           <v-btn 
@@ -27,16 +112,23 @@
 
       <!-- Row for action buttons -->
       <v-layout row v-if="table_state === 'admin'">
-        <!-- Province filter -->
-        <v-flex xs3 class="ml-2">
+        <!-- Clear filter -->
+        <v-flex xs2 class="ml-2">
+          <v-btn @click="resetFilter" class="info">
+            <v-icon left>cached</v-icon>
+            Reset Filter
+          </v-btn>       
+        </v-flex><!-- / Clear filter -->        
+        <!-- Mark paid -->
+        <v-flex xs2 class="ml-2">
           <v-btn 
-          @click="markPaid"
+          @click="markPaidDialog = true"
           class="success"
           >
             <v-icon left>check_circle</v-icon>
-            Mark Paid
+            Mark Invoices Paid
           </v-btn>       
-        </v-flex>
+        </v-flex><!-- / Mark paid -->      
       </v-layout><!-- /Row for action buttons -->
 
     <!-- Data table -->
@@ -62,6 +154,19 @@
         <td v-if="table_state === 'admin'">{{ props.item.user.first }}</td>
       	<td>{{ props.item.from_date | date }}</td>
       	<td>{{ props.item.to_date | date }}</td>
+        <td v-if="table_state === 'admin'">
+          <v-chip 
+            v-if="!props.item.is_paid"
+            class="red white--text"
+            >Not Paid
+          </v-chip>
+          <v-chip
+            v-else
+            class="green white--text"
+          >
+            Paid
+          </v-chip>
+        </td>
       	<td>
           <v-btn 
             icon 
@@ -78,6 +183,44 @@
       </template>    
     </v-data-table><!-- /Data table -->  
 
+    <!-- Confirm mark paid dialog -->
+    <v-layout 
+      row 
+      justify-center 
+      class="mr-0" 
+      style="position: relative;"
+    >
+      <v-dialog v-model="markPaidDialog" width="365" lazy absolute persistent>      
+        <v-card>
+          <v-card-title>
+            <div class="headline grey--text">Mark as paid?</div>                           
+          </v-card-title>
+          <v-divider></v-divider>
+          <v-card-text>
+            Are you sure you want to mark these invoices as paid?
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <!-- Cancel delete button-->
+            <v-btn outline 
+              class="red--text darken-1" 
+              flat="flat" 
+              @click.native.stop="markPaidDialog = false">
+                Maybe not
+            </v-btn>
+            <!-- Confirm delete button -->
+            <v-btn outline 
+            class="green--text darken-1" 
+            flat="flat" 
+            :loading="markingPaid" 
+            :disable="markingPaid" 
+            @click.native.stop="markPaid">
+              Do it
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-layout><!-- / Confirm mark paid dialog --> 
 
   </v-container><!-- /Container -->
 
@@ -89,20 +232,28 @@
     // Determines what headers and fields the table should display ("admin" or "user")
     props: ['table_state'],
 
-    components: {
-
-    },
-
     data () {
       return {
         // Loader
         loading: false,
         // For data table pagination   
         perPage: [15, 30, 45, { text: "All", value: -1 }],
-        // For the invoice filter
-        userFilter: '' ,
         // Selected items
-        selected: []      
+        selected: [],
+        // For the mark paid confirmation dialog
+        markPaidDialog: false,
+        // For mark paid button
+        markingPaid: false,   
+        // For from date filter
+        fromDateFilterMenu: false,
+        // For to date filter
+        toDateFilterMenu: false,
+        // For invoice status
+        invoiceStatus: [
+          { text: 'Invoice status...', value: '' },
+          { text: 'Not Paid', value: 0 },
+          { text: 'Paid', value: 1 }                 
+        ]        
       }
     },
 
@@ -119,6 +270,10 @@
         }
       },
 
+      invoicesFilter () {
+        return this.$store.getters.invoicesFilter;
+      },
+
       usersSelectList () {
         return this.$store.getters.usersSelectList;
       },
@@ -130,6 +285,7 @@
             { text: 'User', value: 'user', align: 'left' },            
             { text: 'From Date', value: 'from_date', align: 'left' },
             { text: 'To Date', value: 'to_date', align: 'left' },
+            { text: 'Paid?', value: 'is_paid', align: 'left' },
             { text: 'Actions', value: '', align: 'left' }
           ];
         }
@@ -155,13 +311,31 @@
         if(this.table_state === 'admin') this.$router.push('/my-invoices/'+id+'/view');  
       },
 
+      updateUserFilter (value) {
+        return this.$store.commit('updateInvoicesUserFilter', value);
+      },
+
+      updateInvoiceFilter (value) {
+        return this.$store.commit('updateInvoicesInvoiceFilter', value);
+      },
+
+      updateFromDateFilter (value) {
+        return this.$store.commit('updateInvoicesFromDateFilter', value);
+      },
+
+      updateToDateFilter (value) {
+        return this.$store.commit('updateInvoicesToDateFilter', value);
+      },
+
+      resetFilter () {
+        this.$store.commit("resetInvoicesFilter");
+      },
+
       filterInvoices () {
         // Toggle loader
         this.loading = true;
         // Dispatch action to find projects
-        this.$store.dispatch('getAllInvoices', {
-          user_id: this.userFilter
-        })
+        this.$store.dispatch('getAllInvoices', this.invoicesFilter)
           .then(() => {
             // Toggle loader
             this.loading = false;
@@ -169,14 +343,28 @@
       },
 
       markPaid () {
+        // Toggle loader
+        this.markingPaid = true;
         // Will hold the invoice ids to be marked paid
-        var selectedIds = [];
+        var selectedIds = { id: [] };
         // Populate the Ids
-        this.selected.forEach((timesheet) => {
-          selectedIds.push(timesheet.id);
+        this.selected.forEach((invoice) => {
+          selectedIds.id.push(invoice.id)
         });
 
-        console.log(selectedIds);
+      // Dispatch action to store
+      this.$store.dispatch("markInvoicesPaid", selectedIds)
+        .then(() => {
+          // Clear selected invoices
+          this.selected = [];
+          // Toggle loader
+          this.markingPaid = false;
+          // Toggle dialog
+          this.markPaidDialog = false;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       }
     },
 

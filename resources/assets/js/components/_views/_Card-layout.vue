@@ -28,7 +28,7 @@
 					  <v-layout row>
 					    <v-flex xs12 lg10 offset-lg1>
 					      <v-card class="card--flex-toolbar">
-					      	<v-container>
+					      	<v-container fluid>
 						      	<!-- Card toolbar -->
 						        <v-toolbar card class="white" prominent>
 
@@ -48,7 +48,7 @@
 
 						        </v-toolbar><!-- /Card toolbar -->	
 						      </v-container>			        
-						      <v-container>
+						      <v-container fluid>
 						      	<v-layout row>
 
 						        	<!-- 
@@ -71,7 +71,7 @@
 						      </v-container>
 					        <v-divider></v-divider>
 					        <!-- Container for helpful tips -->
-					        <v-container class="mt-4">				        	
+					        <v-container fluid class="mt-4">				        	
 						        <v-layout row>
 						        	<v-flex xs12>	
 

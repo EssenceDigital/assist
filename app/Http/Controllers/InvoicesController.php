@@ -29,7 +29,9 @@ class InvoicesController extends Controller
 		'travel_mileage' => 'numeric',
 		'mileage_rate' => 'numeric|between:0,1000000000000.99',
 		'lodging_desc' => 'max:45|nullable',
-		'lodging_cost' => 'numeric|between:0,1000000000000.99|nullable'
+		'lodging_cost' => 'numeric|between:0,1000000000000.99|nullable',
+        'equipment_desc' => 'max:45|nullable',
+        'equipment_cost' => 'numeric|between:0,1000000000000.99|nullable'        
     ];
 
     /**
@@ -86,21 +88,42 @@ class InvoicesController extends Controller
         ], 200);        
     }
 
-    public function filter($user_id) {
+    public function filter($user = false, $invoice = false, $from_date = false, $to_date = false) {
 
         // Construct where array for query
         $queryArray = [];  
         $query = Invoice::with(['user', 'workItems', 'workItems.project']);
 
-        // Add project id field or not
-        if($user_id){
+        // Add user id field or not
+        if($user){
             // Push array clause
-            array_push($queryArray, ['user_id', '=', $user_id]);
-        }      
+            array_push($queryArray, ['user_id', '=', $user]);
+        } 
+
+        // Add invoice field or not
+        if($invoice){
+            // Push array clause
+            array_push($queryArray, ['is_paid', '=', $invoice]);
+        } 
+
+        // Add single day (from date) field or not
+        if($from_date && !$to_date){
+            // Push array clause
+            array_push($queryArray, ['from_date', '=', $from_date]);
+        }        
+
         // Add where queries
         $query->where($queryArray);
+
+        // If the to date is set then it's a dange range query
+        if($from_date && $to_date){
+            // Add possible where between
+            $query->whereBetween('to_date', [$from_date, $to_date]);
+        }
+
         // Get results
         $invoices = $query->get();
+
         // Return response for ajax call
         return response()->json([
             'result' => 'success',
@@ -118,7 +141,7 @@ class InvoicesController extends Controller
     {
         // Validate and populate the request
         $invoice = $this->validateAndPopulate($request, new Invoice, $this->validationFields);
-        // Add user id to the timesheet
+        // Add user id to the invoice
         $invoice->user_id = Auth::id();
         // Attempt to store model
         $result = $invoice->save();
@@ -138,6 +161,42 @@ class InvoicesController extends Controller
     }
 
     /**
+     * Tag and invoice as paid in storate.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function markPaid(Request $request)
+    {
+        // Grab the array of invoice ids
+        $invoiceIds = $request->id;
+
+        // Itterate each id and update that invoice
+        forEach($invoiceIds as $id) {
+            if(is_numeric($id)) {
+                $invoice = Invoice::find($id);
+                $invoice->is_paid = 1;
+                $result = $invoice->save();
+                // Verify success on store
+                if(! $result){
+                    // Return response for ajax call
+                    return response()->json([
+                        'result' => false
+                    ], 404);
+                }                 
+            }   
+        }
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'payload' => $request->id
+        ], 200);
+
+    }
+
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -147,7 +206,8 @@ class InvoicesController extends Controller
     {
         // Validate and populate the request
         $item = $this->validateAndPopulate($request, new WorkItem, $this->workItemValidationFields);
-
+        // Add user id to the timesheet
+        $item->user_id = Auth::id();
         // Attempt to store model
         $result = $item->save();
         // Verify success on store

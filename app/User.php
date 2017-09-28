@@ -40,11 +40,19 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the work items by the user.
+     * Get the invoices by the user.
      */
     public function invoices()
     {
         return $this->hasMany('App\Invoice');
+    }
+
+    /**
+     * Get the work items by the user.
+     */
+    public function workItems()
+    {
+        return $this->hasMany('App\WorkItem');
     }
 
     /**

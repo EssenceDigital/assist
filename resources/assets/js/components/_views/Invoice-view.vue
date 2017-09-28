@@ -145,9 +145,12 @@
         		<p class="mb-1">
         			<strong>Per Diem:</strong> {{ item.per_diem_desc }}
         		</p>
-        		<p v-if="item.lodging_cost">
+        		<p v-if="item.lodging_cost" class="mb-1">
         			<strong>Lodging:</strong> {{ item.lodging_desc }}
         		</p>
+        		<p v-if="item.equipment_cost">
+        			<strong>Equipment:</strong> {{ item.equipment_desc }}
+        		</p>        		
         	</v-flex>
         	<v-spacer></v-spacer>
         	<v-flex xs1>
@@ -164,9 +167,12 @@
 	        	<p class="mb-1">
 	        		${{ item.per_diem }}
 	        	</p>	
-	        	<p v-if="item.lodging_cost">
+	        	<p v-if="item.lodging_cost" class="mb-1">
 	        		${{ item.lodging_cost }}
-	        	</p>						        							        		
+	        	</p>
+	        	<p v-if="item.equipment_cost">
+	        		${{ item.equipment_cost }}
+	        	</p>	        							        							        		
         	</v-flex>
         </v-layout><!-- / Work Item -->
       </v-container><!-- Work items (Travel and Per diem) -->
@@ -387,7 +393,7 @@
 
 			 					<v-spacer></v-spacer>
 
-			 					<!-- Travel item container -->
+			 					<!-- Costs container -->
 			 					<v-flex xs5>
 					 				<!-- Travel item form card container -->
 					 				<v-card>
@@ -419,7 +425,7 @@
 										</v-card-text>					       
 					 				</v-card><!--/ Travel item form card container -->		 	
 
-					 				<!-- Other cost form card container -->
+					 				<!-- Lodging cost form card container -->
 					 				<v-card class="mt-3">
 						        <v-card-title>
 						          <div class="headline">Lodging</div>									          
@@ -447,9 +453,39 @@
 									      </v-flex>			        		        	
 							        </v-layout><!-- /Lodging row  -->										
 										</v-card-text>					       
-					 				</v-card><!--/ Other cost form card container -->		 				 									
-			 					</v-flex><!--/ Other cost container -->
+					 				</v-card><!--/ Lodging cost form card container -->	
 
+					 				<!-- Equipment cost form card container -->
+					 				<v-card class="mt-3">
+						        <v-card-title>
+						          <div class="headline">Equipment</div>									          
+						        </v-card-title>
+						        <v-divider></v-divider>	
+										<v-card-text>
+
+							        <!-- Equipment row  -->
+							        <v-layout row class="mt-3">
+							        	<v-flex xs5>
+							            <v-text-field
+							            	v-model="workItemForm.equipment_desc.val"
+							              label="Description"
+							              :error="workItemForm.equipment_desc.err"
+							            ></v-text-field>
+							        	</v-flex>	
+							        	<v-spacer></v-spacer>
+									      <v-flex xs5>
+							            <v-text-field
+							            	v-model="workItemForm.equipment_cost.val"
+							              label="Cost"
+							              prefix="$"
+							              :error="workItemForm.equipment_cost.err"
+							            ></v-text-field>												      	
+									      </v-flex>			        		        	
+							        </v-layout><!-- /Equipment row  -->										
+										</v-card-text>					       
+					 				</v-card><!--/ Other cost form card container -->	
+
+			 					</v-flex><!--/ Costs container -->
 			 				</v-layout> 
 
 
@@ -591,7 +627,9 @@
 					travel_mileage: {val: '', err: false, errMsg: '', dflt: ''},
 					mileage_rate: {val: '', err: false, errMsg: '', dflt: ''},
 					lodging_desc: {val: '', err: false, errMsg: '', dflt: ''},
-					lodging_cost: {val: '', err: false, errMsg: '', dflt: ''}
+					lodging_cost: {val: '', err: false, errMsg: '', dflt: ''},
+					equipment_desc: {val: '', err: false, errMsg: '', dflt: ''},
+					equipment_cost: {val: '', err: false, errMsg: '', dflt: ''}					
 				}
 			}
 		},

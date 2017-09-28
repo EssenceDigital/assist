@@ -141,7 +141,8 @@ class DatabaseSeeder extends Seeder
         for($t = 0; $t < rand(7, 15); $t++){
             // Insert some fake invoices
             $invoice = new Invoice;
-            $invoice->user_id = rand(1, 10);
+            $invoiceUserId = rand(1, 10);
+            $invoice->user_id = $invoiceUserId;
             // Adjust month if needed
             if($InvMonth == 13){
                 $InvMonth = 1;
@@ -157,6 +158,7 @@ class DatabaseSeeder extends Seeder
                 $item = new WorkItem;
                 $item->project_id = rand(1, 25);
                 $item->invoice_id = $invoice->id;
+                $item->user_id = $invoiceUserId;
                 // For the dates
                 $itemFromDay = rand(1, 23);
                 // Populate dates based on invoice date rang

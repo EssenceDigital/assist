@@ -888,14 +888,24 @@ module.exports = {
 		});
 		return total;
 	},
+	tallyWorkItemsEquipmentCost: function tallyWorkItemsEquipmentCost(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			if (item.equipment_cost) total += parseFloat(item.equipment_cost);
+		});
+		return total;
+	},
 	tallyWorkItemsExtraCosts: function tallyWorkItemsExtraCosts(workItems) {
 		// Cache total
 		var total = 0;
 		// Itterate and calculate
 		workItems.forEach(function (item) {
-			total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate);
-			total += parseFloat(item.per_diem);
+			if (item.travel_mileage) total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate);
+			if (item.per_diem) total += parseFloat(item.per_diem);
 			if (item.lodging_cost) total += parseFloat(item.lodging_cost);
+			if (item.equipment_cost) total += parseFloat(item.equipment_cost);
 		});
 		return total;
 	}
@@ -45177,12 +45187,26 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		projects: [],
 		// A project who has been selected to view/edit
 		currentProject: { id: -1 },
+		// The current project search filter
+		projectsFilter: {
+			province: '',
+			client: '',
+			location: '',
+			invoice: ''
+		},
 		// 'My 'Invoices returned by the server
 		invoices: [],
 		// Crew Invoices returned by the server
 		crewInvoices: [],
 		// An invoice that has been selected to view/edit
 		currentInvoice: false,
+		// The current invoice search filter
+		invoicesFilter: {
+			user: '',
+			invoice: '',
+			from_date: '',
+			to_date: ''
+		},
 		// All companies found within the project table
 		clients: []
 	},
@@ -45199,6 +45223,21 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		// Update the current project
 		updateCurrentProject: function updateCurrentProject(state, payload) {
 			return state.currentProject = payload;
+		},
+		updateProjectsProvinceFilter: function updateProjectsProvinceFilter(state, payload) {
+			return state.projectsFilter.province = payload;
+		},
+		updateProjectsClientFilter: function updateProjectsClientFilter(state, payload) {
+			return state.projectsFilter.client = payload;
+		},
+		updateProjectsLocationFilter: function updateProjectsLocationFilter(state, payload) {
+			return state.projectsFilter.location = payload;
+		},
+		updateProjectsInvoiceFilter: function updateProjectsInvoiceFilter(state, payload) {
+			return state.projectsFilter.invoice = payload;
+		},
+		updateProjectsFilter: function updateProjectsFilter(state, payload) {
+			return state.projectsFilter = payload;
 		},
 
 		// Push a freshly added comment into the current project
@@ -45239,11 +45278,38 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		updateInvoices: function updateInvoices(state, payload) {
 			return state.invoices = payload;
 		},
+		markInvoicesPaid: function markInvoicesPaid(state, payload) {
+			payload.forEach(function (id) {
+				var invoice = state.crewInvoices.find(function (elem) {
+					return elem.id === id;
+				}),
+				    invoiceIndex = state.crewInvoices.indexOf(invoice);
+				// Mark paid
+				return state.crewInvoices[invoiceIndex].is_paid = 1;
+			});
+		},
 		updateCrewInvoices: function updateCrewInvoices(state, payload) {
 			return state.crewInvoices = payload;
 		},
 		updateCurrentInvoice: function updateCurrentInvoice(state, payload) {
 			return state.currentInvoice = payload;
+		},
+		resetInvoicesFilter: function resetInvoicesFilter(state, payload) {
+			for (var i in state.invoicesFilter) {
+				state.invoicesFilter[i] = '';
+			}
+		},
+		updateInvoicesUserFilter: function updateInvoicesUserFilter(state, payload) {
+			return state.invoicesFilter.user = payload;
+		},
+		updateInvoicesInvoiceFilter: function updateInvoicesInvoiceFilter(state, payload) {
+			return state.invoicesFilter.invoice = payload;
+		},
+		updateInvoicesFromDateFilter: function updateInvoicesFromDateFilter(state, payload) {
+			return state.invoicesFilter.from_date = payload;
+		},
+		updateInvoicesToDateFilter: function updateInvoicesToDateFilter(state, payload) {
+			return state.invoicesFilter.to_date = payload;
 		},
 		addWorkItem: function addWorkItem(state, payload) {
 			return state.currentInvoice.work_items.push(payload);
@@ -45384,8 +45450,14 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			var url = '/invoices';
 			// Create payload 
 			if (payload) {
+				// Add user to string
+				if (payload.user != '') url += '/' + payload.user;else url += '/' + 0;
+				// Add invoice status to string
+				if (payload.invoice != '') url += '/' + payload.invoice;else url += '/' + 0;
 				// Add from date to string
-				if (payload.user_id != '') url += '/user/' + payload.user_id;else url += '/' + 0;
+				if (payload.from_date != '') url += '/' + payload.from_date;else url += '/' + 0;
+				// Add date to string
+				if (payload.to_date != '') url += '/' + payload.to_date;else url += '/' + 0;
 			}
 			// Use api to send request		
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, url, 'updateCrewInvoices');
@@ -45409,6 +45481,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		getInvoice: function getInvoice(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/invoices/' + payload, 'updateCurrentInvoice');
 		},
+		markInvoicesPaid: function markInvoicesPaid(context, payload) {
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, 'invoices/mark-paid', 'markInvoicesPaid');
+		},
+
 
 		// Use api to add hours to a timesheet
 		addWorkItem: function addWorkItem(context, payload) {
@@ -45489,6 +45565,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		currentProject: function currentProject(state) {
 			return state.currentProject;
 		},
+		projectsFilter: function projectsFilter(state) {
+			return state.projectsFilter;
+		},
 
 
 		// Return the clients formatted for a vuetify select list
@@ -45510,6 +45589,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		},
 		currentInvoice: function currentInvoice(state) {
 			return state.currentInvoice;
+		},
+		invoicesFilter: function invoicesFilter(state) {
+			return state.invoicesFilter;
 		},
 
 
@@ -49712,7 +49794,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('v-card', {
     staticClass: "card--flex-toolbar"
-  }, [_c('v-container', [_c('v-toolbar', {
+  }, [_c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-toolbar', {
     staticClass: "white",
     attrs: {
       "card": "",
@@ -49720,7 +49806,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('v-toolbar-title', {
     staticClass: "display-1"
-  }, [_vm._t("title")], 2), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _vm._t("dialog")], 2)], 1), _vm._v(" "), _c('v-container', [_c('v-layout', {
+  }, [_vm._t("title")], 2), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _vm._t("dialog")], 2)], 1), _vm._v(" "), _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -49735,7 +49825,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "xs3": ""
     }
   }, [_vm._t("additional")], 2)], 1)], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-4"
+    staticClass: "mt-4",
+    attrs: {
+      "fluid": ""
+    }
   }, [_c('v-layout', {
     attrs: {
       "row": ""
@@ -50206,13 +50299,154 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   // Determines what headers and fields the table should display ("admin" or "user")
   props: ['table_state'],
-
-  components: {},
 
   data: function data() {
     return {
@@ -50220,10 +50454,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       loading: false,
       // For data table pagination   
       perPage: [15, 30, 45, { text: "All", value: -1 }],
-      // For the invoice filter
-      userFilter: '',
       // Selected items
-      selected: []
+      selected: [],
+      // For the mark paid confirmation dialog
+      markPaidDialog: false,
+      // For mark paid button
+      markingPaid: false,
+      // For from date filter
+      fromDateFilterMenu: false,
+      // For to date filter
+      toDateFilterMenu: false,
+      // For invoice status
+      invoiceStatus: [{ text: 'Invoice status...', value: '' }, { text: 'Not Paid', value: 0 }, { text: 'Paid', value: 1 }]
     };
   },
 
@@ -50240,12 +50482,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       }
     },
+    invoicesFilter: function invoicesFilter() {
+      return this.$store.getters.invoicesFilter;
+    },
     usersSelectList: function usersSelectList() {
       return this.$store.getters.usersSelectList;
     },
     headers: function headers() {
       if (this.table_state === 'admin') {
-        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'User', value: 'user', align: 'left' }, { text: 'From Date', value: 'from_date', align: 'left' }, { text: 'To Date', value: 'to_date', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'User', value: 'user', align: 'left' }, { text: 'From Date', value: 'from_date', align: 'left' }, { text: 'To Date', value: 'to_date', align: 'left' }, { text: 'Paid?', value: 'is_paid', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
       }
       if (this.table_state === 'user') {
         var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'From Date', value: 'from_date', align: 'left' }, { text: 'To Date', value: 'to_date', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
@@ -50262,33 +50507,60 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // Admin state forward
       if (this.table_state === 'admin') this.$router.push('/my-invoices/' + id + '/view');
     },
+    updateUserFilter: function updateUserFilter(value) {
+      return this.$store.commit('updateInvoicesUserFilter', value);
+    },
+    updateInvoiceFilter: function updateInvoiceFilter(value) {
+      return this.$store.commit('updateInvoicesInvoiceFilter', value);
+    },
+    updateFromDateFilter: function updateFromDateFilter(value) {
+      return this.$store.commit('updateInvoicesFromDateFilter', value);
+    },
+    updateToDateFilter: function updateToDateFilter(value) {
+      return this.$store.commit('updateInvoicesToDateFilter', value);
+    },
+    resetFilter: function resetFilter() {
+      this.$store.commit("resetInvoicesFilter");
+    },
     filterInvoices: function filterInvoices() {
       var _this = this;
 
       // Toggle loader
       this.loading = true;
       // Dispatch action to find projects
-      this.$store.dispatch('getAllInvoices', {
-        user_id: this.userFilter
-      }).then(function () {
+      this.$store.dispatch('getAllInvoices', this.invoicesFilter).then(function () {
         // Toggle loader
         _this.loading = false;
       });
     },
     markPaid: function markPaid() {
+      var _this2 = this;
+
+      // Toggle loader
+      this.markingPaid = true;
       // Will hold the invoice ids to be marked paid
-      var selectedIds = [];
+      var selectedIds = { id: [] };
       // Populate the Ids
-      this.selected.forEach(function (timesheet) {
-        selectedIds.push(timesheet.id);
+      this.selected.forEach(function (invoice) {
+        selectedIds.id.push(invoice.id);
       });
 
-      console.log(selectedIds);
+      // Dispatch action to store
+      this.$store.dispatch("markInvoicesPaid", selectedIds).then(function () {
+        // Clear selected invoices
+        _this2.selected = [];
+        // Toggle loader
+        _this2.markingPaid = false;
+        // Toggle dialog
+        _this2.markPaidDialog = false;
+      }).catch(function (error) {
+        console.log(error);
+      });
     }
   },
 
   created: function created() {
-    var _this2 = this;
+    var _this3 = this;
 
     // Toggle loader
     this.loading = true;
@@ -50305,13 +50577,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     // Tell store to load projects
     this.$store.dispatch(dispatchAction, payload).then(function () {
       if (dispatchAction === 'getAllInvoices') {
-        _this2.$store.dispatch('getUsers').then(function () {
+        _this3.$store.dispatch('getUsers').then(function () {
           // Toggle loader
-          _this2.loading = false;
+          _this3.loading = false;
         });
       } else {
         // Toggle loader
-        _this2.loading = false;
+        _this3.loading = false;
       }
     });
   }
@@ -50333,21 +50605,177 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('v-flex', {
     staticClass: "ml-2",
     attrs: {
-      "xs3": ""
+      "xs2": ""
     }
   }, [_c('v-select', {
     attrs: {
+      "value": _vm.invoicesFilter.user,
       "items": _vm.usersSelectList,
       "label": "User...",
       "single-line": "",
       "bottom": ""
     },
+    on: {
+      "input": _vm.updateUserFilter
+    }
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('v-menu', {
+    attrs: {
+      "lazy": "",
+      "close-on-content-click": false,
+      "transition": "scale-transition",
+      "offset-y": "",
+      "full-width": "",
+      "nudge-left": 40,
+      "max-width": "290px"
+    },
     model: {
-      value: (_vm.userFilter),
+      value: (_vm.fromDateFilterMenu),
       callback: function($$v) {
-        _vm.userFilter = $$v
+        _vm.fromDateFilterMenu = $$v
       },
-      expression: "userFilter"
+      expression: "fromDateFilterMenu"
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "slot": "activator",
+      "value": _vm.invoicesFilter.from_date,
+      "label": "From Date...",
+      "prepend-icon": "event",
+      "readonly": ""
+    },
+    on: {
+      "input": _vm.updateFromDateFilter
+    },
+    slot: "activator"
+  }), _vm._v(" "), _c('v-date-picker', {
+    attrs: {
+      "value": _vm.invoicesFilter.from_date,
+      "no-title": "",
+      "scrollable": "",
+      "actions": ""
+    },
+    on: {
+      "input": _vm.updateFromDateFilter
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function(ref) {
+        var save = ref.save;
+        var cancel = ref.cancel;
+
+        return [_c('v-card-actions', [_c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              cancel()
+            }
+          }
+        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              save()
+            }
+          }
+        }, [_vm._v("Save")])], 1)]
+      }
+    }])
+  })], 1)], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('v-menu', {
+    attrs: {
+      "lazy": "",
+      "close-on-content-click": false,
+      "transition": "scale-transition",
+      "offset-y": "",
+      "full-width": "",
+      "nudge-left": 40,
+      "max-width": "290px"
+    },
+    model: {
+      value: (_vm.toDateFilterMenu),
+      callback: function($$v) {
+        _vm.toDateFilterMenu = $$v
+      },
+      expression: "toDateFilterMenu"
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "slot": "activator",
+      "value": _vm.invoicesFilter.to_date,
+      "label": "To Date...",
+      "prepend-icon": "event",
+      "readonly": ""
+    },
+    on: {
+      "input": _vm.updateToDateFilter
+    },
+    slot: "activator"
+  }), _vm._v(" "), _c('v-date-picker', {
+    attrs: {
+      "value": _vm.invoicesFilter.to_date,
+      "no-title": "",
+      "scrollable": "",
+      "actions": ""
+    },
+    on: {
+      "input": _vm.updateToDateFilter
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function(ref) {
+        var save = ref.save;
+        var cancel = ref.cancel;
+
+        return [_c('v-card-actions', [_c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              cancel()
+            }
+          }
+        }, [_vm._v("Cancel")]), _vm._v(" "), _c('v-btn', {
+          attrs: {
+            "flat": "",
+            "primary": ""
+          },
+          nativeOn: {
+            "click": function($event) {
+              save()
+            }
+          }
+        }, [_vm._v("Save")])], 1)]
+      }
+    }])
+  })], 1)], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('v-select', {
+    attrs: {
+      "value": _vm.invoicesFilter.invoice,
+      "items": _vm.invoiceStatus,
+      "label": "Invoice status...",
+      "single-line": "",
+      "bottom": ""
+    },
+    on: {
+      "input": _vm.updateInvoiceFilter
     }
   })], 1), _vm._v(" "), _c('v-flex', {
     attrs: {
@@ -50377,18 +50805,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('v-flex', {
     staticClass: "ml-2",
     attrs: {
-      "xs3": ""
+      "xs2": ""
     }
   }, [_c('v-btn', {
-    staticClass: "success",
+    staticClass: "info",
     on: {
-      "click": _vm.markPaid
+      "click": _vm.resetFilter
     }
   }, [_c('v-icon', {
     attrs: {
       "left": ""
     }
-  }, [_vm._v("check_circle")]), _vm._v("\n          Mark Paid\n        ")], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('v-data-table', {
+  }, [_vm._v("cached")]), _vm._v("\n          Reset Filter\n        ")], 1)], 1), _vm._v(" "), _c('v-flex', {
+    staticClass: "ml-2",
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('v-btn', {
+    staticClass: "success",
+    on: {
+      "click": function($event) {
+        _vm.markPaidDialog = true
+      }
+    }
+  }, [_c('v-icon', {
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("check_circle")]), _vm._v("\n          Mark Invoices Paid\n        ")], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('v-data-table', {
     staticClass: "elevation-1 mt-3",
     attrs: {
       "headers": _vm.headers,
@@ -50413,7 +50857,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
             },
             expression: "props.selected"
           }
-        })], 1), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.id))]), _vm._v(" "), (_vm.table_state === 'admin') ? _c('td', [_vm._v(_vm._s(props.item.user.first))]) : _vm._e(), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("date")(props.item.from_date)))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("date")(props.item.to_date)))]), _vm._v(" "), _c('td', [_c('v-btn', {
+        })], 1), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.id))]), _vm._v(" "), (_vm.table_state === 'admin') ? _c('td', [_vm._v(_vm._s(props.item.user.first))]) : _vm._e(), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("date")(props.item.from_date)))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("date")(props.item.to_date)))]), _vm._v(" "), (_vm.table_state === 'admin') ? _c('td', [(!props.item.is_paid) ? _c('v-chip', {
+          staticClass: "red white--text"
+        }, [_vm._v("Not Paid\n        ")]) : _c('v-chip', {
+          staticClass: "green white--text"
+        }, [_vm._v("\n          Paid\n        ")])], 1) : _vm._e(), _vm._v(" "), _c('td', [_c('v-btn', {
           directives: [{
             name: "tooltip",
             rawName: "v-tooltip:top",
@@ -50451,7 +50899,58 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "selected"
     }
-  })], 1)
+  }), _vm._v(" "), _c('v-layout', {
+    staticClass: "mr-0",
+    staticStyle: {
+      "position": "relative"
+    },
+    attrs: {
+      "row": "",
+      "justify-center": ""
+    }
+  }, [_c('v-dialog', {
+    attrs: {
+      "width": "365",
+      "lazy": "",
+      "absolute": "",
+      "persistent": ""
+    },
+    model: {
+      value: (_vm.markPaidDialog),
+      callback: function($$v) {
+        _vm.markPaidDialog = $$v
+      },
+      expression: "markPaidDialog"
+    }
+  }, [_c('v-card', [_c('v-card-title', [_c('div', {
+    staticClass: "headline grey--text"
+  }, [_vm._v("Mark as paid?")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-card-text', [_vm._v("\n          Are you sure you want to mark these invoices as paid?\n        ")]), _vm._v(" "), _c('v-card-actions', [_c('v-spacer'), _vm._v(" "), _c('v-btn', {
+    staticClass: "red--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat"
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.markPaidDialog = false
+      }
+    }
+  }, [_vm._v("\n              Maybe not\n          ")]), _vm._v(" "), _c('v-btn', {
+    staticClass: "green--text darken-1",
+    attrs: {
+      "outline": "",
+      "flat": "flat",
+      "loading": _vm.markingPaid,
+      "disable": _vm.markingPaid
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.markPaid($event)
+      }
+    }
+  }, [_vm._v("\n            Do it\n          ")])], 1)], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -50875,7 +51374,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   data: function data() {
     return {
-      tips: [{ text: "Use the view button on each invoice row to view the full invoice." }]
+      tips: [{ text: "Use the view button on each invoice row to view the full invoice." }, { text: 'You can use all of the filters at once, or simply one at a time. In addition, clicking on a heading will sort the invoices accordingly.' }]
     };
   },
 
@@ -51449,6 +51948,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -51474,16 +51977,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       perPage: [15, 30, 45, { text: "All", value: -1 }],
       // For provinces filter
       provinces: [{ text: 'Province...', value: '' }, { text: 'Alberta', value: 'Alberta' }, { text: 'British Columbia', value: 'British Columbia' }, { text: 'Saskatchewan', value: 'Saskatchewan' }],
-      // Provinces filter
-      provinceFilter: '',
-      // Clients filter
-      clientFilter: '',
       // For invoice status
-      invoiceStatus: [{ text: 'Invoice status...', value: '' }, { text: 'Not Invoiced', value: 'not-invoiced' }, { text: 'Paid', value: 'paid' }, { text: 'Outstanding', value: 'outstanding' }],
-      // Location filter
-      locationFilter: '',
-      // Invoice status filter
-      invoiceFilter: ''
+      invoiceStatus: [{ text: 'Invoice status...', value: '' }, { text: 'Not Invoiced', value: 'not-invoiced' }, { text: 'Paid', value: 'paid' }, { text: 'Outstanding', value: 'outstanding' }]
     };
   },
 
@@ -51498,6 +51993,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     // Watch for uniqueCLients state to update
     clients: function clients() {
       return this.$store.getters.clientsSelectList;
+    },
+    projectsFilter: function projectsFilter() {
+      return this.$store.getters.projectsFilter;
     },
     headers: function headers() {
       if (this.table_state === 'admin_work') {
@@ -51514,18 +52012,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
+    updateProvinceFilter: function updateProvinceFilter(value) {
+      return this.$store.commit('updateProjectsProvinceFilter', value);
+    },
+    updateClientFilter: function updateClientFilter(value) {
+      return this.$store.commit('updateProjectsClientFilter', value);
+    },
+    updateLocationFilter: function updateLocationFilter(value) {
+      return this.$store.commit('updateProjectsLocationFilter', value);
+    },
+    updateInvoiceFilter: function updateInvoiceFilter(value) {
+      return this.$store.commit('updateProjectsInvoiceFilter', value);
+    },
     filterProjects: function filterProjects() {
       var _this = this;
 
       // Toggle loader
       this.loading = true;
       // Dispatch action to find projects
-      this.$store.dispatch('getProjects', {
-        client: this.clientFilter,
-        province: this.provinceFilter,
-        location: this.locationFilter,
-        invoice: this.invoiceFilter
-      }).then(function () {
+      this.$store.dispatch('getProjects', this.projectsFilter).then(function () {
         // Toggle loader
         _this.loading = false;
       });
@@ -51550,8 +52055,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         payload = false;
     if (this.table_state === 'admin_work') {
       dispatchAction = 'getProjects';
+      // Populate payload
+      payload = this.projectsFilter;
     } else if (this.table_state === 'admin_manage') {
       dispatchAction = 'getProjects';
+      // Populate payload
+      payload = this.projectsFilter;
     } else if (this.table_state === 'user') {
       dispatchAction = 'getUsersProjects';
       payload = {
@@ -51758,17 +52267,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('v-select', {
     attrs: {
+      "value": _vm.projectsFilter.province,
       "items": _vm.provinces,
       "label": "Province...",
       "single-line": "",
       "bottom": ""
     },
-    model: {
-      value: (_vm.provinceFilter),
-      callback: function($$v) {
-        _vm.provinceFilter = $$v
-      },
-      expression: "provinceFilter"
+    on: {
+      "input": _vm.updateProvinceFilter
     }
   })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
     attrs: {
@@ -51776,17 +52282,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('v-select', {
     attrs: {
+      "value": _vm.projectsFilter.client,
       "items": _vm.clients,
       "label": "Client...",
       "single-line": "",
       "bottom": ""
     },
-    model: {
-      value: (_vm.clientFilter),
-      callback: function($$v) {
-        _vm.clientFilter = $$v
-      },
-      expression: "clientFilter"
+    on: {
+      "input": _vm.updateClientFilter
     }
   })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
     attrs: {
@@ -51794,14 +52297,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('v-text-field', {
     attrs: {
-      "label": "Enter part of location..."
+      "label": "Enter part of location...",
+      "value": _vm.projectsFilter.location
     },
-    model: {
-      value: (_vm.locationFilter),
-      callback: function($$v) {
-        _vm.locationFilter = $$v
-      },
-      expression: "locationFilter"
+    on: {
+      "input": _vm.updateLocationFilter
     }
   })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('v-flex', {
     attrs: {
@@ -51809,17 +52309,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('v-select', {
     attrs: {
+      "value": _vm.projectsFilter.invoice,
       "items": _vm.invoiceStatus,
       "label": "Invoice status...",
       "single-line": "",
       "bottom": ""
     },
-    model: {
-      value: (_vm.invoiceFilter),
-      callback: function($$v) {
-        _vm.invoiceFilter = $$v
-      },
-      expression: "invoiceFilter"
+    on: {
+      "input": _vm.updateInvoiceFilter
     }
   })], 1) : _vm._e(), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
     attrs: {
@@ -55674,6 +56171,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -55709,6 +56221,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		totalLodgingCost: function totalLodgingCost() {
 			if (this.workItems) {
 				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsLodgingCost(this.workItems).toFixed(2);
+			}
+		},
+		totalEquipmentCost: function totalEquipmentCost() {
+			if (this.workItems) {
+				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsEquipmentCost(this.workItems).toFixed(2);
 			}
 		},
 		totalExtraCosts: function totalExtraCosts() {
@@ -55842,7 +56359,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "mb-1"
     }, [_c('strong', [_vm._v("Mileage:")])]), _vm._v(" "), _c('p', {
       staticClass: "mb-1"
-    }, [_c('strong', [_vm._v("Per Diem:")]), _vm._v(" " + _vm._s(item.per_diem_desc) + "\n      \t\t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', [_c('strong', [_vm._v("Lodging:")]), _vm._v(" " + _vm._s(item.lodging_desc) + "\n      \t\t")]) : _vm._e()]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    }, [_c('strong', [_vm._v("Per Diem:")]), _vm._v(" " + _vm._s(item.per_diem_desc) + "\n      \t\t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', {
+      staticClass: "mb-1"
+    }, [_c('strong', [_vm._v("Lodging:")]), _vm._v(" " + _vm._s(item.lodging_desc) + "\n      \t\t")]) : _vm._e(), _vm._v(" "), (item.equipment_cost) ? _c('p', [_c('strong', [_vm._v("Equipment:")]), _vm._v(" " + _vm._s(item.equipment_desc) + "\n          ")]) : _vm._e()]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
       attrs: {
         "xs1": ""
       }
@@ -55855,7 +56374,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "mb-1"
     }, [_vm._v("\n        \t\t$" + _vm._s((parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate)).toFixed(2)) + "\n        \t")]), _vm._v(" "), _c('p', {
       staticClass: "mb-1"
-    }, [_vm._v("\n        \t\t$" + _vm._s(item.per_diem) + "\n        \t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', [_vm._v("\n        \t\t$" + _vm._s(item.lodging_cost) + "\n        \t")]) : _vm._e()])], 1)], 1)
+    }, [_vm._v("\n        \t\t$" + _vm._s(item.per_diem) + "\n        \t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', {
+      staticClass: "mb-1"
+    }, [_vm._v("\n        \t\t$" + _vm._s(item.lodging_cost) + "\n        \t")]) : _vm._e(), _vm._v(" "), (item.equipment_cost) ? _c('p', [_vm._v("\n            $" + _vm._s(item.equipment_cost) + "\n          ")]) : _vm._e()])], 1)], 1)
   }), _vm._v(" "), _c('v-container', [_c('v-layout', {
     attrs: {
       "row": ""
@@ -55910,6 +56431,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('span', {
     staticClass: "subheading"
   }, [_vm._v("$" + _vm._s(_vm.totalLodgingCost))])])], 1), _vm._v(" "), _c('v-layout', {
+    staticClass: "mt-3",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs3": ""
+    }
+  }, [_c('span', {
+    staticClass: "subheading"
+  }, [_c('em', [_vm._v("EQUIPMENT (SUBTOTAL):")])])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    staticClass: "text-xs-right",
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "subheading"
+  }, [_vm._v("$" + _vm._s(_vm.totalEquipmentCost))])])], 1), _vm._v(" "), _c('v-layout', {
     staticClass: "mt-4",
     attrs: {
       "row": ""
@@ -56777,6 +57316,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -56859,7 +57434,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				travel_mileage: { val: '', err: false, errMsg: '', dflt: '' },
 				mileage_rate: { val: '', err: false, errMsg: '', dflt: '' },
 				lodging_desc: { val: '', err: false, errMsg: '', dflt: '' },
-				lodging_cost: { val: '', err: false, errMsg: '', dflt: '' }
+				lodging_cost: { val: '', err: false, errMsg: '', dflt: '' },
+				equipment_desc: { val: '', err: false, errMsg: '', dflt: '' },
+				equipment_cost: { val: '', err: false, errMsg: '', dflt: '' }
 			}
 		};
 	},
@@ -57203,7 +57780,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "mb-1"
     }, [_c('strong', [_vm._v("Mileage:")])]), _vm._v(" "), _c('p', {
       staticClass: "mb-1"
-    }, [_c('strong', [_vm._v("Per Diem:")]), _vm._v(" " + _vm._s(item.per_diem_desc) + "\n        \t\t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', [_c('strong', [_vm._v("Lodging:")]), _vm._v(" " + _vm._s(item.lodging_desc) + "\n        \t\t")]) : _vm._e()]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    }, [_c('strong', [_vm._v("Per Diem:")]), _vm._v(" " + _vm._s(item.per_diem_desc) + "\n        \t\t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', {
+      staticClass: "mb-1"
+    }, [_c('strong', [_vm._v("Lodging:")]), _vm._v(" " + _vm._s(item.lodging_desc) + "\n        \t\t")]) : _vm._e(), _vm._v(" "), (item.equipment_cost) ? _c('p', [_c('strong', [_vm._v("Equipment:")]), _vm._v(" " + _vm._s(item.equipment_desc) + "\n        \t\t")]) : _vm._e()]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
       attrs: {
         "xs1": ""
       }
@@ -57216,7 +57795,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "mb-1"
     }, [_vm._v("\n\t        \t\t$" + _vm._s((parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate)).toFixed(2)) + "\n\t        \t")]), _vm._v(" "), _c('p', {
       staticClass: "mb-1"
-    }, [_vm._v("\n\t        \t\t$" + _vm._s(item.per_diem) + "\n\t        \t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', [_vm._v("\n\t        \t\t$" + _vm._s(item.lodging_cost) + "\n\t        \t")]) : _vm._e()])], 1)], 1)
+    }, [_vm._v("\n\t        \t\t$" + _vm._s(item.per_diem) + "\n\t        \t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', {
+      staticClass: "mb-1"
+    }, [_vm._v("\n\t        \t\t$" + _vm._s(item.lodging_cost) + "\n\t        \t")]) : _vm._e(), _vm._v(" "), (item.equipment_cost) ? _c('p', [_vm._v("\n\t        \t\t$" + _vm._s(item.equipment_cost) + "\n\t        \t")]) : _vm._e()])], 1)], 1)
   }), _vm._v(" "), _c('v-container', [_c('v-divider', {
     staticClass: "mb-2"
   }), _vm._v(" "), _c('v-layout', {
@@ -57714,6 +58295,48 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.workItemForm.lodging_cost.val = $$v
       },
       expression: "workItemForm.lodging_cost.val"
+    }
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-card', {
+    staticClass: "mt-3"
+  }, [_c('v-card-title', [_c('div', {
+    staticClass: "headline"
+  }, [_vm._v("Equipment")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    staticClass: "mt-3",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs5": ""
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "Description",
+      "error": _vm.workItemForm.equipment_desc.err
+    },
+    model: {
+      value: (_vm.workItemForm.equipment_desc.val),
+      callback: function($$v) {
+        _vm.workItemForm.equipment_desc.val = $$v
+      },
+      expression: "workItemForm.equipment_desc.val"
+    }
+  })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    attrs: {
+      "xs5": ""
+    }
+  }, [_c('v-text-field', {
+    attrs: {
+      "label": "Cost",
+      "prefix": "$",
+      "error": _vm.workItemForm.equipment_cost.err
+    },
+    model: {
+      value: (_vm.workItemForm.equipment_cost.val),
+      callback: function($$v) {
+        _vm.workItemForm.equipment_cost.val = $$v
+      },
+      expression: "workItemForm.equipment_cost.val"
     }
   })], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1)], 1) : _vm._e(), _vm._v(" "), (_vm.invoice_state != 'readonly') ? _c('v-layout', {
     staticClass: "mr-0",

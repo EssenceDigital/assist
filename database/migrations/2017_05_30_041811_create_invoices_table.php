@@ -22,7 +22,7 @@ class CreateInvoicesTable extends Migration
             $table->date('from_date');
             $table->date('to_date');
             // Paid flag
-            $table->date('paid_date')->nullable();
+            $table->boolean('is_paid')->default(0);
             $table->timestamps();
         });
     }

@@ -16,11 +16,14 @@ class CreateWorkItemsTable extends Migration
         Schema::create('work_items', function (Blueprint $table) {
             $table->increments('id');
             // Foreign key for project
-            $table->integer('project_id')->unsigned()->nullable();
+            $table->integer('project_id')->unsigned();
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             // Foreign key for invoice
             $table->integer('invoice_id')->unsigned();
-            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');                        
+            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');   
+            // Foreign key for user
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');                                   
             // Basic fields
             $table->date('from_date');
             $table->date('to_date');            
@@ -35,6 +38,9 @@ class CreateWorkItemsTable extends Migration
             // Lodging cost fields
             $table->string('lodging_desc', 75)->nullable();
             $table->decimal('lodging_cost', 13, 2)->nullable(); 
+            // Equipment cost fields
+            $table->string('equipment_desc', 75)->nullable();
+            $table->decimal('equipment_cost', 13, 2)->nullable();
             // Timestamps                      
             $table->timestamps();
         });

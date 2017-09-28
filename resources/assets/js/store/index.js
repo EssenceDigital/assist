@@ -25,12 +25,26 @@ export const store = new Vuex.Store({
 		projects: [],
 		// A project who has been selected to view/edit
 		currentProject: { id: -1 },
+		// The current project search filter
+		projectsFilter: { 
+			province: '',
+			client: '',
+			location: '',
+			invoice: ''
+		},
 		// 'My 'Invoices returned by the server
 		invoices: [],
 		// Crew Invoices returned by the server
 		crewInvoices: [],
 		// An invoice that has been selected to view/edit
 		currentInvoice: false,
+		// The current invoice search filter
+		invoicesFilter: {
+			user: '',
+			invoice: '',
+			from_date: '',
+			to_date: ''
+		},
 		// All companies found within the project table
 		clients: []
 	},
@@ -46,6 +60,26 @@ export const store = new Vuex.Store({
 		// Update the current project
 		updateCurrentProject (state, payload) {
 			return state.currentProject = payload;
+		},
+
+		updateProjectsProvinceFilter(state, payload) {
+			return state.projectsFilter.province = payload;
+		},
+
+		updateProjectsClientFilter(state, payload) {
+			return state.projectsFilter.client = payload;
+		},
+
+		updateProjectsLocationFilter(state, payload) {
+			return state.projectsFilter.location = payload;
+		},
+
+		updateProjectsInvoiceFilter(state, payload) {
+			return state.projectsFilter.invoice = payload;
+		},
+
+		updateProjectsFilter (state, payload) {
+			return state.projectsFilter = payload;
 		},
 		// Push a freshly added comment into the current project
 		addProjectComment (state, payload) {
@@ -83,6 +117,14 @@ export const store = new Vuex.Store({
 			return state.invoices = payload;
 		},
 
+		markInvoicesPaid (state, payload) {
+			payload.forEach((id) => {
+				var invoice = state.crewInvoices.find(elem => elem.id === id),
+						invoiceIndex = state.crewInvoices.indexOf(invoice);
+				// Mark paid
+				return state.crewInvoices[invoiceIndex].is_paid = 1;
+			});
+		},
 		updateCrewInvoices (state, payload) {
 			return state.crewInvoices = payload;
 		},
@@ -90,6 +132,28 @@ export const store = new Vuex.Store({
 		updateCurrentInvoice (state, payload) {
 			return state.currentInvoice = payload;
 		},
+
+		resetInvoicesFilter (state, payload) {
+			for(var i in state.invoicesFilter){
+				state.invoicesFilter[i] = '';
+			}
+		},
+
+		updateInvoicesUserFilter(state, payload) {
+			return state.invoicesFilter.user = payload;
+		},		
+
+		updateInvoicesInvoiceFilter(state, payload) {
+			return state.invoicesFilter.invoice = payload;
+		},		
+
+		updateInvoicesFromDateFilter(state, payload) {
+			return state.invoicesFilter.from_date = payload;
+		},		
+
+		updateInvoicesToDateFilter(state, payload) {
+			return state.invoicesFilter.to_date = payload;
+		},	
 
 		addWorkItem (state, payload) {
 			return state.currentInvoice.work_items.push(payload);
@@ -224,9 +288,18 @@ export const store = new Vuex.Store({
 			var url = '/invoices';
 			// Create payload 
 			if(payload){
+				// Add user to string
+				if(payload.user != '') url += '/' + payload.user;
+					else url += '/' + 0;		
+				// Add invoice status to string
+				if(payload.invoice != '') url += '/' + payload.invoice;
+					else url += '/' + 0;							
 				// Add from date to string
-				if(payload.user_id != '') url += '/user/' + payload.user_id;
-					else url += '/' + 0;				
+				if(payload.from_date != '') url += '/' + payload.from_date;
+					else url += '/' + 0;	
+				// Add date to string
+				if(payload.to_date != '') url += '/' + payload.to_date;
+					else url += '/' + 0;														
 			}
 			// Use api to send request		
 			return api.getAction(context, url, 'updateCrewInvoices');
@@ -249,6 +322,11 @@ export const store = new Vuex.Store({
 		getInvoice (context, payload) {
 			return api.getAction(context, '/invoices/'+payload, 'updateCurrentInvoice');
 		},
+
+		markInvoicesPaid (context, payload) {
+			return api.postAction(context, payload, 'invoices/mark-paid', 'markInvoicesPaid');
+		},
+
 		// Use api to add hours to a timesheet
 		addWorkItem (context, payload) {
 			return api.postAction(context, payload, '/invoices/add-item', 'addWorkItem');
@@ -323,6 +401,10 @@ export const store = new Vuex.Store({
 			return state.currentProject;
 		},
 
+		projectsFilter (state) {
+			return state.projectsFilter;
+		},
+
 		// Return the clients formatted for a vuetify select list
 		projectsSelectList (state) {
 			// Cache users
@@ -345,6 +427,10 @@ export const store = new Vuex.Store({
 
 		currentInvoice (state) {
 			return state.currentInvoice;
+		},
+
+		invoicesFilter (state) {
+			return state.invoicesFilter;
 		},
 
 		// Return all users
