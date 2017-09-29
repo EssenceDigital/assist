@@ -13,8 +13,9 @@
       <v-layout row justify-center style="position: relative;" class="mr-0">
         <v-dialog v-model="addProjectDialog" width="765" lazy absolute>
           <!-- Add project button -->
-          <v-btn slot="activator" icon v-tooltip:top="{ html: 'Add Project' }">
-            <v-icon>add_circle</v-icon>
+          <v-btn slot="activator" flat class="success--text pr-5 mr-2" icon v-tooltip:top="{ html: 'Add Project' }">
+            <v-icon left>add_circle</v-icon>
+            Project
           </v-btn>      
           <v-card>
             <v-card-title>

@@ -29,8 +29,10 @@
   	data () {
   		return {
   			tips: [
-  				{ text: "Use the view button on each invoice row to view the full invoice." },
-          { text: 'You can use all of the filters at once, or simply one at a time. In addition, clicking on a heading will sort the invoices accordingly.' }       
+  				{ text: "Use the view button at the end of each row to see the entire invoice." },
+          { text: 'You can search your crews invoices using the filter below. The filters can be used one at a time or all at once.' } ,
+          { text: "Clicking on a heading will sort the invoices accordingly." },
+          { text: 'You can mark an invoice as paid by checking the box at the start of the desired row and then clicking the "Mark Invoices Paid" button.' }      
   			]
   		}
   	},

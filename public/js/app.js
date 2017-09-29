@@ -49835,6 +49835,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('p', {
     staticClass: "subheading pl-4"
   }, [_vm._t("description")], 2)]), _vm._v(" "), _c('v-flex', {
+    staticClass: "text-xs-right",
     attrs: {
       "xs3": ""
     }
@@ -50139,7 +50140,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       // Tips for card layout
-      tips: [{ text: "Use the view button on each project row to view your timesheets for that project or add new ones." }],
+      tips: [{ text: "You can start a new invoice using the add button located in the top right corner of this card." }, { text: "Use the view button at the end of each row to view that invoice and add your hours and costs." }],
       // For invoice dialog and loading
       addInvoiceDialog: false,
       startingInvoice: false,
@@ -50493,7 +50494,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       toDateFilterMenu: false,
       // For invoice status
       invoiceStatus: [{ text: 'Invoice status...', value: '' }, { text: 'Not Paid', value: 0 }, { text: 'Paid', value: 1 }],
-      // For the select all table option
+      // For the select all table option - Can be changed by created hook
       selectAll: 'default'
     };
   },
@@ -51008,13 +51009,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "slot": "title"
     },
     slot: "title"
-  }, [_vm._v("\n\t\t\tInvoices You've Created\t\n\t\t")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n\t\t\tMy Invoices "), _c('small', [_vm._v("(For Arrow)")])]), _vm._v(" "), _c('div', {
     attrs: {
       "slot": "dialog"
     },
     slot: "dialog"
   }, [_c('v-layout', {
-    staticClass: "mr-0",
     staticStyle: {
       "position": "relative"
     },
@@ -51408,7 +51408,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   data: function data() {
     return {
-      tips: [{ text: "Use the view button on each invoice row to view the full invoice." }, { text: 'You can use all of the filters at once, or simply one at a time. In addition, clicking on a heading will sort the invoices accordingly.' }]
+      tips: [{ text: "Use the view button at the end of each row to see the entire invoice." }, { text: 'You can search your crews invoices using the filter below. The filters can be used one at a time or all at once.' }, { text: "Clicking on a heading will sort the invoices accordingly." }, { text: 'You can mark an invoice as paid by checking the box at the start of the desired row and then clicking the "Mark Invoices Paid" button.' }]
     };
   },
 
@@ -51546,6 +51546,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Card_layout__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__project_Projects_table__ = __webpack_require__(78);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__project_Projects_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__project_Projects_table__);
+//
 //
 //
 //
@@ -52554,12 +52555,18 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       expression: "{ html: 'Add Project' }",
       arg: "top"
     }],
+    staticClass: "success--text pr-5 mr-2",
     attrs: {
       "slot": "activator",
+      "flat": "",
       "icon": ""
     },
     slot: "activator"
-  }, [_c('v-icon', [_vm._v("add_circle")])], 1), _vm._v(" "), _c('v-card', [_c('v-card-title', [_c('div', {
+  }, [_c('v-icon', {
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("add_circle")]), _vm._v("\n            Project\n          ")], 1), _vm._v(" "), _c('v-card', [_c('v-card-title', [_c('div', {
     staticClass: "headline grey--text"
   }, [_vm._v("Start a project")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', [_c('p', {
     staticClass: "subheading info--text pl-2"
@@ -55233,6 +55240,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: ["crew"],
@@ -55359,6 +55368,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       expression: "{ html: 'Add crew member' }",
       arg: "top"
     }],
+    staticClass: "green--text mr-3",
     attrs: {
       "icon": ""
     },
@@ -55368,7 +55378,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.addCrewDialog = true
       }
     }
-  }, [_c('v-icon', [_vm._v("add_circle")])], 1)], 1), _vm._v(" "), _c('v-layout', {
+  }, [_c('v-icon', {
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("add_circle")]), _vm._v("\n        Crew\n      ")], 1)], 1), _vm._v(" "), _c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -58847,6 +58861,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -59209,12 +59224,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       expression: "{ html: 'Add User' }",
       arg: "top"
     }],
+    staticClass: "green--text pr-5 mr-2",
     attrs: {
       "slot": "activator",
       "icon": ""
     },
     slot: "activator"
-  }, [_c('v-icon', [_vm._v("add_circle")])], 1), _vm._v(" "), _c('v-card', [_c('v-card-title', [_c('div', {
+  }, [_c('v-icon', {
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("add_circle")]), _vm._v("\n          User\n        ")], 1), _vm._v(" "), _c('v-card', [_c('v-card-title', [_c('div', {
     staticClass: "headline grey--text"
   }, [_vm._v("Add a user")])]), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
     attrs: {

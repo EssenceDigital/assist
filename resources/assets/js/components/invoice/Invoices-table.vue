@@ -267,7 +267,7 @@
           { text: 'Not Paid', value: 0 },
           { text: 'Paid', value: 1 }                 
         ],
-        // For the select all table option
+        // For the select all table option - Can be changed by created hook
         selectAll: 'default'       
       }
     },

@@ -151,6 +151,8 @@ class DatabaseSeeder extends Seeder
             // Populate years
             $invoice->from_date = $InvYear . '-' . sprintf("%02d", $InvMonth) . '-' . $InvFromDay;
             $invoice->to_date = $InvYear . '-' . sprintf("%02d", $InvMonth) . '-' . $InvToDay;
+            // Publish or not
+            $invoice->is_published = rand(0,1);
             $invoice->save(); 
 
             // Add some work items

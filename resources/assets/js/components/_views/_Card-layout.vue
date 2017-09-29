@@ -63,7 +63,7 @@
 						        	<!-- 
 											 * An optional additional slot (prop)
 						        	-->	
-						        	<v-flex xs3>
+						        	<v-flex xs3 class="text-xs-right">
 						        		<slot name="additional"></slot>
 						        	</v-flex>			      	
 

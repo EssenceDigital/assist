@@ -8,11 +8,13 @@
 			</div>
 			<v-spacer></v-spacer>
       <v-btn 
+      	@click.native.stop="addCrewDialog = true"
       	icon 
       	v-tooltip:top="{ html: 'Add crew member' }"
-      	@click.native.stop="addCrewDialog = true"
+      	class="green--text mr-3"
       >
-        <v-icon>add_circle</v-icon>
+        <v-icon left>add_circle</v-icon>
+        Crew
       </v-btn>						
 		</v-layout>
 		<v-layout row>

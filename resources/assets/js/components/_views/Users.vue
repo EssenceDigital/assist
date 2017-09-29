@@ -10,8 +10,9 @@
       <v-layout row justify-center style="position: relative;">
         <v-dialog v-model="addUserDialog" width="765" lazy absolute persistent>
           <!-- Add User button -->
-          <v-btn slot="activator" icon v-tooltip:top="{ html: 'Add User' }">
-            <v-icon>add_circle</v-icon>
+          <v-btn slot="activator" class="green--text pr-5 mr-2" icon v-tooltip:top="{ html: 'Add User' }">
+            <v-icon left>add_circle</v-icon>
+            User
           </v-btn>      
           <v-card>
             <v-card-title>

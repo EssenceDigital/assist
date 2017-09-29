@@ -3,15 +3,15 @@
 		:tips="tips"
 	>
 		<div slot="title">
-			Invoices You've Created	
+			My Invoices <small>(For Arrow)</small>
 		</div>
 		<div slot="dialog">
       <!-- Add invoice dialog -->
-			<v-layout row justify-center style="position: relative;" class="mr-0">
+			<v-layout row justify-center style="position: relative;">
 		    <v-dialog v-model="addInvoiceDialog" width="765" lazy absolute>
 	        <!-- Add project button -->
 					<v-btn slot="activator" flat class="success--text" v-tooltip:top="{ html: 'Add Invoice' }">
-					<v-icon left class="success--text">add_circle</v-icon>
+						<v-icon left class="success--text">add_circle</v-icon>
 						Invoice
 					</v-btn>   
 		      <v-card>
@@ -131,7 +131,8 @@
   		return {
   			// Tips for card layout
   			tips: [
-  			 { text: "Use the view button on each project row to view your timesheets for that project or add new ones." }
+					{ text: "You can start a new invoice using the add button located in the top right corner of this card." },
+  			 	{ text: "Use the view button at the end of each row to view that invoice and add your hours and costs." }
   			],
   			// For invoice dialog and loading
   			addInvoiceDialog: false,
