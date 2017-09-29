@@ -41,7 +41,7 @@
 	    	<v-spacer></v-spacer>
 	    	<v-flex xs1 class="text-xs-right">
 	      	<p>
-	      		${{ (parseFloat(item.hours) * parseFloat(item.hourly_rate)).toFixed(2) }}
+	      		{{ tallySingleWorkItemHoursPay(item) | money }}
 	      	</p>						        		
 	    	</v-flex>
 	    </v-layout><!-- / Work Item -->
@@ -60,7 +60,7 @@
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
-      		<span class="title red--text">${{ totalWorkHoursPay }}</span>
+      		<span class="title red--text">{{ totalWorkHoursPay | money }}</span>
       	</v-flex>
       </v-layout>
       <v-divider class="mt-2"></v-divider>		        	
@@ -117,16 +117,16 @@
       	<v-spacer></v-spacer>
       	<v-flex xs1 class="text-xs-right">
         	<p class="mb-1">
-        		${{ (parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate)).toFixed(2) }}
+        		{{ tallySingleWorkItemsMileagePay(item) | money }}
         	</p>
         	<p class="mb-1">
-        		${{ item.per_diem }}
+        		{{ item.per_diem | money }}
         	</p>	
         	<p v-if="item.lodging_cost" class="mb-1">
-        		${{ item.lodging_cost }}
+        		{{ item.lodging_cost | money }}
         	</p>
           <p v-if="item.equipment_cost">
-            ${{ item.equipment_cost }}
+            {{ item.equipment_cost | money }}
           </p>          						        							        		
       	</v-flex>
       </v-layout><!-- / Work Item -->
@@ -140,7 +140,7 @@
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
-      		<span class="subheading">${{ totalTravelMileageCost }}</span>
+      		<span class="subheading">{{ totalTravelMileageCost | money }}</span>
       	</v-flex>
       </v-layout>	
       <v-layout row class="mt-3">
@@ -149,7 +149,7 @@
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
-      		<span class="subheading">${{ totalPerDiemCost }}</span>
+      		<span class="subheading">{{ totalPerDiemCost | money }}</span>
       	</v-flex>
       </v-layout>	 
       <v-layout row class="mt-3">
@@ -158,7 +158,7 @@
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
-      		<span class="subheading">${{ totalLodgingCost }}</span>
+      		<span class="subheading">{{ totalLodgingCost | money}}</span>
       	</v-flex>
       </v-layout> 
       <v-layout row class="mt-3">
@@ -167,7 +167,7 @@
         </v-flex>
         <v-spacer></v-spacer>
         <v-flex xs2 class="text-xs-right">
-          <span class="subheading">${{ totalEquipmentCost }}</span>
+          <span class="subheading">{{ totalEquipmentCost | money }}</span>
         </v-flex>
       </v-layout>                      
       <v-layout row class="mt-4">
@@ -181,7 +181,7 @@
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
-      		<span class="title red--text">${{ totalExtraCosts }}</span>
+      		<span class="title red--text">{{ totalExtraCosts | money }}</span>
       	</v-flex>
       </v-layout>
       <v-divider class="mt-2"></v-divider>		        	
@@ -197,7 +197,7 @@
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
-      		<span class="headline red--text">${{ totalProjectCost }}</span>
+      		<span class="headline red--text">{{ totalProjectCost | money }}</span>
       	</v-flex>					        		
     	</v-layout>
 
@@ -224,8 +224,8 @@
       		v-if="clientInvoicedAmount != 0"
       		class="text-xs-right"       		
       	>
-      		<span v-if="invoicePaidDate" class="headline green--text">${{ clientInvoicedAmount }}</span>
-      		<span v-else class="headline">${{ clientInvoicedAmount }}</span>
+      		<span v-if="invoicePaidDate" class="headline green--text">{{ clientInvoicedAmount | money }}</span>
+      		<span v-else class="headline">{{ clientInvoicedAmount | money }}</span>
       	</v-flex>	
       	<v-flex xs2 
       		v-else
@@ -249,8 +249,8 @@
       	</v-flex>
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
-      		<span v-if="totalBottomLine > 0" class="headline green--text">+${{ totalBottomLine}}</span>
-      		<span v-else class="headline red--text">-${{ (totalBottomLine * -1).toFixed(2) }}</span>
+      		<span v-if="totalBottomLine > 0" class="headline green--text">+{{ totalBottomLine | money }}</span>
+      		<span v-else class="headline red--text">-{{ (totalBottomLine * -1).toFixed(2) | money }}</span>
       	</v-flex>					        		
     	</v-layout>     	   	
 		</v-container><!-- / Profit or loss container -->			         	
@@ -259,6 +259,7 @@
 
 <script>
 	import Helpers from './../../store/helpers';
+  import BusLogic from './../../resources/bus-logic';
 
 	export default {
 		props: ["workItems", "clientInvoicedAmount", "invoicePaidDate"],
@@ -266,49 +267,49 @@
 		computed: {
 			totalInvoicesNum () {
 				if(this.workItems){
-					return Helpers.tallyProjectInvoices(this.workItems);
+					return BusLogic.tallyProjectInvoices(this.workItems);
 				}				
 			},
 
 			totalWorkHours () {
 				if(this.workItems){
-					return Helpers.tallyWorkItemsHours(this.workItems).toFixed(2);
+					return BusLogic.tallyWorkItemsHours(this.workItems).toFixed(2);
 				}
 			},
 
 			totalWorkHoursPay () {
 				if(this.workItems) {
-					return Helpers.tallyWorkItemsHoursPay(this.workItems).toFixed(2);
+					return BusLogic.tallyWorkItemsHoursPay(this.workItems).toFixed(2);
 				}
 			},
 
 			totalTravelMileageCost () {
 				if(this.workItems) {
-					return Helpers.tallyWorkItemsTravelMileageCost(this.workItems).toFixed(2);
+					return BusLogic.tallyWorkItemsTravelMileageCost(this.workItems).toFixed(2);
 				}
 			},
 
 			totalPerDiemCost () {
 				if(this.workItems) {
-					return Helpers.tallyWorkItemsPerDiemCost(this.workItems).toFixed(2);
+					return BusLogic.tallyWorkItemsPerDiemCost(this.workItems).toFixed(2);
 				}
 			},
 
 			totalLodgingCost () {
 				if(this.workItems) {
-					return Helpers.tallyWorkItemsLodgingCost(this.workItems).toFixed(2);
+					return BusLogic.tallyWorkItemsLodgingCost(this.workItems).toFixed(2);
 				}
 			},
 
       totalEquipmentCost () {
         if(this.workItems) {
-          return Helpers.tallyWorkItemsEquipmentCost(this.workItems).toFixed(2);
+          return BusLogic.tallyWorkItemsEquipmentCost(this.workItems).toFixed(2);
         }
       },
 
 			totalExtraCosts () {
 				if(this.workItems){
-					return Helpers.tallyWorkItemsExtraCosts(this.workItems).toFixed(2);
+					return BusLogic.tallyWorkItemsExtraCosts(this.workItems).toFixed(2);
 				}
 			},
 
@@ -324,6 +325,16 @@
 				} 
 				return (parseFloat(invoiceAmount) - parseFloat(this.totalProjectCost)).toFixed(2);
 			}
-		}
+		},
+
+    methods: {
+      tallySingleWorkItemHoursPay (item) {
+        return BusLogic.tallySingleWorkItemHoursPay(item).toFixed(2);
+      },
+
+      tallySingleWorkItemsMileagePay (item) {
+        return BusLogic.tallySingleWorkItemsMileagePay(item).toFixed(2);
+      }
+    }
 	}
 </script>

@@ -369,19 +369,19 @@
           selectedIds.id.push(invoice.id)
         });
 
-      // Dispatch action to store
-      this.$store.dispatch("markInvoicesPaid", selectedIds)
-        .then(() => {
-          // Clear selected invoices
-          this.selected = [];
-          // Toggle loader
-          this.markingPaid = false;
-          // Toggle dialog
-          this.markPaidDialog = false;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        // Dispatch action to store
+        this.$store.dispatch("markInvoicesPaid", selectedIds)
+          .then(() => {
+            // Clear selected invoices
+            this.selected = [];
+            // Toggle loader
+            this.markingPaid = false;
+            // Toggle dialog
+            this.markPaidDialog = false;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     },
 

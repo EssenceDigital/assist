@@ -55,7 +55,7 @@
       	</v-layout>
       	<!-- Work Item -->
         <v-layout row>
-        	<v-flex xs2>
+        	<v-flex xs3>
         		<p>
         			{{ item.from_date | dateMinusYear }} - {{ item.to_date | dateMinusYear }}
         		</p>
@@ -78,7 +78,7 @@
         	<v-spacer></v-spacer>
         	<v-flex xs1 class="text-xs-right">
 	        	<p>
-	        		${{ (parseFloat(item.hours) * parseFloat(item.hourly_rate)).toFixed(2) }}
+	        		{{ tallySingleWorkItemHoursPay(item) | money }}
 	        	</p>						        		
         	</v-flex>
         </v-layout><!-- / Work Item -->
@@ -93,7 +93,7 @@
         	</v-flex>
         	<v-spacer></v-spacer>
         	<v-flex xs2 class="text-xs-right">
-        		<span class="title">${{ workHoursTotal }}</span>
+        		<span class="title">{{ workHoursTotal | money }}</span>
         	</v-flex>
         </v-layout>
         <v-divider class="mt-2"></v-divider>		        	
@@ -162,16 +162,16 @@
         	<v-spacer></v-spacer>
         	<v-flex xs1 class="text-xs-right">
 	        	<p class="mb-1">
-	        		${{ (parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate)).toFixed(2) }}
+	        		{{ tallySingleWorkItemMileagePay(item) | money }}
 	        	</p>
 	        	<p class="mb-1">
-	        		${{ item.per_diem }}
+	        		{{ item.per_diem | money }}
 	        	</p>	
 	        	<p v-if="item.lodging_cost" class="mb-1">
-	        		${{ item.lodging_cost }}
+	        		{{ item.lodging_cost | money }}
 	        	</p>
 	        	<p v-if="item.equipment_cost">
-	        		${{ item.equipment_cost }}
+	        		{{ item.equipment_cost | money }}
 	        	</p>	        							        							        		
         	</v-flex>
         </v-layout><!-- / Work Item -->
@@ -186,7 +186,7 @@
         	</v-flex>
         	<v-spacer></v-spacer>
         	<v-flex xs2 class="text-xs-right">
-        		<span class="title">${{ extraCostsTotal }}</span>
+        		<span class="title">{{ extraCostsTotal | money }}</span>
         	</v-flex>
         </v-layout>
         <v-divider class="mt-2"></v-divider>		        	
@@ -201,7 +201,7 @@
         	</v-flex>
         	<v-spacer></v-spacer>
         	<v-flex xs2 class="text-xs-right">
-        		<span class="title">${{ gstTotal }}</span>
+        		<span class="title">{{ gstTotal | money }}</span>
         	</v-flex>
         </v-layout>					        	
       	<v-layout row class="mt-5">
@@ -210,7 +210,7 @@
         	</v-flex>
         	<v-spacer></v-spacer>
         	<v-flex xs2 class="text-xs-right">
-        		<span class="headline">${{ invoiceTotal }}</span>
+        		<span class="headline">{{ invoiceTotal | money }}</span>
         	</v-flex>					        		
       	</v-layout>
       	<v-layout row class="mt-3">
@@ -596,6 +596,7 @@
 <script>
 	import CardLayout from './_Card-layout';
 	import Helpers from './../../store/helpers';
+	import BusLogic from './../../resources/bus-logic';
 
 	export default {
 		props: ['id', 'invoice_state'],
@@ -616,36 +617,32 @@
 			workHoursTotal () {
 				if(this.currentInvoice){
 					// Tally with helper
-					var total = Helpers.tallyWorkItemsHoursPay(this.currentInvoice.work_items);
-
-					return total.toFixed(2);					
+					return BusLogic.tallyWorkItemsHoursPay(this.currentInvoice.work_items).toFixed(2);			
 				}
 			},
 
 			extraCostsTotal () {
 				if(this.currentInvoice){
 					// Tally with helper
-					var total = Helpers.tallyWorkItemsExtraCosts(this.currentInvoice.work_items);
-
-					return total.toFixed(2);				
+					return BusLogic.tallyWorkItemsExtraCosts(this.currentInvoice.work_items).toFixed(2);				
 				}		
 			},
 
 			invoiceSubTotal () {
 				if(this.currentInvoice){
-					return (parseFloat(this.workHoursTotal) + parseFloat(this.extraCostsTotal));
+					return BusLogic.tallyInvoiceSubTotal(this.currentInvoice.work_items).toFixed(2);
 				}	
 			},
 
 			gstTotal () {
 				if(this.currentInvoice){
-					return (parseFloat(this.invoiceSubTotal) * 0.05).toFixed(2);
+					return BusLogic.tallyInvoiceGst(this.currentInvoice.work_items).toFixed(2);
 				}				
 			},
 
 			invoiceTotal () {
 				if(this.currentInvoice){
-					return (parseFloat(this.gstTotal) + parseFloat(this.invoiceSubTotal)).toFixed(2);
+					return BusLogic.tallyInvoiceTotal(this.currentInvoice.work_items).toFixed(2);
 				}				
 			}
 		},
@@ -695,6 +692,14 @@
 		},
 
 		methods: {
+
+      tallySingleWorkItemHoursPay (item) {
+        return BusLogic.tallySingleWorkItemHoursPay(item).toFixed(2);
+      },
+
+      tallySingleWorkItemMileagePay (item) {
+        return BusLogic.tallySingleWorkItemsMileagePay(item).toFixed(2);
+      },
 
 			editDialog (work_item_id) {
 				// Find the requested work item

@@ -11668,6 +11668,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__router__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__filters_date__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__filters_dateMinusYear__ = __webpack_require__(144);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__filters_money__ = __webpack_require__(151);
 /** Load general dependencies from a file */
 __webpack_require__(19);
 /** Load Vue based dependencies */
@@ -11685,8 +11686,10 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('login', __webpack_require
 /** Register Vue filters */
 
 
+
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.filter('date', __WEBPACK_IMPORTED_MODULE_4__filters_date__["a" /* default */]);
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.filter('dateMinusYear', __WEBPACK_IMPORTED_MODULE_5__filters_dateMinusYear__["a" /* default */]);
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.filter('money', __WEBPACK_IMPORTED_MODULE_6__filters_money__["a" /* default */]);
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.productionTip = false;
 
@@ -52190,24 +52193,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['projects'],
@@ -52245,44 +52230,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-container', {
-    staticClass: "pl-0 pr-0",
+  return _c('v-container', [_c('v-divider', {
+    staticClass: "mb-2"
+  }), _vm._v(" "), _c('v-layout', {
     attrs: {
-      "fluid": ""
+      "row": ""
     }
-  }, [_c('v-data-table', {
-    staticClass: "elevation-1 mt-1 mb-4",
+  }, [_c('v-flex', {
     attrs: {
-      "headers": [{
-          text: 'Total Paid Invoices',
-          align: 'center',
-          sortable: false
-        },
-        {
-          text: 'Total Outstanding Invoices',
-          align: 'center',
-          sortable: false
-        } ],
-      "items": [{
-        invoices_paid_total: _vm.invoicesPaidTotal,
-        invoices_outstanding_total: _vm.invoicesOutstandingTotal
-      }],
-      "hide-actions": ""
-    },
-    scopedSlots: _vm._u([{
-      key: "items",
-      fn: function(props) {
-        return [_c('td', {
-          staticClass: "text-xs-center"
-        }, [_c('v-chip', {
-          staticClass: "success white--text"
-        }, [_vm._v("\n          $" + _vm._s(props.item.invoices_paid_total) + "\n        ")])], 1), _vm._v(" "), _c('td', {
-          staticClass: "text-xs-center"
-        }, [_c('v-chip', {
-          staticClass: "error white--text"
-        }, [_vm._v("\n          $" + _vm._s(props.item.invoices_outstanding_total) + "\n        ")])], 1)]
-      }
-    }])
+      "xs4": ""
+    }
+  }, [_c('span', {
+    staticClass: "title red--text"
+  }, [_vm._v("OUTSTANDING INVOICES:")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    staticClass: "text-xs-right",
+    attrs: {
+      "xs2": ""
+    }
+  }, [_c('span', {
+    staticClass: "title red--text"
+  }, [_vm._v("$" + _vm._s(_vm.invoicesOutstandingTotal))])])], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "mt-2"
   })], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
@@ -56007,6 +55975,7 @@ module.exports = Component.exports
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__ = __webpack_require__(150);
 //
 //
 //
@@ -56266,6 +56235,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -56275,42 +56245,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	computed: {
 		totalInvoicesNum: function totalInvoicesNum() {
 			if (this.workItems) {
-				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyProjectInvoices(this.workItems);
+				return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallyProjectInvoices(this.workItems);
 			}
 		},
 		totalWorkHours: function totalWorkHours() {
 			if (this.workItems) {
-				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsHours(this.workItems).toFixed(2);
+				return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallyWorkItemsHours(this.workItems).toFixed(2);
 			}
 		},
 		totalWorkHoursPay: function totalWorkHoursPay() {
 			if (this.workItems) {
-				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsHoursPay(this.workItems).toFixed(2);
+				return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallyWorkItemsHoursPay(this.workItems).toFixed(2);
 			}
 		},
 		totalTravelMileageCost: function totalTravelMileageCost() {
 			if (this.workItems) {
-				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsTravelMileageCost(this.workItems).toFixed(2);
+				return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallyWorkItemsTravelMileageCost(this.workItems).toFixed(2);
 			}
 		},
 		totalPerDiemCost: function totalPerDiemCost() {
 			if (this.workItems) {
-				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsPerDiemCost(this.workItems).toFixed(2);
+				return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallyWorkItemsPerDiemCost(this.workItems).toFixed(2);
 			}
 		},
 		totalLodgingCost: function totalLodgingCost() {
 			if (this.workItems) {
-				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsLodgingCost(this.workItems).toFixed(2);
+				return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallyWorkItemsLodgingCost(this.workItems).toFixed(2);
 			}
 		},
 		totalEquipmentCost: function totalEquipmentCost() {
 			if (this.workItems) {
-				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsEquipmentCost(this.workItems).toFixed(2);
+				return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallyWorkItemsEquipmentCost(this.workItems).toFixed(2);
 			}
 		},
 		totalExtraCosts: function totalExtraCosts() {
 			if (this.workItems) {
-				return __WEBPACK_IMPORTED_MODULE_0__store_helpers__["a" /* default */].tallyWorkItemsExtraCosts(this.workItems).toFixed(2);
+				return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallyWorkItemsExtraCosts(this.workItems).toFixed(2);
 			}
 		},
 		totalProjectCost: function totalProjectCost() {
@@ -56323,6 +56293,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				invoiceAmount = this.clientInvoicedAmount;
 			}
 			return (parseFloat(invoiceAmount) - parseFloat(this.totalProjectCost)).toFixed(2);
+		}
+	},
+
+	methods: {
+		tallySingleWorkItemHoursPay: function tallySingleWorkItemHoursPay(item) {
+			return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallySingleWorkItemHoursPay(item).toFixed(2);
+		},
+		tallySingleWorkItemsMileagePay: function tallySingleWorkItemsMileagePay(item) {
+			return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallySingleWorkItemsMileagePay(item).toFixed(2);
 		}
 	}
 });
@@ -56377,7 +56356,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "xs1": ""
       }
-    }, [_c('p', [_vm._v("\n\t      \t\t$" + _vm._s((parseFloat(item.hours) * parseFloat(item.hourly_rate)).toFixed(2)) + "\n\t      \t")])])], 1)], 1)
+    }, [_c('p', [_vm._v("\n\t      \t\t" + _vm._s(_vm._f("money")(_vm.tallySingleWorkItemHoursPay(item))) + "\n\t      \t")])])], 1)], 1)
   }), _vm._v(" "), _c('v-container', [_c('v-layout', {
     attrs: {
       "row": ""
@@ -56397,7 +56376,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "title red--text"
-  }, [_vm._v("$" + _vm._s(_vm.totalWorkHoursPay))])])], 1), _vm._v(" "), _c('v-divider', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.totalWorkHoursPay)))])])], 1), _vm._v(" "), _c('v-divider', {
     staticClass: "mt-2"
   })], 1), _vm._v(" "), _c('v-container', {
     staticClass: "mt-2"
@@ -56452,11 +56431,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('p', {
       staticClass: "mb-1"
-    }, [_vm._v("\n        \t\t$" + _vm._s((parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate)).toFixed(2)) + "\n        \t")]), _vm._v(" "), _c('p', {
+    }, [_vm._v("\n        \t\t" + _vm._s(_vm._f("money")(_vm.tallySingleWorkItemsMileagePay(item))) + "\n        \t")]), _vm._v(" "), _c('p', {
       staticClass: "mb-1"
-    }, [_vm._v("\n        \t\t$" + _vm._s(item.per_diem) + "\n        \t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', {
+    }, [_vm._v("\n        \t\t" + _vm._s(_vm._f("money")(item.per_diem)) + "\n        \t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', {
       staticClass: "mb-1"
-    }, [_vm._v("\n        \t\t$" + _vm._s(item.lodging_cost) + "\n        \t")]) : _vm._e(), _vm._v(" "), (item.equipment_cost) ? _c('p', [_vm._v("\n            $" + _vm._s(item.equipment_cost) + "\n          ")]) : _vm._e()])], 1)], 1)
+    }, [_vm._v("\n        \t\t" + _vm._s(_vm._f("money")(item.lodging_cost)) + "\n        \t")]) : _vm._e(), _vm._v(" "), (item.equipment_cost) ? _c('p', [_vm._v("\n            " + _vm._s(_vm._f("money")(item.equipment_cost)) + "\n          ")]) : _vm._e()])], 1)], 1)
   }), _vm._v(" "), _c('v-container', [_c('v-layout', {
     attrs: {
       "row": ""
@@ -56474,7 +56453,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "subheading"
-  }, [_vm._v("$" + _vm._s(_vm.totalTravelMileageCost))])])], 1), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.totalTravelMileageCost)))])])], 1), _vm._v(" "), _c('v-layout', {
     staticClass: "mt-3",
     attrs: {
       "row": ""
@@ -56492,7 +56471,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "subheading"
-  }, [_vm._v("$" + _vm._s(_vm.totalPerDiemCost))])])], 1), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.totalPerDiemCost)))])])], 1), _vm._v(" "), _c('v-layout', {
     staticClass: "mt-3",
     attrs: {
       "row": ""
@@ -56510,7 +56489,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "subheading"
-  }, [_vm._v("$" + _vm._s(_vm.totalLodgingCost))])])], 1), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.totalLodgingCost)))])])], 1), _vm._v(" "), _c('v-layout', {
     staticClass: "mt-3",
     attrs: {
       "row": ""
@@ -56528,7 +56507,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "subheading"
-  }, [_vm._v("$" + _vm._s(_vm.totalEquipmentCost))])])], 1), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.totalEquipmentCost)))])])], 1), _vm._v(" "), _c('v-layout', {
     staticClass: "mt-4",
     attrs: {
       "row": ""
@@ -56548,7 +56527,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "title red--text"
-  }, [_vm._v("$" + _vm._s(_vm.totalExtraCosts))])])], 1), _vm._v(" "), _c('v-divider', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.totalExtraCosts)))])])], 1), _vm._v(" "), _c('v-divider', {
     staticClass: "mt-2"
   })], 1), _vm._v(" "), _c('v-container', {
     staticClass: "mt-2"
@@ -56572,7 +56551,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "headline red--text"
-  }, [_vm._v("$" + _vm._s(_vm.totalProjectCost))])])], 1), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.totalProjectCost)))])])], 1), _vm._v(" "), _c('v-layout', {
     staticClass: "mt-3",
     attrs: {
       "row": ""
@@ -56606,9 +56585,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [(_vm.invoicePaidDate) ? _c('span', {
     staticClass: "headline green--text"
-  }, [_vm._v("$" + _vm._s(_vm.clientInvoicedAmount))]) : _c('span', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.clientInvoicedAmount)))]) : _c('span', {
     staticClass: "headline"
-  }, [_vm._v("$" + _vm._s(_vm.clientInvoicedAmount))])]) : _c('v-flex', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.clientInvoicedAmount)))])]) : _c('v-flex', {
     staticClass: "text-xs-right",
     attrs: {
       "xs2": ""
@@ -56639,9 +56618,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [(_vm.totalBottomLine > 0) ? _c('span', {
     staticClass: "headline green--text"
-  }, [_vm._v("+$" + _vm._s(_vm.totalBottomLine))]) : _c('span', {
+  }, [_vm._v("+" + _vm._s(_vm._f("money")(_vm.totalBottomLine)))]) : _c('span', {
     staticClass: "headline red--text"
-  }, [_vm._v("-$" + _vm._s((_vm.totalBottomLine * -1).toFixed(2)))])])], 1)], 1)], 2)
+  }, [_vm._v("-" + _vm._s(_vm._f("money")((_vm.totalBottomLine * -1).toFixed(2))))])])], 1)], 1)], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -56893,6 +56872,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Card_layout__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store_helpers__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__ = __webpack_require__(150);
 //
 //
 //
@@ -57488,6 +57468,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -57509,32 +57490,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		workHoursTotal: function workHoursTotal() {
 			if (this.currentInvoice) {
 				// Tally with helper
-				var total = __WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].tallyWorkItemsHoursPay(this.currentInvoice.work_items);
-
-				return total.toFixed(2);
+				return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyWorkItemsHoursPay(this.currentInvoice.work_items).toFixed(2);
 			}
 		},
 		extraCostsTotal: function extraCostsTotal() {
 			if (this.currentInvoice) {
 				// Tally with helper
-				var total = __WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].tallyWorkItemsExtraCosts(this.currentInvoice.work_items);
-
-				return total.toFixed(2);
+				return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyWorkItemsExtraCosts(this.currentInvoice.work_items).toFixed(2);
 			}
 		},
 		invoiceSubTotal: function invoiceSubTotal() {
 			if (this.currentInvoice) {
-				return parseFloat(this.workHoursTotal) + parseFloat(this.extraCostsTotal);
+				return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyInvoiceSubTotal(this.currentInvoice.work_items).toFixed(2);
 			}
 		},
 		gstTotal: function gstTotal() {
 			if (this.currentInvoice) {
-				return (parseFloat(this.invoiceSubTotal) * 0.05).toFixed(2);
+				return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyInvoiceGst(this.currentInvoice.work_items).toFixed(2);
 			}
 		},
 		invoiceTotal: function invoiceTotal() {
 			if (this.currentInvoice) {
-				return (parseFloat(this.gstTotal) + parseFloat(this.invoiceSubTotal)).toFixed(2);
+				return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyInvoiceTotal(this.currentInvoice.work_items).toFixed(2);
 			}
 		}
 	},
@@ -57583,6 +57560,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 	methods: {
+		tallySingleWorkItemHoursPay: function tallySingleWorkItemHoursPay(item) {
+			return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallySingleWorkItemHoursPay(item).toFixed(2);
+		},
+		tallySingleWorkItemMileagePay: function tallySingleWorkItemMileagePay(item) {
+			return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallySingleWorkItemsMileagePay(item).toFixed(2);
+		},
 		editDialog: function editDialog(work_item_id) {
 			// Find the requested work item
 			var data = this.currentInvoice.work_items.find(function (elem) {
@@ -57815,7 +57798,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('v-flex', {
       attrs: {
-        "xs2": ""
+        "xs3": ""
       }
     }, [_c('p', [_vm._v("\n        \t\t\t" + _vm._s(_vm._f("dateMinusYear")(item.from_date)) + " - " + _vm._s(_vm._f("dateMinusYear")(item.to_date)) + "\n        \t\t")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
       attrs: {
@@ -57832,7 +57815,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "xs1": ""
       }
-    }, [_c('p', [_vm._v("\n\t        \t\t$" + _vm._s((parseFloat(item.hours) * parseFloat(item.hourly_rate)).toFixed(2)) + "\n\t        \t")])])], 1)], 1)
+    }, [_c('p', [_vm._v("\n\t        \t\t" + _vm._s(_vm._f("money")(_vm.tallySingleWorkItemHoursPay(item))) + "\n\t        \t")])])], 1)], 1)
   }), _vm._v(" "), _c('v-container', [_c('v-divider', {
     staticClass: "mb-2"
   }), _vm._v(" "), _c('v-layout', {
@@ -57852,7 +57835,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "title"
-  }, [_vm._v("$" + _vm._s(_vm.workHoursTotal))])])], 1), _vm._v(" "), _c('v-divider', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.workHoursTotal)))])])], 1), _vm._v(" "), _c('v-divider', {
     staticClass: "mt-2"
   })], 1), _vm._v(" "), _vm._l((_vm.currentInvoice.work_items), function(item) {
     return _c('v-container', {
@@ -57946,11 +57929,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('p', {
       staticClass: "mb-1"
-    }, [_vm._v("\n\t        \t\t$" + _vm._s((parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate)).toFixed(2)) + "\n\t        \t")]), _vm._v(" "), _c('p', {
+    }, [_vm._v("\n\t        \t\t" + _vm._s(_vm._f("money")(_vm.tallySingleWorkItemMileagePay(item))) + "\n\t        \t")]), _vm._v(" "), _c('p', {
       staticClass: "mb-1"
-    }, [_vm._v("\n\t        \t\t$" + _vm._s(item.per_diem) + "\n\t        \t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', {
+    }, [_vm._v("\n\t        \t\t" + _vm._s(_vm._f("money")(item.per_diem)) + "\n\t        \t")]), _vm._v(" "), (item.lodging_cost) ? _c('p', {
       staticClass: "mb-1"
-    }, [_vm._v("\n\t        \t\t$" + _vm._s(item.lodging_cost) + "\n\t        \t")]) : _vm._e(), _vm._v(" "), (item.equipment_cost) ? _c('p', [_vm._v("\n\t        \t\t$" + _vm._s(item.equipment_cost) + "\n\t        \t")]) : _vm._e()])], 1)], 1)
+    }, [_vm._v("\n\t        \t\t" + _vm._s(_vm._f("money")(item.lodging_cost)) + "\n\t        \t")]) : _vm._e(), _vm._v(" "), (item.equipment_cost) ? _c('p', [_vm._v("\n\t        \t\t" + _vm._s(_vm._f("money")(item.equipment_cost)) + "\n\t        \t")]) : _vm._e()])], 1)], 1)
   }), _vm._v(" "), _c('v-container', [_c('v-divider', {
     staticClass: "mb-2"
   }), _vm._v(" "), _c('v-layout', {
@@ -57970,7 +57953,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "title"
-  }, [_vm._v("$" + _vm._s(_vm.extraCostsTotal))])])], 1), _vm._v(" "), _c('v-divider', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.extraCostsTotal)))])])], 1), _vm._v(" "), _c('v-divider', {
     staticClass: "mt-2"
   })], 1), _vm._v(" "), _c('v-container', {
     staticClass: "mt-3"
@@ -57994,7 +57977,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "title"
-  }, [_vm._v("$" + _vm._s(_vm.gstTotal))])])], 1), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.gstTotal)))])])], 1), _vm._v(" "), _c('v-layout', {
     staticClass: "mt-5",
     attrs: {
       "row": ""
@@ -58012,7 +57995,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "headline"
-  }, [_vm._v("$" + _vm._s(_vm.invoiceTotal))])])], 1), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.invoiceTotal)))])])], 1), _vm._v(" "), _c('v-layout', {
     staticClass: "mt-3",
     attrs: {
       "row": ""
@@ -61177,6 +61160,175 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 146 */,
+/* 147 */,
+/* 148 */,
+/* 149 */,
+/* 150 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+
+	/**
+  * Counts the number of unique projects within a set of work items.
+  *
+  * @param workItems (Array) - The work items to search and find unique projects.
+  * @return (Int) The amount of unique invoices within the set of work items.
+ */
+	tallyProjectInvoices: function tallyProjectInvoices(workItems) {
+		if (workItems.length != 0) {
+			// Cache total
+			var total = 0,
+			    invoiceIds = [];
+			// Itterate and calculate
+			workItems.forEach(function (item) {
+				// Push this items invoice id to the cached array
+				invoiceIds.push(item.invoice.id);
+			});
+			// Return unique invoice IDs in array
+			return Array.from(new Set(invoiceIds)).length;
+		}
+	},
+	tallySingleWorkItemHoursPay: function tallySingleWorkItemHoursPay(workItem) {
+		// Tally, calculating in cents not dollars
+		var total = parseFloat(workItem.hours) * (parseFloat(workItem.hourly_rate) * 100);
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallySingleWorkItemsMileagePay: function tallySingleWorkItemsMileagePay(workItem) {
+		// Tally, calculating in cents not dollars
+		var total = parseFloat(workItem.travel_mileage) * (parseFloat(workItem.mileage_rate) * 100);
+		// Convert back to dollars
+		return total / 100;
+	},
+
+
+	/** 
+  * Tallies the amount of hours in a set of work items.
+ */
+	tallyWorkItemsHours: function tallyWorkItemsHours(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			total += parseFloat(item.hours);
+		});
+		return total;
+	},
+
+
+	/** 
+  * Tallies the amount of pay in a set of work items (Based on hours and hourly rate).
+ */
+	tallyWorkItemsHoursPay: function tallyWorkItemsHoursPay(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			// Tally, calculating in cents not dollars
+			total += parseFloat(item.hours) * parseFloat(item.hourly_rate) * 100;
+		});
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallyWorkItemsTravelMileageCost: function tallyWorkItemsTravelMileageCost(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			// Tally, calculating in cents not dollars
+			if (item.travel_mileage) total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate) * 100;
+		});
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallyWorkItemsPerDiemCost: function tallyWorkItemsPerDiemCost(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			// Tally, calculating in cents not dollars
+			if (item.per_diem) total += parseFloat(item.per_diem) * 100;
+		});
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallyWorkItemsLodgingCost: function tallyWorkItemsLodgingCost(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			// Tally, calculating in cents not dollars
+			if (item.lodging_cost) total += parseFloat(item.lodging_cost) * 100;
+		});
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallyWorkItemsEquipmentCost: function tallyWorkItemsEquipmentCost(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			// Tally, calculating in cents not dollars
+			if (item.equipment_cost) total += parseFloat(item.equipment_cost) * 100;
+		});
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallyWorkItemsExtraCosts: function tallyWorkItemsExtraCosts(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			// Tally, calculating in cents not dollars
+			if (item.travel_mileage) total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate) * 100;
+			// Tally, calculating in cents not dollars
+			if (item.per_diem) total += parseFloat(item.per_diem) * 100;
+			// Tally, calculating in cents not dollars
+			if (item.lodging_cost) total += parseFloat(item.lodging_cost) * 100;
+			// Tally, calculating in cents not dollars	
+			if (item.equipment_cost) total += parseFloat(item.equipment_cost) * 100;
+		});
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallyInvoiceSubTotal: function tallyInvoiceSubTotal(workItems) {
+		// Tally
+		var hoursPayTotal = this.tallyWorkItemsHoursPay(workItems),
+		    extraCostsTotal = this.tallyWorkItemsExtraCosts(workItems);
+		// Calculate in cents then convert back to dollars
+		return (hoursPayTotal * 100 + extraCostsTotal * 100) / 100;
+	},
+	tallyInvoiceGst: function tallyInvoiceGst(workItems) {
+		// Get the subtotal
+		var subtotal = this.tallyInvoiceSubTotal(workItems);
+		// Calculate in cents then convert back to dollars
+		return subtotal * 100 * 0.05 / 100;
+	},
+	tallyInvoiceTotal: function tallyInvoiceTotal(workItems) {
+		var subtotal = this.tallyInvoiceSubTotal(workItems),
+		    gst = this.tallyInvoiceGst(workItems);
+		// Calculate in cents then convert back to dollars
+		return (subtotal * 100 + gst * 100) / 100;
+	}
+});
+
+/***/ }),
+/* 151 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (function (amount) {
+   var money = new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+   }).format(amount);
+
+   return '$' + money;
+});
 
 /***/ })
 /******/ ]);

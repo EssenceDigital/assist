@@ -15,8 +15,10 @@ Vue.component('login', require('./Login.vue'));
 /** Register Vue filters */
 import DateFilter from './filters/date';
 import DateMinusYearFilter from './filters/dateMinusYear';
+import MoneyFilter from './filters/money';
 Vue.filter('date', DateFilter);
 Vue.filter('dateMinusYear', DateMinusYearFilter);
+Vue.filter('money', MoneyFilter);
 
 Vue.config.productionTip = false;
 
