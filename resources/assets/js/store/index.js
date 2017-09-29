@@ -81,6 +81,13 @@ export const store = new Vuex.Store({
 		updateProjectsFilter (state, payload) {
 			return state.projectsFilter = payload;
 		},
+
+		resetProjectsFilter (state, payload) {
+			for(var i in state.projectsFilter){
+				state.projectsFilter[i] = '';
+			}
+		},
+
 		// Push a freshly added comment into the current project
 		addProjectComment (state, payload) {
 			return state.currentProject.comments.push(payload);
@@ -115,6 +122,10 @@ export const store = new Vuex.Store({
 
 		updateInvoices (state, payload) {
 			return state.invoices = payload;
+		},
+
+		publishInvoice (state, payload) {
+			return state.currentInvoice.is_published = 1;	
 		},
 
 		markInvoicesPaid (state, payload) {
@@ -309,10 +320,6 @@ export const store = new Vuex.Store({
 		getUsersInvoices (context, payload) {
 			 return api.getAction(context, '/invoices/auth-users', 'updateInvoices');
 		},
-
-		/* 
-			INVOICE ACTIONS
-		*/
 	
 		// Use api to add an invoice
 		addInvoice (context, payload) {
@@ -321,6 +328,10 @@ export const store = new Vuex.Store({
 
 		getInvoice (context, payload) {
 			return api.getAction(context, '/invoices/'+payload, 'updateCurrentInvoice');
+		},
+
+		publishInvoice (context, payload) {
+			return api.postAction(context, payload, '/invoices/publish', 'publishInvoice');
 		},
 
 		markInvoicesPaid (context, payload) {

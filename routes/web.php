@@ -46,10 +46,11 @@ Route::post('/users/update-field', 'UsersController@updateField');
 
 Route::get('/invoices', 'InvoicesController@all');
 Route::post('/invoices/add', 'InvoicesController@store');
+Route::post('/invoices/publish', 'InvoicesController@publish');
 Route::post('/invoices/mark-paid', 'InvoicesController@markPaid');
 Route::post('/invoices/add-item', 'InvoicesController@storeWorkItem');
 Route::post('/invoices/edit-item', 'InvoicesController@updateWorkItem');
 Route::delete('/invoices/delete-item/{id}', 'InvoicesController@deleteWorkItem');
 Route::get('/invoices/auth-users', 'InvoicesController@authUsersInvoices');
-Route::get('/invoices/{user?}/{invoice?}/{from_date?}/{to_date?}', 'InvoicesController@filter');
+Route::get('/invoices/{user}/{invoice}/{from_date}/{to_date}', 'InvoicesController@filter');
 Route::get('/invoices/{id}', 'InvoicesController@single');

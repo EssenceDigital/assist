@@ -1,7 +1,11 @@
 export default {
 	
-	formatDate (yyyMMdd) {
-		return new Date(Date.parse(yyyMMdd + 'T00:00:00')).toDateString();
+	pluckObjectById (arrayToSearch, idToMatch){
+		// Search array and match object id
+		var item = arrayToSearch.find(elem => elem.id === idToMatch),
+				index = arrayToSearch.indexOf(item);
+		// Return the plucked index
+		return index;
 	},
 
 	populatePostData (form) {

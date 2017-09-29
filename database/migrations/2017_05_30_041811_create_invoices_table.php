@@ -21,6 +21,8 @@ class CreateInvoicesTable extends Migration
             // Fields                     
             $table->date('from_date');
             $table->date('to_date');
+            // Published flag
+            $table->boolean('is_published')->default(0);
             // Paid flag
             $table->boolean('is_paid')->default(0);
             $table->timestamps();

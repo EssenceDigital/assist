@@ -138,12 +138,12 @@
       :rows-per-page-items="perPage"
       :loading="loading"
       v-model="selected"
-      select-all
+      :select-all="selectAll"
       selected-key="id"      
       class="elevation-1 mt-3"
     >    
       <template slot="items" scope="props">
-        <td>
+        <td v-if="table_state === 'admin'">
           <v-checkbox
             primary
             hide-details
@@ -154,7 +154,20 @@
         <td v-if="table_state === 'admin'">{{ props.item.user.first }}</td>
       	<td>{{ props.item.from_date | date }}</td>
       	<td>{{ props.item.to_date | date }}</td>
-        <td v-if="table_state === 'admin'">
+        <td v-if="table_state === 'user'">
+          <v-chip 
+            v-if="!props.item.is_published"
+            class="red white--text"
+            >Not Published
+          </v-chip>
+          <v-chip
+            v-else
+            class="green white--text"
+          >
+            Published
+          </v-chip>
+        </td>        
+        <td>
           <v-chip 
             v-if="!props.item.is_paid"
             class="red white--text"
@@ -166,7 +179,7 @@
           >
             Paid
           </v-chip>
-        </td>
+        </td>        
       	<td>
           <v-btn 
             icon 
@@ -253,7 +266,9 @@
           { text: 'Invoice status...', value: '' },
           { text: 'Not Paid', value: 0 },
           { text: 'Paid', value: 1 }                 
-        ]        
+        ],
+        // For the select all table option
+        selectAll: 'default'       
       }
     },
 
@@ -294,6 +309,8 @@
             { text: 'Identifier', value: 'id', align: 'left' },
             { text: 'From Date', value: 'from_date', align: 'left' },
             { text: 'To Date', value: 'to_date', align: 'left' },
+            { text: 'Published?', value: 'is_published', align: 'left' },            
+            { text: 'Paid?', value: 'is_paid', align: 'left' },
             { text: 'Actions', value: '', align: 'left' }
           ];          
         }
@@ -377,6 +394,7 @@
       // Change action depending on table state
       if(this.table_state === 'user') {
         dispatchAction = 'getUsersInvoices';
+        this.selectAll = false;
       } else if(this.table_state === 'admin'){
         dispatchAction = 'getAllInvoices';        
       }

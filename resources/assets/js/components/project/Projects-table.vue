@@ -72,6 +72,17 @@
         <projects-totals :projects="projects"></projects-totals>
       </v-layout>
 
+      <!-- Row for action buttons -->
+      <v-layout row>
+        <!-- Clear filter -->
+        <v-flex xs2 class="ml-2">
+          <v-btn @click="resetFilter" class="info">
+            <v-icon left>cached</v-icon>
+            Reset Filter
+          </v-btn>       
+        </v-flex><!-- / Clear filter -->            
+      </v-layout><!-- /Row for action buttons -->
+
       <!-- Data table -->
       <v-data-table
         :headers="headers"
@@ -268,6 +279,10 @@
 
       updateInvoiceFilter (value) {
         return this.$store.commit('updateProjectsInvoiceFilter', value);
+      },
+
+      resetFilter () {
+        return this.$store.commit('resetProjectsFilter');
       },
 
       filterProjects () {

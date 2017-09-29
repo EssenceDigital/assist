@@ -61,7 +61,7 @@ class InvoicesController extends Controller
     public function all()
     {
         // With all foreign keys / children
-        $invoices = Invoice::with(['workItems', 'workItems.project', 'user'])->get();
+        $invoices = Invoice::with(['workItems', 'workItems.project', 'user'])->where('is_published', '=', 1)->get();
 
         // Return response for ajax call
         return response()->json([
@@ -93,6 +93,9 @@ class InvoicesController extends Controller
         // Construct where array for query
         $queryArray = [];  
         $query = Invoice::with(['user', 'workItems', 'workItems.project']);
+
+        // Make sure invoice is published
+        array_push($queryArray, ['is_published', '=', 1]);
 
         // Add user id field or not
         if($user){
@@ -158,6 +161,40 @@ class InvoicesController extends Controller
             'payload' => $invoice
         ], 200);
 
+    }
+
+    /**
+     * Tag an invoice as published
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function publish(Request $request)
+    {
+        // Validate request id
+        $this->validate($request, [
+            'id' => 'numeric'
+        ]);
+
+        // Find invoice
+        $invoice = Invoice::find($request->id);
+        // Update
+        $invoice->is_published = 1;
+        // Save
+        $result = $invoice->save();
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+
+        // Return response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'payload' => $invoice->id
+        ], 200);
     }
 
     /**

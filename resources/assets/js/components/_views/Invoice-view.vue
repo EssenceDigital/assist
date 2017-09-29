@@ -220,6 +220,23 @@
       			</p>
       		</v-flex>
       	</v-layout>
+      	<!-- Publish dialog trigger -->
+      	<v-layout row class="mt-5">
+      		<v-flex xs3 offset-xs5>
+      			<v-btn
+      				v-if="!currentInvoice.is_published" 
+      				@click="publishDialog = true"
+      				block 
+      				class="info"
+      			>
+      				<v-icon left>assignment_turned_in</v-icon>
+      				Publish
+      			</v-btn>
+      			<v-alert v-else success value="true">
+      				Invoice is published!
+      			</v-alert>
+      		</v-flex>
+      	</v-layout>
 			</v-container><!-- / Total container -->	
 
 			<!--
@@ -494,6 +511,45 @@
 			  </v-dialog>
 			</v-layout>    
 
+	    <!-- Publish invoice dialog -->
+	    <v-layout 
+	      row 
+	      justify-center 
+	      class="mr-0" 
+	      style="position: relative;"
+	    >
+	      <v-dialog v-model="publishDialog" width="365" lazy absolute persistent>      
+	        <v-card>
+	          <v-card-title>
+	            <div class="headline grey--text">Publish this invoice?</div>                           
+	          </v-card-title>
+	          <v-divider></v-divider>
+	          <v-card-text>
+	            Are you sure you want to publish this invoice?
+	          </v-card-text>
+	          <v-card-actions>
+	            <v-spacer></v-spacer>
+	            <!-- Cancel delete button-->
+	            <v-btn outline 
+	              class="red--text darken-1" 
+	              flat="flat" 
+	              @click.native.stop="publishDialog = false">
+	                Maybe not
+	            </v-btn>
+	            <!-- Confirm delete button -->
+	            <v-btn outline 
+	            class="green--text darken-1" 
+	            flat="flat" 
+	            :loading="publishing" 
+	            :disable="publishing" 
+	            @click.native.stop="publishInvoice">
+	              Do it
+	            </v-btn>
+	          </v-card-actions>
+	        </v-card>
+	      </v-dialog>
+	    </v-layout><!-- / Confirm publish dialog --> 
+
 	    <!-- Remove asset dialog and button -->
 			<v-layout 
 				v-if="invoice_state != 'readonly'"
@@ -630,7 +686,11 @@
 					lodging_cost: {val: '', err: false, errMsg: '', dflt: ''},
 					equipment_desc: {val: '', err: false, errMsg: '', dflt: ''},
 					equipment_cost: {val: '', err: false, errMsg: '', dflt: ''}					
-				}
+				},
+				// For publish dialog
+				publishDialog: false,
+				// Publishing loader
+				publishing: false
 			}
 		},
 
@@ -716,7 +776,20 @@
 						// Reset asset id
 						this.assetId = '';
 					});
-			}							
+			},
+
+			publishInvoice () {
+				// Toggle loader
+				this.publishing = true;
+				// Dispatch event
+				this.$store.dispatch('publishInvoice', { id: this.id })
+					.then(() => {
+						// Toggle loader 
+						this.publishing = false;
+						// Toggle dialog
+						this.publishDialog = false;
+					});
+			}						
 
 		},
 
