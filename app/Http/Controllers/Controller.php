@@ -9,8 +9,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Timesheet;
-
+use App\Notification;
 
 class Controller extends BaseController
 {
@@ -121,7 +120,27 @@ class Controller extends BaseController
         return;    
     }
 
+    protected function notify($userId, $title, $desc, $link = null) {
+        // Create notification
+        $notif = new Notification;
+        // Add fields
+        $notif->user_id = $userId;
+        $notif->title = $title;
+        $notif->desc = $desc;      
+        $notif->link = $link;
+        // Save notification
+        $result = $notif->save();
 
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+
+        return;
+    }
 
 
 

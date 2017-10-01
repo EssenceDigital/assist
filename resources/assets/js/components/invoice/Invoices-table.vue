@@ -264,8 +264,8 @@
         // For invoice status
         invoiceStatus: [
           { text: 'Invoice status...', value: '' },
-          { text: 'Not Paid', value: 0 },
-          { text: 'Paid', value: 1 }                 
+          { text: 'Not Paid', value: 'not-paid' },
+          { text: 'Paid', value: 'paid' }                 
         ],
         // For the select all table option - Can be changed by created hook
         selectAll: 'default'       

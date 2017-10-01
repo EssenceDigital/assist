@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="workItems">
 		<v-container class="mt-5">
 			<v-divider class="mb-4"></v-divider>	
 			<v-layout row>
@@ -190,7 +190,15 @@
     <!-- Total container -->
     <v-container class="mt-2">
     	<v-divider class="black"></v-divider>	
-
+      <v-layout row class="mt-3">
+        <v-flex xs2>
+          <span class="title"><em>GST TOTAL:</em></span>
+        </v-flex>
+        <v-spacer></v-spacer>
+        <v-flex xs2 class="text-xs-right">
+          <span class="title red--text">{{ totalProjectGst | money }}</span>
+        </v-flex>
+      </v-layout>
     	<v-layout row class="mt-5">
       	<v-flex xs3>
       		<span class="title">TOTAL COST:</span>
@@ -266,55 +274,44 @@
 
 		computed: {
 			totalInvoicesNum () {
-				if(this.workItems){
-					return BusLogic.tallyProjectInvoices(this.workItems);
-				}				
+				return BusLogic.tallyProjectInvoices(this.workItems);		
 			},
 
 			totalWorkHours () {
-				if(this.workItems){
-					return BusLogic.tallyWorkItemsHours(this.workItems).toFixed(2);
-				}
+				return BusLogic.tallyWorkItemsHours(this.workItems).toFixed(2);
 			},
 
 			totalWorkHoursPay () {
-				if(this.workItems) {
-					return BusLogic.tallyWorkItemsHoursPay(this.workItems).toFixed(2);
-				}
+				return BusLogic.tallyWorkItemsHoursPay(this.workItems).toFixed(2);
 			},
 
 			totalTravelMileageCost () {
-				if(this.workItems) {
-					return BusLogic.tallyWorkItemsTravelMileageCost(this.workItems).toFixed(2);
-				}
+				return BusLogic.tallyWorkItemsTravelMileageCost(this.workItems).toFixed(2);
 			},
 
 			totalPerDiemCost () {
-				if(this.workItems) {
-					return BusLogic.tallyWorkItemsPerDiemCost(this.workItems).toFixed(2);
-				}
+				return BusLogic.tallyWorkItemsPerDiemCost(this.workItems).toFixed(2);
 			},
 
 			totalLodgingCost () {
-				if(this.workItems) {
-					return BusLogic.tallyWorkItemsLodgingCost(this.workItems).toFixed(2);
-				}
+				return BusLogic.tallyWorkItemsLodgingCost(this.workItems).toFixed(2);
 			},
 
       totalEquipmentCost () {
-        if(this.workItems) {
-          return BusLogic.tallyWorkItemsEquipmentCost(this.workItems).toFixed(2);
-        }
+        return BusLogic.tallyWorkItemsEquipmentCost(this.workItems).toFixed(2);
+
       },
 
 			totalExtraCosts () {
-				if(this.workItems){
-					return BusLogic.tallyWorkItemsExtraCosts(this.workItems).toFixed(2);
-				}
+				return BusLogic.tallyWorkItemsExtraCosts(this.workItems).toFixed(2);
 			},
 
+      totalProjectGst () {
+        return BusLogic.tallyWorkItemsGst(this.workItems).toFixed(2); 
+      },
+
 			totalProjectCost () {
-				return (parseFloat(this.totalWorkHoursPay) + parseFloat(this.totalExtraCosts)).toFixed(2);
+        return BusLogic.tallyWorkItemsTotal(this.workItems).toFixed(2);
 			},
 
 			totalBottomLine () {

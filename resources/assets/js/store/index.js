@@ -17,6 +17,8 @@ export const store = new Vuex.Store({
 		debug: true,
 		// The logged in user
 		authUser: {},
+		// The logged in users notifications
+		notifications: [],
 		// A user who has been selected to view/edit
 		currentUser: { id: -1 },
 		// Users returned by the server
@@ -41,9 +43,9 @@ export const store = new Vuex.Store({
 		// The current invoice search filter
 		invoicesFilter: {
 			user: '',
-			invoice: '',
 			from_date: '',
-			to_date: ''
+			to_date: '',
+			invoice: ''
 		},
 		// All companies found within the project table
 		clients: []
@@ -53,6 +55,10 @@ export const store = new Vuex.Store({
 	 * Methods that directly change the state cache
 	*/
 	mutations: {
+		updateNotifications (state, payload) {
+			return state.notifications = payload;
+		},
+
 		// Update projects
 		updateProjects (state, payload) {
 			return state.projects = payload;
@@ -226,6 +232,10 @@ export const store = new Vuex.Store({
 
 	actions: {
 
+		getNotifications (context, payload) {
+			return api.getAction(context, '/notifications', 'updateNotifications');
+		},
+
 		/* 
 			PROJECT ACTIONS
 		*/
@@ -301,16 +311,16 @@ export const store = new Vuex.Store({
 			if(payload){
 				// Add user to string
 				if(payload.user != '') url += '/' + payload.user;
-					else url += '/' + 0;		
-				// Add invoice status to string
-				if(payload.invoice != '') url += '/' + payload.invoice;
-					else url += '/' + 0;							
+					else url += '/' + 0;								
 				// Add from date to string
 				if(payload.from_date != '') url += '/' + payload.from_date;
 					else url += '/' + 0;	
 				// Add date to string
 				if(payload.to_date != '') url += '/' + payload.to_date;
-					else url += '/' + 0;														
+					else url += '/' + 0;				
+				// Add invoice status to string
+				if(payload.invoice != '') url += '/' + payload.invoice;
+					else url += '/' + 0;																
 			}
 			// Use api to send request		
 			return api.getAction(context, url, 'updateCrewInvoices');
@@ -401,6 +411,10 @@ export const store = new Vuex.Store({
 		// Return the debug state
 		debug (state) {
 			return state.debug;
+		},
+
+		notifications (state) {
+			return state.notifications;
 		},
 
 		// Return the loaded projects

@@ -138,7 +138,14 @@ export default {
 		return total / 100;			
 	},
 
-	tallyInvoiceSubTotal (workItems) {
+	tallyWorkItemsGst (workItems) {
+		// Get the subtotal
+		var subtotal = this.tallyWorkItemsSubTotal(workItems);
+		// Calculate in cents then convert back to dollars
+		return ((subtotal * 100) * 0.05) / 100; 
+	},
+
+	tallyWorkItemsSubTotal (workItems) {
 		// Tally
 		var hoursPayTotal = this.tallyWorkItemsHoursPay(workItems),
 				extraCostsTotal = this.tallyWorkItemsExtraCosts(workItems);
@@ -146,16 +153,9 @@ export default {
 		return ((hoursPayTotal * 100) + (extraCostsTotal * 100)) / 100;
 	},
 
-	tallyInvoiceGst (workItems) {
-		// Get the subtotal
-		var subtotal = this.tallyInvoiceSubTotal(workItems);
-		// Calculate in cents then convert back to dollars
-		return ((subtotal * 100) * 0.05) / 100; 
-	},
-
-	tallyInvoiceTotal (workItems) {
-		var subtotal = this.tallyInvoiceSubTotal(workItems),
-				gst = this.tallyInvoiceGst(workItems);
+	tallyWorkItemsTotal (workItems) {
+		var subtotal = this.tallyWorkItemsSubTotal(workItems),
+				gst = this.tallyWorkItemsGst(workItems);
 		// Calculate in cents then convert back to dollars
 		return ((subtotal * 100) + (gst * 100)) / 100;
 	}

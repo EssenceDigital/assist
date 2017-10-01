@@ -56,7 +56,7 @@ class ProjectsController extends Controller
      */
     public function all()
     {
-        $projects = Project::all();
+        $projects = Project::with(['workItems'])->get();
 
         // Return response for ajax call
         return response()->json([
@@ -97,7 +97,7 @@ class ProjectsController extends Controller
             } 
         }
    
-       $projects = Project::where($queryArray)->get();  
+       $projects = Project::with(['workItems'])->where($queryArray)->get();  
 
         // Return response for ajax call
         return response()->json([
@@ -208,7 +208,7 @@ class ProjectsController extends Controller
         }        
 
         // Get the full project
-        $project = Project::with((['comments', 'comments.user', 'timeline', 'users', 'users.timesheets', 'timesheets']))->find($project->id);
+        $project = Project::with((['comments', 'comments.user', 'timeline', 'users']))->find($project->id);
 
         // Return response for ajax call
         return response()->json([
@@ -238,7 +238,12 @@ class ProjectsController extends Controller
                 'result' => false
             ], 404);
         } 
-        
+        // Create notification for the user
+        $this->notify(
+            $user->id,
+            "You've been added to the crew of a project",
+            "This mean you can now use this project on future invoices."
+        );
         // Return response for ajax call
         return response()->json([
             'result' => 'success',

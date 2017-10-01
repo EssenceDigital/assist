@@ -68,10 +68,6 @@
         </v-flex> 
       </v-layout><!-- /Row for project filter -->
 
-      <v-layout row v-if="table_state === 'admin_manage'">
-        <projects-totals :projects="projects"></projects-totals>
-      </v-layout>
-
       <!-- Row for action buttons -->
       <v-layout row>
         <!-- Clear filter -->
@@ -83,12 +79,16 @@
         </v-flex><!-- / Clear filter -->            
       </v-layout><!-- /Row for action buttons -->
 
+      <v-layout row v-if="table_state === 'admin_manage'">
+        <projects-totals :projects="projects"></projects-totals>
+      </v-layout>
+
       <!-- Data table -->
       <v-data-table
         :headers="headers"
         :items="projects"
         :rows-per-page-items="perPage"
-        class="elevation-1 mt-2"
+        class="elevation-1 mt-4"
       >    
         <template slot="items" scope="props">
           <td>{{ props.item.id }}</td>
@@ -131,7 +131,22 @@
           </td>
 
           <td v-if="table_state === 'admin_manage'">
-            ${{ props.item.invoice_amount }}
+            {{ props.item.invoice_amount | money }}
+          </td>
+
+          <td v-if="table_state === 'admin_manage'">
+            {{ totalProjectCost(props.item.work_items) | money }}
+          </td>
+
+          <td v-if="table_state === 'admin_manage'">
+            <span v-if="props.item.invoiced_date && props.item.invoice_paid_date === null">
+              <v-chip class="error white--text">
+                Not Paid   
+              </v-chip>             
+            </span>
+            <span v-else>
+              {{ projectBottomLine(props.item.work_items, props.item.invoice_amount) | money }}
+            </span>
           </td>
 
           <td v-if="table_state === 'user'">{{ props.item.timesheets.length }}</td>
@@ -175,6 +190,7 @@
 </template>
 
 <script>
+  import BusLogic from './../../resources/bus-logic';
   import ProjectsTotals from './Projects-totals';
 
   export default {
@@ -247,6 +263,8 @@
             { text: 'Location', value: 'location', align: 'left' },
             { text: 'Invoice Status', value: 'invoice_status', align: 'left' },
             { text: 'Invoice Amount', value: 'invoice_amount', align: 'left' },
+            { text: 'Crew Cost', value: 'crew_cost', align: 'left' },
+            { text: 'Bottom Line', value: 'crew_cost', align: 'left' },
             { text: 'Actions', value: '', align: 'left' }
           ];
         }
@@ -300,6 +318,14 @@
         if(this.table_state === 'admin_work' || this.table_state === 'admin_manage') this.$router.push('/projects/'+id+'/view');
         // User state forward
         if(this.table_state === 'user') this.$router.push('/projects/'+id+'/timesheets');        
+      },
+
+      totalProjectCost (workItems) {
+        return BusLogic.tallyWorkItemsTotal(workItems).toFixed(2);
+      },
+
+      projectBottomLine (workItems, invoiceAmount) {
+        return (parseFloat(invoiceAmount) - parseFloat(BusLogic.tallyWorkItemsTotal(workItems))).toFixed(2);
       }
     },
 

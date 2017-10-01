@@ -20,7 +20,7 @@
 		<v-layout row>
 			<p class="subheading info--text pl-4">
 				<v-icon left class="info--text">help_outline</v-icon>
-        You must add a user to the project crew before they can add timesheets.       			
+        You must add a user to the project crew before they can invoice this project.       			
   		</p>			
 		</v-layout>
 		<!-- No crew added alert -->

@@ -17,6 +17,8 @@
 		*/
 		created () {
 			console.log('Notify-wrapper created');
+			// Dispatch action to update notifications
+			this.$store.dispatch('getNotifications');
 		}
 	}
 </script>

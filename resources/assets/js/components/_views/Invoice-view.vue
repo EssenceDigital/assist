@@ -55,13 +55,12 @@
       	</v-layout>
       	<!-- Work Item -->
         <v-layout row>
-        	<v-flex xs3>
+        	<v-flex xs3 class="mr-2">
         		<p>
         			{{ item.from_date | dateMinusYear }} - {{ item.to_date | dateMinusYear }}
         		</p>
         	</v-flex>
-        	<v-spacer></v-spacer>
-        	<v-flex xs4>
+        	<v-flex xs5>
         		<p class="mb-1">
         			<strong>{{ item.project.client_company_name }}</strong>
         		</p>
@@ -132,13 +131,13 @@
       	</v-layout>
       	<!-- Work Item -->
         <v-layout row>
-        	<v-flex xs2>
+        	<v-flex xs3 class="mr-2">
         		<p>
         			{{ item.from_date | dateMinusYear }} - {{ item.to_date | dateMinusYear }}
         		</p>
         	</v-flex>
-        	<v-spacer></v-spacer>
-        	<v-flex xs4>
+
+        	<v-flex xs5>
         		<p class="mb-1">
         			<strong>Mileage:</strong>
         		</p>
@@ -630,19 +629,19 @@
 
 			invoiceSubTotal () {
 				if(this.currentInvoice){
-					return BusLogic.tallyInvoiceSubTotal(this.currentInvoice.work_items).toFixed(2);
+					return BusLogic.tallyWorkItemsSubTotal(this.currentInvoice.work_items).toFixed(2);
 				}	
 			},
 
 			gstTotal () {
 				if(this.currentInvoice){
-					return BusLogic.tallyInvoiceGst(this.currentInvoice.work_items).toFixed(2);
+					return BusLogic.tallyWorkItemsGst(this.currentInvoice.work_items).toFixed(2);
 				}				
 			},
 
 			invoiceTotal () {
 				if(this.currentInvoice){
-					return BusLogic.tallyInvoiceTotal(this.currentInvoice.work_items).toFixed(2);
+					return BusLogic.tallyWorkItemsTotal(this.currentInvoice.work_items).toFixed(2);
 				}				
 			}
 		},

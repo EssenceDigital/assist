@@ -39,7 +39,7 @@
 						flat 
 						slot="activator"
 						>
-							<v-icon right dark class="mt-2">arrow_drop_down_circle</v-icon>
+							<v-icon right dark class="mt-2 mr-0">arrow_drop_down_circle</v-icon>
 					</v-btn>	
 		      <v-list>
 		        <v-list-tile @click="$router.push('/user-settings')">
@@ -49,7 +49,16 @@
 		          <v-list-tile-title>Logout</v-list-tile-title>
 		        </v-list-tile>		        
 		      </v-list>
-		    </v-menu>					
+		    </v-menu>	
+
+		    <v-chip 
+		    	v-if="notifications.length != 0"
+		    	@click="$router.push('/dashboard')"
+		    	class="red white--text mt-3 hover"
+		    	v-tooltip:left="{ html: 'View Notifications' }"
+		    >
+		    	{{ notifications.length }}
+		    </v-chip>
 			</v-toolbar-items><!-- /Holds menu items -->
 		</v-toolbar><!-- /Medium and large screen menu -->
 
@@ -94,6 +103,10 @@
 		computed: {
 			authUser () {
 				return this.$store.getters.user
+			},
+
+			notifications () {
+				return this.$store.getters.notifications;
 			},
 
 			menuItems () {
@@ -142,3 +155,9 @@
 		}
 	}
 </script>
+
+<style>
+	.hover:hover {
+		cursor: pointer;
+	}
+</style>

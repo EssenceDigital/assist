@@ -63,4 +63,13 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Project');
     }
 
+    /**
+     * Get the work items by the user.
+     */
+    public function notifications()
+    {
+        return $this->hasMany('App\Notification');
+    }
+
+
 }

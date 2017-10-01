@@ -23,13 +23,16 @@ Route::get('/app', 'DashboardController@index');
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
+Route::get('/notifications', 'NotificationsController@get');
+
+
 Route::get('/projects', 'ProjectsController@all');
 Route::get('/projects/clients', 'ProjectsController@clients');
 Route::post('/projects/start', 'ProjectsController@store');
 Route::get('/projects/auth-users', 'ProjectsController@authUsersProjects');
 Route::post('/projects/update-field', 'ProjectsController@updateField');
 Route::get('/projects/{id}', 'ProjectsController@single');
-Route::get('/projects/{client?}/{province?}/{location?}/{invoice?}', 'ProjectsController@filter');
+Route::get('/projects/{client}/{province}/{location}/{invoice}', 'ProjectsController@filter');
 Route::post('/projects/add-comment', 'ProjectsController@addComment');
 Route::delete('/projects/delete-comment/{id}', 'ProjectsController@deleteComment');
 Route::post('/projects/add-crew', 'ProjectsController@addCrew');
@@ -52,5 +55,5 @@ Route::post('/invoices/add-item', 'InvoicesController@storeWorkItem');
 Route::post('/invoices/edit-item', 'InvoicesController@updateWorkItem');
 Route::delete('/invoices/delete-item/{id}', 'InvoicesController@deleteWorkItem');
 Route::get('/invoices/auth-users', 'InvoicesController@authUsersInvoices');
-Route::get('/invoices/{user}/{invoice}/{from_date}/{to_date}', 'InvoicesController@filter');
+Route::get('/invoices/{user}/{from_date}/{to_date}/{invoice}', 'InvoicesController@filter');
 Route::get('/invoices/{id}', 'InvoicesController@single');

@@ -88,7 +88,7 @@ class InvoicesController extends Controller
         ], 200);        
     }
 
-    public function filter($user = false, $invoice = false, $from_date = false, $to_date = false) {
+    public function filter($user = false, $from_date = false, $to_date = false, $invoice = false) {
 
         // Construct where array for query
         $queryArray = [];  
@@ -105,8 +105,10 @@ class InvoicesController extends Controller
 
         // Add invoice field or not
         if($invoice){
+            if($invoice == 'not-paid') $status = 0;
+            if($invoice == 'paid') $status = 1;
             // Push array clause
-            array_push($queryArray, ['is_paid', '=', $invoice]);
+            array_push($queryArray, ['is_paid', '=', $status]);
         } 
 
         // Add single day (from date) field or not
