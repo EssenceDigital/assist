@@ -1,5 +1,6 @@
 <template>
 	<card-layout
+		v-if="currentInvoice"
 		:tips="tips"
 	>
 		<div slot="title">
@@ -28,7 +29,11 @@
       	class="mt-3"
       >
       	<!-- Edit button container -->
-      	<v-layout row class="mb-2" v-if="invoice_state != 'readonly'">
+      	<v-layout
+      		v-if="!currentInvoice.is_paid" 
+      		row 
+      		class="mb-2"
+      	>
       		<v-spacer></v-spacer>
       		<v-flex xs1 class="text-xs-right">
        			<!-- Edit button -->
@@ -104,7 +109,11 @@
       	class="mt-3"
       >
       	<!-- Edit button container -->
-      	<v-layout row class="mb-2" v-if="invoice_state != 'readonly'">
+      	<v-layout 
+      		v-if="!currentInvoice.is_paid"
+      		row 
+      		class="mb-2"
+      	>
       		<v-spacer></v-spacer>
       		<v-flex xs1 class="text-xs-right">
        			<!-- Edit button -->
@@ -231,9 +240,15 @@
       				<v-icon left>assignment_turned_in</v-icon>
       				Publish
       			</v-btn>
-      			<v-alert v-else success value="true">
-      				Invoice is published!
-      			</v-alert>
+      			<p v-else class="subheading info--text">
+      				<v-icon left class="info--text">assignment_turned_in</v-icon></v-icon> <span>Invoice is published!</span>
+      			</p>
+      			<p v-if="currentInvoice.is_paid" class="subheading green--text">
+      				<v-icon left class="green--text">check_circle</v-icon></v-icon> <span>Invoice is paid!</span>
+      			</p>
+      			<p v-if="currentInvoice && !currentInvoice.is_paid" class="subheading red--text">
+      				<v-icon left class="red--text">priority_high</v-icon></v-icon> <span>Not yet paid!</span>
+      			</p>       			      			
       		</v-flex>
       	</v-layout>
 			</v-container><!-- / Total container -->	

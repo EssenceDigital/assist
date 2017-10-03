@@ -470,7 +470,7 @@ function applyToTag (styleElement, obj) {
 "use strict";
 
 
-var bind = __webpack_require__(11);
+var bind = __webpack_require__(12);
 var isBuffer = __webpack_require__(24);
 
 /*global toString:true*/
@@ -963,6 +963,158 @@ module.exports = Component.exports
 
 /***/ }),
 /* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+
+	/**
+  * Counts the number of unique projects within a set of work items.
+  *
+  * @param workItems (Array) - The work items to search and find unique projects.
+  * @return (Int) The amount of unique invoices within the set of work items.
+ */
+	tallyProjectInvoices: function tallyProjectInvoices(workItems) {
+		if (workItems.length != 0) {
+			// Cache total
+			var total = 0,
+			    invoiceIds = [];
+			// Itterate and calculate
+			workItems.forEach(function (item) {
+				// Push this items invoice id to the cached array
+				invoiceIds.push(item.invoice.id);
+			});
+			// Return unique invoice IDs in array
+			return Array.from(new Set(invoiceIds)).length;
+		}
+	},
+	tallySingleWorkItemHoursPay: function tallySingleWorkItemHoursPay(workItem) {
+		// Tally, calculating in cents not dollars
+		var total = parseFloat(workItem.hours) * (parseFloat(workItem.hourly_rate) * 100);
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallySingleWorkItemsMileagePay: function tallySingleWorkItemsMileagePay(workItem) {
+		// Tally, calculating in cents not dollars
+		var total = parseFloat(workItem.travel_mileage) * (parseFloat(workItem.mileage_rate) * 100);
+		// Convert back to dollars
+		return total / 100;
+	},
+
+
+	/** 
+  * Tallies the amount of hours in a set of work items.
+ */
+	tallyWorkItemsHours: function tallyWorkItemsHours(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			total += parseFloat(item.hours);
+		});
+		return total;
+	},
+
+
+	/** 
+  * Tallies the amount of pay in a set of work items (Based on hours and hourly rate).
+ */
+	tallyWorkItemsHoursPay: function tallyWorkItemsHoursPay(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			// Tally, calculating in cents not dollars
+			total += parseFloat(item.hours) * parseFloat(item.hourly_rate) * 100;
+		});
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallyWorkItemsTravelMileageCost: function tallyWorkItemsTravelMileageCost(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			// Tally, calculating in cents not dollars
+			if (item.travel_mileage) total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate) * 100;
+		});
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallyWorkItemsPerDiemCost: function tallyWorkItemsPerDiemCost(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			// Tally, calculating in cents not dollars
+			if (item.per_diem) total += parseFloat(item.per_diem) * 100;
+		});
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallyWorkItemsLodgingCost: function tallyWorkItemsLodgingCost(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			// Tally, calculating in cents not dollars
+			if (item.lodging_cost) total += parseFloat(item.lodging_cost) * 100;
+		});
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallyWorkItemsEquipmentCost: function tallyWorkItemsEquipmentCost(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			// Tally, calculating in cents not dollars
+			if (item.equipment_cost) total += parseFloat(item.equipment_cost) * 100;
+		});
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallyWorkItemsExtraCosts: function tallyWorkItemsExtraCosts(workItems) {
+		// Cache total
+		var total = 0;
+		// Itterate and calculate
+		workItems.forEach(function (item) {
+			// Tally, calculating in cents not dollars
+			if (item.travel_mileage) total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate) * 100;
+			// Tally, calculating in cents not dollars
+			if (item.per_diem) total += parseFloat(item.per_diem) * 100;
+			// Tally, calculating in cents not dollars
+			if (item.lodging_cost) total += parseFloat(item.lodging_cost) * 100;
+			// Tally, calculating in cents not dollars	
+			if (item.equipment_cost) total += parseFloat(item.equipment_cost) * 100;
+		});
+		// Convert back to dollars
+		return total / 100;
+	},
+	tallyWorkItemsGst: function tallyWorkItemsGst(workItems) {
+		// Get the subtotal
+		var subtotal = this.tallyWorkItemsSubTotal(workItems);
+		// Calculate in cents then convert back to dollars
+		return subtotal * 100 * 0.05 / 100;
+	},
+	tallyWorkItemsSubTotal: function tallyWorkItemsSubTotal(workItems) {
+		// Tally
+		var hoursPayTotal = this.tallyWorkItemsHoursPay(workItems),
+		    extraCostsTotal = this.tallyWorkItemsExtraCosts(workItems);
+		// Calculate in cents then convert back to dollars
+		return (hoursPayTotal * 100 + extraCostsTotal * 100) / 100;
+	},
+	tallyWorkItemsTotal: function tallyWorkItemsTotal(workItems) {
+		var subtotal = this.tallyWorkItemsSubTotal(workItems),
+		    gst = this.tallyWorkItemsGst(workItems);
+		// Calculate in cents then convert back to dollars
+		return (subtotal * 100 + gst * 100) / 100;
+	},
+	tallyWorkItemsBottomLine: function tallyWorkItemsBottomLine(workItems) {}
+});
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -1002,7 +1154,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1025,10 +1177,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(12);
+    adapter = __webpack_require__(13);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(12);
+    adapter = __webpack_require__(13);
   }
   return adapter;
 }
@@ -1102,7 +1254,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11299,10 +11451,10 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 var g;
@@ -11329,13 +11481,13 @@ module.exports = g;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(23);
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11353,7 +11505,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11364,7 +11516,7 @@ var settle = __webpack_require__(28);
 var buildURL = __webpack_require__(30);
 var parseHeaders = __webpack_require__(31);
 var isURLSameOrigin = __webpack_require__(32);
-var createError = __webpack_require__(13);
+var createError = __webpack_require__(14);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(33);
 
 module.exports = function xhrAdapter(config) {
@@ -11540,7 +11692,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11565,7 +11717,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11577,7 +11729,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11603,7 +11755,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -11647,157 +11799,6 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony default export */ __webpack_exports__["a"] = ({
-
-	/**
-  * Counts the number of unique projects within a set of work items.
-  *
-  * @param workItems (Array) - The work items to search and find unique projects.
-  * @return (Int) The amount of unique invoices within the set of work items.
- */
-	tallyProjectInvoices: function tallyProjectInvoices(workItems) {
-		if (workItems.length != 0) {
-			// Cache total
-			var total = 0,
-			    invoiceIds = [];
-			// Itterate and calculate
-			workItems.forEach(function (item) {
-				// Push this items invoice id to the cached array
-				invoiceIds.push(item.invoice.id);
-			});
-			// Return unique invoice IDs in array
-			return Array.from(new Set(invoiceIds)).length;
-		}
-	},
-	tallySingleWorkItemHoursPay: function tallySingleWorkItemHoursPay(workItem) {
-		// Tally, calculating in cents not dollars
-		var total = parseFloat(workItem.hours) * (parseFloat(workItem.hourly_rate) * 100);
-		// Convert back to dollars
-		return total / 100;
-	},
-	tallySingleWorkItemsMileagePay: function tallySingleWorkItemsMileagePay(workItem) {
-		// Tally, calculating in cents not dollars
-		var total = parseFloat(workItem.travel_mileage) * (parseFloat(workItem.mileage_rate) * 100);
-		// Convert back to dollars
-		return total / 100;
-	},
-
-
-	/** 
-  * Tallies the amount of hours in a set of work items.
- */
-	tallyWorkItemsHours: function tallyWorkItemsHours(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			total += parseFloat(item.hours);
-		});
-		return total;
-	},
-
-
-	/** 
-  * Tallies the amount of pay in a set of work items (Based on hours and hourly rate).
- */
-	tallyWorkItemsHoursPay: function tallyWorkItemsHoursPay(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			// Tally, calculating in cents not dollars
-			total += parseFloat(item.hours) * parseFloat(item.hourly_rate) * 100;
-		});
-		// Convert back to dollars
-		return total / 100;
-	},
-	tallyWorkItemsTravelMileageCost: function tallyWorkItemsTravelMileageCost(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			// Tally, calculating in cents not dollars
-			if (item.travel_mileage) total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate) * 100;
-		});
-		// Convert back to dollars
-		return total / 100;
-	},
-	tallyWorkItemsPerDiemCost: function tallyWorkItemsPerDiemCost(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			// Tally, calculating in cents not dollars
-			if (item.per_diem) total += parseFloat(item.per_diem) * 100;
-		});
-		// Convert back to dollars
-		return total / 100;
-	},
-	tallyWorkItemsLodgingCost: function tallyWorkItemsLodgingCost(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			// Tally, calculating in cents not dollars
-			if (item.lodging_cost) total += parseFloat(item.lodging_cost) * 100;
-		});
-		// Convert back to dollars
-		return total / 100;
-	},
-	tallyWorkItemsEquipmentCost: function tallyWorkItemsEquipmentCost(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			// Tally, calculating in cents not dollars
-			if (item.equipment_cost) total += parseFloat(item.equipment_cost) * 100;
-		});
-		// Convert back to dollars
-		return total / 100;
-	},
-	tallyWorkItemsExtraCosts: function tallyWorkItemsExtraCosts(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			// Tally, calculating in cents not dollars
-			if (item.travel_mileage) total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate) * 100;
-			// Tally, calculating in cents not dollars
-			if (item.per_diem) total += parseFloat(item.per_diem) * 100;
-			// Tally, calculating in cents not dollars
-			if (item.lodging_cost) total += parseFloat(item.lodging_cost) * 100;
-			// Tally, calculating in cents not dollars	
-			if (item.equipment_cost) total += parseFloat(item.equipment_cost) * 100;
-		});
-		// Convert back to dollars
-		return total / 100;
-	},
-	tallyWorkItemsGst: function tallyWorkItemsGst(workItems) {
-		// Get the subtotal
-		var subtotal = this.tallyWorkItemsSubTotal(workItems);
-		// Calculate in cents then convert back to dollars
-		return subtotal * 100 * 0.05 / 100;
-	},
-	tallyWorkItemsSubTotal: function tallyWorkItemsSubTotal(workItems) {
-		// Tally
-		var hoursPayTotal = this.tallyWorkItemsHoursPay(workItems),
-		    extraCostsTotal = this.tallyWorkItemsExtraCosts(workItems);
-		// Calculate in cents then convert back to dollars
-		return (hoursPayTotal * 100 + extraCostsTotal * 100) / 100;
-	},
-	tallyWorkItemsTotal: function tallyWorkItemsTotal(workItems) {
-		var subtotal = this.tallyWorkItemsSubTotal(workItems),
-		    gst = this.tallyWorkItemsGst(workItems);
-		// Calculate in cents then convert back to dollars
-		return (subtotal * 100 + gst * 100) / 100;
-	}
-});
-
-/***/ }),
 /* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11811,7 +11812,7 @@ module.exports = __webpack_require__(149);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuetify__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuetify___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vuetify__);
@@ -11864,7 +11865,7 @@ window._ = __webpack_require__(21);
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = __webpack_require__(10);
+window.axios = __webpack_require__(11);
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -28987,7 +28988,7 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(22)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10), __webpack_require__(22)(module)))
 
 /***/ }),
 /* 22 */
@@ -29025,9 +29026,9 @@ module.exports = function(module) {
 
 
 var utils = __webpack_require__(3);
-var bind = __webpack_require__(11);
+var bind = __webpack_require__(12);
 var Axios = __webpack_require__(25);
-var defaults = __webpack_require__(7);
+var defaults = __webpack_require__(8);
 
 /**
  * Create an instance of Axios
@@ -29060,9 +29061,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(15);
+axios.Cancel = __webpack_require__(16);
 axios.CancelToken = __webpack_require__(40);
-axios.isCancel = __webpack_require__(14);
+axios.isCancel = __webpack_require__(15);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -29110,7 +29111,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(7);
+var defaults = __webpack_require__(8);
 var utils = __webpack_require__(3);
 var InterceptorManager = __webpack_require__(35);
 var dispatchRequest = __webpack_require__(36);
@@ -29412,7 +29413,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(13);
+var createError = __webpack_require__(14);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -29831,8 +29832,8 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(3);
 var transformData = __webpack_require__(37);
-var isCancel = __webpack_require__(14);
-var defaults = __webpack_require__(7);
+var isCancel = __webpack_require__(15);
+var defaults = __webpack_require__(8);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -29984,7 +29985,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(15);
+var Cancel = __webpack_require__(16);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -45315,7 +45316,7 @@ function unbind(el) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return store; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api__ = __webpack_require__(45);
@@ -46737,7 +46738,7 @@ var index_esm = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 
 
@@ -46883,7 +46884,7 @@ var index_esm = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_views_Home__ = __webpack_require__(48);
@@ -50247,7 +50248,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Card_layout__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store_helpers__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__invoice_Invoices_table__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__invoice_Invoices_table__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__invoice_Invoices_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__invoice_Invoices_table__);
 //
 //
@@ -51617,7 +51618,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Card_layout__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store_helpers__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__invoice_Invoices_table__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__invoice_Invoices_table__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__invoice_Invoices_table___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__invoice_Invoices_table__);
 //
 //
@@ -52061,11 +52062,9 @@ exports.push([module.i, "\n.center[data-v-d970b024]{\n  margin-left: auto;\n  ma
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Projects_totals__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Projects_totals___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Projects_totals__);
-//
-//
 //
 //
 //
@@ -52303,13 +52302,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     headers: function headers() {
       if (this.table_state === 'admin_work') {
-        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Company Name', value: 'client_company_name', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Work Type', value: 'work_type', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+        var headers = [{ text: 'ID', value: 'id', align: 'left' }, { text: 'Client', value: 'client_company_name', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Work', value: 'work_type', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
       }
       if (this.table_state === 'admin_manage') {
-        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Company Name', value: 'client_company_name', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Invoice Status', value: 'invoice_status', align: 'left' }, { text: 'Invoice Amount', value: 'invoice_amount', align: 'left' }, { text: 'Crew Cost', value: 'crew_cost', align: 'left' }, { text: 'Bottom Line', value: 'crew_cost', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+        var headers = [{ text: 'ID', value: 'id', align: 'left' }, { text: 'Client', value: 'client_company_name', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Invoice Status', value: 'invoice_status', align: 'left' }, { text: 'Invoice Amount', value: 'invoice_amount', align: 'left' }, { text: 'Crew Cost', value: 'crew_cost', align: 'left' }, { text: 'Bottom Line', value: 'crew_cost', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
       }
       if (this.table_state === 'user') {
-        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Timesheets', value: 'timesheets', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+        var headers = [{ text: 'ID', value: 'id', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
       }
       return headers;
     }
@@ -52351,8 +52350,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     totalProjectCost: function totalProjectCost(workItems) {
       return __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyWorkItemsTotal(workItems).toFixed(2);
     },
-    projectBottomLine: function projectBottomLine(workItems, invoiceAmount) {
-      return (parseFloat(invoiceAmount) - parseFloat(__WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyWorkItemsTotal(workItems))).toFixed(2);
+    projectBottomLine: function projectBottomLine(workItems, invoiceAmount, invoicePaidDate) {
+      if (invoicePaidDate === null) {
+        var total = (parseFloat(invoiceAmount) + parseFloat(__WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyWorkItemsTotal(workItems))).toFixed(2);
+      } else {
+        var total = (parseFloat(invoiceAmount) - parseFloat(__WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyWorkItemsTotal(workItems))).toFixed(2);
+      }
+      return total;
     }
   },
 
@@ -52437,7 +52441,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__ = __webpack_require__(6);
 //
 //
 //
@@ -52763,9 +52767,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           staticClass: "error white--text"
         }, [_vm._v("\n            Not Paid   \n          ")]) : _vm._e(), _vm._v(" "), (props.item.invoice_paid_date) ? _c('v-chip', {
           staticClass: "success white--text"
-        }, [_vm._v("\n            Paid   \n          ")]) : _vm._e()], 1) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_vm._v("\n          " + _vm._s(_vm._f("money")(props.item.invoice_amount)) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_vm._v("\n          " + _vm._s(_vm._f("money")(_vm.totalProjectCost(props.item.work_items))) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [(props.item.invoiced_date && props.item.invoice_paid_date === null) ? _c('span', [_c('v-chip', {
-          staticClass: "error white--text"
-        }, [_vm._v("\n              Not Paid   \n            ")])], 1) : _c('span', [_vm._v("\n            " + _vm._s(_vm._f("money")(_vm.projectBottomLine(props.item.work_items, props.item.invoice_amount))) + "\n          ")])]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'user') ? _c('td', [_vm._v(_vm._s(props.item.timesheets.length))]) : _vm._e(), _vm._v(" "), _c('td', [_c('v-btn', {
+        }, [_vm._v("\n            Paid   \n          ")]) : _vm._e()], 1) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_vm._v("\n          " + _vm._s(_vm._f("money")(props.item.invoice_amount)) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_vm._v("\n          " + _vm._s(_vm._f("money")(_vm.totalProjectCost(props.item.work_items))) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [(!props.item.invoice_paid_date) ? _c('span', [_vm._v("\n            -" + _vm._s(_vm._f("money")(_vm.projectBottomLine(props.item.work_items, props.item.invoice_amount, props.item.invoice_paid_date))) + "\n          ")]) : _c('span', [_vm._v("\n            " + _vm._s(_vm._f("money")(_vm.projectBottomLine(props.item.work_items, props.item.invoice_amount, props.item.invoice_paid_date))) + "\n          ")])]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'user') ? _c('td', [_vm._v(_vm._s(props.item.timesheets.length))]) : _vm._e(), _vm._v(" "), _c('td', [_c('v-btn', {
           directives: [{
             name: "tooltip",
             rawName: "v-tooltip:top",
@@ -53373,7 +53375,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__);
 //
 //
@@ -55971,7 +55973,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__);
 //
 //
@@ -56342,7 +56344,7 @@ module.exports = Component.exports
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store_helpers__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__ = __webpack_require__(6);
 //
 //
 //
@@ -57252,7 +57254,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Card_layout__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store_helpers__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__ = __webpack_require__(6);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -58057,7 +58074,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('card-layout', {
+  return (_vm.currentInvoice) ? _c('card-layout', {
     attrs: {
       "tips": _vm.tips
     }
@@ -58112,7 +58129,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     return _c('v-container', {
       key: item.id,
       staticClass: "mt-3"
-    }, [(_vm.invoice_state != 'readonly') ? _c('v-layout', {
+    }, [(!_vm.currentInvoice.is_paid) ? _c('v-layout', {
       staticClass: "mb-2",
       attrs: {
         "row": ""
@@ -58221,7 +58238,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     return _c('v-container', {
       key: item.id,
       staticClass: "mt-3"
-    }, [(_vm.invoice_state != 'readonly') ? _c('v-layout', {
+    }, [(!_vm.currentInvoice.is_paid) ? _c('v-layout', {
       staticClass: "mb-2",
       attrs: {
         "row": ""
@@ -58409,12 +58426,28 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "left": ""
     }
-  }, [_vm._v("assignment_turned_in")]), _vm._v("\n      \t\t\t\tPublish\n      \t\t\t")], 1) : _c('v-alert', {
+  }, [_vm._v("assignment_turned_in")]), _vm._v("\n      \t\t\t\tPublish\n      \t\t\t")], 1) : _c('p', {
+    staticClass: "subheading info--text"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
     attrs: {
-      "success": "",
-      "value": "true"
+      "left": ""
     }
-  }, [_vm._v("\n      \t\t\t\tInvoice is published!\n      \t\t\t")])], 1)], 1)], 1), _vm._v(" "), (_vm.invoice_state != 'readonly') ? _c('v-layout', {
+  }, [_vm._v("assignment_turned_in")]), _vm._v(" "), _c('span', [_vm._v("Invoice is published!")])], 1), _vm._v(" "), (_vm.currentInvoice.is_paid) ? _c('p', {
+    staticClass: "subheading green--text"
+  }, [_c('v-icon', {
+    staticClass: "green--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("check_circle")]), _vm._v(" "), _c('span', [_vm._v("Invoice is paid!")])], 1) : _vm._e(), _vm._v(" "), (_vm.currentInvoice && !_vm.currentInvoice.is_paid) ? _c('p', {
+    staticClass: "subheading red--text"
+  }, [_c('v-icon', {
+    staticClass: "red--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("priority_high")]), _vm._v(" "), _c('span', [_vm._v("Not yet paid!")])], 1) : _vm._e()], 1)], 1)], 1), _vm._v(" "), (_vm.invoice_state != 'readonly') ? _c('v-layout', {
     attrs: {
       "row": "",
       "justify-center": ""
@@ -58986,7 +59019,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.deleteAsset($event)
       }
     }
-  }, [_vm._v("\n\t\t          \tDo it\n\t\t          ")])], 1)], 1)], 1)], 1) : _vm._e()], 2)])
+  }, [_vm._v("\n\t\t          \tDo it\n\t\t          ")])], 1)], 1)], 1)], 1) : _vm._e()], 2)]) : _vm._e()
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -59920,7 +59953,7 @@ exports.push([module.i, "\n.center[data-v-2caf8cc4]{\n\t\tmargin-left: auto;\n\t
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Card_layout__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_Field_input_toggle__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_Field_input_toggle__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__form_Field_input_toggle__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store_helpers__ = __webpack_require__(4);
 //
@@ -60463,7 +60496,7 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Card_layout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Card_layout__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_Field_input_toggle__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_Field_input_toggle__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__form_Field_input_toggle__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store_helpers__ = __webpack_require__(4);
 //

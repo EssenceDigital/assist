@@ -139,13 +139,11 @@
           </td>
 
           <td v-if="table_state === 'admin_manage'">
-            <span v-if="props.item.invoiced_date && props.item.invoice_paid_date === null">
-              <v-chip class="error white--text">
-                Not Paid   
-              </v-chip>             
+            <span v-if="!props.item.invoice_paid_date">
+              -{{ projectBottomLine(props.item.work_items, props.item.invoice_amount, props.item.invoice_paid_date) | money }}
             </span>
             <span v-else>
-              {{ projectBottomLine(props.item.work_items, props.item.invoice_amount) | money }}
+              {{ projectBottomLine(props.item.work_items, props.item.invoice_amount, props.item.invoice_paid_date) | money }}
             </span>
           </td>
 
@@ -248,18 +246,18 @@
       headers () {
         if(this.table_state === 'admin_work'){
           var headers = [
-            { text: 'Identifier', value: 'id', align: 'left' },
-            { text: 'Company Name', value: 'client_company_name', align: 'left' },
+            { text: 'ID', value: 'id', align: 'left' },
+            { text: 'Client', value: 'client_company_name', align: 'left' },
             { text: 'Province', value: 'province', align: 'left' },
             { text: 'Location', value: 'location', align: 'left' },
-            { text: 'Work Type', value: 'work_type', align: 'left' },
+            { text: 'Work', value: 'work_type', align: 'left' },
             { text: 'Actions', value: '', align: 'left' }
           ];
         }
         if(this.table_state === 'admin_manage'){
           var headers = [
-            { text: 'Identifier', value: 'id', align: 'left' },
-            { text: 'Company Name', value: 'client_company_name', align: 'left' },
+            { text: 'ID', value: 'id', align: 'left' },
+            { text: 'Client', value: 'client_company_name', align: 'left' },
             { text: 'Location', value: 'location', align: 'left' },
             { text: 'Invoice Status', value: 'invoice_status', align: 'left' },
             { text: 'Invoice Amount', value: 'invoice_amount', align: 'left' },
@@ -270,10 +268,9 @@
         }
         if(this.table_state === 'user'){
           var headers = [
-            { text: 'Identifier', value: 'id', align: 'left' },
+            { text: 'ID', value: 'id', align: 'left' },
             { text: 'Province', value: 'province', align: 'left' },
             { text: 'Location', value: 'location', align: 'left' },
-            { text: 'Timesheets', value: 'timesheets', align: 'left' },
             { text: 'Actions', value: '', align: 'left' }          
           ];
         }
@@ -324,8 +321,13 @@
         return BusLogic.tallyWorkItemsTotal(workItems).toFixed(2);
       },
 
-      projectBottomLine (workItems, invoiceAmount) {
-        return (parseFloat(invoiceAmount) - parseFloat(BusLogic.tallyWorkItemsTotal(workItems))).toFixed(2);
+      projectBottomLine (workItems, invoiceAmount, invoicePaidDate) {
+        if(invoicePaidDate === null){
+         var total = (parseFloat(invoiceAmount) + parseFloat(BusLogic.tallyWorkItemsTotal(workItems))).toFixed(2);
+        } else {
+          var total = (parseFloat(invoiceAmount) - parseFloat(BusLogic.tallyWorkItemsTotal(workItems))).toFixed(2);
+        }
+        return total;
       }
     },
 

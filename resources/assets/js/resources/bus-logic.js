@@ -158,6 +158,10 @@ export default {
 				gst = this.tallyWorkItemsGst(workItems);
 		// Calculate in cents then convert back to dollars
 		return ((subtotal * 100) + (gst * 100)) / 100;
+	},
+
+	tallyWorkItemsBottomLine (workItems) {
+
 	}
 
 }
