@@ -46926,7 +46926,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
 	routes: [{
-		path: '/dashboard',
+		path: '/',
 		name: 'Home',
 		component: __WEBPACK_IMPORTED_MODULE_2__components_views_Home___default.a
 	}, {
@@ -61174,11 +61174,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 		menuItems: function menuItems() {
 			if (this.authUser.permissions === 'admin') {
-				var menuItems = [{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' }, { icon: 'receipt', title: 'My Invoices', link: '/my-invoices' }, { icon: 'receipt', title: 'Crew Invoices', link: '/crew-invoices' }, { icon: 'assignment', title: 'Projects', link: '/projects' }, { icon: 'group', title: 'Users', link: '/users' }];
+				var menuItems = [{ icon: 'dashboard', title: 'Dashboard', link: '/' }, { icon: 'receipt', title: 'My Invoices', link: '/my-invoices' }, { icon: 'receipt', title: 'Crew Invoices', link: '/crew-invoices' }, { icon: 'assignment', title: 'Projects', link: '/projects' }, { icon: 'group', title: 'Users', link: '/users' }];
 			}
 
 			if (this.authUser.permissions === 'user') {
-				var menuItems = [{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' }, { icon: 'receipt', title: 'My Invoices', link: '/my-invoices' }];
+				var menuItems = [{ icon: 'dashboard', title: 'Dashboard', link: '/' }, { icon: 'receipt', title: 'My Invoices', link: '/my-invoices' }];
 			}
 
 			return menuItems;

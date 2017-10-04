@@ -18,7 +18,7 @@ Vue.use(VueRouter);
 export default new VueRouter({
 	routes: [
 		{
-			path: '/dashboard',
+			path: '/',
 			name: 'Home',
 			component: Home
 		},

@@ -112,7 +112,7 @@
 			menuItems () {
 				if(this.authUser.permissions === 'admin') {
 					var menuItems = [
-						{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' },
+						{ icon: 'dashboard', title: 'Dashboard', link: '/' },
 						{ icon: 'receipt', title: 'My Invoices', link: '/my-invoices' },
 						{ icon: 'receipt', title: 'Crew Invoices', link: '/crew-invoices' },
 						{ icon: 'assignment', title: 'Projects', link: '/projects' },
@@ -122,7 +122,7 @@
 
 				if(this.authUser.permissions === 'user') {
 					var menuItems = [
-						{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' },
+						{ icon: 'dashboard', title: 'Dashboard', link: '/' },
 						{ icon: 'receipt', title: 'My Invoices', link: '/my-invoices' },
 					];					
 				}
