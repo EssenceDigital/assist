@@ -123,7 +123,7 @@
 				if(this.authUser.permissions === 'user') {
 					var menuItems = [
 						{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' },
-						{ icon: 'receipt', title: 'Your Invoices', link: '/your-invoices' }
+						{ icon: 'receipt', title: 'My Invoices', link: '/my-invoices' },
 					];					
 				}
 

@@ -1,0 +1,52 @@
+/*
+Flaticon icon font: Flaticon
+Creation date: 13/07/2016 06:50
+*/
+
+@font-face {
+    font-family: "Flaticon";
+    src: url("../../fonts/Flaticon.eot");
+    src: url("../../fonts/Flaticon.eot?#iefix") format("embedded-opentype"),
+        url("../../fonts/Flaticon.woff") format("woff"),
+        url("../../fonts/Flaticon.ttf") format("truetype"),
+        url("../../fonts/Flaticon.svg#Flaticon") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="flaticon-"], [class*=" flaticon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: flaticon !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.flaticon-arrows:before { content: "\f100"; }
+.flaticon-back:before { content: "\f101"; }
+.flaticon-black-back-closed-envelope-shape:before { content: "\f102"; }
+.flaticon-business:before { content: "\f103"; }
+.flaticon-cell-phone:before { content: "\f104"; }
+.flaticon-clipboard:before { content: "\f105"; }
+.flaticon-closed-envelope-circle:before { content: "\f106"; }
+.flaticon-coffee:before { content: "\f107"; }
+.flaticon-connections:before { content: "\f108"; }
+.flaticon-facebook-logo-button:before { content: "\f109"; }
+.flaticon-home-icon-silhouette:before { content: "\f10a"; }
+.flaticon-left-quote:before { content: "\f10b"; }
+.flaticon-maths-class-materials-cross-of-a-pencil-and-a-ruler:before { content: "\f10c"; }
+.flaticon-multimedia:before { content: "\f10d"; }
+.flaticon-next:before { content: "\f10e"; }
+.flaticon-phone-book:before { content: "\f10f"; }
+.flaticon-right-arrow:before { content: "\f110"; }
+.flaticon-right-quote:before { content: "\f111"; }
+.flaticon-sports:before { content: "\f112"; }
+.flaticon-technology:before { content: "\f113"; }
+.flaticon-twitter-logo-button:before { content: "\f114"; }

@@ -1,0 +1,119 @@
+/*===== Background Color =====*/
+.ct-in > span,
+.thm-btn,
+.blk-btn:hover,
+.team-member:hover .member-inf::before,
+.cate:hover,
+.ftr-lgo-tl .logo h1 a,
+.cnt-frm form .form-group input[type="submit"],
+.post-dtl-inf p span,
+.tagclouds > a:hover,
+.socil-shar > a:hover,
+.vd-thmb > a:before,
+.wdgt-pst:hover:before,
+.wdgt .tagclouds > a:hover,
+.sdbr-btn,
+.mnu-inn > ul > li::before,
+.txt-car-wrp .owl-nav > div:hover,
+.sdbr-cls:hover,
+.hrs-cls:hover,
+.rspn-mnu-btn:hover,
+.rspn-scil > li a:hover,
+.rspn-mnu-cls:hover,
+.rsnp-mnu ul > li.menu-item-has-children::before
+{
+    background:#c20505;
+}
+
+/*===== Font Color =====*/
+.tl-inn > i,
+.pro-stps > span,
+.test-inf > span,
+.test-car .owl-nav > div:hover:before,
+.fltlb > li:hover > a,
+.fltlb > li.selected > a,
+.prj-inf1 > span,
+.prj-inf1 > h2 a:hover,
+.fun-itm > i,
+.member-inf > span,
+.post-meta > li,
+.pst-inf > h2 a:hover,
+.rcnt-pst-car .owl-nav > div:hover,
+.rcnt-pst-car .owl-nav > div:hover:before,
+.clnt-car .owl-nav > div:hover:before,
+.wdg-tl > span,
+.ft-cnt-inf > li a:hover,
+.btm-lnks > li a:hover,
+.btmbar p a,
+.pgntn-inn > li:hover a,
+.arct-intr > span,
+.social-btns > li a:hover,
+.arct-inf .ft-cnt-inf > li i,
+.prj-dtl-inf-inn > span,
+.pg-it > a:hover,
+.pg-it > a:hover i,
+.wrk-fl-car-cnt > h2 a:hover,
+.wrk-flw-car .owl-nav > div:hover,
+.wrk-flw-car .owl-nav > div:hover:before,
+.author-name > span,
+.author-name > h2 a:hover,
+.sngl-pst-pgna:hover > a,
+.sngl-pst-pgna ul.post-meta > li a:hover,
+.sngl-pst-pgna:hover:before,
+.coment-reply-link,
+.cmt-nm > h2 a:hover,
+.cmt-des > span,
+.wdgt-tl > span,
+.wdgt-pst-inf > span,
+.wdgt-frm button:hover,
+.wdgt-pst-inf > h2 a:hover,
+.wdgt li a:hover,
+.vd-thmb > a:hover,
+.wdgt ul li:hover:before,
+.wdgt-vd .wdgt-pst:hover .wdgt-pst-inf > span,
+.sl2-ly1 span,
+.sl2-ly2 span,
+.tp-scil.active > span > i,
+.mnu-inn > ul li:hover > a,
+.mnu-cls-btn:hover,
+nav > ul li:hover > a,
+.hrs-tl > strong,
+.capt-in > span i,
+.rsnp-mnu ul > li:hover > a,
+.rsnp-mnu ul > li.active > a
+{
+    color:#c20505;
+}
+
+/*===== Border Color =====*/
+
+{
+    border-color:#c20505;
+}
+
+/*===== Border Left Color =====*/
+
+{
+    border-left-color: #c20505;
+}
+
+/*===== Border Right Color =====*/
+
+{
+    border-right-color: #c20505;
+}
+
+/*===== Border Top Color =====*/
+
+{
+    border-top-color: #c20505;
+}
+
+/*===== Border Bottom Color =====*/
+.pgntn-inn > li:hover a
+{
+    border-bottom-color: #c20505;
+}
+
+
+
