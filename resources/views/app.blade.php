@@ -9,7 +9,11 @@
         <title>Arrow Assist</title>
 
         <link href="{{ url('css/app.css') }}" rel="stylesheet">  
-
+        <script>
+          window.Laravel = <?php echo json_encode([
+              'csrfToken' => csrf_token(),
+          ]); ?>
+        </script>
         <script>
             const AUTH_ID = '{{ Auth::user()->id }}';
             const AUTH_FIRST = '{{ Auth::user()->first }}';
