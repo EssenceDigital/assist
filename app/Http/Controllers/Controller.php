@@ -6,6 +6,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 
@@ -143,5 +144,50 @@ class Controller extends BaseController
     }
 
 
+    /* ****************************************************
+     * For User access control.
+     * ****************************************************
+    */
+
+    /** 
+     * Top level check. Ensures the user has the required role to access calling resource
+     *
+     * @param Array or String - The allowed roles
+    */
+    public function authorizeRoles($roles){
+        // Check if the supplied roles exist in role set
+        if($this->hasAnyRole($roles)) {
+            return true;
+        } 
+        // Not authorized
+        else {
+            return response()->json([
+                'result' => 'false',
+                'error' => 'true',
+                'message' => "Not authorized."
+            ], 401)->send(); // MUST send() to return full response
+        }         
+    }
+
+    /** 
+     * Checks all supplied roles to determine if they are allowed access
+     *
+     * @param Array or String - The allowed roles
+    */
+    public function hasAnyRole($roles){
+        // If supplied roles is an array
+        if(is_array($roles)) {
+            // Itterate through supplied roles
+            foreach($roles as $role) {
+                // Check if the users permissions matches the supplied role or not
+                if(auth()->user()->permissions === $role) {
+                    // If matched...
+                    return true;
+                }
+            }
+        } 
+        // Return false for all other conditions
+        return false;
+    }
 
 }

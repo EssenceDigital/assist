@@ -89,30 +89,6 @@ class DashboardController extends Controller
         ], 200);           
     }
 
-    public function projectTimesheets($projectId){
-        // Get the users timesheets for the requested project
-        $timesheets = Timesheet::where([
-            ['user_id', '=', Auth::id()],
-            ['project_id', '=', $projectId],
-        ])->with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->orderBy('date', 'desc')->get();
-
-        // Return failed response if collection empty
-        if(! $timesheets){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false,
-            ], 404);
-        }
-        // Tally timesheet totals   
-        $talliedTimesheets = $this->tallyTimesheets($timesheets);
-
-        // Return response for ajax call
-        return response()->json([
-            'result' => 'success',
-            'payload' => $talliedTimesheets
-        ], 200);                  
-    }
-
     /**
      * Updates the logged in users basic info.
      *

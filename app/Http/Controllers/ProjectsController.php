@@ -16,10 +16,10 @@ use Session;
 class ProjectsController extends Controller
 {
 
-    /*public function __construct()
+    public function __construct()
     {
         $this->middleware('auth');
-    }*/
+    }
 
     // Fields and their respective validation rules
     private $validationFields = [
@@ -50,12 +50,15 @@ class ProjectsController extends Controller
     ];
 
     /**
-     * Find all projects and returns a paginated result
+     * Find all projects
      *
      * @return \Illuminate\Http\JsonResponse
      */
     public function all()
     {
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);        
+
         $projects = Project::with(['workItems'])->get();
 
         // Return response for ajax call
@@ -66,6 +69,9 @@ class ProjectsController extends Controller
     }
 
     public function filter($client = false, $province = false, $location = false, $invoice = null){
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
+
         // Construct where array for query
         $queryArray = [];
         // Add company field or not
@@ -137,6 +143,9 @@ class ProjectsController extends Controller
      */
     public function single($id)
     {
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
+
         // With all foreign keys / children
         $project = Project::with(['comments', 'comments.user', 'timeline', 'users', 'workItems', 'workItems.invoice'])->find($id);
 
@@ -178,6 +187,10 @@ class ProjectsController extends Controller
      */
     public function store(Request $request)
     {
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
+
+        // Request validation
         $validationFields = [
             'client_company_name' => 'required|max:30'
         ];
@@ -225,6 +238,9 @@ class ProjectsController extends Controller
      * @return \Illuminate\Http\Response
     */
     public function addCrew(Request $request){
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
+
         // Find project
         $project = Project::find($request->project_id);
         // Find the user now
@@ -258,6 +274,9 @@ class ProjectsController extends Controller
      * @return \Illuminate\Http\Response
     */
     public function deleteCrew($project_id, $id){
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
+
         // Find the association
         $project = Project::find($project_id);
         // Attempt to detach
@@ -284,6 +303,9 @@ class ProjectsController extends Controller
      * @return \Illuminate\Http\Response
     */
     public function addComment(Request $request){
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
+
         // Validate request
         $this->validate($request, [
             'project_id' => 'required|numeric',
@@ -335,6 +357,9 @@ class ProjectsController extends Controller
      * @return \Illuminate\Http\Response
     */
     public function deleteComment($id){
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
+
         // Find or throw 404
         $comment = ProjectComment::findOrFail($id);
 
@@ -363,6 +388,9 @@ class ProjectsController extends Controller
      * @return \Illuminate\Http\Response
     */
     public function updateField(Request $request){
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
+
         // Use the parent method to update
         return $this->updateModelField(
             $request,
@@ -379,6 +407,10 @@ class ProjectsController extends Controller
      */
     public function update(Request $request)
     {   
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
+
+        // Fetch the project        
         $project = Project::with('proposal')->find($request->id);
 
         // Return failed response if collection empty
@@ -419,15 +451,17 @@ class ProjectsController extends Controller
      */
     public function delete(Request $request)
     {
-        // With all foreign keys / children
-        $project = Project::with(['comments', 'comments.user', 'timeline', 'users', 'timesheets'])->find($request->id);
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
 
-        if(count($project->users) > 0 || count($project->timesheets) > 0){
+        // With all foreign keys / children
+        $project = Project::with(['comments', 'comments.user', 'timeline', 'users', 'invoices'])->find($request->id);
+
+        if(count($project->users) <= 0 || count($project->workItems) <= 0){
             // Return response for ajax call
             return response()->json([
                 'result' => false,
-                'message' => 'Project has crew assigned or timesheets present. Cannot remove!',
-                'data' => $project->users
+                'message' => 'Project has crew assigned or invoices present. Cannot remove!'
             ], 404);  
 
         } else {

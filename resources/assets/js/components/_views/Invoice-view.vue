@@ -1,6 +1,6 @@
 <template>
 	<card-layout
-		v-if="currentInvoice"
+		v-if="currentInvoice && invoice_state"
 		:tips="tips"
 	>
 		<div slot="title">
@@ -14,8 +14,12 @@
 		<div slot="description">
 			This is where you can add your hours and costs to the invoice.
 		</div>
-		<div slot="additional">
-      <v-btn flat class="success--text" v-tooltip:top="{ html: 'Add Work Item' }"
+		<div v-if="invoice_state == 'full'" slot="additional">
+      <v-btn
+      	v-if="!currentInvoice.is_paid" 
+      	flat 
+      	class="success--text" 
+      	v-tooltip:top="{ html: 'Add Work Item' }"
       	@click.native.stop="workItemDialog = true"
       >
       	<v-icon left class="success--text">add_circle</v-icon>
@@ -28,36 +32,38 @@
       	v-for="item in currentInvoice.work_items" :key="item.id"
       	class="mt-3"
       >
-      	<!-- Edit button container -->
-      	<v-layout
-      		v-if="!currentInvoice.is_paid" 
-      		row 
-      		class="mb-2"
-      	>
-      		<v-spacer></v-spacer>
-      		<v-flex xs1 class="text-xs-right">
-       			<!-- Edit button -->
-		        <v-btn 
-		        	class="mr-0"
-		        	icon 
-		        	v-tooltip:top="{ html: 'Edit Item' }"
-		        	@click.native.stop="editDialog(item.id)"
-		        >
-		          <v-icon right>settings</v-icon>
-		        </v-btn>					        		
-      		</v-flex>
-      		<v-flex xs1 class="text-xs-right">					        						        		
-		        <!-- Delete button -->
-		        <v-btn 
-		        	icon 
-		        	class="mr-0 red--text" 
-		        	v-tooltip:top="{ html: 'Remove' }"
-		        	@click.native.stop="openDeleteDialog('deleteWorkItem', item.id)"
-		        >
-		          <v-icon>close</v-icon>
-		        </v-btn>					        			
-      		</v-flex>								        
-      	</v-layout>
+      	<div v-if="invoice_state === 'full'" >
+	      	<!-- Edit button container -->
+	      	<v-layout
+	      		v-if="!currentInvoice.is_paid || invoice_state === 'full'" 
+	      		row 
+	      		class="mb-2"
+	      	>
+	      		<v-spacer></v-spacer>
+	      		<v-flex xs1 class="text-xs-right">
+	       			<!-- Edit button -->
+			        <v-btn 
+			        	class="mr-0"
+			        	icon 
+			        	v-tooltip:top="{ html: 'Edit Item' }"
+			        	@click.native.stop="editDialog(item.id)"
+			        >
+			          <v-icon right>settings</v-icon>
+			        </v-btn>					        		
+	      		</v-flex>
+	      		<v-flex xs1 class="text-xs-right">					        						        		
+			        <!-- Delete button -->
+			        <v-btn 
+			        	icon 
+			        	class="mr-0 red--text" 
+			        	v-tooltip:top="{ html: 'Remove' }"
+			        	@click.native.stop="openDeleteDialog('deleteWorkItem', item.id)"
+			        >
+			          <v-icon>close</v-icon>
+			        </v-btn>					        			
+	      		</v-flex>      										        
+	      	</v-layout>
+	      </div>
       	<!-- Work Item -->
         <v-layout row>
         	<v-flex xs3 class="mr-2">
@@ -108,36 +114,38 @@
       	v-for="item in currentInvoice.work_items" :key="item.id"
       	class="mt-3"
       >
-      	<!-- Edit button container -->
-      	<v-layout 
-      		v-if="!currentInvoice.is_paid"
-      		row 
-      		class="mb-2"
-      	>
-      		<v-spacer></v-spacer>
-      		<v-flex xs1 class="text-xs-right">
-       			<!-- Edit button -->
-		        <v-btn 
-		        	class="mr-0"
-		        	icon 
-		        	v-tooltip:top="{ html: 'Edit Item' }"
-		        	@click.native.stop="editDialog(item.id)"
-		        >
-		          <v-icon right>settings</v-icon>
-		        </v-btn>					        		
-      		</v-flex>
-      		<v-flex xs1 class="text-xs-right">					        						        		
-		        <!-- Delete button -->
-		        <v-btn 
-		        	icon 
-		        	class="mr-0 red--text" 
-		        	v-tooltip:top="{ html: 'Remove' }"
-		        	@click.native.stop="openDeleteDialog('deleteWorkItem', item.id)"
-		        >
-		          <v-icon>close</v-icon>
-		        </v-btn>					        			
-      		</v-flex>								        
-      	</v-layout>
+      	<div v-if="invoice_state === 'full'">
+	      	<!-- Edit button container -->
+	      	<v-layout 
+	      		v-if="!currentInvoice.is_paid"
+	      		row 
+	      		class="mb-2"
+	      	>
+	      		<v-spacer></v-spacer>
+	      		<v-flex xs1 class="text-xs-right">
+	       			<!-- Edit button -->
+			        <v-btn 
+			        	class="mr-0"
+			        	icon 
+			        	v-tooltip:top="{ html: 'Edit Item' }"
+			        	@click.native.stop="editDialog(item.id)"
+			        >
+			          <v-icon right>settings</v-icon>
+			        </v-btn>					        		
+	      		</v-flex>
+	      		<v-flex xs1 class="text-xs-right">					        						        		
+			        <!-- Delete button -->
+			        <v-btn 
+			        	icon 
+			        	class="mr-0 red--text" 
+			        	v-tooltip:top="{ html: 'Remove' }"
+			        	@click.native.stop="openDeleteDialog('deleteWorkItem', item.id)"
+			        >
+			          <v-icon>close</v-icon>
+			        </v-btn>					        			
+	      		</v-flex>								        
+	      	</v-layout>      		
+      	</div>
       	<!-- Work Item -->
         <v-layout row>
         	<v-flex xs3 class="mr-2">
@@ -230,7 +238,7 @@
       	</v-layout>
       	<!-- Publish dialog trigger -->
       	<v-layout row class="mt-5">
-      		<v-flex xs3 offset-xs5>
+      		<v-flex xs4 offset-xs4 class="text-xs-center"> 
       			<v-btn
       				v-if="!currentInvoice.is_published" 
       				@click="publishDialog = true"
@@ -240,13 +248,13 @@
       				<v-icon left>assignment_turned_in</v-icon>
       				Publish
       			</v-btn>
-      			<p v-else class="subheading info--text">
+      			<p v-else class="subheading info--text mt-2">
       				<v-icon left class="info--text">assignment_turned_in</v-icon></v-icon> <span>Invoice is published!</span>
       			</p>
-      			<p v-if="currentInvoice.is_paid" class="subheading green--text">
+      			<p v-if="currentInvoice.is_paid" class="subheading green--text mt-2">
       				<v-icon left class="green--text">check_circle</v-icon></v-icon> <span>Invoice is paid!</span>
       			</p>
-      			<p v-if="currentInvoice && !currentInvoice.is_paid" class="subheading red--text">
+      			<p v-if="currentInvoice && !currentInvoice.is_paid && currentInvoice.is_published" class="subheading red--text mt-2">
       				<v-icon left class="red--text">priority_high</v-icon></v-icon> <span>Not yet paid!</span>
       			</p>       			      			
       		</v-flex>
@@ -278,7 +286,11 @@
 		          </v-toolbar-items>		        
 			      </v-toolbar>
 			 			<v-card-text>
-
+			 				<v-container fluid>
+								<v-alert warning dismissible v-model="errorAlert" class="mt-3 mb-3">
+						      {{ errorMessage }}
+						    </v-alert>			 					
+			 				</v-container>
 			 				<v-layout row>
 			 					<!-- Work item container -->
 			 					<v-flex xs6>
@@ -668,7 +680,11 @@
 					{ text: "Use the toolbar below to adjust the invoice"  }
 				],
 				// Loading
-				loading: false,		
+				loading: false,	
+				// For form error alert
+				errorAlert: false,
+				// For form error alert message	
+				errorMessage: '',
 				// For the delete dialog
 				deleteDialog: false,
 				deleteDispatchAction: '',
@@ -733,6 +749,8 @@
 				Helpers.resetForm(this.workItemForm);
 				// Toggle dialog
 				this.workItemDialog = false;
+				// Toggle error alert
+				this.errorAlert = false;
 				// Revert action to default
 				this.workItemDispatchAction = 'addWorkItem';				
 			},
@@ -773,11 +791,20 @@
 								Helpers.resetForm(this.workItemForm);
 							})
 							.catch((errors) => {
-								Helpers.populateFormErrors(this.workItemForm, errors.response.data).
-									then(() => {
-										// Toggle loader
-										this.workItemSaving = false;							
-									});							
+								if(!errors.response.data.error){
+									Helpers.populateFormErrors(this.workItemForm, errors.response.data).
+										then(() => {
+											// Toggle loader
+											this.workItemSaving = false;							
+										});
+								} else {
+									// Flag error
+									this.errorAlert = true;
+									// Set message
+									this.errorMessage = errors.response.data.message;
+									// Toggle loader
+									this.workItemSaving = false;										
+								}
 							});
 					});
 			},	
@@ -798,6 +825,12 @@
 			},
 
 			publishInvoice () {
+				// Do not publish if there is zero work items on invoice
+				if(this.currentInvoice.work_items.length === 0){
+					// Toggle dialog
+					this.publishDialog = false;					
+					return false;
+				}
 				// Toggle loader
 				this.publishing = true;
 				// Dispatch event

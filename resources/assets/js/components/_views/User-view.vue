@@ -55,9 +55,10 @@
 								<field-input-toggle
 									:type="'select'"
 									:select_options="[
-					          { text: 'Permissions...', value: '' },
+					          { text: 'Permissions...', value: '' },					         
+					          { text: 'User', value: 'user' },
 					          { text: 'Admin', value: 'admin' },
-					          { text: 'User', value: 'user' }
+					          { text: 'Super', value: 'super' }
 									]"
 									:action="'updateUserField'"
 									:id="currentUser.id"
@@ -84,17 +85,6 @@
 									:label="'Company'"
 									:field="'company_name'"
 									:value="currentUser.company_name"
-								></field-input-toggle>
-							</v-flex>
-							<v-flex xs4>
-								<field-input-toggle
-									:type="'text'"
-									:action="'updateUserField'"
-									:id="currentUser.id"
-									:label="'Hourly Rate'"
-									:field="'hourly_rate_one'"
-									:prefix="'$'"
-									:value="currentUser.hourly_rate_one"
 								></field-input-toggle>
 							</v-flex>
 							<v-flex xs4>

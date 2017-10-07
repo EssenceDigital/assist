@@ -24,10 +24,9 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'first' => "Matt",
             'last' => "Shanks",
-            'permissions' => 'admin',
-            'email' => 'matt@admin.ca',
+            'permissions' => 'super',
+            'email' => 'matt@super.ca',
             'company_name' => "Asha'man",
-            'hourly_rate_one' => 50.00,
             'gst_number' => 'A458EHE5',
             'password' => bcrypt(env('ADMIN_CREDENTIALS', false))
         ]);
@@ -45,7 +44,6 @@ class DatabaseSeeder extends Seeder
                 'permissions' => 'user',
                 'email' => $first . $last . '@gmail.com',
                 'company_name' => $faker->company,
-                'hourly_rate_one' => $faker->numberBetween(35, 100),
                 'gst_number' => $faker->randomNumber(8),
                 'password' => bcrypt('password')
             ]);

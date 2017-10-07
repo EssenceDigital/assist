@@ -11,10 +11,10 @@ use App\Timesheet;
 class UsersController extends Controller
 {
 
-    /*public function __construct()
+    public function __construct()
     {
         $this->middleware('auth');
-    }*/
+    }
 
     // Fields and their respective validation rules
     private $validationFields = [
@@ -24,7 +24,6 @@ class UsersController extends Controller
         'permissions' => 'required|string|max:10',
         'password' => 'required|string|min:6|confirmed',
         'company_name' => 'required|string|max:25',
-        'hourly_rate_one' => 'required|numeric|between:0,1000000000000.99',
         'gst_number' => 'required|string|max:25'
     ];
 
@@ -81,6 +80,9 @@ class UsersController extends Controller
      */
     public function all()
     {
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
+
         $users = User::all();
 
         // Return response for ajax call
@@ -97,6 +99,9 @@ class UsersController extends Controller
      */
     public function single($id)
     {
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
+
         $user = User::find($id);
 
         // Return response for ajax call
@@ -107,14 +112,14 @@ class UsersController extends Controller
     }
 
     public function projects($user_id){
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
 
         // Construct query to find all projects user is a part of
         $projects = Project::whereHas('users', function ($q) use ($user_id) {
             $q->where('user_id', $user_id);
         // Now, only select the timesheets that belongs to this user
-        })->with(['timesheets' => function($q) use ($user_id)  {
-            $q->where('user_id', $user_id);
-        }])->get();
+        })->get();
 
         // Return failed response if collection empty
         if(! $projects){
@@ -131,31 +136,6 @@ class UsersController extends Controller
         ], 200);          
     }
 
-    public function projectTimesheets($user_id, $project_id){
-
-        // Get the users timesheets for the requested project
-        $timesheets = Timesheet::where([
-            ['user_id', '=', $user_id],
-            ['project_id', '=', $project_id],
-        ])->with(['workJobs', 'travelJobs', 'equipmentRentals', 'otherCosts'])->orderBy('date', 'desc')->get();
-
-        // Return failed response if collection empty
-        if(! $timesheets){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false,
-            ], 404);
-        }
-        // Tally timesheet totals   
-        $talliedTimesheets = $this->tallyTimesheets($timesheets);
-
-        // Return response for ajax call
-        return response()->json([
-            'result' => 'success',
-            'payload' => $talliedTimesheets
-        ], 200);          
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -164,6 +144,9 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['super']);
+
         // Validate and populate the request
         $user = $this->validateUser($request, new User);
 
@@ -186,52 +169,14 @@ class UsersController extends Controller
     }
 
     public function updateField(Request $request){
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['super']);
 
         return $this->updateModelField(
             $request,
             User::find($request->id),
             $this->validationFields
         );
-    }
-
-    /**
-     * Update a resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {   
-        $user = User::find($request->id);
-
-        // Return failed response if collection empty
-        if(! $user){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }
-
-        // Validate and populate the request
-        $user = $this->validateUser($request, $user);
-
-        // Attempt to store model
-        $result = $user->save();
-
-        // Verify success on store
-        if(! $result){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }
-
-        // Return response for ajax call
-        return response()->json([
-            'result' => 'success',
-            'model' => $user
-        ], 200);
-
     }
 
     /**
@@ -242,6 +187,9 @@ class UsersController extends Controller
      */
     public function changePassword(Request $request)
     {
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['super']);
+
         // Validate or stop proccessing :)
         $this->validate($request, [
             'id' => 'required|numeric',
@@ -283,8 +231,19 @@ class UsersController extends Controller
      */
     public function delete(Request $request)
     {
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['super']);
+                
         // Find user or throw 404 :)
-        $user = User::findOrFail($request->id);
+        $user = User::with(['invoices'])->find($request->id);
+
+        if(count($user->invoices) <= 0) {
+            // Return response for ajax call
+            return response()->json([
+                'result' => false,
+                'message' => 'User has invoices saved. Cannot delete.'
+            ], 404); 
+        }
 
         // Attempt to remove 
         $result = $user->delete();

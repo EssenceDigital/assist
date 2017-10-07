@@ -325,7 +325,7 @@
         // User state forward
         if(this.table_state === 'user') this.$router.push('/my-invoices/'+id+'/view');
         // Admin state forward
-        if(this.table_state === 'admin') this.$router.push('/my-invoices/'+id+'/view');  
+        if(this.table_state === 'admin') this.$router.push('/crew-invoices/'+id+'/view');  
       },
 
       updateUserFilter (value) {

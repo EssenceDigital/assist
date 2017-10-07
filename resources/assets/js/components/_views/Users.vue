@@ -22,7 +22,7 @@
             <v-card-text>
 
               <v-layout row>
-                <v-flex xs6>
+                <v-flex xs5>
                   <v-text-field
                     v-model="form.first.val"
                     label="First Name..."
@@ -30,7 +30,7 @@
                   ></v-text-field>                                
                 </v-flex>
                 <v-spacer></v-spacer>
-                <v-flex xs6>
+                <v-flex xs5>
                   <v-text-field
                     v-model="form.last.val"
                     label="Last Name..."
@@ -39,7 +39,7 @@
                 </v-flex>                              
               </v-layout>
               <v-layout row>
-                <v-flex xs6>
+                <v-flex xs5>
                   <v-text-field
                     v-model="form.email.val"
                     label="Email (used as username)..."
@@ -47,21 +47,22 @@
                   ></v-text-field>                                
                 </v-flex>
                 <v-spacer></v-spacer>
-                <v-flex xs6>
+                <v-flex xs5>
                   <v-select
                     v-model="form.permissions.val"
                     label="Permissions..."
                     :items="[
                       { text: 'Select...', value: '' },
                       { text: 'User', value: 'user' },
-                      { text: 'Admin', value: 'admin' }                                    
+                      { text: 'Admin', value: 'admin' },
+                      { text: 'Super', value: 'super' }                                  
                     ]"
                     :error="form.permissions.err"
                   ></v-select>                                
                 </v-flex>                              
               </v-layout>
               <v-layout row>
-                <v-flex xs6>
+                <v-flex xs5>
                   <v-text-field
                     v-model="form.company_name.val"
                     label="Company Name..."
@@ -69,7 +70,7 @@
                   ></v-text-field>                                
                 </v-flex>
                 <v-spacer></v-spacer>
-                <v-flex xs6>
+                <v-flex xs5>
                   <v-text-field
                     v-model="form.gst_number.val"
                     label="GST Number..."
@@ -77,19 +78,9 @@
                   ></v-text-field>                                
                 </v-flex>                              
               </v-layout>                            
-              <v-layout row>
-                <v-flex xs6>
-                  <v-text-field
-                    v-model="form.hourly_rate_one.val"
-                    label="Hourly Rate..."
-                    :error="form.hourly_rate_one.err"
-                    prefix="$"
-                  ></v-text-field>                                
-                </v-flex>                              
-              </v-layout>
               <v-divider class="mt-2 mb-2"></v-divider>
               <v-layout row>
-                <v-flex xs6>
+                <v-flex xs5>
                   <v-text-field
                     v-model="form.password.val"
                     label="Temporary Password..."
@@ -98,7 +89,7 @@
                   ></v-text-field>                                
                 </v-flex>
                 <v-spacer></v-spacer>
-                <v-flex xs6>
+                <v-flex xs5>
                   <v-text-field
                     v-model="form.password_confirmation.val"
                     label="Confirm Password..."
@@ -162,8 +153,7 @@
           password: {val: '', err: false, errMsg: '', dflt: ''},
           password_confirmation: {val: '', err: false, errMsg: '', dflt: ''},
           company_name: {val: '', err: false, errMsg: '', dflt: ''},
-          gst_number: {val: '', err: false, errMsg: '', dflt: ''},
-          hourly_rate_one: {val: '0.00', err: false, errMsg: '', dflt: '0.00'},
+          gst_number: {val: '', err: false, errMsg: '', dflt: ''}
         }        
       }
     },

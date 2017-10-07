@@ -9,10 +9,10 @@ use App\Timeline;
 class TimelinesController extends Controller
 {
 
-    /*public function __construct()
+    public function __construct()
     {
         $this->middleware('auth');
-    }*/
+    }
 
     // Fields and their respective validation rules
     private $validationFields = [
@@ -45,6 +45,9 @@ class TimelinesController extends Controller
      */
     public function store(Request $request)
     {
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
+
         // Validate and populate the request
         $timeline = $this->validateAndPopulate($request, new Timeline, $this->validationFields);
 
@@ -66,7 +69,6 @@ class TimelinesController extends Controller
             'result' => 'success',
             'model' => $timeline
         ], 200);
-
     }
 
     /**
@@ -76,51 +78,14 @@ class TimelinesController extends Controller
      * @return \Illuminate\Http\Response
     */
     public function updateField(Request $request){
+        // For ACL, only allows supplied roles to access this method
+        $this->authorizeRoles(['admin', 'super']);
+
         return $this->updateModelField(
             $request,
             Timeline::find($request->id),
             $this->validationFields
         );        
-    }
-
-    /**
-     * Update a resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {   
-        $timeline = Timeline::find($request->id);
-
-        // Return failed response if collection empty
-        if(! $timeline){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }
-
-        // Validate and populate the request
-        $timeline = $this->validateAndPopulate($request, $timeline);
-
-        // Attempt to store model
-        $result = $timeline->save();
-
-        // Verify success on store
-        if(! $result){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }
-
-        // Return response for ajax call
-        return response()->json([
-            'result' => 'success',
-            'model' => $timeline
-        ], 200);
-
     } 
 
 }

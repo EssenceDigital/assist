@@ -3,7 +3,7 @@
 */
 <template>
 	<!-- Component container -->
-	<v-layout>
+	<v-layout v-if="authUser">
 		<!-- Medium and large screen menu -->
 		<v-toolbar dark class="default">
 			<!-- Mobile drawer toggle -->
@@ -13,7 +13,7 @@
       </v-toolbar-side-icon>
 			<!-- Title -->
 			<v-toolbar-title>
-				<router-link to="/" tag="span" style="cursor: pointer">
+				<router-link to="/dashboard" tag="span" style="cursor: pointer">
 					Arrow Assist
 				</router-link>
 			</v-toolbar-title>
@@ -100,6 +100,13 @@
 <script>
 	export default {
 
+		data () {
+			return{
+				navDrawer: false,
+				menuItems: []			
+			}
+		},
+
 		computed: {
 			authUser () {
 				return this.$store.getters.user
@@ -107,33 +114,6 @@
 
 			notifications () {
 				return this.$store.getters.notifications;
-			},
-
-			menuItems () {
-				if(this.authUser.permissions === 'admin') {
-					var menuItems = [
-						{ icon: 'dashboard', title: 'Dashboard', link: '/' },
-						{ icon: 'receipt', title: 'My Invoices', link: '/my-invoices' },
-						{ icon: 'receipt', title: 'Crew Invoices', link: '/crew-invoices' },
-						{ icon: 'assignment', title: 'Projects', link: '/projects' },
-						{ icon: 'group', title: 'Users', link: '/users' }
-					];
-				}
-
-				if(this.authUser.permissions === 'user') {
-					var menuItems = [
-						{ icon: 'dashboard', title: 'Dashboard', link: '/' },
-						{ icon: 'receipt', title: 'My Invoices', link: '/my-invoices' },
-					];					
-				}
-
-				return menuItems;
-			}
-		},
-
-		data () {
-			return{
-				navDrawer: false			
 			}
 		},
 
@@ -152,6 +132,36 @@
 						console.log(error);
 					});
 			}
+		},
+
+		created () {
+			if(this.authUser){
+				if(this.authUser.permissions === "super") {
+					this.menuItems = [
+						{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' },
+						{ icon: 'receipt', title: 'My Invoices', link: '/my-invoices' },
+						{ icon: 'receipt', title: 'Crew Invoices', link: '/crew-invoices' },
+						{ icon: 'assignment', title: 'Projects', link: '/projects' },
+						{ icon: 'group', title: 'Users', link: '/users' }
+					];
+				}
+
+				if(this.authUser.permissions === 'admin') {
+					this.menuItems = [
+						{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' },
+						{ icon: 'receipt', title: 'My Invoices', link: '/my-invoices' },
+						{ icon: 'assignment', title: 'Projects', link: '/projects' }
+					];
+				}
+
+				if(this.authUser.permissions === 'user') {
+					this.menuItems = [
+						{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' },
+						{ icon: 'receipt', title: 'My Invoices', link: '/my-invoices' },
+					];					
+				}				
+			}
+			
 		}
 	}
 </script>

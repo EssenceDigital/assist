@@ -46926,7 +46926,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
 	routes: [{
-		path: '/',
+		path: '/dashboard',
 		name: 'Home',
 		component: __WEBPACK_IMPORTED_MODULE_2__components_views_Home___default.a
 	}, {
@@ -50370,60 +50370,97 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    'card-layout': __WEBPACK_IMPORTED_MODULE_0__Card_layout___default.a,
-    'invoices-table': __WEBPACK_IMPORTED_MODULE_2__invoice_Invoices_table___default.a
-  },
+	components: {
+		'card-layout': __WEBPACK_IMPORTED_MODULE_0__Card_layout___default.a,
+		'invoices-table': __WEBPACK_IMPORTED_MODULE_2__invoice_Invoices_table___default.a
+	},
 
-  data: function data() {
-    return {
-      // Tips for card layout
-      tips: [{ text: "You can start a new invoice using the add button located in the top right corner of this card." }, { text: "Use the view button at the end of each row to view that invoice and add your hours and costs." }],
-      // For invoice dialog and loading
-      addInvoiceDialog: false,
-      startingInvoice: false,
-      // For the date menus
-      fromDateMenu: false,
-      toDateMenu: false,
-      // The start invoice form  			
-      form: {
-        from_date: { val: '', err: false, errMsg: '', dflt: '' },
-        to_date: { val: '', err: false, errMsg: '', dflt: '' }
-      }
-    };
-  },
+	data: function data() {
+		return {
+			// For form error
+			errorAlert: false,
+			// For form error message
+			errorMessage: '',
+			// Tips for card layout
+			tips: [{ text: "You can start a new invoice using the add button located in the top right corner of this card." }, { text: "Use the view button at the end of each row to view that invoice and add your hours and costs." }],
+			// For invoice dialog and loading
+			addInvoiceDialog: false,
+			startingInvoice: false,
+			// For the date menus
+			fromDateMenu: false,
+			toDateMenu: false,
+			// The start invoice form  			
+			form: {
+				from_date: { val: '', err: false, errMsg: '', dflt: '' },
+				to_date: { val: '', err: false, errMsg: '', dflt: '' }
+			}
+		};
+	},
 
 
-  methods: {
-    startInvoice: function startInvoice() {
-      var _this = this;
+	methods: {
+		startInvoice: function startInvoice() {
+			var _this = this;
 
-      // Toggle loader
-      this.startingInvoice = true;
-      // Dispatch event to store
-      this.$store.dispatch('addInvoice', {
-        from_date: this.form.from_date.val,
-        to_date: this.form.to_date.val
-      }).then(function (response) {
-        // Toggle loader
-        _this.startingInvoice = false;
-        _this.addInvoiceDialog = false;
-        // Forward view
-        _this.$router.push('/my-invoices/' + response.id + '/view');
-      }).catch(function (errors) {
-        __WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].populateFormErrors(_this.form, errors.response.data).then(function () {
-          // Toggle loader
-          _this.startingInvoice = false;
-        });
-      });
-    }
-  }
+			// Toggle loader
+			this.startingInvoice = true;
+			/*
+    * Ensure from to date is before to date
+   */
+			// Populate date objects
+			var fromDate = new Date(this.form.from_date.val),
+			    toDate = new Date(this.form.to_date.val);
+			// Compate dates and return false if to date is before from date
+			if (toDate.getTime() < fromDate.getTime()) {
+				// Set up error and message
+				this.errorAlert = true;
+				this.errorMessage = "'From date' must be before 'To Date'.";
+				// Toggle loader 
+				this.startingInvoice = false;
+				// Return false
+				return false;
+			}
+			/* 
+    * Dispatch event to store if everything checks out 
+   */
+			this.$store.dispatch('addInvoice', {
+				from_date: this.form.from_date.val,
+				to_date: this.form.to_date.val
+			}).then(function (response) {
+				// Toggle loader
+				_this.startingInvoice = false;
+				_this.addInvoiceDialog = false;
+				// Forward view
+				_this.$router.push('/my-invoices/' + response.id + '/view');
+			}).catch(function (errors) {
+				if (errors.response.data.error) {
+					__WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].populateFormErrors(_this.workItemForm, errors.response.data).then(function () {
+						// Toggle loader
+						_this.startingInvoice = false;
+					});
+				} else {
+					// Flag error
+					_this.errorAlert = true;
+					// Set message
+					_this.errorMessage = errors.response.data.message;
+					// Toggle loader
+					_this.startingInvoice = false;
+				}
+			});
+		}
+	}
 
 });
 
@@ -50779,7 +50816,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // User state forward
       if (this.table_state === 'user') this.$router.push('/my-invoices/' + id + '/view');
       // Admin state forward
-      if (this.table_state === 'admin') this.$router.push('/my-invoices/' + id + '/view');
+      if (this.table_state === 'admin') this.$router.push('/crew-invoices/' + id + '/view');
     },
     updateUserFilter: function updateUserFilter(value) {
       return this.$store.commit('updateInvoicesUserFilter', value);
@@ -51309,7 +51346,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "left": ""
     }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t          After starting the invoice you will be able to add your hours and other costs.        \t\t\t\n\t        \t\t")], 1)]), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t          After starting the invoice you will be able to add your hours and other costs.        \t\t\t\n\t        \t\t")], 1)]), _vm._v(" "), _c('v-card-text', [_c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-alert', {
+    staticClass: "mb-3",
+    attrs: {
+      "warning": "",
+      "dismissible": ""
+    },
+    model: {
+      value: (_vm.errorAlert),
+      callback: function($$v) {
+        _vm.errorAlert = $$v
+      },
+      expression: "errorAlert"
+    }
+  }, [_vm._v("\n\t\t\t\t\t\t      " + _vm._s(_vm.errorMessage) + "\n\t\t\t\t\t\t    ")])], 1), _vm._v(" "), _c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -57866,6 +57920,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -57920,6 +57986,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			tips: [{ text: "Use the toolbar below to adjust the invoice" }],
 			// Loading
 			loading: false,
+			// For form error alert
+			errorAlert: false,
+			// For form error alert message	
+			errorMessage: '',
 			// For the delete dialog
 			deleteDialog: false,
 			deleteDispatchAction: '',
@@ -57983,6 +58053,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			__WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].resetForm(this.workItemForm);
 			// Toggle dialog
 			this.workItemDialog = false;
+			// Toggle error alert
+			this.errorAlert = false;
 			// Revert action to default
 			this.workItemDispatchAction = 'addWorkItem';
 		},
@@ -58019,10 +58091,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					// Reset form
 					__WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].resetForm(_this.workItemForm);
 				}).catch(function (errors) {
-					__WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].populateFormErrors(_this.workItemForm, errors.response.data).then(function () {
+					if (!errors.response.data.error) {
+						__WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].populateFormErrors(_this.workItemForm, errors.response.data).then(function () {
+							// Toggle loader
+							_this.workItemSaving = false;
+						});
+					} else {
+						// Flag error
+						_this.errorAlert = true;
+						// Set message
+						_this.errorMessage = errors.response.data.message;
 						// Toggle loader
 						_this.workItemSaving = false;
-					});
+					}
 				});
 			});
 		},
@@ -58044,6 +58125,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		publishInvoice: function publishInvoice() {
 			var _this3 = this;
 
+			// Do not publish if there is zero work items on invoice
+			if (this.currentInvoice.work_items.length === 0) {
+				// Toggle dialog
+				this.publishDialog = false;
+				return false;
+			}
 			// Toggle loader
 			this.publishing = true;
 			// Dispatch event
@@ -58076,7 +58163,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return (_vm.currentInvoice) ? _c('card-layout', {
+  return (_vm.currentInvoice && _vm.invoice_state) ? _c('card-layout', {
     attrs: {
       "tips": _vm.tips
     }
@@ -58092,12 +58179,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "slot": "description"
     },
     slot: "description"
-  }, [_vm._v("\n\t\t\tThis is where you can add your hours and costs to the invoice.\n\t\t")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n\t\t\tThis is where you can add your hours and costs to the invoice.\n\t\t")]), _vm._v(" "), (_vm.invoice_state == 'full') ? _c('div', {
     attrs: {
       "slot": "additional"
     },
     slot: "additional"
-  }, [_c('v-btn', {
+  }, [(!_vm.currentInvoice.is_paid) ? _c('v-btn', {
     directives: [{
       name: "tooltip",
       rawName: "v-tooltip:top",
@@ -58122,7 +58209,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "left": ""
     }
-  }, [_vm._v("add_circle")]), _vm._v("\n      \tWork Item\n      ")], 1)], 1), _vm._v(" "), _c('div', {
+  }, [_vm._v("add_circle")]), _vm._v("\n      \tWork Item\n      ")], 1) : _vm._e()], 1) : _vm._e(), _vm._v(" "), _c('div', {
     attrs: {
       "slot": "content"
     },
@@ -58131,7 +58218,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     return _c('v-container', {
       key: item.id,
       staticClass: "mt-3"
-    }, [(!_vm.currentInvoice.is_paid) ? _c('v-layout', {
+    }, [(_vm.invoice_state === 'full') ? _c('div', [(!_vm.currentInvoice.is_paid || _vm.invoice_state === 'full') ? _c('v-layout', {
       staticClass: "mb-2",
       attrs: {
         "row": ""
@@ -58190,7 +58277,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.openDeleteDialog('deleteWorkItem', item.id)
         }
       }
-    }, [_c('v-icon', [_vm._v("close")])], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
+    }, [_c('v-icon', [_vm._v("close")])], 1)], 1)], 1) : _vm._e()], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
       attrs: {
         "row": ""
       }
@@ -58240,7 +58327,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     return _c('v-container', {
       key: item.id,
       staticClass: "mt-3"
-    }, [(!_vm.currentInvoice.is_paid) ? _c('v-layout', {
+    }, [(_vm.invoice_state === 'full') ? _c('div', [(!_vm.currentInvoice.is_paid) ? _c('v-layout', {
       staticClass: "mb-2",
       attrs: {
         "row": ""
@@ -58299,7 +58386,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.openDeleteDialog('deleteWorkItem', item.id)
         }
       }
-    }, [_c('v-icon', [_vm._v("close")])], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
+    }, [_c('v-icon', [_vm._v("close")])], 1)], 1)], 1) : _vm._e()], 1) : _vm._e(), _vm._v(" "), _c('v-layout', {
       attrs: {
         "row": ""
       }
@@ -58410,9 +58497,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "row": ""
     }
   }, [_c('v-flex', {
+    staticClass: "text-xs-center",
     attrs: {
-      "xs3": "",
-      "offset-xs5": ""
+      "xs4": "",
+      "offset-xs4": ""
     }
   }, [(!_vm.currentInvoice.is_published) ? _c('v-btn', {
     staticClass: "info",
@@ -58429,21 +58517,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "left": ""
     }
   }, [_vm._v("assignment_turned_in")]), _vm._v("\n      \t\t\t\tPublish\n      \t\t\t")], 1) : _c('p', {
-    staticClass: "subheading info--text"
+    staticClass: "subheading info--text mt-2"
   }, [_c('v-icon', {
     staticClass: "info--text",
     attrs: {
       "left": ""
     }
   }, [_vm._v("assignment_turned_in")]), _vm._v(" "), _c('span', [_vm._v("Invoice is published!")])], 1), _vm._v(" "), (_vm.currentInvoice.is_paid) ? _c('p', {
-    staticClass: "subheading green--text"
+    staticClass: "subheading green--text mt-2"
   }, [_c('v-icon', {
     staticClass: "green--text",
     attrs: {
       "left": ""
     }
-  }, [_vm._v("check_circle")]), _vm._v(" "), _c('span', [_vm._v("Invoice is paid!")])], 1) : _vm._e(), _vm._v(" "), (_vm.currentInvoice && !_vm.currentInvoice.is_paid) ? _c('p', {
-    staticClass: "subheading red--text"
+  }, [_vm._v("check_circle")]), _vm._v(" "), _c('span', [_vm._v("Invoice is paid!")])], 1) : _vm._e(), _vm._v(" "), (_vm.currentInvoice && !_vm.currentInvoice.is_paid && _vm.currentInvoice.is_published) ? _c('p', {
+    staticClass: "subheading red--text mt-2"
   }, [_c('v-icon', {
     staticClass: "red--text",
     attrs: {
@@ -58494,7 +58582,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.saveWorkItem($event)
       }
     }
-  }, [_vm._v("Save")])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+  }, [_vm._v("Save")])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-alert', {
+    staticClass: "mt-3 mb-3",
+    attrs: {
+      "warning": "",
+      "dismissible": ""
+    },
+    model: {
+      value: (_vm.errorAlert),
+      callback: function($$v) {
+        _vm.errorAlert = $$v
+      },
+      expression: "errorAlert"
+    }
+  }, [_vm._v("\n\t\t\t\t\t\t      " + _vm._s(_vm.errorMessage) + "\n\t\t\t\t\t\t    ")])], 1), _vm._v(" "), _c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -59252,15 +59357,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -59288,8 +59384,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         password: { val: '', err: false, errMsg: '', dflt: '' },
         password_confirmation: { val: '', err: false, errMsg: '', dflt: '' },
         company_name: { val: '', err: false, errMsg: '', dflt: '' },
-        gst_number: { val: '', err: false, errMsg: '', dflt: '' },
-        hourly_rate_one: { val: '0.00', err: false, errMsg: '', dflt: '0.00' }
+        gst_number: { val: '', err: false, errMsg: '', dflt: '' }
       }
     };
   },
@@ -59641,7 +59736,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('v-flex', {
     attrs: {
-      "xs6": ""
+      "xs5": ""
     }
   }, [_c('v-text-field', {
     attrs: {
@@ -59657,7 +59752,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
     attrs: {
-      "xs6": ""
+      "xs5": ""
     }
   }, [_c('v-text-field', {
     attrs: {
@@ -59677,7 +59772,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('v-flex', {
     attrs: {
-      "xs6": ""
+      "xs5": ""
     }
   }, [_c('v-text-field', {
     attrs: {
@@ -59693,7 +59788,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
     attrs: {
-      "xs6": ""
+      "xs5": ""
     }
   }, [_c('v-select', {
     attrs: {
@@ -59709,6 +59804,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         {
           text: 'Admin',
           value: 'admin'
+        },
+        {
+          text: 'Super',
+          value: 'super'
         }
       ],
       "error": _vm.form.permissions.err
@@ -59726,7 +59825,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('v-flex', {
     attrs: {
-      "xs6": ""
+      "xs5": ""
     }
   }, [_c('v-text-field', {
     attrs: {
@@ -59742,7 +59841,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
     attrs: {
-      "xs6": ""
+      "xs5": ""
     }
   }, [_c('v-text-field', {
     attrs: {
@@ -59756,27 +59855,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "form.gst_number.val"
     }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs6": ""
-    }
-  }, [_c('v-text-field', {
-    attrs: {
-      "label": "Hourly Rate...",
-      "error": _vm.form.hourly_rate_one.err,
-      "prefix": "$"
-    },
-    model: {
-      value: (_vm.form.hourly_rate_one.val),
-      callback: function($$v) {
-        _vm.form.hourly_rate_one.val = $$v
-      },
-      expression: "form.hourly_rate_one.val"
-    }
   })], 1)], 1), _vm._v(" "), _c('v-divider', {
     staticClass: "mt-2 mb-2"
   }), _vm._v(" "), _c('v-layout', {
@@ -59785,7 +59863,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('v-flex', {
     attrs: {
-      "xs6": ""
+      "xs5": ""
     }
   }, [_c('v-text-field', {
     attrs: {
@@ -59802,7 +59880,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
     attrs: {
-      "xs6": ""
+      "xs5": ""
     }
   }, [_c('v-text-field', {
     attrs: {
@@ -59958,16 +60036,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_Field_input_toggle__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__form_Field_input_toggle__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store_helpers__ = __webpack_require__(4);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -60300,12 +60368,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           value: ''
         },
         {
+          text: 'User',
+          value: 'user'
+        },
+        {
           text: 'Admin',
           value: 'admin'
         },
         {
-          text: 'User',
-          value: 'user'
+          text: 'Super',
+          value: 'super'
         }
       ],
       "action": 'updateUserField',
@@ -60332,20 +60404,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": 'Company',
       "field": 'company_name',
       "value": _vm.currentUser.company_name
-    }
-  })], 1), _vm._v(" "), _c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('field-input-toggle', {
-    attrs: {
-      "type": 'text',
-      "action": 'updateUserField',
-      "id": _vm.currentUser.id,
-      "label": 'Hourly Rate',
-      "field": 'hourly_rate_one',
-      "prefix": '$',
-      "value": _vm.currentUser.hourly_rate_one
     }
   })], 1), _vm._v(" "), _c('v-flex', {
     attrs: {
@@ -61164,6 +61222,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+	data: function data() {
+		return {
+			navDrawer: false,
+			menuItems: []
+		};
+	},
+
 
 	computed: {
 		authUser: function authUser() {
@@ -61171,26 +61236,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 		notifications: function notifications() {
 			return this.$store.getters.notifications;
-		},
-		menuItems: function menuItems() {
-			if (this.authUser.permissions === 'admin') {
-				var menuItems = [{ icon: 'dashboard', title: 'Dashboard', link: '/' }, { icon: 'receipt', title: 'My Invoices', link: '/my-invoices' }, { icon: 'receipt', title: 'Crew Invoices', link: '/crew-invoices' }, { icon: 'assignment', title: 'Projects', link: '/projects' }, { icon: 'group', title: 'Users', link: '/users' }];
-			}
-
-			if (this.authUser.permissions === 'user') {
-				var menuItems = [{ icon: 'dashboard', title: 'Dashboard', link: '/' }, { icon: 'receipt', title: 'My Invoices', link: '/my-invoices' }];
-			}
-
-			return menuItems;
 		}
 	},
-
-	data: function data() {
-		return {
-			navDrawer: false
-		};
-	},
-
 
 	methods: {
 		logout: function logout() {
@@ -61207,6 +61254,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				console.log(error);
 			});
 		}
+	},
+
+	created: function created() {
+		if (this.authUser) {
+			if (this.authUser.permissions === "super") {
+				this.menuItems = [{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' }, { icon: 'receipt', title: 'My Invoices', link: '/my-invoices' }, { icon: 'receipt', title: 'Crew Invoices', link: '/crew-invoices' }, { icon: 'assignment', title: 'Projects', link: '/projects' }, { icon: 'group', title: 'Users', link: '/users' }];
+			}
+
+			if (this.authUser.permissions === 'admin') {
+				this.menuItems = [{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' }, { icon: 'receipt', title: 'My Invoices', link: '/my-invoices' }, { icon: 'assignment', title: 'Projects', link: '/projects' }];
+			}
+
+			if (this.authUser.permissions === 'user') {
+				this.menuItems = [{ icon: 'dashboard', title: 'Dashboard', link: '/dashboard' }, { icon: 'receipt', title: 'My Invoices', link: '/my-invoices' }];
+			}
+		}
 	}
 });
 
@@ -61215,7 +61278,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('v-layout', [_c('v-toolbar', {
+  return (_vm.authUser) ? _c('v-layout', [_c('v-toolbar', {
     staticClass: "default",
     attrs: {
       "dark": ""
@@ -61233,7 +61296,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "cursor": "pointer"
     },
     attrs: {
-      "to": "/",
+      "to": "/dashboard",
       "tag": "span"
     }
   }, [_vm._v("\n\t\t\t\t\tArrow Assist\n\t\t\t\t")])], 1), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-toolbar-items', {
@@ -61323,7 +61386,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "row": ""
     },
     slot: "activator"
-  }, [_c('v-list-tile-action', [_c('v-icon', [_vm._v("arrow_drop_down_circle")])], 1), _vm._v(" "), _c('v-list-tile-content', [_vm._v("User")])], 1), _vm._v(" "), _c('v-list', [_c('v-list-tile')], 1)], 1)], 1)], 2)], 1)], 1)
+  }, [_c('v-list-tile-action', [_c('v-icon', [_vm._v("arrow_drop_down_circle")])], 1), _vm._v(" "), _c('v-list-tile-content', [_vm._v("User")])], 1), _vm._v(" "), _c('v-list', [_c('v-list-tile')], 1)], 1)], 1)], 2)], 1)], 1) : _vm._e()
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {

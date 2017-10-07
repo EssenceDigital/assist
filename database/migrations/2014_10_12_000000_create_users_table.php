@@ -21,8 +21,6 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('company_name');
-            $table->decimal('hourly_rate_one', 13, 2);
-            $table->decimal('hourly_rate_two', 13, 2)->nullable();
             $table->string('gst_number', 25);
             $table->boolean('change_password')->default(true);
             $table->softDeletes();
