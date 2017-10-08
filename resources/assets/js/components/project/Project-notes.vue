@@ -15,7 +15,7 @@
 			class="grey lighten-5"
 		>
     	<!-- Card toolbar -->
-      <v-toolbar card class="white" prominent>
+      <v-toolbar card class="grey lighten-5" prominent>
       	<!-- Card heading -->
         <v-toolbar-title class="subheading grey--text">				         
         	{{ note.user.first + ' ' + note.user.last }} says:          	
@@ -90,7 +90,7 @@
 			<!-- Container for viewing field -->
 			<v-container>
 	    	<!-- Card toolbar -->
-	      <v-toolbar card class="white" prominent>
+	      <v-toolbar card class="grey lighten-5" prominent>
 	      	<!-- Card heading -->
 	        <v-toolbar-title class="subheading grey--text">				         
 	        	Add a Note	          	

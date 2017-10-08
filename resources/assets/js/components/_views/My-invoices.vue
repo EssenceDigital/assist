@@ -142,7 +142,7 @@
   			// Tips for card layout
   			tips: [
 					{ text: "You can start a new invoice using the add button located in the top right corner of this card." },
-  			 	{ text: "Use the view button at the end of each row to view that invoice and add your hours and costs." }
+  			 	{ text: "Use the view button at the end of each row to add hours and costs, as well as publish the invoice." }
   			],
   			// For invoice dialog and loading
   			addInvoiceDialog: false,
@@ -162,10 +162,10 @@
   		startInvoice () {
 				// Toggle loader
 				this.startingInvoice = true;
+				
 				/*
 				 * Ensure from to date is before to date
 				*/ 
-				// Populate date objects
 				var fromDate = new Date(this.form.from_date.val),
 						toDate = new Date(this.form.to_date.val);
 				// Compate dates and return false if to date is before from date
@@ -178,6 +178,7 @@
 					// Return false
 					return false;
 				}
+
 				/* 
 				 * Dispatch event to store if everything checks out 
 				*/

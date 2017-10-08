@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
 
 use App\Invoice;
 use App\WorkItem;
@@ -33,6 +34,75 @@ class InvoicesController extends Controller
         'equipment_desc' => 'max:45|nullable',
         'equipment_cost' => 'numeric|between:0,1000000000000.99|nullable'        
     ];
+
+    protected function validateAndPopulate(Request $request, Model $model, Array $validationFields) {
+        /* First, make sure to date is after from date
+        */
+        // Grab dates
+        $to = strtotime($request->to_date);
+        $from = strtotime($request->from_date);
+        // Compare dates and return error is to is before from
+        if($to < $from){
+            // Return error response
+            return response()->json([
+                'result' => 'false',
+                'error' => 'true',
+                'message' => "'From date' must be before 'To Date'."
+            ], 422);     
+        }
+
+        // Now delegate to parent method to finish validation
+        return parent::validateAndPopulate($request, $model, $validationFields); 
+    }
+
+    protected function validateAndPopulateWorkItem(Request $request, Model $model, Array $validationFields){
+        /* Get invoice first so we can make sure the invoice is not paid.
+         * Work items may not be changed on an invoice that has been paid--the paid total is final.
+        */
+        $invoice = Invoice::find($request->invoice_id);
+        // Check if invoice is paid and return false if so
+        if($invoice->is_paid) {
+            // Return failure response for ajax call
+            return response()->json([
+                'result' => false,
+                'error' => 'true',                
+                'message' => "Cannot edit work on an invoice that's already been paid."
+            ], 422);
+        }
+
+        /* Next, make sure to date is after from date.
+         * Get unix timestamps for work item date range
+        */
+        $itemFrom = strtotime($request->from_date);        
+        $itemTo = strtotime($request->to_date);
+        // Compare unix timestamps and return error is to is before from
+        if($itemTo < $itemFrom){
+            // Return error response
+            return response()->json([
+                'result' => 'false',
+                'error' => 'true',
+                'message' => "'From date' must be before 'To Date'."
+            ], 422);     
+        } 
+
+        /* Finally, make sure the work item date range is within the invoice date range.
+         * Get unix timestamps for invoice date range
+        */       
+        $invoiceFrom = strtotime($invoice->from_date);        
+        $invoiceTo = strtotime($invoice->to_date);
+        // Compate unix timestamps and return error if the work items date range is outside the invoice's
+        if($itemFrom < $invoiceFrom || $itemTo > $invoiceTo){
+            // Return error response
+            return response()->json([
+                'result' => 'false',
+                'error' => 'true',
+                'message' => "The work item must date range be within the invoice date range."
+            ], 422); 
+        } 
+        
+        // Now delegate to parent method to finish validation
+        return parent::validateAndPopulate($request, $model, $validationFields);       
+    }
 
     /**
      * Finds all invoices belonging to the authenticated user
@@ -149,24 +219,6 @@ class InvoicesController extends Controller
      */
     public function store(Request $request)
     {
-        /* First, make sure to date is after from date
-        */
-
-        // Grab dates
-        $to = strtotime($request->to_date);
-        $from = strtotime($request->from_date);
-        // Compare dates and return error is to is before from
-        if($to < $from){
-            // Return error response
-            return response()->json([
-                'result' => 'false',
-                'error' => 'true',
-                'message' => "'From date' must be before 'To Date'."
-            ], 404);     
-        }
-
-        /* Proceed on creating invoice if everything checks out
-        */
 
         // Validate and populate the request
         $invoice = $this->validateAndPopulate($request, new Invoice, $this->validationFields);
@@ -270,39 +322,8 @@ class InvoicesController extends Controller
      */
     public function storeWorkItem(Request $request)
     {
-        /* Get invoice first so we can make sure the invoice is not yet paid.
-         * Work items may not be added to an invoice that has been paid--the paid total is final.
-        */
-        $invoice = Invoice::find($request->invoice_id);
-        // Check if invoice is paid and return false if so
-        if($invoice->is_paid) {
-            // Return failure response for ajax call
-            return response()->json([
-                'result' => false,
-                'error' => 'true',
-                'message' => "Cannot add more work to an invoice that's already been paid."
-            ], 404);
-        }
-
-        /* Next, make sure to date is after from date
-        */
-        // Grab dates
-        $to = strtotime($request->to_date);
-        $from = strtotime($request->from_date);
-        // Compare dates and return error is to is before from
-        if($to < $from){
-            // Return error response
-            return response()->json([
-                'result' => 'false',
-                'error' => 'true',
-                'message' => "'From date' must be before 'To Date'."
-            ], 404);     
-        }        
-
-        /* If invoice is not paid and dates are chronological then proceed to adding the work item
-        */
         // Validate work item
-        $item = $this->validateAndPopulate($request, new WorkItem, $this->workItemValidationFields);
+        $item = $this->validateAndPopulateWorkItem($request, new WorkItem, $this->workItemValidationFields);
         // Add user id to the timesheet
         $item->user_id = Auth::id();
         // Attempt to store model
@@ -330,40 +351,9 @@ class InvoicesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function updateWorkItem(Request $request)
-    {
-        /* Get invoice first so we can make sure the invoice is not yet paid.
-         * Work items may not be changed on an invoice that has been paid--the paid total is final.
-        */
-        $invoice = Invoice::find($request->invoice_id);
-        // Check if invoice is paid and return false if so
-        if($invoice->is_paid) {
-            // Return failure response for ajax call
-            return response()->json([
-                'result' => false,
-                'error' => 'true',                
-                'message' => "Cannot edit work on an invoice that's already been paid."
-            ], 404);
-        }
-
-        /* Next, make sure to date is after from date
-        */
-        // Grab dates
-        $to = strtotime($request->to_date);
-        $from = strtotime($request->from_date);
-        // Compare dates and return error is to is before from
-        if($to < $from){
-            // Return error response
-            return response()->json([
-                'result' => 'false',
-                'error' => 'true',
-                'message' => "'From date' must be before 'To Date'."
-            ], 404);     
-        } 
-
-        /* If invoice is not paid and dates are chronological then proceed to updating the work item
-        */        
+    {       
         // Validate and populate the work item
-        $item = $this->validateAndPopulate($request, WorkItem::findOrFail($request->id), $this->workItemValidationFields);
+        $item = $this->validateAndPopulateWorkItem($request, WorkItem::findOrFail($request->id), $this->workItemValidationFields);
         // Attempt to store model
         $result = $item->save();
         // Verify success on store
@@ -390,10 +380,13 @@ class InvoicesController extends Controller
      */
     public function deleteWorkItem($id)
     {
-        /* Get invoice first so we can make sure the invoice is not yet paid.
+        // Find work item
+        $item = WorkItem::findOrFail($id);
+
+        /* Get the related invoice so we can make sure that it's not yet paid.
          * Work items may not be removed from an invoice that has been paid--the paid total is final.
         */
-        $invoice = Invoice::find($request->invoice_id);
+        $invoice = Invoice::find($item->invoice_id);
         // Check if invoice is paid and return false if so
         if($invoice->is_paid) {
             // Return failure response for ajax call
@@ -401,13 +394,11 @@ class InvoicesController extends Controller
                 'result' => false,
                 'error' => 'true',                
                 'message' => "Cannot remove work from an invoice that's already been paid."
-            ], 404);
+            ], 422);
         }
 
-        /* If invoice is not paid then proceed to removing
+        /* If invoice is not paid then proceed to removing the work item
         */         
-    	// Find work item
-    	$item = WorkItem::findOrFail($id);
         // Attempt to remove 
         $result = $item->delete();
         // Verify success on store
@@ -424,5 +415,58 @@ class InvoicesController extends Controller
         ], 200);        	
 
     }     
+
+    /**
+     * Remove an invoice from storage (Only if it has no work items)
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function delete($id)
+    {
+        // Get requested invoice
+        $invoice = Invoice::with(['workItems'])->find($id);
+
+        /* Invoice can only be delete under certain conditions. 
+         * Now we check for these. 
+        */
+        // Check if invoice is paid and return false if so (Fail safe)
+        if($invoice->is_paid) {
+            // Return failure response for ajax call
+            return response()->json([
+                'result' => false,
+                'error' => 'true',                
+                'message' => "Cannot remove a paid invoice."
+            ], 422);
+        }
+
+        // Check if invoice has work items and return false if so
+        if(count($invoice->workItems) > 0){
+            // Return failure response for ajax call
+            return response()->json([
+                'result' => false,
+                'error' => 'true',                
+                'message' => "Cannot remove an invoice with work items."
+            ], 422);            
+        }
+
+        /* If invoice is blank and has not been paid then it can be deleted
+        */         
+        // Attempt to remove 
+        $result = $invoice->delete();
+        // Verify success on removal
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }   
+        // Return response
+        return response()->json([
+            'result' => 'success',
+            'payload' => $id
+        ], 200);            
+
+    }  
 
 }

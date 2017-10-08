@@ -1,7 +1,6 @@
 <template>
 	<card-layout
 		v-if="currentInvoice && invoice_state"
-		:tips="tips"
 	>
 		<div slot="title">
     	Invoice 
@@ -11,10 +10,10 @@
       	</span>
     	</small>			
 		</div>
-		<div slot="description">
+		<div slot="description" v-if="invoice_state == 'full'">
 			This is where you can add your hours and costs to the invoice.
 		</div>
-		<div v-if="invoice_state == 'full'" slot="additional">
+		<div slot="additional" v-if="invoice_state == 'full'">
       <v-btn
       	v-if="!currentInvoice.is_paid" 
       	flat 
@@ -240,7 +239,7 @@
       	<v-layout row class="mt-5">
       		<v-flex xs4 offset-xs4 class="text-xs-center"> 
       			<v-btn
-      				v-if="!currentInvoice.is_published" 
+      				v-if="!currentInvoice.is_published && currentInvoice.work_items.length > 0" 
       				@click="publishDialog = true"
       				block 
       				class="info"
@@ -248,9 +247,18 @@
       				<v-icon left>assignment_turned_in</v-icon>
       				Publish
       			</v-btn>
-      			<p v-else class="subheading info--text mt-2">
+      			<p v-if="currentInvoice.is_published"class="subheading info--text mt-2">
       				<v-icon left class="info--text">assignment_turned_in</v-icon></v-icon> <span>Invoice is published!</span>
       			</p>
+      			<v-btn
+      				v-if="currentInvoice.work_items.length == 0" 
+      				@click="openDeleteDialog('deleteInvoice', currentInvoice.id)"
+      				block 
+      				class="error mt-3"
+      			>
+      				<v-icon left>close</v-icon>
+      				Remove Invoice
+      			</v-btn>
       			<p v-if="currentInvoice.is_paid" class="subheading green--text mt-2">
       				<v-icon left class="green--text">check_circle</v-icon></v-icon> <span>Invoice is paid!</span>
       			</p>
@@ -555,14 +563,14 @@
 	          </v-card-text>
 	          <v-card-actions>
 	            <v-spacer></v-spacer>
-	            <!-- Cancel delete button-->
+	            <!-- Cancel button-->
 	            <v-btn outline 
 	              class="red--text darken-1" 
 	              flat="flat" 
 	              @click.native.stop="publishDialog = false">
 	                Maybe not
 	            </v-btn>
-	            <!-- Confirm delete button -->
+	            <!-- Confirm button -->
 	            <v-btn outline 
 	            class="green--text darken-1" 
 	            flat="flat" 
@@ -675,10 +683,6 @@
 
 		data () {
 			return {
-				// For card layout tips
-				tips: [
-					{ text: "Use the toolbar below to adjust the invoice"  }
-				],
 				// Loading
 				loading: false,	
 				// For form error alert
@@ -777,12 +781,48 @@
 			saveWorkItem (work_item_id) {
 				// Toggle loader
 				this.workItemSaving = true;
-				// Use helper to create post object then dispatch event to add hours
+
+				/* Ensure work item from date is before to date
+				*/ 
+				var itemFrom = new Date(this.workItemForm.from_date.val),
+						itemTo = new Date(this.workItemForm.to_date.val);
+				// Compare dates and return false if to date is before from date
+				if(itemTo.getTime() < itemFrom.getTime()){
+					// Set up error and message
+					this.errorAlert = true;
+					this.errorMessage = "'From date' must be before 'To Date'.";
+					// Toggle loader 
+					this.workItemSaving = false;
+					// Return false
+					return false;
+				}
+
+				/* Ensure work item date range is within the invoice date range
+				*/ 
+				var invoiceFrom = new Date(this.currentInvoice.from_date),
+						invoiceTo = new Date(this.currentInvoice.to_date);
+				// Compare dates and return false if the work item date range is outside the invoice date range
+				if(itemFrom.getTime() < invoiceFrom.getTime() || itemTo.getTime() > invoiceTo.getTime()){
+					// Set up error and message
+					this.errorAlert = true;
+					this.errorMessage = "The work item must date range be within the invoice date range.";
+					// Toggle loader 
+					this.workItemSaving = false;
+					// Return false
+					return false;					
+				}
+
+				/* If everything checks out then use a helper to populate the post data and then dispatch the 
+				 * save event
+				*/
 				Helpers.populatePostData(this.workItemForm)
 					.then((data) => {
 						// Dispatch event
 						this.$store.dispatch(this.workItemDispatchAction, data)
+							// Successful request
 							.then((response) => {
+								// Toggle error alert
+								this.errorAlert = false;								
 								// Toggle dialog
 								this.workItemDialog = false;
 								// Toggle loader
@@ -790,15 +830,17 @@
 								// Reset form
 								Helpers.resetForm(this.workItemForm);
 							})
+							// Unsuccessful request
 							.catch((errors) => {
 								if(!errors.response.data.error){
+									// Populate formm with errors using helper
 									Helpers.populateFormErrors(this.workItemForm, errors.response.data).
 										then(() => {
 											// Toggle loader
 											this.workItemSaving = false;							
 										});
 								} else {
-									// Flag error
+									// Flag general non form error
 									this.errorAlert = true;
 									// Set message
 									this.errorMessage = errors.response.data.message;
@@ -815,6 +857,18 @@
 				// Dispatch event
 				this.$store.dispatch(this.deleteDispatchAction, this.assetId)
 					.then(() => {
+						// If an entire invoice was deleted then redirect back to my-invoices
+						if(this.deleteDispatchAction === 'deleteInvoice'){
+							this.$router.push('/my-invoices');
+						}
+						// Toggle loader
+						this.deletingAsset = false;						
+						// Toggle dialog
+						this.deleteDialog = false;
+						// Reset asset id
+						this.assetId = '';
+					})
+					.catch((errors) => {
 						// Toggle loader
 						this.deletingAsset = false;						
 						// Toggle dialog

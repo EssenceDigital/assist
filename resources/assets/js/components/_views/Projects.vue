@@ -112,7 +112,9 @@
   			// For card layout tips
   			tips: [
   				{ text: 'Add a new project with the plus icon in the upper right corner of this card.' },
-  				{ text: 'You can use all of the filters at once, or simply one at a time. In addition, clicking on a heading will sort the projects accordingly.' },
+          { text: 'The view filter in the upper right hand corner will switch between work and manage states.' },
+  				{ text: 'You can search your projects using the filter below. The filters can be used one at a time or all at once.' } ,
+          { text: "Clicking on a heading will sort the invoices accordingly." },
   				{ text: 'Click on the view projects arrow in the action column to see the entire project.' }
   			],
   			// For add project dialog

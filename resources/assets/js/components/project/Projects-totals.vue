@@ -39,8 +39,31 @@
       </v-flex>
       <v-spacer></v-spacer>
       <v-flex xs2 class="text-xs-right">
-        <span v-if="totalBottomLine > 0" class="title green--text">+{{ totalBottomLine | money }}</span>
-        <span v-else class="title red--text">-{{ (totalBottomLine * -1).toFixed(2) | money }}</span>
+
+        <span v-if="totalBottomLine > 0" class="title green--text">
+          <p>
+            +{{ totalBottomLine.toFixed(2) | money }}
+          </p>
+          <!-- Sub bottom line - The bottom line minus outstanding invoices -->
+          <p v-if="subBottomLine > 0" class="mt-2 mb-1">
+            (+{{ subBottomLine.toFixed(2) | money }})
+          </p>
+          <p v-if="subBottomLine < 0" class="red--text mt-2 mb-1">
+            (-{{ (subBottomLine * -1).toFixed(2) | money }})
+          </p>
+          <p class="caption black--text">
+            <small>(Including outstanding invoices)</small>
+          </p>          
+        </span>
+
+        <span v-else class="title red--text">
+          <p>-{{ (totalBottomLine * -1).toFixed(2) | money }}</p>
+          <!-- Sub bottom line - The negative bottom line plus the outstanding invoices -->
+          <p class="mt-2 mb-1">(-{{ ((totalBottomLine * -1) + invoicesOutstandingTotal).toFixed(2) | money }})</p>
+          <p class="caption black--text">
+            <small>(Including outstanding invoices)</small>
+          </p>
+        </span>
       </v-flex>
     </v-layout>                  
   </v-container><!--  -->  
@@ -87,7 +110,13 @@
         var total = (parseFloat(this.invoicesPaidTotal) * 100) - parseFloat(this.totalCrewCost * 100);
 
         return total / 100;
-      }          
+      },
+
+      subBottomLine () {
+        var total = (parseFloat(this.totalBottomLine) * 100) - (parseFloat(this.invoicesOutstandingTotal) * 100);
+
+        return total / 100;
+      }         
     }
   }
 </script>

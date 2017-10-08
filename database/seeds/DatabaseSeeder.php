@@ -165,11 +165,11 @@ class DatabaseSeeder extends Seeder
                 $item->from_date = $InvYear . '-' . sprintf("%02d", $InvMonth) . '-' . $itemFromDay;
                 $item->to_date = $InvYear . '-' . sprintf("%02d", $InvMonth) . '-' . ($itemFromDay + rand(2, 5));
                 $item->desc = $faker->text(rand(10, 25));
-                $item->hours = rand(15, 65);
+                $item->hours = rand(15, 45);
                 $item->hourly_rate = 27.5;
-                $item->per_diem = rand(75, 200);
+                $item->per_diem = rand(75, 150);
                 $item->per_diem_desc = $faker->text(rand(10, 12));
-                $item->travel_mileage = rand(225, 1400);
+                $item->travel_mileage = rand(225, 850);
                 $item->mileage_rate = 0.65;
                 $item->lodging_desc = $faker->text(rand(10, 15));
                 $item->lodging_cost = rand(400, 1000);

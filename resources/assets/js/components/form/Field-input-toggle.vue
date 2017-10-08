@@ -4,7 +4,7 @@
 		<!-- Container for viewing field -->
 		<v-container v-if="!editState">
     	<!-- Card toolbar -->
-      <v-toolbar card class="white" prominent >
+      <v-toolbar card class="grey lighten-5" prominent >
       	<!-- Card heading -->
         <v-toolbar-title 
         	v-if="!alt_style"

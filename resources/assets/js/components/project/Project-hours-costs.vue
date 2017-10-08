@@ -239,7 +239,7 @@
       		v-else
       		class="text-xs-right"
       	>
-					<v-chip class="info white--text">
+					<v-chip class="warning white--text">
 			      NOT INVOICED
 			    </v-chip>	      		
       	</v-flex>				        		

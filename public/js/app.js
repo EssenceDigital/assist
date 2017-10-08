@@ -807,11 +807,16 @@ module.exports = {
 		});
 	},
 	resetForm: function resetForm(form) {
+		var _this = this;
+
 		return new Promise(function (resolve, reject) {
 			// Populate form
 			for (var key in form) {
 				form[key].val = form[key].dflt;
 			}
+			// Clear errors
+			_this.clearFormErrors(form);
+			// Resolve promise
 			resolve(form);
 		});
 	},
@@ -45457,6 +45462,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		publishInvoice: function publishInvoice(state, payload) {
 			return state.currentInvoice.is_published = 1;
 		},
+		deleteInvoice: function deleteInvoice(state, payload) {
+			return state.currentInvoice = false;
+		},
 		markInvoicesPaid: function markInvoicesPaid(state, payload) {
 			payload.forEach(function (id) {
 				var invoice = state.crewInvoices.find(function (elem) {
@@ -45665,6 +45673,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		},
 		markInvoicesPaid: function markInvoicesPaid(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, 'invoices/mark-paid', 'markInvoicesPaid');
+		},
+
+
+		// Use api to delete an invoice
+		deleteInvoice: function deleteInvoice(context, payload) {
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/invoices/delete/' + payload, 'deleteInvoice');
 		},
 
 
@@ -46876,6 +46890,8 @@ var index_esm = {
 				context.commit(mutation, response);
 				// Resolve promise
 				resolve();
+			}).catch(function (error) {
+				return reject(error);
 			});
 		});
 	}
@@ -49724,7 +49740,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n.card--flex-toolbar[data-v-ebbdee8a] {\n  margin-top: -64px;\n}\n", ""]);
+exports.push([module.i, "\n.card--flex-toolbar[data-v-ebbdee8a] {\n  margin-top: -64px;\n}\n.nmt-2[data-v-ebbdee8a]{\n\tmargin-top: -20px;\n}\n", ""]);
 
 // exports
 
@@ -49849,11 +49865,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: ['tips'],
+
+	data: function data() {
+		return {
+			hideTips: false
+		};
+	},
+
 
 	components: {
 		'notify-wrapper': __WEBPACK_IMPORTED_MODULE_0__Notify_wrapper___default.a
@@ -50044,7 +50079,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "xs3": ""
     }
   }, [_vm._t("additional")], 2)], 1)], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
-    staticClass: "mt-4",
+    staticClass: "mt-2 pb-0",
     attrs: {
       "fluid": ""
     }
@@ -50054,18 +50089,48 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('v-flex', {
     attrs: {
-      "xs12": ""
+      "xs11": ""
     }
   }, _vm._l((_vm.tips), function(tip) {
-    return _c('p', {
+    return (!_vm.hideTips) ? _c('p', {
       staticClass: "subheading info--text pl-4"
     }, [_c('v-icon', {
       staticClass: "info--text",
       attrs: {
         "left": ""
       }
-    }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t         \t" + _vm._s(tip.text) + "     \t\t\t\n\t\t\t\t\t        \t\t")], 1)
-  }))], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
+    }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t\t\t\t\t         \t" + _vm._s(tip.text) + "     \t\t\t\n\t\t\t\t\t        \t\t")], 1) : _vm._e()
+  })), _vm._v(" "), _c('v-flex', {
+    staticClass: "nmt-2",
+    attrs: {
+      "xs1": ""
+    }
+  }, [_c('v-btn', {
+    directives: [{
+      name: "tooltip",
+      rawName: "v-tooltip:top",
+      value: ({
+        html: 'Toggle Tips'
+      }),
+      expression: "{ html: 'Toggle Tips' }",
+      arg: "top"
+    }],
+    attrs: {
+      "flat": "",
+      "icon": ""
+    },
+    on: {
+      "click": function($event) {
+        _vm.hideTips = !_vm.hideTips
+      }
+    }
+  }, [(_vm.hideTips) ? _c('v-icon', {
+    staticClass: "display-2 info--text"
+  }, [_vm._v("expand_less")]) : _c('v-icon', {
+    staticClass: "display-2 info--text"
+  }, [_vm._v("expand_more")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-card-text', {
+    staticClass: "pt-0"
+  }, [_c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -50394,7 +50459,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// For form error message
 			errorMessage: '',
 			// Tips for card layout
-			tips: [{ text: "You can start a new invoice using the add button located in the top right corner of this card." }, { text: "Use the view button at the end of each row to view that invoice and add your hours and costs." }],
+			tips: [{ text: "You can start a new invoice using the add button located in the top right corner of this card." }, { text: "Use the view button at the end of each row to add hours and costs, as well as publish the invoice." }],
 			// For invoice dialog and loading
 			addInvoiceDialog: false,
 			startingInvoice: false,
@@ -50416,10 +50481,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			// Toggle loader
 			this.startingInvoice = true;
+
 			/*
     * Ensure from to date is before to date
    */
-			// Populate date objects
 			var fromDate = new Date(this.form.from_date.val),
 			    toDate = new Date(this.form.to_date.val);
 			// Compate dates and return false if to date is before from date
@@ -50432,6 +50497,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				// Return false
 				return false;
 			}
+
 			/* 
     * Dispatch event to store if everything checks out 
    */
@@ -51956,7 +52022,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       // For card layout tips
-      tips: [{ text: 'Add a new project with the plus icon in the upper right corner of this card.' }, { text: 'You can use all of the filters at once, or simply one at a time. In addition, clicking on a heading will sort the projects accordingly.' }, { text: 'Click on the view projects arrow in the action column to see the entire project.' }],
+      tips: [{ text: 'Add a new project with the plus icon in the upper right corner of this card.' }, { text: 'The view filter in the upper right hand corner will switch between work and manage states.' }, { text: 'You can search your projects using the filter below. The filters can be used one at a time or all at once.' }, { text: "Clicking on a heading will sort the invoices accordingly." }, { text: 'Click on the view projects arrow in the action column to see the entire project.' }],
       // For add project dialog
       addProjectDialog: false,
 
@@ -52546,6 +52612,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -52582,6 +52671,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     totalBottomLine: function totalBottomLine() {
       var total = parseFloat(this.invoicesPaidTotal) * 100 - parseFloat(this.totalCrewCost * 100);
+
+      return total / 100;
+    },
+    subBottomLine: function subBottomLine() {
+      var total = parseFloat(this.totalBottomLine) * 100 - parseFloat(this.invoicesOutstandingTotal) * 100;
 
       return total / 100;
     }
@@ -52674,9 +52768,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [(_vm.totalBottomLine > 0) ? _c('span', {
     staticClass: "title green--text"
-  }, [_vm._v("+" + _vm._s(_vm._f("money")(_vm.totalBottomLine)))]) : _c('span', {
+  }, [_c('p', [_vm._v("\n          +" + _vm._s(_vm._f("money")(_vm.totalBottomLine.toFixed(2))) + "\n        ")]), _vm._v(" "), (_vm.subBottomLine > 0) ? _c('p', {
+    staticClass: "mt-2 mb-1"
+  }, [_vm._v("\n          (+" + _vm._s(_vm._f("money")(_vm.subBottomLine.toFixed(2))) + ")\n        ")]) : _vm._e(), _vm._v(" "), (_vm.subBottomLine < 0) ? _c('p', {
+    staticClass: "red--text mt-2 mb-1"
+  }, [_vm._v("\n          (-" + _vm._s(_vm._f("money")((_vm.subBottomLine * -1).toFixed(2))) + ")\n        ")]) : _vm._e(), _vm._v(" "), _c('p', {
+    staticClass: "caption black--text"
+  }, [_c('small', [_vm._v("(Including outstanding invoices)")])])]) : _c('span', {
     staticClass: "title red--text"
-  }, [_vm._v("-" + _vm._s(_vm._f("money")((_vm.totalBottomLine * -1).toFixed(2))))])])], 1)], 1)
+  }, [_c('p', [_vm._v("-" + _vm._s(_vm._f("money")((_vm.totalBottomLine * -1).toFixed(2))))]), _vm._v(" "), _c('p', {
+    staticClass: "mt-2 mb-1"
+  }, [_vm._v("(-" + _vm._s(_vm._f("money")(((_vm.totalBottomLine * -1) + _vm.invoicesOutstandingTotal).toFixed(2))) + ")")]), _vm._v(" "), _c('p', {
+    staticClass: "caption black--text"
+  }, [_c('small', [_vm._v("(Including outstanding invoices)")])])])])], 1)], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -54150,7 +54254,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "flat": _vm.alt_style
     }
   }, [(!_vm.editState) ? _c('v-container', [_c('v-toolbar', {
-    staticClass: "white",
+    staticClass: "grey lighten-5",
     attrs: {
       "card": "",
       "prominent": ""
@@ -55266,7 +55370,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "flat": ""
       }
     }, [_c('v-toolbar', {
-      staticClass: "white",
+      staticClass: "grey lighten-5",
       attrs: {
         "card": "",
         "prominent": ""
@@ -55364,7 +55468,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("\n\t          \tDo it\n\t          ")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-card', {
     staticClass: "grey lighten-5 mt-3"
   }, [_c('v-container', [_c('v-toolbar', {
-    staticClass: "white",
+    staticClass: "grey lighten-5",
     attrs: {
       "card": "",
       "prominent": ""
@@ -57031,7 +57135,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "xs2": ""
     }
   }, [_c('v-chip', {
-    staticClass: "info white--text"
+    staticClass: "warning white--text"
   }, [_vm._v("\n\t\t\t      NOT INVOICED\n\t\t\t    ")])], 1)], 1)], 1), _vm._v(" "), _c('v-container', {
     staticClass: "mt-0"
   }, [_c('v-divider', {
@@ -57932,6 +58036,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -57982,8 +58094,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	data: function data() {
 		return {
-			// For card layout tips
-			tips: [{ text: "Use the toolbar below to adjust the invoice" }],
 			// Loading
 			loading: false,
 			// For form error alert
@@ -58080,24 +58190,64 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 			// Toggle loader
 			this.workItemSaving = true;
-			// Use helper to create post object then dispatch event to add hours
+
+			/* Ensure work item from date is before to date
+   */
+			var itemFrom = new Date(this.workItemForm.from_date.val),
+			    itemTo = new Date(this.workItemForm.to_date.val);
+			// Compare dates and return false if to date is before from date
+			if (itemTo.getTime() < itemFrom.getTime()) {
+				// Set up error and message
+				this.errorAlert = true;
+				this.errorMessage = "'From date' must be before 'To Date'.";
+				// Toggle loader 
+				this.workItemSaving = false;
+				// Return false
+				return false;
+			}
+
+			/* Ensure work item date range is within the invoice date range
+   */
+			var invoiceFrom = new Date(this.currentInvoice.from_date),
+			    invoiceTo = new Date(this.currentInvoice.to_date);
+			// Compare dates and return false if the work item date range is outside the invoice date range
+			if (itemFrom.getTime() < invoiceFrom.getTime() || itemTo.getTime() > invoiceTo.getTime()) {
+				// Set up error and message
+				this.errorAlert = true;
+				this.errorMessage = "The work item must date range be within the invoice date range.";
+				// Toggle loader 
+				this.workItemSaving = false;
+				// Return false
+				return false;
+			}
+
+			/* If everything checks out then use a helper to populate the post data and then dispatch the 
+    * save event
+   */
 			__WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].populatePostData(this.workItemForm).then(function (data) {
 				// Dispatch event
-				_this.$store.dispatch(_this.workItemDispatchAction, data).then(function (response) {
+				_this.$store.dispatch(_this.workItemDispatchAction, data)
+				// Successful request
+				.then(function (response) {
+					// Toggle error alert
+					_this.errorAlert = false;
 					// Toggle dialog
 					_this.workItemDialog = false;
 					// Toggle loader
 					_this.workItemSaving = false;
 					// Reset form
 					__WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].resetForm(_this.workItemForm);
-				}).catch(function (errors) {
+				})
+				// Unsuccessful request
+				.catch(function (errors) {
 					if (!errors.response.data.error) {
+						// Populate formm with errors using helper
 						__WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].populateFormErrors(_this.workItemForm, errors.response.data).then(function () {
 							// Toggle loader
 							_this.workItemSaving = false;
 						});
 					} else {
-						// Flag error
+						// Flag general non form error
 						_this.errorAlert = true;
 						// Set message
 						_this.errorMessage = errors.response.data.message;
@@ -58114,6 +58264,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			this.deletingAsset = true;
 			// Dispatch event
 			this.$store.dispatch(this.deleteDispatchAction, this.assetId).then(function () {
+				// If an entire invoice was deleted then redirect back to my-invoices
+				if (_this2.deleteDispatchAction === 'deleteInvoice') {
+					_this2.$router.push('/my-invoices');
+				}
+				// Toggle loader
+				_this2.deletingAsset = false;
+				// Toggle dialog
+				_this2.deleteDialog = false;
+				// Reset asset id
+				_this2.assetId = '';
+			}).catch(function (errors) {
 				// Toggle loader
 				_this2.deletingAsset = false;
 				// Toggle dialog
@@ -58163,23 +58324,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return (_vm.currentInvoice && _vm.invoice_state) ? _c('card-layout', {
-    attrs: {
-      "tips": _vm.tips
-    }
-  }, [_c('div', {
+  return (_vm.currentInvoice && _vm.invoice_state) ? _c('card-layout', [_c('div', {
     attrs: {
       "slot": "title"
     },
     slot: "title"
   }, [_vm._v("\n    \tInvoice \n    \t"), _c('small', [_c('span', {
     staticClass: "grey--text"
-  }, [_vm._v("\n      \t\t(" + _vm._s(_vm._f("date")(_vm.currentInvoice.from_date)) + " - " + _vm._s(_vm._f("date")(_vm.currentInvoice.to_date)) + ")\n      \t")])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n      \t\t(" + _vm._s(_vm._f("date")(_vm.currentInvoice.from_date)) + " - " + _vm._s(_vm._f("date")(_vm.currentInvoice.to_date)) + ")\n      \t")])])]), _vm._v(" "), (_vm.invoice_state == 'full') ? _c('div', {
     attrs: {
       "slot": "description"
     },
     slot: "description"
-  }, [_vm._v("\n\t\t\tThis is where you can add your hours and costs to the invoice.\n\t\t")]), _vm._v(" "), (_vm.invoice_state == 'full') ? _c('div', {
+  }, [_vm._v("\n\t\t\tThis is where you can add your hours and costs to the invoice.\n\t\t")]) : _vm._e(), _vm._v(" "), (_vm.invoice_state == 'full') ? _c('div', {
     attrs: {
       "slot": "additional"
     },
@@ -58502,7 +58659,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "xs4": "",
       "offset-xs4": ""
     }
-  }, [(!_vm.currentInvoice.is_published) ? _c('v-btn', {
+  }, [(!_vm.currentInvoice.is_published && _vm.currentInvoice.work_items.length > 0) ? _c('v-btn', {
     staticClass: "info",
     attrs: {
       "block": ""
@@ -58516,14 +58673,28 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "left": ""
     }
-  }, [_vm._v("assignment_turned_in")]), _vm._v("\n      \t\t\t\tPublish\n      \t\t\t")], 1) : _c('p', {
+  }, [_vm._v("assignment_turned_in")]), _vm._v("\n      \t\t\t\tPublish\n      \t\t\t")], 1) : _vm._e(), _vm._v(" "), (_vm.currentInvoice.is_published) ? _c('p', {
     staticClass: "subheading info--text mt-2"
   }, [_c('v-icon', {
     staticClass: "info--text",
     attrs: {
       "left": ""
     }
-  }, [_vm._v("assignment_turned_in")]), _vm._v(" "), _c('span', [_vm._v("Invoice is published!")])], 1), _vm._v(" "), (_vm.currentInvoice.is_paid) ? _c('p', {
+  }, [_vm._v("assignment_turned_in")]), _vm._v(" "), _c('span', [_vm._v("Invoice is published!")])], 1) : _vm._e(), _vm._v(" "), (_vm.currentInvoice.work_items.length == 0) ? _c('v-btn', {
+    staticClass: "error mt-3",
+    attrs: {
+      "block": ""
+    },
+    on: {
+      "click": function($event) {
+        _vm.openDeleteDialog('deleteInvoice', _vm.currentInvoice.id)
+      }
+    }
+  }, [_c('v-icon', {
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("close")]), _vm._v("\n      \t\t\t\tRemove Invoice\n      \t\t\t")], 1) : _vm._e(), _vm._v(" "), (_vm.currentInvoice.is_paid) ? _c('p', {
     staticClass: "subheading green--text mt-2"
   }, [_c('v-icon', {
     staticClass: "green--text",

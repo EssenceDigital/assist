@@ -53,6 +53,8 @@ Route::post('/invoices/publish', 'InvoicesController@publish');
 Route::post('/invoices/mark-paid', 'InvoicesController@markPaid');
 Route::post('/invoices/add-item', 'InvoicesController@storeWorkItem');
 Route::post('/invoices/edit-item', 'InvoicesController@updateWorkItem');
+Route::post('/invoices/edit-item', 'InvoicesController@updateWorkItem');
+Route::delete('/invoices/delete/{id}', 'InvoicesController@delete');
 Route::delete('/invoices/delete-item/{id}', 'InvoicesController@deleteWorkItem');
 Route::get('/invoices/auth-users', 'InvoicesController@authUsersInvoices');
 Route::get('/invoices/{user}/{from_date}/{to_date}/{invoice}', 'InvoicesController@filter');

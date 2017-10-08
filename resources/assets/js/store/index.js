@@ -134,6 +134,10 @@ export const store = new Vuex.Store({
 			return state.currentInvoice.is_published = 1;	
 		},
 
+		deleteInvoice (state, payload) {
+			return state.currentInvoice = false;
+		},
+
 		markInvoicesPaid (state, payload) {
 			payload.forEach((id) => {
 				var invoice = state.crewInvoices.find(elem => elem.id === id),
@@ -347,6 +351,11 @@ export const store = new Vuex.Store({
 		markInvoicesPaid (context, payload) {
 			return api.postAction(context, payload, 'invoices/mark-paid', 'markInvoicesPaid');
 		},
+
+		// Use api to delete an invoice
+		deleteInvoice (context, payload) {
+			return api.deleteAction(context, '/invoices/delete/'+ payload, 'deleteInvoice');
+		},	
 
 		// Use api to add hours to a timesheet
 		addWorkItem (context, payload) {

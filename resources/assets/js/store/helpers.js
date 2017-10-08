@@ -34,6 +34,9 @@ export default {
 			for(var key in form) {
 				form[key].val = form[key].dflt;
 			}
+			// Clear errors
+			this.clearFormErrors(form);
+			// Resolve promise
 			resolve(form);
 		});		
 	},

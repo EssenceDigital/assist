@@ -71,14 +71,15 @@
 						      </v-container>
 					        <v-divider></v-divider>
 					        <!-- Container for helpful tips -->
-					        <v-container fluid class="mt-4">				        	
+					        <v-container fluid class="mt-2 pb-0">				        	
 						        <v-layout row>
-						        	<v-flex xs12>	
+						        	<v-flex xs11>	
 
 							        	<!-- 
 												 * Any tips for page usage (prop)
 							        	-->						        	
 				        				<p 
+				        					v-if="!hideTips"
 				        					v-for="tip in tips"
 				        					class="subheading info--text pl-4"
 				        				>
@@ -86,11 +87,22 @@
 								         	{{ tip.text }}     			
 						        		</p>	
 
+						        	</v-flex>
+						        	<v-flex xs1 class="nmt-2">
+						        		<v-btn
+						        			@click="hideTips = !hideTips"
+						        			flat 
+						        			icon
+						        			v-tooltip:top="{ html: 'Toggle Tips' }"
+						        		>						        			
+						        			<v-icon v-if="hideTips" class="display-2 info--text">expand_less</v-icon>
+						        			<v-icon v-else class="display-2 info--text">expand_more</v-icon>
+						        		</v-btn>
 						        	</v-flex>				        	
 						        </v-layout>		        	
 					        </v-container><!-- / Container for helpful tips -->	
 					        <!-- Card body -->
-					        <v-card-text>				 
+					        <v-card-text class="pt-0">				 
 					        	<v-layout row>
 					        		<v-flex xs12>
 
@@ -116,6 +128,12 @@
 	export default{
 		props: ['tips'],
 
+		data() {
+			return {
+				hideTips: false
+			}
+		},
+
 		components: {
 			'notify-wrapper': NotifyWrapper
 		}
@@ -125,5 +143,8 @@
 <style scoped>
   .card--flex-toolbar {
     margin-top: -64px;
+  }
+  .nmt-2{
+  	margin-top: -20px;
   }
 </style>

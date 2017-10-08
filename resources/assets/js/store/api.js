@@ -113,7 +113,8 @@ export default {
 					context.commit(mutation, response);
 					// Resolve promise
 					resolve();
-				});
+				})
+				.catch((error) => reject(error));	
 		});
 	}
 
