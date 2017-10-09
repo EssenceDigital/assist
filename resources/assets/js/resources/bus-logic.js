@@ -160,6 +160,20 @@ export default {
 		return ((subtotal * 100) + (gst * 100)) / 100;
 	},
 
+	tallyPaidWorkItemsTotal (workItems) {
+		// Seperate the work items that are on a paid invoice
+		var paidWorkItems = [];
+		workItems.forEach((item) => {
+			if(item.invoice.is_paid){
+				paidWorkItems.push(item);
+			}
+		});
+		var subtotal = this.tallyWorkItemsSubTotal(paidWorkItems),
+				gst = this.tallyWorkItemsGst(paidWorkItems);
+		// Calculate in cents then convert back to dollars
+		return ((subtotal * 100) + (gst * 100)) / 100;
+	},
+
 	tallyWorkItemsBottomLine (workItems) {
 
 	}

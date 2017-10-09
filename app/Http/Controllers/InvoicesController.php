@@ -9,14 +9,18 @@ use Illuminate\Database\Eloquent\Model;
 use App\Invoice;
 use App\WorkItem;
 
+/** 
+ * Handles invoice and work item related actions
+*/
 class InvoicesController extends Controller
 {
-    // Fields and their respective validation rules
+    // Invoice fields and their respective validation rules
     private $validationFields = [
         'from_date' => 'date',
         'to_date' => 'date',
     ];
 
+    // Work item fields and their respective validation rules
     private $workItemValidationFields = [
 		'project_id' => 'numeric',
 		'invoice_id' => 'numeric',
@@ -35,7 +39,17 @@ class InvoicesController extends Controller
         'equipment_cost' => 'numeric|between:0,1000000000000.99|nullable'        
     ];
 
-    protected function validateAndPopulate(Request $request, Model $model, Array $validationFields) {
+    /**
+     * Extends the validation method of the BaseController.
+     * Ensures dates are chronological and then calls the parent validateAndPopulate method.
+     *
+     * @param Illuminate\Http\Request $request
+     * @param Illuminate\Database\Eloquent\Model $model     
+     * @param Array - Formatted in a way that the validate method accepts $validationFields
+     * @return parent::validateAndPopulate
+    */
+    protected function validateAndPopulate(Request $request, Model $model, Array $validationFields) 
+    {
         /* First, make sure to date is after from date
         */
         // Grab dates
@@ -55,7 +69,17 @@ class InvoicesController extends Controller
         return parent::validateAndPopulate($request, $model, $validationFields); 
     }
 
-    protected function validateAndPopulateWorkItem(Request $request, Model $model, Array $validationFields){
+    /**
+     * Extends the validation method of the BaseController. Work item verison.
+     * Ensures dates are chronological  and in the proper range, and then calls the parent validateAndPopulate method.
+     *
+     * @param Illuminate\Http\Request $request
+     * @param Illuminate\Database\Eloquent\Model $model     
+     * @param Array - Formatted in a way that the validate method accepts $validationFields 
+     * @return parent::validateAndPopulate
+    */
+    protected function validateAndPopulateWorkItem(Request $request, Model $model, Array $validationFields)
+    {
         /* Get invoice first so we can make sure the invoice is not paid.
          * Work items may not be changed on an invoice that has been paid--the paid total is final.
         */
@@ -105,10 +129,10 @@ class InvoicesController extends Controller
     }
 
     /**
-     * Finds all invoices belonging to the authenticated user
+     * Finds all invoices belonging to the authenticated user.
      *
-     * @return \Illuminate\Http\JsonResponse
-     */
+     * @return JSON response
+    */
     public function authUsersInvoices()
     {
         // With all foreign keys / children
@@ -124,10 +148,10 @@ class InvoicesController extends Controller
     }
 
     /**
-     * Finds all invoices
+     * Finds all invoices.
      *
-     * @return \Illuminate\Http\JsonResponse
-     */
+     * @return JSON response
+    */
     public function all()
     {
         // For ACL, only allows supplied roles to access this method
@@ -144,14 +168,14 @@ class InvoicesController extends Controller
     }
 
     /**
-     * Find an invoice
+     * Find a single invoice
      *
-     * @param Int - The primary key
-     * @return \Illuminate\Http\JsonResponse
-     */
+     * @param Int $id - The primary key
+     * @return JSON response
+    */
     public function single($id)
     {
-        // With all foreign keys / children
+        // Get invoice with all foreign keys / children
         $invoice = Invoice::with(['user', 'workItems', 'workItems.project'])->find($id);
 
         // Return response for ajax call
@@ -161,32 +185,40 @@ class InvoicesController extends Controller
         ], 200);        
     }
 
-    public function filter($user = false, $from_date = false, $to_date = false, $invoice = false) {
+    /** 
+     * Filters invoices based on the recieved paramaters.
+     *
+     * @param String $user - A user ID
+     * @param String Date $from_date - A string date (yyyy-mm-dd) to start at
+     * @param String Date $to_date - A string date (yyyy-mm-dd) to end at
+     * @param String $invoice - The status of the crew invoice (Method responds to: not-paid paid)
+     * @param JSON response
+    */
+    public function filter($user = false, $from_date = false, $to_date = false, $invoice = false) 
+    {
         // For ACL, only allows supplied roles to access this method
         $this->authorizeRoles(['super']);
 
-        // Construct where array for query
+        // Instatiate 'where array' for query
         $queryArray = [];  
+        // Add invoice assets and start query
         $query = Invoice::with(['user', 'workItems', 'workItems.project']);
-
         // Make sure invoice is published
         array_push($queryArray, ['is_published', '=', 1]);
 
-        // Add user id field or not
+        // Add user id field to the 'where array' or not
         if($user){
             // Push array clause
             array_push($queryArray, ['user_id', '=', $user]);
         } 
-
-        // Add invoice field or not
+        // Add invoice field to the 'where array' or not
         if($invoice){
             if($invoice == 'not-paid') $status = 0;
             if($invoice == 'paid') $status = 1;
             // Push array clause
             array_push($queryArray, ['is_paid', '=', $status]);
         } 
-
-        // Add single day (from date) field or not
+        // Add single day (from date) to the 'where array' field or not
         if($from_date && !$to_date){
             // Push array clause
             array_push($queryArray, ['from_date', '=', $from_date]);
@@ -195,13 +227,13 @@ class InvoicesController extends Controller
         // Add where queries
         $query->where($queryArray);
 
-        // If the to date is set then it's a dange range query
+        // If the to date is set then it's a dange range query and the single day loop did not run. So...
         if($from_date && $to_date){
             // Add possible where between
             $query->whereBetween('to_date', [$from_date, $to_date]);
         }
 
-        // Get results
+        // Run the query
         $invoices = $query->get();
 
         // Return response for ajax call
@@ -212,17 +244,16 @@ class InvoicesController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Save an invoice to storage
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JSON response
      */
     public function store(Request $request)
     {
-
         // Validate and populate the request
         $invoice = $this->validateAndPopulate($request, new Invoice, $this->validationFields);
-        // Add user id to the invoice
+        // Add authenticated user ID to the invoice
         $invoice->user_id = Auth::id();
         // Attempt to store model
         $result = $invoice->save();
@@ -238,22 +269,20 @@ class InvoicesController extends Controller
             'result' => 'success',
             'payload' => $invoice
         ], 200);
-
     }
 
     /**
-     * Tag an invoice as published
+     * Tag an invoice as published.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JSON response
      */
     public function publish(Request $request)
     {
-        // Validate request id
+        // Validate request ID
         $this->validate($request, [
             'id' => 'numeric'
         ]);
-
         // Find invoice
         $invoice = Invoice::find($request->id);
         // Update
@@ -279,7 +308,7 @@ class InvoicesController extends Controller
      * Tag and invoice as paid in storate.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JSON response
      */
     public function markPaid(Request $request)
     {
@@ -288,7 +317,6 @@ class InvoicesController extends Controller
 
         // Grab the array of invoice ids
         $invoiceIds = $request->id;
-
         // Itterate each id and update that invoice
         forEach($invoiceIds as $id) {
             if(is_numeric($id)) {
@@ -310,12 +338,11 @@ class InvoicesController extends Controller
             'result' => 'success',
             'payload' => $request->id
         ], 200);
-
     }
 
 
     /**
-     * Store a newly created resource in storage.
+     * Save a work item to storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -324,7 +351,7 @@ class InvoicesController extends Controller
     {
         // Validate work item
         $item = $this->validateAndPopulateWorkItem($request, new WorkItem, $this->workItemValidationFields);
-        // Add user id to the timesheet
+        // Add authenticated user ID to the invoice
         $item->user_id = Auth::id();
         // Attempt to store model
         $result = $item->save();
@@ -335,7 +362,7 @@ class InvoicesController extends Controller
                 'result' => false
             ], 404);
         }
-        // Load related project
+        // Load related project (for view)
         $item->load('project');
         // Return response for ajax call
         return response()->json([
@@ -345,10 +372,10 @@ class InvoicesController extends Controller
     }
 
     /**
-     * Updata a resource in storage.
+     * Update a work item in storage
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JSON response
      */
     public function updateWorkItem(Request $request)
     {       
@@ -363,7 +390,7 @@ class InvoicesController extends Controller
                 'result' => false
             ], 404);
         }        
-        // Load related project
+        // Load related project (for view)
         $item->load('project');
         // Return response for ajax call
         return response()->json([
@@ -373,9 +400,9 @@ class InvoicesController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove a work item from storage
      *
-     * @param  int  $id
+     * @param  Integer $id - The ID of the work item to remove.
      * @return \Illuminate\Http\Response
      */
     public function deleteWorkItem($id)
@@ -413,13 +440,12 @@ class InvoicesController extends Controller
             'result' => 'success',
             'payload' => $id
         ], 200);        	
-
     }     
 
     /**
      * Remove an invoice from storage (Only if it has no work items)
      *
-     * @param  int  $id
+     * @param Integer  $id - The ID of the invoice to remove
      * @return \Illuminate\Http\Response
      */
     public function delete($id)
@@ -466,7 +492,6 @@ class InvoicesController extends Controller
             'result' => 'success',
             'payload' => $id
         ], 200);            
-
     }  
 
 }

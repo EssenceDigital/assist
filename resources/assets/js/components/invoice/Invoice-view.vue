@@ -370,7 +370,7 @@
 							          <v-select
 							            v-model="workItemForm.project_id.val"
 							            :items="projectsSelectList"
-							            label="Projects..."
+							            label="Project..."
 							            single-line
 							            bottom
 							            :error="workItemForm.project_id.err"

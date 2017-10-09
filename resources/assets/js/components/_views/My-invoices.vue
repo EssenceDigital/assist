@@ -26,13 +26,7 @@
 			          After starting the invoice you will be able to add your hours and other costs.        			
 	        		</p>									        	
 		        </v-container><!-- /Container for tips -->
-		        <v-card-text>
-		        	<!-- Error alert container -->
-			 				<v-container fluid>
-								<v-alert warning dismissible v-model="errorAlert" class="mb-3">
-						      {{ errorMessage }}
-						    </v-alert>			 					
-			 				</v-container><!-- / Error alert container -->		        
+		        <v-card-text>		        
 							<v-layout row>
 								<v-flex xs12>
 									<v-layout row>
@@ -135,10 +129,6 @@
 
   	data () {
   		return {
-  			// For form error
-  			errorAlert: false,
-  			// For form error message
-  			errorMessage: '',
   			// Tips for card layout
   			tips: [
 					{ text: "You can start a new invoice using the add button located in the top right corner of this card." },
@@ -170,11 +160,12 @@
 						toDate = new Date(this.form.to_date.val);
 				// Compate dates and return false if to date is before from date
 				if(toDate.getTime() < fromDate.getTime()){
-					// Set up error and message
-					this.errorAlert = true;
-					this.errorMessage = "'From date' must be before 'To Date'.";
 					// Toggle loader 
 					this.startingInvoice = false;
+					// Emit even to show snackbar alert						
+					this.$router.app.$emit('show-snackbar', {
+						text: "'From date' must be before 'To Date'."
+					});						
 					// Return false
 					return false;
 				}
@@ -201,12 +192,12 @@
 									this.startingInvoice = false;							
 								});
 						} else {
-							// Flag error
-							this.errorAlert = true;
-							// Set message
-							this.errorMessage = errors.response.data.message;
 							// Toggle loader
-							this.startingInvoice = false;										
+							this.startingInvoice = false;
+							// Emit even to show snackbar alert						
+							this.$router.app.$emit('show-snackbar', {
+								text: errors.response.data.message
+							});																		
 						}
 					});	
   		}

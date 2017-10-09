@@ -1,8 +1,7 @@
 <template>
 	<v-card class="grey lighten-5 mt-3" :flat="alt_style">
-
 		<!-- Container for viewing field -->
-		<v-container v-if="!editState">
+		<v-container v-if="!editState" fluid>
     	<!-- Card toolbar -->
       <v-toolbar card class="grey lighten-5" prominent >
       	<!-- Card heading -->
@@ -54,7 +53,7 @@
 		</v-container><!-- /Container for viewing field -->
 
 		<!-- Container for editing field -->
-		<v-container v-if="editState" class="pt-0 pb-0">
+		<v-container v-if="editState" class="pt-0 pb-0" fluid>
     	<!-- Card toolbar -->
       <v-layout row>			          
         <v-spacer></v-spacer>
@@ -75,7 +74,7 @@
 	      -->
       	<!-- Text input container 
       	-->
-      	<v-container v-if="type === 'text'" class="pt-0 pb-0">
+      	<v-container v-if="type === 'text'" class="pt-0 pb-0" fluid>
       		<!-- Input -->
       		<v-layout row>
       			<v-flex xs12>
@@ -86,47 +85,40 @@
 							  :prepend-icon="icon"
 							  :prefix="prefix"
 							  :error="fieldError"
+							  :error-messages="[fieldErrorMsg]"	
 							></v-text-field>      				
       			</v-flex>       			
-      		</v-layout>
-      		<!-- Error msg -->
-      		<v-layout row>
-						<p v-if="fieldError" class="caption error--text">
-							{{ fieldErrorMsg }}
-						</p>       			
       		</v-layout>
       	</v-container><!-- /Text input container -->
 
       	<!-- Text area input container 
       	-->
-      	<v-container v-if="type === 'textarea'" class="pt-0 pb-0">
+      	<v-container v-if="type === 'textarea'" class="pt-0 pb-0" fluid>
       		<!-- Input -->
       		<v-layout row>
       			<v-flex xs12>
 							<v-text-field
+								multi-line
 								class="pb-0"
 								v-model="fieldValue"						
 							  :label="label + '...'"
 							  :prepend-icon="icon"
-							  :error="fieldError"
-							  multi-line
-							  :counter="charCount"
-							  :max="char_count"
+							  :error="fieldError"	
+							  :error-messages="[fieldErrorMsg]"						 
+							  :counter="char_count"
 							></v-text-field>      				
       			</v-flex>       			
       		</v-layout>
 
       		<!-- Error msg -->
       		<v-layout row>
-						<p v-if="fieldError" class="caption error--text">
-							{{ fieldErrorMsg }}
-						</p>       			
+      			
       		</v-layout>
       	</v-container><!-- /Text area input container -->
 
       	<!-- Select input container 
       	-->
-      	<v-container v-if="type === 'select'" class="pt-0 pb-0">
+      	<v-container v-if="type === 'select'" class="pt-0 pb-0" fluid>
 	      	<v-layout row>
 	      		<v-flex xs12>
 			        <v-select
@@ -137,6 +129,7 @@
 			          single-line
 			          bottom
 			          :error="fieldError"
+			          :error-messages="[fieldErrorMsg]"	
 			        ></v-select>  	      			
 	      		</v-flex>    		
 	      	</v-layout>
@@ -151,7 +144,7 @@
 
       	<!-- Bool input container 
       	-->
-      	<v-container v-if="type === 'bool'" class="pt-0 pb-0">
+      	<v-container v-if="type === 'bool'" class="pt-0 pb-0" fluid>
 	      	<v-layout row>
 	      		<v-flex xs12>
 			        <v-select
@@ -165,20 +158,14 @@
 			          single-line
 			          bottom
 			          :error="fieldError"
+			          :error-messages="[fieldErrorMsg]"	
 			        ></v-select>  	      			
 	      		</v-flex>    		
 	      	</v-layout>
-      		<!-- Error msg -->
-      		<v-layout row>
-						<p v-if="fieldError" class="caption error--text">
-							{{ fieldErrorMsg }}
-						</p>       			
-      		</v-layout>	      	      		
-      	</v-container><!-- /Select input container -->
-
+	      </v-container>
 
       	<!-- Date input container -->
-      	<v-container v-if="type === 'date'" class="pt-0 pb-0">
+      	<v-container v-if="type === 'date'" class="pt-0 pb-0" fluid>
       		<v-layout row>
       			<v-flex xs12>
 							<v-menu
@@ -271,9 +258,7 @@
 				// The new field value
 				fieldValue: '',
 				fieldError: false,
-				fieldErrorMsg: '',
-				// For the char count check
-				charCount: false
+				fieldErrorMsg: ''
 			}
 		},
 
@@ -339,8 +324,6 @@
 				// Adjust field value
 				this.fieldValue = this.value;				
 			}
-			// Set the char count check bool
-			if(this.char_count) this.charCount = true;
 		}
 
 

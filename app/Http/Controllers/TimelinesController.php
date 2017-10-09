@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Project;
 use App\Timeline;
 
+/** 
+ * Handles project, project commment, and project crew related actions
+*/
 class TimelinesController extends Controller
 {
 
@@ -38,10 +41,10 @@ class TimelinesController extends Controller
     ];
 
     /**
-     * Store a newly created resource in storage.
+     * Save a timeline to storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JSON response
      */
     public function store(Request $request)
     {
@@ -72,15 +75,17 @@ class TimelinesController extends Controller
     }
 
     /**
-     * Updates a single field on a timeline
+     * Updates a single field on a timeline.
      *
      * @param Illuminate\Http\Request
-     * @return \Illuminate\Http\Response
+     * @return JSON response
     */
-    public function updateField(Request $request){
+    public function updateField(Request $request)
+    {
         // For ACL, only allows supplied roles to access this method
         $this->authorizeRoles(['admin', 'super']);
-
+        
+        // Return response for ajax call
         return $this->updateModelField(
             $request,
             Timeline::find($request->id),

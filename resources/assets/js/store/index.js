@@ -20,13 +20,13 @@ export const store = new Vuex.Store({
 		// The logged in users notifications
 		notifications: [],
 		// A user who has been selected to view/edit
-		currentUser: { id: -1 },
+		currentUser: false,
 		// Users returned by the server
 		users: [],
 		// Projects returned by the server
 		projects: [],
 		// A project who has been selected to view/edit
-		currentProject: { id: -1 },
+		currentProject: false,
 		// The current project search filter
 		projectsFilter: { 
 			province: '',

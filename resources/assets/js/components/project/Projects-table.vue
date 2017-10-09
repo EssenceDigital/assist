@@ -135,17 +135,22 @@
           </td>
 
           <td v-if="table_state === 'admin_manage'">
-            {{ totalProjectCost(props.item.work_items) | money }}
+            <span>{{ totalProjectCost(props.item.work_items) | money }}</span>
           </td>
-
           <td v-if="table_state === 'admin_manage'">
+            {{ totalPaidProjectCost(props.item.work_items) | money }}
+          </td>
+          <td v-if="table_state === 'admin_manage'">
+            {{ (parseFloat(totalProjectCost(props.item.work_items))) - (parseFloat(totalPaidProjectCost(props.item.work_items))) | money }}
+          </td>          
+          <!--<td v-if="table_state === 'admin_manage'">
             <span v-if="!props.item.invoice_paid_date">
               -{{ projectBottomLine(props.item.work_items, props.item.invoice_amount, props.item.invoice_paid_date) | money }}
             </span>
             <span v-else>
               {{ projectBottomLine(props.item.work_items, props.item.invoice_amount, props.item.invoice_paid_date) | money }}
             </span>
-          </td>
+          </td>-->
 
           <td v-if="table_state === 'user'">{{ props.item.timesheets.length }}</td>
 
@@ -262,7 +267,8 @@
             { text: 'Invoice Status', value: 'invoice_status', align: 'left' },
             { text: 'Invoice Amount', value: 'invoice_amount', align: 'left' },
             { text: 'Crew Cost', value: 'crew_cost', align: 'left' },
-            { text: 'Bottom Line', value: 'crew_cost', align: 'left' },
+            { text: 'Paid Crew', value: 'crew_paid', align: 'left' },
+            { text: 'Owing Crew', value: 'crew_owing', align: 'left' },
             { text: 'Actions', value: '', align: 'left' }
           ];
         }
@@ -319,6 +325,10 @@
 
       totalProjectCost (workItems) {
         return BusLogic.tallyWorkItemsTotal(workItems).toFixed(2);
+      },
+
+      totalPaidProjectCost (workItems) {
+        return BusLogic.tallyPaidWorkItemsTotal(workItems).toFixed(2);
       },
 
       projectBottomLine (workItems, invoiceAmount, invoicePaidDate) {

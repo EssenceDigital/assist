@@ -5,21 +5,25 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Notification;
 
+/** 
+ * Base controller that contains some helper methods which can be used by controllers that extend this class.
+*/
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     /**
-     * Validates request data and then adds it to a model. Helper method used by store() and update()
-     * @param Illuminate\Http\Request
-     * @param App\Project (model)
+     * Validates request data and then adds it to a model. Helper method used by store() and update().
+     *
+     * @param Illuminate\Http\Request $request
+     * @param Illuminate\Database\Eloquent\Model $model   
+     * @param Array - Formatted in a way that the validate method accepts $validationFields
      * @return App\Model
      */
     protected function validateAndPopulate(Request $request, Model $model, Array $validationFields)
@@ -35,10 +39,21 @@ class Controller extends BaseController
         return $model;
     }
 
-    protected function updateModelField(Request $request, Model $model, Array $validationFields){
-        // Ensure request field is actually a project field
+    /**
+     * Updates a single field on a model.
+     *
+     * Validates request data and then adds it to a model. Helper method used by store() and update()
+     * @param Illuminate\Http\Request $request
+     * @param Illuminate\Database\Eloquent\Model $model     
+     * @param Array - Formatted in a way that the validate method accepts $validationFields  
+     * @return App\Model
+     */
+    protected function updateModelField(Request $request, Model $model, Array $validationFields)
+    {
+        // Ensure request field is actually a model field
         if(array_key_exists($request->field, $validationFields)){
-            // Validate field
+            // Validate field, constructing the validation array so that it only validates
+            // the field we want to update and not the whole set of fields.
             $this->validate($request, [
                 // Dynamically validate proper field
                 $request->field => $validationFields[$request->field],
@@ -55,10 +70,8 @@ class Controller extends BaseController
 
             // Update model with new field data
             $model[$request->field] = $request[$request->field];
-
             // Attempt to store model
             $result = $model->save();
-
             // Verify success on store
             if(! $result){
                 // Return response for ajax call
@@ -75,53 +88,17 @@ class Controller extends BaseController
         }
     }
 
-    protected function storeInvoiceAsset(Request $request, $model, $validationFields) {
-        // Validate and populate the request
-        $asset = $this->validateAndPopulate($request, $model, $validationFields);
-        // Attempt to store model
-        $result = $asset->save();
-        // Verify success on store
-        if(! $result){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }  
-
-        return $asset;      
-    }
-
-    protected function updateInvoiceAsset(Request $request, $model, $validationFields) {
-        // Validate and populate the request
-        $asset = $this->validateAndPopulate($request, $model, $validationFields);
-        // Attempt to store model
-        $result = $asset->save();
-        // Verify success on store
-        if(! $result){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }
-
-        return $asset;        
-    }
-
-    protected function deleteInvoiceAsset($model) {      
-        // Attempt to remove 
-        $result = $model->delete();
-        // Verify success on store
-        if(! $result){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }   
-
-        return;    
-    }
-
-    protected function notify($userId, $title, $desc, $link = null) {
+    /**
+     * Saves an entry to the notifactions table
+     *
+     * @param Integer $userId - The user the notification is for
+     * @param String $title - The tile of the notification
+     * @param String $desc - The description for the notification
+     * @param String $link - A link for the 
+     * @return Boolean
+    */
+    protected function notify($userId, $title, $desc, $link = null) 
+    {
         // Create notification
         $notif = new Notification;
         // Add fields
@@ -140,7 +117,7 @@ class Controller extends BaseController
             ], 404);
         }
 
-        return;
+        return true;
     }
 
 
@@ -153,8 +130,10 @@ class Controller extends BaseController
      * Top level check. Ensures the user has the required role to access calling resource
      *
      * @param Array or String - The allowed roles
+     * @return boolean
     */
-    public function authorizeRoles($roles){
+    public function authorizeRoles($roles)
+    {
         // Check if the supplied roles exist in role set
         if($this->hasAnyRole($roles)) {
             return true;
@@ -173,8 +152,10 @@ class Controller extends BaseController
      * Checks all supplied roles to determine if they are allowed access
      *
      * @param Array or String - The allowed roles
+     * @return Boolean
     */
-    public function hasAnyRole($roles){
+    public function hasAnyRole($roles)
+    {
         // If supplied roles is an array
         if(is_array($roles)) {
             // Itterate through supplied roles

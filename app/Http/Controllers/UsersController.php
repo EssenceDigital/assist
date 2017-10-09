@@ -8,6 +8,9 @@ use App\User;
 use App\Project;
 use App\Timesheet;
 
+/** 
+ * Handles all generic user related actions.
+*/
 class UsersController extends Controller
 {
 
@@ -30,6 +33,7 @@ class UsersController extends Controller
     /**
      * Validates request data and then adds it to a model. Helper method used by store() and update()
      *
+     * @param  \Illuminate\Http\Request $request     
      * @return App\Model
      */
     private function validateUser(Request $request, User $user)
@@ -74,15 +78,15 @@ class UsersController extends Controller
     }
 
     /**
-     * Find a user
+     * Find all users.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JSON response
      */
     public function all()
     {
         // For ACL, only allows supplied roles to access this method
         $this->authorizeRoles(['admin', 'super']);
-
+        // Fetch users
         $users = User::all();
 
         // Return response for ajax call
@@ -93,7 +97,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Find a user
+     * Find a single user.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -101,7 +105,7 @@ class UsersController extends Controller
     {
         // For ACL, only allows supplied roles to access this method
         $this->authorizeRoles(['admin', 'super']);
-
+        // Fetch user
         $user = User::find($id);
 
         // Return response for ajax call
@@ -111,7 +115,14 @@ class UsersController extends Controller
         ], 200);        
     }
 
-    public function projects($user_id){
+    /** 
+     * Finds all projects a user has been added to.
+     *
+     * @param Integer $user_id - ID of the user
+     * @return JSON response
+    */
+    public function projects($user_id)
+    {
         // For ACL, only allows supplied roles to access this method
         $this->authorizeRoles(['admin', 'super']);
 
@@ -137,10 +148,10 @@ class UsersController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Save a user to storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JSON response
      */
     public function store(Request $request)
     {
@@ -168,7 +179,14 @@ class UsersController extends Controller
 
     }
 
-    public function updateField(Request $request){
+    /** 
+     * Updates a single field on a user.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return JSON response
+    */
+    public function updateField(Request $request)
+    {
         // For ACL, only allows supplied roles to access this method
         $this->authorizeRoles(['super']);
 
@@ -183,19 +201,19 @@ class UsersController extends Controller
      * Changes a users password in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JSON response
      */
     public function changePassword(Request $request)
     {
         // For ACL, only allows supplied roles to access this method
         $this->authorizeRoles(['super']);
 
-        // Validate or stop proccessing :)
+        // Validate request
         $this->validate($request, [
             'id' => 'required|numeric',
             'password' => 'required|min:6|confirmed',
         ]);
-        // Find user in storage
+        // Find the user to change password of in storage
         $user = User::find($request->id);
         // Return failed response if collection empty
         if(! $user){
@@ -220,32 +238,35 @@ class UsersController extends Controller
         return response()->json([
             'result' => 'success'
         ], 200);
-
     }  
 
     /**
-     * Remove the specified resource from storage.
+     * Remove a user from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Integer $id - ID of the user to remove.
+     * @return JSON response
      */
     public function delete(Request $request)
     {
         // For ACL, only allows supplied roles to access this method
         $this->authorizeRoles(['super']);
                 
-        // Find user or throw 404 :)
+        // Find user to remove with all of their potential invoices
         $user = User::with(['invoices'])->find($request->id);
 
+        /* If the user has invoices created then it cannot be remove
+        */
         if(count($user->invoices) <= 0) {
             // Return response for ajax call
             return response()->json([
                 'result' => false,
+                'error' => true,
                 'message' => 'User has invoices saved. Cannot delete.'
             ], 404); 
         }
 
-        // Attempt to remove 
+        /* If user has no invoices created then it can now be removed.
+        */
         $result = $user->delete();
         // Verify success on store
         if(! $result){

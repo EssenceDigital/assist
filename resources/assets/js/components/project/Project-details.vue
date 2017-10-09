@@ -297,7 +297,15 @@
 			<v-container fluid class="mt-5">
 				<div class="headline">
 					Invoicing
-				</div>												
+				</div>
+				<v-layout row class="mt-3">
+					<v-flex xs12>
+    				<p class="subheading info--text pl-4">
+							<v-icon left class="info--text">help_outline</v-icon>
+		         	These fields are used for all sorts of useful calculations so be sure to fill them as the project progresses.      			
+        		</p>						
+					</v-flex>
+				</v-layout>												
 				<v-layout row>
 					<v-flex xs4>
 						<field-input-toggle

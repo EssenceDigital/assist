@@ -8,8 +8,8 @@
 		<div slot="description">
 			This is where you can edit and track the project you've selected.				
 		</div>
-		<div slot="content">
-			<v-layout row>
+		<div v-if="currentProject && users.length > 0" slot="content">
+			<v-layout row class="mt-3">
 				<!-- Tabs for displaying project info -->
 				<v-tabs dark fixed centered v-model="active">
 		    	<!-- Tab links -->
@@ -117,6 +117,7 @@
 			        <v-card flat>
 			          <v-card-text>
 			          	<project-hours-costs
+			          		v-if=""
 			          		:workItems="currentProject.work_items"
 			          		:clientInvoicedAmount="currentProject.invoice_amount"
 			          		:invoicePaidDate="currentProject.invoice_paid_date"
@@ -170,6 +171,10 @@
 				return this.$store.getters.currentProject;
 			},
 
+			users () {
+				return this.$store.getters.users;
+			},
+
       // Watch for uniqueCLients state to update
       clientsSelectList () {
         return this.$store.getters.clientsSelectList;
@@ -185,6 +190,8 @@
     		this.$store.dispatch('getClients');
     		// Toggle loader
     		this.loading = false;
+
+    		this.$store.dispatch('getUsers');
     	});			
 		}
 	}

@@ -8,17 +8,21 @@
 		</v-layout>	
 
 		<!-- No crew added alert -->
-		<v-layout row v-if="projectApprovalDate === null" class="mt-5">
+		<v-container v-if="projectApprovalDate === null" class="mt-5">
 			<v-alert info value="true">
 	      Once the project has an approval date the timeline will become available.
 	    </v-alert>			
-		</v-layout><!-- / No crew added alert -->
+		</v-container><!-- / No crew added alert -->
 
 		<v-layout row v-if="projectApprovalDate != null" class="mt-5">
 			<v-flex xs12>
-			 	<v-stepper v-model="step" vertical non-linear>
+			 	<v-stepper v-model="step" vertical non-linear class="grey lighten-5">
 			 		<!-- Steps -->
-			 		<v-container fluid v-for="current in steps" :key="current.field">
+			 		<v-container 
+			 			v-for="current in steps" 
+			 			fluid 			 			
+			 			:key="current.field"
+			 		>
 				    <v-stepper-step :step="current.step" 
 				    	style="cursor:pointer;"
 				    	:complete="timeline[current.field] != null && timeline[current.field] != 0" 
@@ -27,8 +31,12 @@
 				    >
 				      {{ current.heading}}
 				      <small v-if="timeline[current.field] != 0 && timeline[current.field] != 1">
-				      	<span v-if="current.inputType != 'date'">{{ timeline[current.field] }}</span>
-				      	<span v-else>{{ timeline[current.field] | date }}</span>
+				      	<span v-if="current.inputType != 'date'">
+				      		{{ timeline[current.field] }}
+				      	</span>
+				      	<span v-if="current.inputType == 'date' && timeline[current.field]">
+				      		{{ timeline[current.field] | date }}
+				      	</span>
 				      </small>
 				      <small v-if="timeline[current.field] === null">Milestone Not Complete</small>
 				      <small v-if="timeline[current.field] === 0">No</small>
@@ -90,7 +98,7 @@
 						field: 'permit_applicant',
 						inputType: 'select',
 						items: [],
-						label: 'Permit Applicant',
+						label: 'User...',
 						heading: 'Permit was applied for by:'
 					},	
 					{
@@ -210,17 +218,20 @@
 		},
 
 		created () {
+console.log(this.usersSelectList);
+				this.steps[1].items = this.usersSelectList;		
+				console.log(this.usersSelectList);
+
 			if(this.timeline){
 				// Determine the current step
 				for(let step of this.steps){
-					// Set select list for this step
-					if(step.step === 2) step.items = this.usersSelectList;
 					// Determine current step
 					if(this.timeline[step.field] === null || this.timeline[step.field] === 0){
 						this.step = step.step;
 						break;
 					}
-				}					
+				}
+
 			}
 		}
 	}

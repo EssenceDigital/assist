@@ -2,11 +2,11 @@
 	<v-container v-if="notes">
 
 		<!-- No notes info -->
-		<v-layout row v-if="notes.length === 0">
+		<v-container fluid v-if="notes.length === 0">
 			<v-alert info value="true">
 	      No notes have been added to this project
 	    </v-alert>			
-		</v-layout>
+		</v-container>
 
 		<!-- Current notes. For each note create a card -->
 		<v-card flat
@@ -42,7 +42,6 @@
 						</v-chip>
           </v-flex>	     			
       	</v-layout>
-
       </v-card-text><!-- /The field value -->
 		</v-card>	<!-- /Current notes -->
 

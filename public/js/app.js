@@ -1115,6 +1115,19 @@ module.exports = Component.exports
 		// Calculate in cents then convert back to dollars
 		return (subtotal * 100 + gst * 100) / 100;
 	},
+	tallyPaidWorkItemsTotal: function tallyPaidWorkItemsTotal(workItems) {
+		// Seperate the work items that are on a paid invoice
+		var paidWorkItems = [];
+		workItems.forEach(function (item) {
+			if (item.invoice.is_paid) {
+				paidWorkItems.push(item);
+			}
+		});
+		var subtotal = this.tallyWorkItemsSubTotal(paidWorkItems),
+		    gst = this.tallyWorkItemsGst(paidWorkItems);
+		// Calculate in cents then convert back to dollars
+		return (subtotal * 100 + gst * 100) / 100;
+	},
 	tallyWorkItemsBottomLine: function tallyWorkItemsBottomLine(workItems) {}
 });
 
@@ -45350,13 +45363,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		// The logged in users notifications
 		notifications: [],
 		// A user who has been selected to view/edit
-		currentUser: { id: -1 },
+		currentUser: false,
 		// Users returned by the server
 		users: [],
 		// Projects returned by the server
 		projects: [],
 		// A project who has been selected to view/edit
-		currentProject: { id: -1 },
+		currentProject: false,
 		// The current project search filter
 		projectsFilter: {
 			province: '',
@@ -49740,7 +49753,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n.card--flex-toolbar[data-v-ebbdee8a] {\n  margin-top: -64px;\n}\n.nmt-2[data-v-ebbdee8a]{\n\tmargin-top: -20px;\n}\n", ""]);
+exports.push([module.i, "\n.card--flex-toolbar[data-v-ebbdee8a] {\n  margin-top: -64px;\n}\n.nmt-2[data-v-ebbdee8a]{\n\tmargin-top: -20px;\n}\n.absolute-center[data-v-ebbdee8a]{\n\ttop: 40%;\n}\n", ""]);
 
 // exports
 
@@ -49877,6 +49890,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -49885,13 +49910,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	data: function data() {
 		return {
-			hideTips: false
+			hideTips: false,
+			snackbar: false,
+			mode: '',
+			timeout: 6000,
+			snackBarText: 'Hello, I\'m a snackbar'
 		};
 	},
 
 
 	components: {
 		'notify-wrapper': __WEBPACK_IMPORTED_MODULE_0__Notify_wrapper___default.a
+	},
+
+	created: function created() {
+		var _this = this;
+
+		this.$router.app.$on('show-snackbar', function (config) {
+			_this.snackbar = true;
+			_this.snackBarText = config.text;
+		});
 	}
 });
 
@@ -49991,7 +50029,32 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "fluid": ""
     },
     slot: "content"
-  }, [_c('v-layout', {
+  }, [_c('v-snackbar', {
+    staticClass: "absolute-center",
+    attrs: {
+      "timeout": _vm.timeout,
+      "absolute": true,
+      "multi-line": true
+    },
+    model: {
+      value: (_vm.snackbar),
+      callback: function($$v) {
+        _vm.snackbar = $$v
+      },
+      expression: "snackbar"
+    }
+  }, [_vm._v("\n      " + _vm._s(_vm.snackBarText) + "\n      "), _c('v-btn', {
+    staticClass: "pink--text",
+    attrs: {
+      "flat": ""
+    },
+    nativeOn: {
+      "click": function($event) {
+        $event.stopPropagation();
+        _vm.snackbar = false
+      }
+    }
+  }, [_vm._v("Close")])], 1), _vm._v(" "), _c('v-layout', {
     staticClass: "mt-5",
     attrs: {
       "row": ""
@@ -50078,7 +50141,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "xs3": ""
     }
-  }, [_vm._t("additional")], 2)], 1)], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), _c('v-container', {
+  }, [_vm._t("additional")], 2)], 1)], 1), _vm._v(" "), _c('v-divider'), _vm._v(" "), (_vm.tips) ? _c('v-container', {
     staticClass: "mt-2 pb-0",
     attrs: {
       "fluid": ""
@@ -50128,7 +50191,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "display-2 info--text"
   }, [_vm._v("expand_less")]) : _c('v-icon', {
     staticClass: "display-2 info--text"
-  }, [_vm._v("expand_more")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('v-card-text', {
+  }, [_vm._v("expand_more")])], 1)], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('v-card-text', {
     staticClass: "pt-0"
   }, [_c('v-layout', {
     attrs: {
@@ -50435,12 +50498,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -50454,10 +50511,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	data: function data() {
 		return {
-			// For form error
-			errorAlert: false,
-			// For form error message
-			errorMessage: '',
 			// Tips for card layout
 			tips: [{ text: "You can start a new invoice using the add button located in the top right corner of this card." }, { text: "Use the view button at the end of each row to add hours and costs, as well as publish the invoice." }],
 			// For invoice dialog and loading
@@ -50489,11 +50542,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			    toDate = new Date(this.form.to_date.val);
 			// Compate dates and return false if to date is before from date
 			if (toDate.getTime() < fromDate.getTime()) {
-				// Set up error and message
-				this.errorAlert = true;
-				this.errorMessage = "'From date' must be before 'To Date'.";
 				// Toggle loader 
 				this.startingInvoice = false;
+				// Emit even to show snackbar alert						
+				this.$router.app.$emit('show-snackbar', {
+					text: "'From date' must be before 'To Date'."
+				});
 				// Return false
 				return false;
 			}
@@ -50517,12 +50571,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						_this.startingInvoice = false;
 					});
 				} else {
-					// Flag error
-					_this.errorAlert = true;
-					// Set message
-					_this.errorMessage = errors.response.data.message;
 					// Toggle loader
 					_this.startingInvoice = false;
+					// Emit even to show snackbar alert						
+					_this.$router.app.$emit('show-snackbar', {
+						text: errors.response.data.message
+					});
 				}
 			});
 		}
@@ -51412,24 +51466,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "left": ""
     }
-  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t          After starting the invoice you will be able to add your hours and other costs.        \t\t\t\n\t        \t\t")], 1)]), _vm._v(" "), _c('v-card-text', [_c('v-container', {
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('v-alert', {
-    staticClass: "mb-3",
-    attrs: {
-      "warning": "",
-      "dismissible": ""
-    },
-    model: {
-      value: (_vm.errorAlert),
-      callback: function($$v) {
-        _vm.errorAlert = $$v
-      },
-      expression: "errorAlert"
-    }
-  }, [_vm._v("\n\t\t\t\t\t\t      " + _vm._s(_vm.errorMessage) + "\n\t\t\t\t\t\t    ")])], 1), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t\t          After starting the invoice you will be able to add your hours and other costs.        \t\t\t\n\t        \t\t")], 1)]), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -52376,6 +52413,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -52427,7 +52469,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var headers = [{ text: 'ID', value: 'id', align: 'left' }, { text: 'Client', value: 'client_company_name', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Work', value: 'work_type', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
       }
       if (this.table_state === 'admin_manage') {
-        var headers = [{ text: 'ID', value: 'id', align: 'left' }, { text: 'Client', value: 'client_company_name', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Invoice Status', value: 'invoice_status', align: 'left' }, { text: 'Invoice Amount', value: 'invoice_amount', align: 'left' }, { text: 'Crew Cost', value: 'crew_cost', align: 'left' }, { text: 'Bottom Line', value: 'crew_cost', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+        var headers = [{ text: 'ID', value: 'id', align: 'left' }, { text: 'Client', value: 'client_company_name', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Invoice Status', value: 'invoice_status', align: 'left' }, { text: 'Invoice Amount', value: 'invoice_amount', align: 'left' }, { text: 'Crew Cost', value: 'crew_cost', align: 'left' }, { text: 'Paid Crew', value: 'crew_paid', align: 'left' }, { text: 'Owing Crew', value: 'crew_owing', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
       }
       if (this.table_state === 'user') {
         var headers = [{ text: 'ID', value: 'id', align: 'left' }, { text: 'Province', value: 'province', align: 'left' }, { text: 'Location', value: 'location', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
@@ -52471,6 +52513,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     totalProjectCost: function totalProjectCost(workItems) {
       return __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyWorkItemsTotal(workItems).toFixed(2);
+    },
+    totalPaidProjectCost: function totalPaidProjectCost(workItems) {
+      return __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyPaidWorkItemsTotal(workItems).toFixed(2);
     },
     projectBottomLine: function projectBottomLine(workItems, invoiceAmount, invoicePaidDate) {
       if (invoicePaidDate === null) {
@@ -52635,6 +52680,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -52669,8 +52747,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
       return total / 100;
     },
+    totalPaidCrewCost: function totalPaidCrewCost() {
+      var total = 0;
+      this.projects.forEach(function (project) {
+        if (project.work_items.length != 0) {
+          total += __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyPaidWorkItemsTotal(project.work_items) * 100;
+        }
+      });
+      return total / 100;
+    },
+    totalOwingCrewCost: function totalOwingCrewCost() {
+      var total = parseFloat(this.totalCrewCost) * 100 - parseFloat(this.totalPaidCrewCost) * 100;
+
+      return total / 100;
+    },
     totalBottomLine: function totalBottomLine() {
-      var total = parseFloat(this.invoicesPaidTotal) * 100 - parseFloat(this.totalCrewCost * 100);
+      var total = parseFloat(this.invoicesPaidTotal) * 100 - parseFloat(this.totalCrewCost) * 100;
 
       return total / 100;
     },
@@ -52694,6 +52786,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('v-divider', {
     staticClass: "mb-2 mt-2"
   }), _vm._v(" "), _c('v-layout', {
+    staticClass: "mt-2",
     attrs: {
       "row": ""
     }
@@ -52709,11 +52802,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "xs2": ""
     }
   }, [_c('span', {
-    staticClass: "title red--text"
-  }, [_vm._v(_vm._s(_vm._f("money")(_vm.invoicesOutstandingTotal)))])])], 1), _vm._v(" "), _c('v-divider', {
+    staticClass: "title"
+  }, [_c('p', {
+    staticClass: "mt-0 mb-1"
+  }, [_vm._v("\n          " + _vm._s(_vm._f("money")(_vm.invoicesOutstandingTotal)) + "\n        ")]), _vm._v(" "), _c('p', {
+    staticClass: "caption black--text mb-0"
+  }, [_c('small', [_vm._v("(Clients owe you)")])])])])], 1), _vm._v(" "), _c('v-divider', {
     staticClass: "mb-2 mt-2"
   }), _vm._v(" "), _c('v-layout', {
-    staticClass: "mt-4",
+    staticClass: "mt-2",
     attrs: {
       "row": ""
     }
@@ -52723,64 +52820,30 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "title"
-  }, [_vm._v("PAID INVOICES TOTAL:")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
-    staticClass: "text-xs-right",
-    attrs: {
-      "xs2": ""
-    }
-  }, [_c('span', {
-    staticClass: "title green--text"
-  }, [_vm._v(_vm._s(_vm._f("money")(_vm.invoicesPaidTotal)))])])], 1), _vm._v(" "), _c('v-layout', {
-    staticClass: "mt-4",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('span', {
-    staticClass: "title"
-  }, [_vm._v("TOTAL CREW COST:")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+  }, [_vm._v("TOTAL CREW COSTS:")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
     staticClass: "text-xs-right",
     attrs: {
       "xs2": ""
     }
   }, [_c('span', {
     staticClass: "title"
-  }, [_vm._v(_vm._s(_vm._f("money")(_vm.totalCrewCost)))])])], 1), _vm._v(" "), _c('v-divider', {
+  }, [_c('p', {
+    staticClass: "mt-2 mb-1"
+  }, [_vm._v("\n          " + _vm._s(_vm._f("money")(_vm.totalCrewCost)) + "\n        ")]), _vm._v(" "), _c('p', {
+    staticClass: "caption black--text"
+  }, [_c('small', [_vm._v("(Total crew invoices)")])]), _vm._v(" "), _c('p', {
+    staticClass: "mt-2 mb-1"
+  }, [_vm._v("\n          (" + _vm._s(_vm._f("money")(_vm.totalPaidCrewCost)) + ")\n        ")]), _vm._v(" "), _c('p', {
+    staticClass: "caption black--text"
+  }, [_c('small', [_vm._v("(Paid so far)")])]), _vm._v(" "), _c('p', {
+    staticClass: "mt-2 mb-1"
+  }, [_c('v-divider', {
+    staticClass: "mt-1 mb-1"
+  }), _vm._v("          \n          " + _vm._s(_vm._f("money")(_vm.totalOwingCrewCost)) + "\n        ")], 1), _vm._v(" "), _c('p', {
+    staticClass: "caption black--text"
+  }, [_c('small', [_vm._v("(Still owing )")])])])])], 1), _vm._v(" "), _c('v-divider', {
     staticClass: "mt-2"
-  }), _vm._v(" "), _c('v-layout', {
-    staticClass: "mt-4",
-    attrs: {
-      "row": ""
-    }
-  }, [_c('v-flex', {
-    attrs: {
-      "xs4": ""
-    }
-  }, [_c('span', {
-    staticClass: "title"
-  }, [_vm._v("BOTTOM LINE:")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
-    staticClass: "text-xs-right",
-    attrs: {
-      "xs2": ""
-    }
-  }, [(_vm.totalBottomLine > 0) ? _c('span', {
-    staticClass: "title green--text"
-  }, [_c('p', [_vm._v("\n          +" + _vm._s(_vm._f("money")(_vm.totalBottomLine.toFixed(2))) + "\n        ")]), _vm._v(" "), (_vm.subBottomLine > 0) ? _c('p', {
-    staticClass: "mt-2 mb-1"
-  }, [_vm._v("\n          (+" + _vm._s(_vm._f("money")(_vm.subBottomLine.toFixed(2))) + ")\n        ")]) : _vm._e(), _vm._v(" "), (_vm.subBottomLine < 0) ? _c('p', {
-    staticClass: "red--text mt-2 mb-1"
-  }, [_vm._v("\n          (-" + _vm._s(_vm._f("money")((_vm.subBottomLine * -1).toFixed(2))) + ")\n        ")]) : _vm._e(), _vm._v(" "), _c('p', {
-    staticClass: "caption black--text"
-  }, [_c('small', [_vm._v("(Including outstanding invoices)")])])]) : _c('span', {
-    staticClass: "title red--text"
-  }, [_c('p', [_vm._v("-" + _vm._s(_vm._f("money")((_vm.totalBottomLine * -1).toFixed(2))))]), _vm._v(" "), _c('p', {
-    staticClass: "mt-2 mb-1"
-  }, [_vm._v("(-" + _vm._s(_vm._f("money")(((_vm.totalBottomLine * -1) + _vm.invoicesOutstandingTotal).toFixed(2))) + ")")]), _vm._v(" "), _c('p', {
-    staticClass: "caption black--text"
-  }, [_c('small', [_vm._v("(Including outstanding invoices)")])])])])], 1)], 1)
+  })], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -52927,7 +52990,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           staticClass: "error white--text"
         }, [_vm._v("\n            Not Paid   \n          ")]) : _vm._e(), _vm._v(" "), (props.item.invoice_paid_date) ? _c('v-chip', {
           staticClass: "success white--text"
-        }, [_vm._v("\n            Paid   \n          ")]) : _vm._e()], 1) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_vm._v("\n          " + _vm._s(_vm._f("money")(props.item.invoice_amount)) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_vm._v("\n          " + _vm._s(_vm._f("money")(_vm.totalProjectCost(props.item.work_items))) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [(!props.item.invoice_paid_date) ? _c('span', [_vm._v("\n            -" + _vm._s(_vm._f("money")(_vm.projectBottomLine(props.item.work_items, props.item.invoice_amount, props.item.invoice_paid_date))) + "\n          ")]) : _c('span', [_vm._v("\n            " + _vm._s(_vm._f("money")(_vm.projectBottomLine(props.item.work_items, props.item.invoice_amount, props.item.invoice_paid_date))) + "\n          ")])]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'user') ? _c('td', [_vm._v(_vm._s(props.item.timesheets.length))]) : _vm._e(), _vm._v(" "), _c('td', [_c('v-btn', {
+        }, [_vm._v("\n            Paid   \n          ")]) : _vm._e()], 1) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_vm._v("\n          " + _vm._s(_vm._f("money")(props.item.invoice_amount)) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_c('span', [_vm._v(_vm._s(_vm._f("money")(_vm.totalProjectCost(props.item.work_items))))])]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_vm._v("\n          " + _vm._s(_vm._f("money")(_vm.totalPaidProjectCost(props.item.work_items))) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'admin_manage') ? _c('td', [_vm._v("\n          " + _vm._s(_vm._f("money")((parseFloat(_vm.totalProjectCost(props.item.work_items))) - (parseFloat(_vm.totalPaidProjectCost(props.item.work_items))))) + "\n        ")]) : _vm._e(), _vm._v(" "), (_vm.table_state === 'user') ? _c('td', [_vm._v(_vm._s(props.item.timesheets.length))]) : _vm._e(), _vm._v(" "), _c('td', [_c('v-btn', {
           directives: [{
             name: "tooltip",
             rawName: "v-tooltip:top",
@@ -53429,6 +53492,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -53466,6 +53530,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		currentProject: function currentProject() {
 			return this.$store.getters.currentProject;
 		},
+		users: function users() {
+			return this.$store.getters.users;
+		},
 
 
 		// Watch for uniqueCLients state to update
@@ -53485,6 +53552,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			_this.$store.dispatch('getClients');
 			// Toggle loader
 			_this.loading = false;
+
+			_this.$store.dispatch('getUsers');
 		});
 	}
 });
@@ -53537,6 +53606,14 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_Field_input_toggle__);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -54112,19 +54189,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
@@ -54167,9 +54231,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// The new field value
 			fieldValue: '',
 			fieldError: false,
-			fieldErrorMsg: '',
-			// For the char count check
-			charCount: false
+			fieldErrorMsg: ''
 		};
 	},
 
@@ -54238,8 +54300,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			// Adjust field value
 			this.fieldValue = this.value;
 		}
-		// Set the char count check bool
-		if (this.char_count) this.charCount = true;
 	}
 });
 
@@ -54253,7 +54313,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "flat": _vm.alt_style
     }
-  }, [(!_vm.editState) ? _c('v-container', [_c('v-toolbar', {
+  }, [(!_vm.editState) ? _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-toolbar', {
     staticClass: "grey lighten-5",
     attrs: {
       "card": "",
@@ -54292,7 +54356,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("\n\t      \t\t\tN/A\n\t      \t\t")]) : _vm._e(), _vm._v(" "), (!_vm.value && _vm.alt_style) ? _c('div', {
     staticClass: "pl-2 error--text"
   }, [_vm._v("\n\t      \t\t\tMILESTONE NOT COMPLETE\n\t      \t\t")]) : _vm._e()]) : _c('div', [(_vm.value === 1) ? _c('div', [_vm._v("Yes")]) : _vm._e(), _vm._v(" "), (_vm.value === 0) ? _c('div', [_vm._v("No")]) : _vm._e()]), _vm._v(" "), (_vm.alt_style) ? _c('v-spacer') : _vm._e()], 1)], 1)], 1) : _vm._e(), _vm._v(" "), (_vm.editState) ? _c('v-container', {
-    staticClass: "pt-0 pb-0"
+    staticClass: "pt-0 pb-0",
+    attrs: {
+      "fluid": ""
+    }
   }, [_c('v-layout', {
     attrs: {
       "row": ""
@@ -54318,7 +54385,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('v-icon', [_vm._v("close")])], 1) : _vm._e()], 1), _vm._v(" "), _c('v-card-text', {
     staticClass: "pt-0 pb-0"
   }, [(_vm.type === 'text') ? _c('v-container', {
-    staticClass: "pt-0 pb-0"
+    staticClass: "pt-0 pb-0",
+    attrs: {
+      "fluid": ""
+    }
   }, [_c('v-layout', {
     attrs: {
       "row": ""
@@ -54333,7 +54403,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": _vm.label + '...',
       "prepend-icon": _vm.icon,
       "prefix": _vm.prefix,
-      "error": _vm.fieldError
+      "error": _vm.fieldError,
+      "error-messages": [_vm.fieldErrorMsg]
     },
     model: {
       value: (_vm.fieldValue),
@@ -54342,14 +54413,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "fieldValue"
     }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+  })], 1)], 1)], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'textarea') ? _c('v-container', {
+    staticClass: "pt-0 pb-0",
     attrs: {
-      "row": ""
+      "fluid": ""
     }
-  }, [(_vm.fieldError) ? _c('p', {
-    staticClass: "caption error--text"
-  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'textarea') ? _c('v-container', {
-    staticClass: "pt-0 pb-0"
   }, [_c('v-layout', {
     attrs: {
       "row": ""
@@ -54361,12 +54429,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('v-text-field', {
     staticClass: "pb-0",
     attrs: {
+      "multi-line": "",
       "label": _vm.label + '...',
       "prepend-icon": _vm.icon,
       "error": _vm.fieldError,
-      "multi-line": "",
-      "counter": _vm.charCount,
-      "max": _vm.char_count
+      "error-messages": [_vm.fieldErrorMsg],
+      "counter": _vm.char_count
     },
     model: {
       value: (_vm.fieldValue),
@@ -54379,10 +54447,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "row": ""
     }
-  }, [(_vm.fieldError) ? _c('p', {
-    staticClass: "caption error--text"
-  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'select') ? _c('v-container', {
-    staticClass: "pt-0 pb-0"
+  })], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'select') ? _c('v-container', {
+    staticClass: "pt-0 pb-0",
+    attrs: {
+      "fluid": ""
+    }
   }, [_c('v-layout', {
     attrs: {
       "row": ""
@@ -54398,7 +54467,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": _vm.label + '...',
       "single-line": "",
       "bottom": "",
-      "error": _vm.fieldError
+      "error": _vm.fieldError,
+      "error-messages": [_vm.fieldErrorMsg]
     },
     model: {
       value: (_vm.fieldValue),
@@ -54414,7 +54484,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [(_vm.fieldError) ? _c('p', {
     staticClass: "caption error--text"
   }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'bool') ? _c('v-container', {
-    staticClass: "pt-0 pb-0"
+    staticClass: "pt-0 pb-0",
+    attrs: {
+      "fluid": ""
+    }
   }, [_c('v-layout', {
     attrs: {
       "row": ""
@@ -54438,7 +54511,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": _vm.label + '...',
       "single-line": "",
       "bottom": "",
-      "error": _vm.fieldError
+      "error": _vm.fieldError,
+      "error-messages": [_vm.fieldErrorMsg]
     },
     model: {
       value: (_vm.fieldValue),
@@ -54447,14 +54521,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "fieldValue"
     }
-  })], 1)], 1), _vm._v(" "), _c('v-layout', {
+  })], 1)], 1)], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'date') ? _c('v-container', {
+    staticClass: "pt-0 pb-0",
     attrs: {
-      "row": ""
+      "fluid": ""
     }
-  }, [(_vm.fieldError) ? _c('p', {
-    staticClass: "caption error--text"
-  }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm.fieldErrorMsg) + "\n\t\t\t\t\t\t")]) : _vm._e()])], 1) : _vm._e(), _vm._v(" "), (_vm.type === 'date') ? _c('v-container', {
-    staticClass: "pt-0 pb-0"
   }, [_c('v-layout', {
     attrs: {
       "row": ""
@@ -54583,7 +54654,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tClient\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v("\n\t\t\t\t\tClient\n\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -54655,7 +54726,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tLocation\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v("\n\t\t\t\t\tLocation\n\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -54712,7 +54783,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tBasics\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v("\n\t\t\t\t\tBasics\n\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -54739,7 +54810,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tWork Details\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v("\n\t\t\t\t\tWork Details\n\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -54845,7 +54916,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tLand\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v("\n\t\t\t\t\tLand\n\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -54955,7 +55026,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tApproval\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v("\n\t\t\t\t\tApproval\n\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -54981,7 +55052,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     staticClass: "headline"
-  }, [_vm._v("\n\t\t\t\tInvoicing\n\t\t\t")]), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v("\n\t\t\t\t\tInvoicing\n\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
+    staticClass: "mt-3",
+    attrs: {
+      "row": ""
+    }
+  }, [_c('v-flex', {
+    attrs: {
+      "xs12": ""
+    }
+  }, [_c('p', {
+    staticClass: "subheading info--text pl-4"
+  }, [_c('v-icon', {
+    staticClass: "info--text",
+    attrs: {
+      "left": ""
+    }
+  }, [_vm._v("help_outline")]), _vm._v("\n\t\t         \tThese fields are used for all sorts of useful calculations so be sure to fill them as the project progresses.      \t\t\t\n        \t\t")], 1)])], 1), _vm._v(" "), _c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -55267,7 +55354,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	props: ['notes'],
@@ -55353,9 +55439,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return (_vm.notes) ? _c('v-container', [(_vm.notes.length === 0) ? _c('v-layout', {
+  return (_vm.notes) ? _c('v-container', [(_vm.notes.length === 0) ? _c('v-container', {
     attrs: {
-      "row": ""
+      "fluid": ""
     }
   }, [_c('v-alert', {
     attrs: {
@@ -55790,7 +55876,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		addCrewMember: function addCrewMember() {
 			var _this = this;
 
-			console.log(this.selctedUserId);
 			// Toggle loader
 			this.loading = true;
 			// Dispatch action to add user to project crew
@@ -55830,14 +55915,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this2.deletingCrew = false;
 				// Toggle dialog
 				_this2.deleteCrewDialog = false;
+			}).catch(function (errors) {
+				if (errors.response.data.error) {
+					// Toggle loader
+					_this2.deletingCrew = false;
+					// Toggle dialog
+					_this2.deleteCrewDialog = false;
+					// Emit even to show snackbar alert						
+					_this2.$router.app.$emit('show-snackbar', {
+						text: errors.response.data.message
+					});
+				}
 			});
 		}
 	},
 
-	created: function created() {
-		// Update the users in store state
-		this.$store.dispatch('getUsers');
-	}
+	created: function created() {}
 });
 
 /***/ }),
@@ -55845,11 +55938,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return (_vm.crew) ? _c('v-container', {
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('v-layout', {
+  return (_vm.crew) ? _c('v-container', [_c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -55890,11 +55979,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "left": ""
     }
-  }, [_vm._v("help_outline")]), _vm._v("\n        You must add a user to the project crew before they can invoice this project.       \t\t\t\n  \t\t")], 1)]), _vm._v(" "), (_vm.crew.length === 0) ? _c('v-layout', {
-    staticClass: "mt-5",
-    attrs: {
-      "row": ""
-    }
+  }, [_vm._v("help_outline")]), _vm._v("\n        You must add a user to the project crew before they can invoice this project.       \t\t\t\n  \t\t")], 1)]), _vm._v(" "), (_vm.crew.length === 0) ? _c('v-container', {
+    staticClass: "mt-5"
   }, [_c('v-alert', {
     attrs: {
       "info": "",
@@ -56193,6 +56279,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -56225,7 +56319,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				field: 'permit_applicant',
 				inputType: 'select',
 				items: [],
-				label: 'Permit Applicant',
+				label: 'User...',
 				heading: 'Permit was applied for by:'
 			}, {
 				step: 3,
@@ -56327,6 +56421,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		};
 	},
 	created: function created() {
+		console.log(this.usersSelectList);
+		this.steps[1].items = this.usersSelectList;
+		console.log(this.usersSelectList);
+
 		if (this.timeline) {
 			// Determine the current step
 			var _iteratorNormalCompletion = true;
@@ -56337,8 +56435,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				for (var _iterator = this.steps[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 					var step = _step.value;
 
-					// Set select list for this step
-					if (step.step === 2) step.items = this.usersSelectList;
 					// Determine current step
 					if (this.timeline[step.field] === null || this.timeline[step.field] === 0) {
 						this.step = step.step;
@@ -56374,11 +56470,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('div', {
     staticClass: "headline"
-  }, [_vm._v("\n\t\t\tTimeline\n\t\t")])]), _vm._v(" "), (_vm.projectApprovalDate === null) ? _c('v-layout', {
-    staticClass: "mt-5",
-    attrs: {
-      "row": ""
-    }
+  }, [_vm._v("\n\t\t\tTimeline\n\t\t")])]), _vm._v(" "), (_vm.projectApprovalDate === null) ? _c('v-container', {
+    staticClass: "mt-5"
   }, [_c('v-alert', {
     attrs: {
       "info": "",
@@ -56394,6 +56487,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "xs12": ""
     }
   }, [_c('v-stepper', {
+    staticClass: "grey lighten-5",
     attrs: {
       "vertical": "",
       "non-linear": ""
@@ -56425,7 +56519,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           _vm.step = current.step
         }
       }
-    }, [_vm._v("\n\t\t\t      " + _vm._s(current.heading) + "\n\t\t\t      "), (_vm.timeline[current.field] != 0 && _vm.timeline[current.field] != 1) ? _c('small', [(current.inputType != 'date') ? _c('span', [_vm._v(_vm._s(_vm.timeline[current.field]))]) : _c('span', [_vm._v(_vm._s(_vm._f("date")(_vm.timeline[current.field])))])]) : _vm._e(), _vm._v(" "), (_vm.timeline[current.field] === null) ? _c('small', [_vm._v("Milestone Not Complete")]) : _vm._e(), _vm._v(" "), (_vm.timeline[current.field] === 0) ? _c('small', [_vm._v("No")]) : _vm._e(), _vm._v(" "), (_vm.timeline[current.field] === 1) ? _c('small', [_vm._v("Yes")]) : _vm._e()]), _vm._v(" "), _c('v-stepper-content', {
+    }, [_vm._v("\n\t\t\t      " + _vm._s(current.heading) + "\n\t\t\t      "), (_vm.timeline[current.field] != 0 && _vm.timeline[current.field] != 1) ? _c('small', [(current.inputType != 'date') ? _c('span', [_vm._v("\n\t\t\t      \t\t" + _vm._s(_vm.timeline[current.field]) + "\n\t\t\t      \t")]) : _vm._e(), _vm._v(" "), (current.inputType == 'date' && _vm.timeline[current.field]) ? _c('span', [_vm._v("\n\t\t\t      \t\t" + _vm._s(_vm._f("date")(_vm.timeline[current.field])) + "\n\t\t\t      \t")]) : _vm._e()]) : _vm._e(), _vm._v(" "), (_vm.timeline[current.field] === null) ? _c('small', [_vm._v("Milestone Not Complete")]) : _vm._e(), _vm._v(" "), (_vm.timeline[current.field] === 0) ? _c('small', [_vm._v("No")]) : _vm._e(), _vm._v(" "), (_vm.timeline[current.field] === 1) ? _c('small', [_vm._v("Yes")]) : _vm._e()]), _vm._v(" "), _c('v-stepper-content', {
       attrs: {
         "step": current.step
       }
@@ -56772,6 +56866,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -56809,6 +56909,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		},
 		totalProjectCost: function totalProjectCost() {
 			return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallyWorkItemsTotal(this.workItems).toFixed(2);
+		},
+		totalPaidProjectCost: function totalPaidProjectCost() {
+			return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallyPaidWorkItemsTotal(this.workItems).toFixed(2);
+		},
+		totalOwingProjectCost: function totalOwingProjectCost() {
+			var total = parseFloat(this.totalProjectCost) * 100 - parseFloat(this.totalPaidProjectCost) * 100;
+
+			return (total / 100).toFixed();
 		},
 		totalBottomLine: function totalBottomLine() {
 			var invoiceAmount = 0;
@@ -56867,7 +56975,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "xs2": ""
       }
-    }, [_c('strong', [_vm._v("User Name")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    }, [_c('strong', [_vm._v(_vm._s(item.user.first + ' ' + item.user.last))])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
       attrs: {
         "xs4": ""
       }
@@ -56934,7 +57042,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       attrs: {
         "xs2": ""
       }
-    }, [_c('strong', [_vm._v("User Name")])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
+    }, [_c('strong', [_vm._v(_vm._s(item.user.first + ' ' + item.user.last))])]), _vm._v(" "), _c('v-spacer'), _vm._v(" "), _c('v-flex', {
       attrs: {
         "xs4": ""
       }
@@ -57093,7 +57201,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "headline red--text"
-  }, [_vm._v(_vm._s(_vm._f("money")(_vm.totalProjectCost)))])])], 1), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v(_vm._s(_vm._f("money")(_vm.totalProjectCost)))]), _vm._v(" "), _c('p', {
+    staticClass: "mb-1"
+  }, [_c('span', {
+    staticClass: "subtitle"
+  }, [_c('strong', [_vm._v("Paid:")]), _vm._v(" " + _vm._s(_vm._f("money")(_vm.totalPaidProjectCost)))])]), _vm._v(" "), _c('p', [_c('span', {
+    staticClass: "subtitle"
+  }, [_c('strong', [_vm._v("Owing:")]), _vm._v(" " + _vm._s(_vm._f("money")(_vm.totalOwingProjectCost)))])])])], 1), _vm._v(" "), _c('v-layout', {
     staticClass: "mt-3",
     attrs: {
       "row": ""
@@ -57191,12 +57305,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "slot": "description"
     },
     slot: "description"
-  }, [_vm._v("\n\t\tThis is where you can edit and track the project you've selected.\t\t\t\t\n\t")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("\n\t\tThis is where you can edit and track the project you've selected.\t\t\t\t\n\t")]), _vm._v(" "), (_vm.currentProject && _vm.users.length > 0) ? _c('div', {
     attrs: {
       "slot": "content"
     },
     slot: "content"
   }, [_c('v-layout', {
+    staticClass: "mt-3",
     attrs: {
       "row": ""
     }
@@ -57311,7 +57426,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "clientInvoicedAmount": _vm.currentProject.invoice_amount,
       "invoicePaidDate": _vm.currentProject.invoice_paid_date
     }
-  })], 1)], 1)], 1)], 1)], 1)], 1)], 1)])
+  })], 1)], 1)], 1)], 1)], 1)], 1)], 1) : _vm._e()])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -58039,11 +58154,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 
@@ -58096,10 +58206,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		return {
 			// Loading
 			loading: false,
-			// For form error alert
-			errorAlert: false,
-			// For form error alert message	
-			errorMessage: '',
 			// For the delete dialog
 			deleteDialog: false,
 			deleteDispatchAction: '',
@@ -58163,8 +58269,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			__WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].resetForm(this.workItemForm);
 			// Toggle dialog
 			this.workItemDialog = false;
-			// Toggle error alert
-			this.errorAlert = false;
 			// Revert action to default
 			this.workItemDispatchAction = 'addWorkItem';
 		},
@@ -58197,11 +58301,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			    itemTo = new Date(this.workItemForm.to_date.val);
 			// Compare dates and return false if to date is before from date
 			if (itemTo.getTime() < itemFrom.getTime()) {
-				// Set up error and message
-				this.errorAlert = true;
-				this.errorMessage = "'From date' must be before 'To Date'.";
 				// Toggle loader 
 				this.workItemSaving = false;
+				// Emit even to show snackbar alert						
+				this.$router.app.$emit('show-snackbar', {
+					text: "'From date' must be before 'To Date'."
+				});
 				// Return false
 				return false;
 			}
@@ -58212,11 +58317,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			    invoiceTo = new Date(this.currentInvoice.to_date);
 			// Compare dates and return false if the work item date range is outside the invoice date range
 			if (itemFrom.getTime() < invoiceFrom.getTime() || itemTo.getTime() > invoiceTo.getTime()) {
-				// Set up error and message
-				this.errorAlert = true;
-				this.errorMessage = "The work item must date range be within the invoice date range.";
 				// Toggle loader 
 				this.workItemSaving = false;
+				// Emit even to show snackbar alert						
+				this.$router.app.$emit('show-snackbar', {
+					text: "The work item must date range be within the invoice date range."
+				});
 				// Return false
 				return false;
 			}
@@ -58229,8 +58335,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 				_this.$store.dispatch(_this.workItemDispatchAction, data)
 				// Successful request
 				.then(function (response) {
-					// Toggle error alert
-					_this.errorAlert = false;
 					// Toggle dialog
 					_this.workItemDialog = false;
 					// Toggle loader
@@ -58247,12 +58351,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 							_this.workItemSaving = false;
 						});
 					} else {
-						// Flag general non form error
-						_this.errorAlert = true;
-						// Set message
-						_this.errorMessage = errors.response.data.message;
 						// Toggle loader
 						_this.workItemSaving = false;
+						// Emit even to show snackbar alert						
+						_this.$router.app.$emit('show-snackbar', {
+							text: errors.response.data.message
+						});
 					}
 				});
 			});
@@ -58753,24 +58857,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.saveWorkItem($event)
       }
     }
-  }, [_vm._v("Save")])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-container', {
-    attrs: {
-      "fluid": ""
-    }
-  }, [_c('v-alert', {
-    staticClass: "mt-3 mb-3",
-    attrs: {
-      "warning": "",
-      "dismissible": ""
-    },
-    model: {
-      value: (_vm.errorAlert),
-      callback: function($$v) {
-        _vm.errorAlert = $$v
-      },
-      expression: "errorAlert"
-    }
-  }, [_vm._v("\n\t\t\t\t\t\t      " + _vm._s(_vm.errorMessage) + "\n\t\t\t\t\t\t    ")])], 1), _vm._v(" "), _c('v-layout', {
+  }, [_vm._v("Save")])], 1)], 1), _vm._v(" "), _c('v-card-text', [_c('v-layout', {
     attrs: {
       "row": ""
     }
@@ -60478,7 +60565,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "xs12": ""
     }
-  }, [_c('v-container', [_c('div', {
+  }, [_c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('div', {
     staticClass: "headline"
   }, [_vm._v("\n\t\t\t\t\t\tBasics\n\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
     attrs: {
@@ -60557,7 +60648,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "field": 'permissions',
       "value": _vm.currentUser.permissions
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-container', [_c('div', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('div', {
     staticClass: "headline"
   }, [_vm._v("\n\t\t\t\t\t\tBusiness\n\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
     attrs: {
@@ -60589,9 +60684,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "field": 'gst_number',
       "value": _vm.currentUser.gst_number
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-divider', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-divider', {
     staticClass: "mt-4 mb-4"
-  })], 1), _vm._v(" "), _c('v-container', [_c('v-card', {
+  })], 1), _vm._v(" "), _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-card', {
     staticClass: "grey lighten-2 elevation-3"
   }, [_c('v-card-text', [_c('v-container', [_c('div', {
     staticClass: "headline"
@@ -60956,7 +61059,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "xs12": ""
     }
-  }, [_c('v-container', [_c('div', {
+  }, [_c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('div', {
     staticClass: "headline"
   }, [_vm._v("\n\t\t\t\t\t\tDetails\n\t\t\t\t\t")]), _vm._v(" "), _c('v-layout', {
     attrs: {
@@ -61001,9 +61108,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "field": 'gst_number',
       "value": _vm.$store.getters.user.gst_number
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('v-container', [_c('v-divider', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-divider', {
     staticClass: "mt-4 mb-4"
-  })], 1), _vm._v(" "), _c('v-container', [_c('v-card', {
+  })], 1), _vm._v(" "), _c('v-container', {
+    attrs: {
+      "fluid": ""
+    }
+  }, [_c('v-card', {
     staticClass: "grey lighten-2 elevation-3"
   }, [_c('v-card-text', [_c('v-container', [_c('div', {
     staticClass: "headline"

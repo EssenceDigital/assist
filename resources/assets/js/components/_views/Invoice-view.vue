@@ -294,11 +294,6 @@
 		          </v-toolbar-items>		        
 			      </v-toolbar>
 			 			<v-card-text>
-			 				<v-container fluid>
-								<v-alert warning dismissible v-model="errorAlert" class="mt-3 mb-3">
-						      {{ errorMessage }}
-						    </v-alert>			 					
-			 				</v-container>
 			 				<v-layout row>
 			 					<!-- Work item container -->
 			 					<v-flex xs6>
@@ -685,10 +680,6 @@
 			return {
 				// Loading
 				loading: false,	
-				// For form error alert
-				errorAlert: false,
-				// For form error alert message	
-				errorMessage: '',
 				// For the delete dialog
 				deleteDialog: false,
 				deleteDispatchAction: '',
@@ -753,8 +744,6 @@
 				Helpers.resetForm(this.workItemForm);
 				// Toggle dialog
 				this.workItemDialog = false;
-				// Toggle error alert
-				this.errorAlert = false;
 				// Revert action to default
 				this.workItemDispatchAction = 'addWorkItem';				
 			},
@@ -788,11 +777,12 @@
 						itemTo = new Date(this.workItemForm.to_date.val);
 				// Compare dates and return false if to date is before from date
 				if(itemTo.getTime() < itemFrom.getTime()){
-					// Set up error and message
-					this.errorAlert = true;
-					this.errorMessage = "'From date' must be before 'To Date'.";
 					// Toggle loader 
-					this.workItemSaving = false;
+					this.workItemSaving = false;					
+					// Emit even to show snackbar alert						
+					this.$router.app.$emit('show-snackbar', {
+						text: "'From date' must be before 'To Date'."
+					});					
 					// Return false
 					return false;
 				}
@@ -803,11 +793,12 @@
 						invoiceTo = new Date(this.currentInvoice.to_date);
 				// Compare dates and return false if the work item date range is outside the invoice date range
 				if(itemFrom.getTime() < invoiceFrom.getTime() || itemTo.getTime() > invoiceTo.getTime()){
-					// Set up error and message
-					this.errorAlert = true;
-					this.errorMessage = "The work item must date range be within the invoice date range.";
 					// Toggle loader 
-					this.workItemSaving = false;
+					this.workItemSaving = false;					
+					// Emit even to show snackbar alert						
+					this.$router.app.$emit('show-snackbar', {
+						text: "The work item must date range be within the invoice date range."
+					});						
 					// Return false
 					return false;					
 				}
@@ -820,9 +811,7 @@
 						// Dispatch event
 						this.$store.dispatch(this.workItemDispatchAction, data)
 							// Successful request
-							.then((response) => {
-								// Toggle error alert
-								this.errorAlert = false;								
+							.then((response) => {							
 								// Toggle dialog
 								this.workItemDialog = false;
 								// Toggle loader
@@ -840,12 +829,12 @@
 											this.workItemSaving = false;							
 										});
 								} else {
-									// Flag general non form error
-									this.errorAlert = true;
-									// Set message
-									this.errorMessage = errors.response.data.message;
 									// Toggle loader
-									this.workItemSaving = false;										
+									this.workItemSaving = false;
+									// Emit even to show snackbar alert						
+									this.$router.app.$emit('show-snackbar', {
+										text: errors.response.data.message
+									});																	
 								}
 							});
 					});

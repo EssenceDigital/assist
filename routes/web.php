@@ -1,31 +1,32 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
 */
 
+// Laravel authentication setup
 Auth::routes();
 
 Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/test-dates', 'DashboardController@test');
-
+// The CENTRAL ROUTE (VUE.JS will take over application routes from here)
 Route::get('/app', 'DashboardController@index');
 
+// Handles logging out the authenticated user
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
+/*
+ * ALL routes below are called via axios (ajax) and return JSON responses.
+*/
+
+// Gets the notifications for the logged in user
 Route::get('/notifications', 'NotificationsController@get');
 
-
+// Project related routes
 Route::get('/projects', 'ProjectsController@all');
 Route::get('/projects/clients', 'ProjectsController@clients');
 Route::post('/projects/start', 'ProjectsController@store');
@@ -38,8 +39,10 @@ Route::delete('/projects/delete-comment/{id}', 'ProjectsController@deleteComment
 Route::post('/projects/add-crew', 'ProjectsController@addCrew');
 Route::delete('/projects/{project_id}/delete-crew/{id}', 'ProjectsController@deleteCrew');
 
+// Timeline related toures
 Route::post('/timelines/update-field', 'TimelinesController@updateField');
 
+// User related routes
 Route::get('/users', 'UsersController@all');
 Route::post('/users/add', 'UsersController@store');
 Route::get('/users/{id}', 'UsersController@single');
@@ -47,6 +50,7 @@ Route::post('/users/change-password', 'UsersController@changePassword');
 Route::post('/users/change-personal-password', 'DashboardController@changePersonalPassword');
 Route::post('/users/update-field', 'UsersController@updateField');
 
+// Invoice related routes
 Route::get('/invoices', 'InvoicesController@all');
 Route::post('/invoices/add', 'InvoicesController@store');
 Route::post('/invoices/publish', 'InvoicesController@publish');

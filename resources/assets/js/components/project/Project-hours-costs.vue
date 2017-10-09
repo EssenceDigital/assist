@@ -24,7 +24,7 @@
 	    	</v-flex>
 	    	<v-spacer></v-spacer>
 	    	<v-flex xs2>
-	    		<strong>User Name</strong>
+	    		<strong>{{ item.user.first + ' ' + item.user.last }}</strong>
 	    	</v-flex>	    	
 	    	<v-spacer></v-spacer>
 	    	<v-flex xs4>
@@ -90,7 +90,7 @@
       	</v-flex>
 	    	<v-spacer></v-spacer>
 	    	<v-flex xs2>
-	    		<strong>User Name</strong>
+	    		<strong>{{ item.user.first + ' ' + item.user.last }}</strong>
 	    	</v-flex>	      	
       	<v-spacer></v-spacer>
       	<v-flex xs4>
@@ -206,6 +206,12 @@
       	<v-spacer></v-spacer>
       	<v-flex xs2 class="text-xs-right">
       		<span class="headline red--text">{{ totalProjectCost | money }}</span>
+          <p class="mb-1">
+            <span class="subtitle"><strong>Paid:</strong> {{ totalPaidProjectCost | money }}</span>
+          </p>
+          <p>
+            <span class="subtitle"><strong>Owing:</strong> {{ totalOwingProjectCost | money }}</span>
+          </p>          
       	</v-flex>					        		
     	</v-layout>
 
@@ -313,6 +319,16 @@
 			totalProjectCost () {
         return BusLogic.tallyWorkItemsTotal(this.workItems).toFixed(2);
 			},
+
+      totalPaidProjectCost () {
+        return BusLogic.tallyPaidWorkItemsTotal(this.workItems).toFixed(2);
+      },
+
+      totalOwingProjectCost () {
+        var total = (parseFloat(this.totalProjectCost) * 100) - (parseFloat(this.totalPaidProjectCost) * 100);
+
+        return (total / 100).toFixed();
+      },
 
 			totalBottomLine () {
 				var invoiceAmount = 0;

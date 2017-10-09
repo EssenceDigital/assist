@@ -12,7 +12,7 @@
 			<v-layout row>
 				<v-flex xs12>
 					<!-- User details -->
-					<v-container>
+					<v-container fluid>
 						<div class="headline">
 							Details
 						</div>
@@ -51,11 +51,11 @@
 						</v-layout>														
 					</v-container><!-- /basic details -->
 
-					<v-container>
+					<v-container fluid>
 						<v-divider class="mt-4 mb-4"></v-divider>												
 					</v-container>
 
-					<v-container>
+					<v-container fluid>
 						<v-card class="grey lighten-2 elevation-3">
 						  <v-card-text>
 								<!-- Change password -->

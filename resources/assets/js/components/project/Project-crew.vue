@@ -1,5 +1,5 @@
 <template>
-	<v-container fluid v-if="crew">
+	<v-container v-if="crew">	
 
 		<!-- Heading and add crew member button -->
 		<v-layout row>
@@ -24,11 +24,11 @@
   		</p>			
 		</v-layout>
 		<!-- No crew added alert -->
-		<v-layout row v-if="crew.length === 0" class="mt-5">
+		<v-container v-if="crew.length === 0" class="mt-5">
 			<v-alert info value="true">
 	      No crew members have been added to this project yet.
 	    </v-alert>			
-		</v-layout><!-- / No crew added alert -->
+		</v-container><!-- / No crew added alert -->
 
 		<!-- Crew table -->
 		<v-layout row v-if="crew.length > 0">
@@ -202,19 +202,19 @@
 		methods: {
 			// Dispatch event to store that adds a user to the project
 			addCrewMember () {
-				console.log(this.selctedUserId);
 				// Toggle loader
 				this.loading = true;
 				// Dispatch action to add user to project crew
 				this.$store.dispatch('addProjectCrew', {
 					project_id: this.$store.getters.currentProject.id,
 					user_id: this.selctedUserId
-				}).then( () => {
-					// Toggle loader, close dialog, reset selected user id
-					this.loading = false;
-					this.addCrewDialog = false;
-					this.selctedUserId = '';
-				});
+				})
+					.then(() => {
+						// Toggle loader, close dialog, reset selected user id
+						this.loading = false;
+						this.addCrewDialog = false;
+						this.selctedUserId = '';
+					});
 			},
 
 			// Shows the delete crew dialog and sets the user to delete id
@@ -233,18 +233,30 @@
 				this.$store.dispatch('deleteProjectCrew', {
 					project_id: this.$store.getters.currentProject.id,
 					id: this.userToDeleteId
-				}).then( () => {
-					// Toggle loader
-					this.deletingCrew = false;
-					// Toggle dialog
-					this.deleteCrewDialog = false;
-				});
+				})
+					.then( () => {
+						// Toggle loader
+						this.deletingCrew = false;
+						// Toggle dialog
+						this.deleteCrewDialog = false;
+					})
+					.catch((errors) => {
+						if(errors.response.data.error){
+							// Toggle loader
+							this.deletingCrew = false;
+							// Toggle dialog
+							this.deleteCrewDialog = false;	
+							// Emit even to show snackbar alert						
+							this.$router.app.$emit('show-snackbar', {
+								text: errors.response.data.message
+							});
+						}
+					});				
 			}
 		},
 
 		created () {
-			// Update the users in store state
-			this.$store.dispatch('getUsers');
+		
 		}
 	}
 </script>

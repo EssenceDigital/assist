@@ -10,6 +10,9 @@ use App\Timesheet;
 
 use Hash;
 
+/** 
+ * Handles some miscelaneous dashboard actions like user settings and personal password changing.
+*/
 class DashboardController extends Controller
 {
     public function __construct()
@@ -17,37 +20,20 @@ class DashboardController extends Controller
         $this->middleware('auth');
     }
 
-    public function test(){
-        // Add things to timesheet
-        $assets = ['WorkJobs', 'TravelJobs', 'EquipmentRental', 'OtherCost'];
-
-        $WorkJobs = ['job_type', 'hours_worked'];
-
-        for($z = 0; $z < rand(1, 2); $z++){
-            $assetName = $assets[rand(0, 3)];
-            
-        }  
-    }
-
-
-    // Returns the associated view
+    // Returns the central dashboard view
     public function index(){
         return view('app');
     }
 
-    // Returns the associated view
-    public function userSettings(){
-        return view('app.user-settings');
-    }
-
     /**
+     * Retrieves the logged in user from storage.
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getLoggedInUser()
     {
         // Get logged in user
         $user = User::find(Auth::id());
-
         // Return failed response if collection empty
         if(! $user){
             // Return response for ajax call
@@ -63,14 +49,20 @@ class DashboardController extends Controller
         ], 200);        
     }
 
-    public function usersProjects(){
+    /** 
+     * Gets all of the projects the authenticated user is a part of.
+     *
+     * @return JSON response
+    */
+    public function usersProjects()
+    {
         // User id
         $userId = Auth::id();
         // Construct query to find all projects user is a part of
         $projects = Project::whereHas('users', function ($q) use ($userId) {
             $q->where('user_id', $userId);
         // Now, only select the timesheets that belongs to this user
-        })->with(['timesheets' => function($q) use ($userId)  {
+        })->with(['invoices' => function($q) use ($userId)  {
             $q->where('user_id', $userId);
         }])->get();
 
@@ -90,62 +82,13 @@ class DashboardController extends Controller
     }
 
     /**
-     * Updates the logged in users basic info.
+     * Changes the logged in users personal password.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function updateUserInfo(Request $request){
-        // Validate or stop proccessing :)
-        $this->validate($request, [
-	        'email' => 'required|string|email|max:255|unique:users' . ',id,' . Auth::id(),
-	        'company_name' => 'required|string|max:25',
-	        'gst_number' => 'required|string|max:25'
-        ]);
-
-        // Find the logged in user
-        $user = User::find(Auth::id());
-
-        // Return failed response if collection empty
-        if(! $user){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false,
-            ], 404);
-        }
-
-        // Populate model with new data
-        $user->email = $request->email;
-        $user->company_name = $request->company_name;
-        $user->gst_number = $request->gst_number;
-
-        // Attempt to store model
-        $result = $user->save();
-
-        // Verify success on store
-        if(! $result){
-            // Return response for ajax call
-            return response()->json([
-                'result' => false
-            ], 404);
-        }
-
-        // Return response for ajax call
-        return response()->json([
-            'result' => 'success',
-            'model' => $user
-        ], 200);
-
-    }
-
-    /**
-     * Changes the logged in users personal password
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JSON response
      */
     public function changePersonalPassword(Request $request){
-        // Validate or stop proccessing :)
+        // Validate request
         $this->validate($request, [
         	'current_password' => 'required|string',
 	        'password' => 'required|string|min:6|confirmed'
@@ -161,15 +104,17 @@ class DashboardController extends Controller
             ], 404);
         }
 
-        // Confirm the correct current password
+        /* Confirm the correct current password
+        */
         if(! Hash::check($request->current_password, $user->password)){
             // Return response for ajax call
             return response()->json([
 				'current_password' => ['Current password is incorrect']
-            ], 404);
+            ], 422);
         }
 
-        // Bcrypt password and add to model
+        /* If old password was correct then Bcrypt new password and add to model
+        */
         $user->password = bcrypt($request->password);
         // Attempt to save user
         $result = $user->save();

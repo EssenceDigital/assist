@@ -9,6 +9,18 @@
 			fluid
 			slot="content"
 		>
+			<!-- For showing user alerts and feedback -->
+	    <v-snackbar
+	    	v-model="snackbar"
+	      :timeout="timeout"
+	      :absolute="true"
+	      :multi-line="true"
+	      class="absolute-center"
+	    >
+	      {{ snackBarText }}
+	      <v-btn flat class="pink--text" @click.native.stop="snackbar = false">Close</v-btn>
+	    </v-snackbar>
+
 			<v-layout row class="mt-5">
 				<v-flex xs12 xl10 offset-xl1>
 					<!-- Top most card -->
@@ -71,7 +83,7 @@
 						      </v-container>
 					        <v-divider></v-divider>
 					        <!-- Container for helpful tips -->
-					        <v-container fluid class="mt-2 pb-0">				        	
+					        <v-container v-if="tips" fluid class="mt-2 pb-0">				        	
 						        <v-layout row>
 						        	<v-flex xs11>	
 
@@ -130,12 +142,23 @@
 
 		data() {
 			return {
-				hideTips: false
-			}
+				hideTips: false,
+    		snackbar: false,
+        mode: '',
+        timeout: 6000,
+        snackBarText: 'Hello, I\'m a snackbar'
+      }
 		},
 
 		components: {
 			'notify-wrapper': NotifyWrapper
+		},
+
+		created () {
+			this.$router.app.$on('show-snackbar', (config) => {
+				this.snackbar = true;
+				this.snackBarText = config.text;		
+			});	
 		}
 	}
 </script>
@@ -146,5 +169,8 @@
   }
   .nmt-2{
   	margin-top: -20px;
+  }
+  .absolute-center{
+  	top: 40%;
   }
 </style>
