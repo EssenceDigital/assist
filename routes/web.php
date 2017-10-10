@@ -25,6 +25,7 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 // Gets the notifications for the logged in user
 Route::get('/notifications', 'NotificationsController@get');
+Route::delete('/notifications/delete/{id}', 'NotificationsController@delete');
 
 // Project related routes
 Route::get('/projects', 'ProjectsController@all');

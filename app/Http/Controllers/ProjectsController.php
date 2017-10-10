@@ -278,9 +278,15 @@ class ProjectsController extends Controller
         // Create notification for the user
         $this->notify(
             $user->id,
-            "You've been added to the crew of a project",
-            "This mean you can now use this project on future invoices."
+            "You've been added to a project crew!",
+            "This mean you can now use this project on future invoices.",
+            null,
+            array(
+                'project_id' => $project->id,
+                'project_company' => $project->client_company_name 
+            )
         );
+
         // Return response for ajax call
         return response()->json([
             'result' => 'success',

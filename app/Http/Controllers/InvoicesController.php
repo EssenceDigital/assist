@@ -284,7 +284,7 @@ class InvoicesController extends Controller
             'id' => 'numeric'
         ]);
         // Find invoice
-        $invoice = Invoice::find($request->id);
+        $invoice = Invoice::with(['user'])->find($request->id);
         // Update
         $invoice->is_published = 1;
         // Save
@@ -296,6 +296,19 @@ class InvoicesController extends Controller
                 'result' => false
             ], 404);
         }
+
+        // Notify all users with the super role
+        $this->notifyUsers(
+            ['super'],
+            $invoice->user->first . " has published a new invoice!",
+            "This means you can now view their hours and see the total amount due to them.",
+            null,
+            array(
+                'invoice_id' => $invoice->id,
+                'invoice_from' => $invoice->from_date,
+                'invoice_to' => $invoice->to_date
+            )            
+        );
 
         // Return response for ajax call
         return response()->json([
@@ -320,7 +333,7 @@ class InvoicesController extends Controller
         // Itterate each id and update that invoice
         forEach($invoiceIds as $id) {
             if(is_numeric($id)) {
-                $invoice = Invoice::find($id);
+                $invoice = Invoice::with(['user'])->find($id);
                 $invoice->is_paid = 1;
                 $result = $invoice->save();
                 // Verify success on store
@@ -329,7 +342,20 @@ class InvoicesController extends Controller
                     return response()->json([
                         'result' => false
                     ], 404);
-                }                 
+                }   
+
+                // Notify all users with the user and admin roles
+                $this->notify(
+                    $invoice->user->id,
+                    "An invoice (ID: ".$invoice->id.") of yours has been paid",
+                    "This invoice should now appear as paid and payment should be recieved soon.",
+                    null,
+                    array(
+                        'invoice_id' => $invoice->id,
+                        'invoice_from' => $invoice->from_date,
+                        'invoice_to' => $invoice->to_date
+                    )            
+                );                              
             }   
         }
 

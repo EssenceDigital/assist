@@ -35,11 +35,12 @@
 				<!-- User options -->
 				<v-menu offset-y>
 					<v-btn 
-						class="pr-0 mr-0"
 						flat 
+						icon
 						slot="activator"
+						class="mr-2"
 						>
-							<v-icon right dark class="mt-2 mr-0">arrow_drop_down_circle</v-icon>
+							<v-icon dark>arrow_drop_down_circle</v-icon>
 					</v-btn>	
 		      <v-list>
 		        <v-list-tile @click="$router.push('/user-settings')">
@@ -49,16 +50,64 @@
 		          <v-list-tile-title>Logout</v-list-tile-title>
 		        </v-list-tile>		        
 		      </v-list>
-		    </v-menu>	
+		    </v-menu>
 
-		    <v-chip 
-		    	v-if="notifications.length != 0"
-		    	@click="$router.push('/dashboard')"
-		    	class="red white--text mt-3 hover"
-		    	v-tooltip:left="{ html: 'View Notifications' }"
-		    >
-		    	{{ notifications.length }}
-		    </v-chip>
+
+				<div 
+					v-if="notifications.length > 0"
+					class="text-xs-center"
+				>
+				  <v-menu
+				    :close-on-content-click="false"
+				    :nudge-width="500"
+				    v-model="notifMenu"
+				  >
+				  	<v-btn 	
+				  		class="red mt-3"
+				  		icon 
+				  		slot="activator"
+				  	>
+				  		{{ notifications.length }}
+				  	</v-btn>
+				    <v-card>
+				      <v-list
+				      	v-for="notif in notifications"
+				      	:key="notif.id"
+				      >
+				        <v-list-tile>
+				          <v-list-tile-content>
+				            <v-list-tile-title>
+											{{ notif.title }} 
+											<span v-if="notif.project_id">
+												({{ notif.project_company + ' - ID: ' + notif.project_id }})
+											</span>
+											<span v-if="notif.invoice_id">
+												<small>({{ notif.invoice_from | date  }} to {{ notif.invoice_to | date }})</small>
+											</span>
+				            </v-list-tile-title>
+				            <v-list-tile-sub-title>
+				            	{{ notif.desc }}
+				            </v-list-tile-sub-title>				            
+				          </v-list-tile-content>
+			        		<v-list-tile-action>
+			              <v-btn
+			              	@click="dismiss(notif.id)"
+			                icon
+			                class="red--text"
+			                v-tooltip:left="{ html: 'Dismiss' }"
+			              >
+			                <v-icon>close</v-icon>
+			              </v-btn>
+			            </v-list-tile-action>				          
+				        </v-list-tile>
+				        <v-divider class="mt-2"></v-divider>
+				      </v-list>
+
+
+				    </v-card>
+				  </v-menu>
+				</div>
+
 			</v-toolbar-items><!-- /Holds menu items -->
 		</v-toolbar><!-- /Medium and large screen menu -->
 
@@ -103,7 +152,8 @@
 		data () {
 			return{
 				navDrawer: false,
-				menuItems: []			
+				menuItems: [],
+				notifMenu: false
 			}
 		},
 
@@ -131,7 +181,12 @@
 					.catch( (error) => {
 						console.log(error);
 					});
-			}
+			},
+
+			dismiss (id) {
+				// Dispatch event to delete notification
+				this.$store.dispatch('deleteNotification', { id: id });
+			}			
 		},
 
 		created () {

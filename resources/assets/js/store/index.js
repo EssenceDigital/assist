@@ -59,6 +59,12 @@ export const store = new Vuex.Store({
 			return state.notifications = payload;
 		},
 
+		deleteNotification (state, payload) {
+			var index = Helpers.pluckObjectById(state.notifications, payload);
+			// Remove from store
+			state.notifications.splice(index, 1);
+		},
+
 		// Update projects
 		updateProjects (state, payload) {
 			return state.projects = payload;
@@ -240,6 +246,9 @@ export const store = new Vuex.Store({
 			return api.getAction(context, '/notifications', 'updateNotifications');
 		},
 
+		deleteNotification (context, payload) {
+			return api.deleteAction(context, '/notifications/delete/'+payload.id, 'deleteNotification');
+		},
 		/* 
 			PROJECT ACTIONS
 		*/

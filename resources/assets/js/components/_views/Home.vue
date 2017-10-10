@@ -20,7 +20,7 @@
 				v-for="notif in notifications"
 				fluid
 				class="mt-1"
-				:key="id"
+				:key="notif.id"
 			>
 				<v-alert 
 					icon="new_releases"
@@ -30,11 +30,22 @@
 				>
 					<v-layout row>
 						<v-flex xs10>
-							<p class="title mt-3 mb-1">{{ notif.title }}</p>
-							<p class="subheading">{{ notif.desc }}</p>
+							<p class="title mt-3 mb-1">
+								{{ notif.title }} 
+								<span v-if="notif.project_id">({{ notif.project_company + ' - ID: ' + notif.project_id }})</span>
+								<span v-if="notif.invoice_id"><small>({{ notif.invoice_from | date  }} to {{ notif.invoice_to | date }})</small></span>
+							</p>
+							<p class="subheading">
+								{{ notif.desc }}
+							</p>
 						</v-flex>	
 						<v-flex xs2 class="text-xs-right mt-3">
-							<v-btn outline>
+							<v-btn
+								@click="dismiss(notif.id)"
+								:loading="isDismissing"
+								:disabled="isDismissing"
+								outline
+							>
 								<v-icon left>close</v-icon>
 								Dismiss
 							</v-btn>
@@ -66,7 +77,21 @@
 				// For the card layout
 				tips: [
 					{ text: 'Use the top menu to navigate the application.' }
-				]
+				],
+				isDismissing: false
+			}
+		},
+
+		methods: {
+			dismiss (id) {
+				// Toggle loader
+				this.isDismissing = true;
+				// Dispatch event to delete notification
+				this.$store.dispatch('deleteNotification', { id: id })
+					.then(() => {
+						// Toggle loader
+						this.isDismissing = false;
+					})
 			}
 		}
 	}

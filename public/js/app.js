@@ -45401,6 +45401,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		updateNotifications: function updateNotifications(state, payload) {
 			return state.notifications = payload;
 		},
+		deleteNotification: function deleteNotification(state, payload) {
+			var index = __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].pluckObjectById(state.notifications, payload);
+			// Remove from store
+			state.notifications.splice(index, 1);
+		},
 
 
 		// Update projects
@@ -45575,7 +45580,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		getNotifications: function getNotifications(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/notifications', 'updateNotifications');
 		},
-
+		deleteNotification: function deleteNotification(context, payload) {
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/notifications/delete/' + payload.id, 'deleteNotification');
+		},
 
 		/* 
   	PROJECT ACTIONS
@@ -49696,6 +49703,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -49713,8 +49731,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	data: function data() {
 		return {
 			// For the card layout
-			tips: [{ text: 'Use the top menu to navigate the application.' }]
+			tips: [{ text: 'Use the top menu to navigate the application.' }],
+			isDismissing: false
 		};
+	},
+
+
+	methods: {
+		dismiss: function dismiss(id) {
+			var _this = this;
+
+			// Toggle loader
+			this.isDismissing = true;
+			// Dispatch event to delete notification
+			this.$store.dispatch('deleteNotification', { id: id }).then(function () {
+				// Toggle loader
+				_this.isDismissing = false;
+			});
+		}
 	}
 });
 
@@ -50237,7 +50271,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     slot: "content"
   }, _vm._l((_vm.notifications), function(notif) {
     return _c('v-container', {
-      key: _vm.id,
+      key: notif.id,
       staticClass: "mt-1",
       attrs: {
         "fluid": ""
@@ -50259,16 +50293,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }, [_c('p', {
       staticClass: "title mt-3 mb-1"
-    }, [_vm._v(_vm._s(notif.title))]), _vm._v(" "), _c('p', {
+    }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(notif.title) + " \n\t\t\t\t\t\t\t"), (notif.project_id) ? _c('span', [_vm._v("(" + _vm._s(notif.project_company + ' - ID: ' + notif.project_id) + ")")]) : _vm._e(), _vm._v(" "), (notif.invoice_id) ? _c('span', [_c('small', [_vm._v("(" + _vm._s(_vm._f("date")(notif.invoice_from)) + " to " + _vm._s(_vm._f("date")(notif.invoice_to)) + ")")])]) : _vm._e()]), _vm._v(" "), _c('p', {
       staticClass: "subheading"
-    }, [_vm._v(_vm._s(notif.desc))])]), _vm._v(" "), _c('v-flex', {
+    }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(notif.desc) + "\n\t\t\t\t\t\t")])]), _vm._v(" "), _c('v-flex', {
       staticClass: "text-xs-right mt-3",
       attrs: {
         "xs2": ""
       }
     }, [_c('v-btn', {
       attrs: {
+        "loading": _vm.isDismissing,
+        "disabled": _vm.isDismissing,
         "outline": ""
+      },
+      on: {
+        "click": function($event) {
+          _vm.dismiss(notif.id)
+        }
       }
     }, [_c('v-icon', {
       attrs: {
@@ -61506,12 +61547,62 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 	data: function data() {
 		return {
 			navDrawer: false,
-			menuItems: []
+			menuItems: [],
+			notifMenu: false
 		};
 	},
 
@@ -61539,6 +61630,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			}).catch(function (error) {
 				console.log(error);
 			});
+		},
+		dismiss: function dismiss(id) {
+			// Dispatch event to delete notification
+			this.$store.dispatch('deleteNotification', { id: id });
 		}
 	},
 
@@ -61606,16 +61701,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "offset-y": ""
     }
   }, [_c('v-btn', {
-    staticClass: "pr-0 mr-0",
+    staticClass: "mr-2",
     attrs: {
       "slot": "activator",
-      "flat": ""
+      "flat": "",
+      "icon": ""
     },
     slot: "activator"
   }, [_c('v-icon', {
-    staticClass: "mt-2 mr-0",
     attrs: {
-      "right": "",
       "dark": ""
     }
   }, [_vm._v("arrow_drop_down_circle")])], 1), _vm._v(" "), _c('v-list', [_c('v-list-tile', {
@@ -61628,23 +61722,53 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.logout
     }
-  }, [_c('v-list-tile-title', [_vm._v("Logout")])], 1)], 1)], 1), _vm._v(" "), (_vm.notifications.length != 0) ? _c('v-chip', {
-    directives: [{
-      name: "tooltip",
-      rawName: "v-tooltip:left",
-      value: ({
-        html: 'View Notifications'
-      }),
-      expression: "{ html: 'View Notifications' }",
-      arg: "left"
-    }],
-    staticClass: "red white--text mt-3 hover",
-    on: {
-      "click": function($event) {
-        _vm.$router.push('/dashboard')
-      }
+  }, [_c('v-list-tile-title', [_vm._v("Logout")])], 1)], 1)], 1), _vm._v(" "), (_vm.notifications.length > 0) ? _c('div', {
+    staticClass: "text-xs-center"
+  }, [_c('v-menu', {
+    attrs: {
+      "close-on-content-click": false,
+      "nudge-width": 500
+    },
+    model: {
+      value: (_vm.notifMenu),
+      callback: function($$v) {
+        _vm.notifMenu = $$v
+      },
+      expression: "notifMenu"
     }
-  }, [_vm._v("\n\t\t    \t" + _vm._s(_vm.notifications.length) + "\n\t\t    ")]) : _vm._e()], 2)], 1), _vm._v(" "), _c('v-navigation-drawer', {
+  }, [_c('v-btn', {
+    staticClass: "red mt-3",
+    attrs: {
+      "slot": "activator",
+      "icon": ""
+    },
+    slot: "activator"
+  }, [_vm._v("\n\t\t\t\t  \t\t" + _vm._s(_vm.notifications.length) + "\n\t\t\t\t  \t")]), _vm._v(" "), _c('v-card', _vm._l((_vm.notifications), function(notif) {
+    return _c('v-list', {
+      key: notif.id
+    }, [_c('v-list-tile', [_c('v-list-tile-content', [_c('v-list-tile-title', [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t" + _vm._s(notif.title) + " \n\t\t\t\t\t\t\t\t\t\t\t"), (notif.project_id) ? _c('span', [_vm._v("\n\t\t\t\t\t\t\t\t\t\t\t\t(" + _vm._s(notif.project_company + ' - ID: ' + notif.project_id) + ")\n\t\t\t\t\t\t\t\t\t\t\t")]) : _vm._e(), _vm._v(" "), (notif.invoice_id) ? _c('span', [_c('small', [_vm._v("(" + _vm._s(_vm._f("date")(notif.invoice_from)) + " to " + _vm._s(_vm._f("date")(notif.invoice_to)) + ")")])]) : _vm._e()]), _vm._v(" "), _c('v-list-tile-sub-title', [_vm._v("\n\t\t\t\t            \t" + _vm._s(notif.desc) + "\n\t\t\t\t            ")])], 1), _vm._v(" "), _c('v-list-tile-action', [_c('v-btn', {
+      directives: [{
+        name: "tooltip",
+        rawName: "v-tooltip:left",
+        value: ({
+          html: 'Dismiss'
+        }),
+        expression: "{ html: 'Dismiss' }",
+        arg: "left"
+      }],
+      staticClass: "red--text",
+      attrs: {
+        "icon": ""
+      },
+      on: {
+        "click": function($event) {
+          _vm.dismiss(notif.id)
+        }
+      }
+    }, [_c('v-icon', [_vm._v("close")])], 1)], 1)], 1), _vm._v(" "), _c('v-divider', {
+      staticClass: "mt-2"
+    })], 1)
+  }))], 1)], 1) : _vm._e()], 2)], 1), _vm._v(" "), _c('v-navigation-drawer', {
     attrs: {
       "temporary": ""
     },

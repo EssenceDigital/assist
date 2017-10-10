@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Notification;
 
+/** 
+ * Controls all notification based actions.
+*/
 class NotificationsController extends Controller
 {
 	/**
@@ -22,4 +25,33 @@ class NotificationsController extends Controller
             'payload' => $notif
         ], 200); 		
 	}
+
+    /**
+     * Removes a notification froms torage.
+     *
+     * @param Illuminate\Http\Request
+     * @return JSON response
+     */
+    public function delete($id)
+    {	
+    	// Find notification
+    	$notif = Notification::find($id);
+    	// Attempt to remove
+        $result = $notif->delete();
+        // Verify success on store
+        if(! $result){
+            // Return response for ajax call
+            return response()->json([
+                'result' => false
+            ], 404);
+        }
+
+        // Return successful response for ajax call
+        return response()->json([
+            'result' => 'success',
+            'payload' => $id
+        ], 200);
+        
+    }
+
 }

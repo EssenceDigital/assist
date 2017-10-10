@@ -26,8 +26,12 @@ class CreateNotificationsTable extends Migration
             $table->integer('project_id')->unsigned()->nullable();
             $table->string('project_company')->nullable();
             $table->integer('invoice_id')->nullable();
+            $table->date('invoice_from')->nullable();
+            $table->date('invoice_to')->nullable();
             // Timestamps
             $table->timestamps();         
+            // Set up for soft delete
+            $table->softDeletes();
         });
     }
 

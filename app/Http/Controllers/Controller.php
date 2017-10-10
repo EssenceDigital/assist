@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Notification;
+use App\User;
 
 /** 
  * Base controller that contains some helper methods which can be used by controllers that extend this class.
@@ -95,9 +96,10 @@ class Controller extends BaseController
      * @param String $title - The tile of the notification
      * @param String $desc - The description for the notification
      * @param String $link - A link for the 
+     * @param Array $options - Any additional things to add to the notification      
      * @return Boolean
     */
-    protected function notify($userId, $title, $desc, $link = null) 
+    protected function notify($userId, $title, $desc, $link = null, $options = false) 
     {
         // Create notification
         $notif = new Notification;
@@ -106,6 +108,15 @@ class Controller extends BaseController
         $notif->title = $title;
         $notif->desc = $desc;      
         $notif->link = $link;
+
+        // If options array has been passed then add the options to the notification
+        if($options) {
+            // Each element in options must have a key that corresponds to the proper notifications field
+            forEach($options as $key => $field){
+                $notif->$key = $field; 
+            }
+        }
+
         // Save notification
         $result = $notif->save();
 
@@ -119,6 +130,42 @@ class Controller extends BaseController
 
         return true;
     }
+
+    protected function notifyUsers($roles, $title, $desc, $link = null, $options = false){
+        // Get all users with super permissions (To notify)
+        $users = $this->getUsersWithRoles($roles);
+
+        // Notify all super users
+        forEach($users as $id){
+            $this->notify(
+                $id,
+                $title,
+                $desc,
+                $link,
+                $options
+            );
+        }        
+    }
+
+    protected function getUsersWithRoles($roles) {
+        // Will hold the user IDs corresponding to the supplied roles
+        $userIds = [];
+
+        // Itterate through all supplied roles
+        forEach($roles as $role){
+            // Find all users that match the current role
+            $users = User::where('permissions', '=', $role)->get();
+            // For each user add their ID to the userIds array
+            forEach($users as $user){
+                // Push ID to array
+                array_push($userIds, $user->id);
+            }
+        }
+
+        return $userIds;
+    }
+
+
 
 
     /* ****************************************************
