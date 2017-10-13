@@ -325,18 +325,11 @@
       },
 
       totalOwingProjectCost () {
-        var total = (parseFloat(this.totalProjectCost) * 100) - (parseFloat(this.totalPaidProjectCost) * 100);
-
-        return (total / 100).toFixed();
+        return BusLogic.tallyOwingProjectCost(this.workItems).toFixed(2);
       },
 
 			totalBottomLine () {
-				var invoiceAmount = 0;
-				// Determine invoice amount
-				if(this.invoicePaidDate){
-					invoiceAmount = this.clientInvoicedAmount;
-				} 
-				return (parseFloat(invoiceAmount) - parseFloat(this.totalProjectCost)).toFixed(2);
+        return BusLogic.tallyWorkItemsBottomLine(this.workItems, this.invoicePaidDate, this.clientInvoicedAmount).toFixed(2);
 			}
 		},
 

@@ -131,8 +131,18 @@ class Controller extends BaseController
         return true;
     }
 
+    /**
+     * Saves an entry to the notifactions table for every user with the roles provided
+     *
+     * @param Array $roles - The the roles that should be notified
+     * @param String $title - The tile of the notification
+     * @param String $desc - The description for the notification
+     * @param String $link - A link for the 
+     * @param Array $options - Any additional things to add to the notification      
+     * @return Boolean
+    */
     protected function notifyUsers($roles, $title, $desc, $link = null, $options = false){
-        // Get all users with super permissions (To notify)
+        // Get all users with provided roles (To notify)
         $users = $this->getUsersWithRoles($roles);
 
         // Notify all super users
@@ -147,6 +157,11 @@ class Controller extends BaseController
         }        
     }
 
+    /** 
+     * Finds all users with the roles provided
+     *
+     * @param - Array - The roles to match in the where clause
+    */
     protected function getUsersWithRoles($roles) {
         // Will hold the user IDs corresponding to the supplied roles
         $userIds = [];
@@ -164,9 +179,6 @@ class Controller extends BaseController
 
         return $userIds;
     }
-
-
-
 
     /* ****************************************************
      * For User access control.

@@ -778,16 +778,37 @@ module.exports = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/**
+ * Contains some useful methods that can be used by components to do some mundane and repetitive tasks. 
+ *
+*/
 /* harmony default export */ __webpack_exports__["a"] = ({
-	pluckObjectById: function pluckObjectById(arrayToSearch, idToMatch) {
+	/** 
+  * Searches an array of objects for an 'id' and returns the matched object's index.
+  * Each object in the array should have an
+  *
+  * @param Array arrayToSearch - The array of objects to search (haystack)
+  * @param String idKey - The field on each object that identifies it (Ex. 'id' or 'project_id')
+  * @param Int idToMatch - The value of the id to match (needle)
+  * @return Int - The index of the matched object in the array
+ */
+	pluckObjectById: function pluckObjectById(arrayToSearch, idKey, idToMatch) {
 		// Search array and match object id
 		var item = arrayToSearch.find(function (elem) {
-			return elem.id === idToMatch;
+			return elem[idKey] === idToMatch;
 		}),
 		    index = arrayToSearch.indexOf(item);
 		// Return the plucked index
 		return index;
 	},
+
+
+	/** 
+  * Populates an object with data from the supplied form.
+  *
+  * @param Obj form - An object that contains objects for each form field. { val: , error: , errorMsg: , dflt: }.
+  * @return Promise - Resolves a function with the populated data array.
+ */
 	populatePostData: function populatePostData(form) {
 		return new Promise(function (resolve, reject) {
 			var data = {};
@@ -797,6 +818,15 @@ module.exports = {
 			resolve(data);
 		});
 	},
+
+
+	/** 
+  * Populates the supplied form with the supplied data
+  *
+  * @param Obj form - An object that contains objects for each form field. { val: , error: , errorMsg: , dflt: }.
+  * @param Obj data - An object with fields that correspond to the form.
+  * @return Promise - Resolves a function with the populated form.
+ */
 	populateForm: function populateForm(form, data) {
 		return new Promise(function (resolve, reject) {
 			// Populate form
@@ -806,6 +836,14 @@ module.exports = {
 			resolve(form);
 		});
 	},
+
+
+	/** 
+  * Resets the supplied form fields to their default state, including removing error messages.
+  *
+  * @param Obj form - An object that contains objects for each form field. { val: , error: , errorMsg: , dflt: }.
+  * @return Promise - Resolves a function with the now cleared form.
+ */
 	resetForm: function resetForm(form) {
 		var _this = this;
 
@@ -820,6 +858,15 @@ module.exports = {
 			resolve(form);
 		});
 	},
+
+
+	/** 
+  * Sets all form fields to an error state if they are present in the errors prop.
+  *
+  * @param Obj form - An object that contains objects for each form field. { val: , error: , errorMsg: , dflt: }.
+  * @param Obj errors - Each field in error state will have an object here. Returned by Laravel validate method.
+  * @param Promise - Resolves a function
+ */
 	populateFormErrors: function populateFormErrors(form, errors) {
 		return new Promise(function (resolve, reject) {
 			// Populate form errors
@@ -830,6 +877,12 @@ module.exports = {
 			resolve();
 		});
 	},
+
+
+	/**
+  * Clears the supplied form fields of any possible error state.
+  * @param Obj form - An object that contains objects for each form field. { val: , error: , errorMsg: , dflt: }.	 
+ */
 	clearFormErrors: function clearFormErrors(form) {
 		return new Promise(function (resolve, reject) {
 			// Clear form errors
@@ -839,86 +892,6 @@ module.exports = {
 			}
 			resolve(form);
 		});
-	},
-	tallyProjectInvoices: function tallyProjectInvoices(workItems) {
-		if (workItems.length != 0) {
-			// Cache total
-			var total = 0,
-			    invoiceIds = [];
-			// Itterate and calculate
-			workItems.forEach(function (item) {
-				// Push this items invoice id to the cached array
-				invoiceIds.push(item.invoice.id);
-			});
-			// Return unique invoice IDs in array
-			return Array.from(new Set(invoiceIds)).length;
-		}
-	},
-	tallyWorkItemsHours: function tallyWorkItemsHours(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			total += parseFloat(item.hours);
-		});
-		return total;
-	},
-	tallyWorkItemsHoursPay: function tallyWorkItemsHoursPay(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			total += parseFloat(item.hours) * parseFloat(item.hourly_rate);
-		});
-		return total;
-	},
-	tallyWorkItemsTravelMileageCost: function tallyWorkItemsTravelMileageCost(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			if (item.travel_mileage) total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate);
-		});
-		return total;
-	},
-	tallyWorkItemsPerDiemCost: function tallyWorkItemsPerDiemCost(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			if (item.per_diem) total += parseFloat(item.per_diem);
-		});
-		return total;
-	},
-	tallyWorkItemsLodgingCost: function tallyWorkItemsLodgingCost(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			if (item.lodging_cost) total += parseFloat(item.lodging_cost);
-		});
-		return total;
-	},
-	tallyWorkItemsEquipmentCost: function tallyWorkItemsEquipmentCost(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			if (item.equipment_cost) total += parseFloat(item.equipment_cost);
-		});
-		return total;
-	},
-	tallyWorkItemsExtraCosts: function tallyWorkItemsExtraCosts(workItems) {
-		// Cache total
-		var total = 0;
-		// Itterate and calculate
-		workItems.forEach(function (item) {
-			if (item.travel_mileage) total += parseFloat(item.travel_mileage) * parseFloat(item.mileage_rate);
-			if (item.per_diem) total += parseFloat(item.per_diem);
-			if (item.lodging_cost) total += parseFloat(item.lodging_cost);
-			if (item.equipment_cost) total += parseFloat(item.equipment_cost);
-		});
-		return total;
 	}
 });
 
@@ -971,13 +944,17 @@ module.exports = Component.exports
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/**
+ * Is a central point for all money calculations within the app. 
+ *
+ * All calculations are done in cents and then converted back to dollars for precision.
+*/
 /* harmony default export */ __webpack_exports__["a"] = ({
-
 	/**
   * Counts the number of unique projects within a set of work items.
   *
-  * @param workItems (Array) - The work items to search and find unique projects.
-  * @return (Int) The amount of unique invoices within the set of work items.
+  * @param Array workItems - The work items to search and find unique projects.
+  * @return Int - The amount of unique invoices within the set of work items.
  */
 	tallyProjectInvoices: function tallyProjectInvoices(workItems) {
 		if (workItems.length != 0) {
@@ -993,12 +970,28 @@ module.exports = Component.exports
 			return Array.from(new Set(invoiceIds)).length;
 		}
 	},
+
+
+	/** 
+  * Returns the work hours pay for a single work item.
+  *
+  * @param Obj workItem - WorkItem model
+  * @return Float
+ */
 	tallySingleWorkItemHoursPay: function tallySingleWorkItemHoursPay(workItem) {
 		// Tally, calculating in cents not dollars
 		var total = parseFloat(workItem.hours) * (parseFloat(workItem.hourly_rate) * 100);
 		// Convert back to dollars
 		return total / 100;
 	},
+
+
+	/** 
+  * Returns the travel mileage pay for a single work item.
+  *
+  * @param Obj workItem - WorkItem model
+  * @return Float
+ */
 	tallySingleWorkItemsMileagePay: function tallySingleWorkItemsMileagePay(workItem) {
 		// Tally, calculating in cents not dollars
 		var total = parseFloat(workItem.travel_mileage) * (parseFloat(workItem.mileage_rate) * 100);
@@ -1008,7 +1001,10 @@ module.exports = Component.exports
 
 
 	/** 
-  * Tallies the amount of hours in a set of work items.
+  * Returns the amount of hours in a set of work items.
+  *
+  * @param Array workItems - an array of WorkItem models
+  * @return Int
  */
 	tallyWorkItemsHours: function tallyWorkItemsHours(workItems) {
 		// Cache total
@@ -1022,7 +1018,10 @@ module.exports = Component.exports
 
 
 	/** 
-  * Tallies the amount of pay in a set of work items (Based on hours and hourly rate).
+  * Returns the total hours pay in a set of work items.
+  *
+  * @param Array workItems - an array of WorkItem models
+  * @return Float
  */
 	tallyWorkItemsHoursPay: function tallyWorkItemsHoursPay(workItems) {
 		// Cache total
@@ -1035,6 +1034,14 @@ module.exports = Component.exports
 		// Convert back to dollars
 		return total / 100;
 	},
+
+
+	/** 
+  * Returns the total travel mileage pay in a set of work items.
+  *
+  * @param Array workItems - an array of WorkItem models
+  * @return Float
+ */
 	tallyWorkItemsTravelMileageCost: function tallyWorkItemsTravelMileageCost(workItems) {
 		// Cache total
 		var total = 0;
@@ -1046,6 +1053,14 @@ module.exports = Component.exports
 		// Convert back to dollars
 		return total / 100;
 	},
+
+
+	/** 
+  * Returns the total per diem amount in a set of work items.
+  *
+  * @param Array workItems - an array of WorkItem models
+  * @return Float
+ */
 	tallyWorkItemsPerDiemCost: function tallyWorkItemsPerDiemCost(workItems) {
 		// Cache total
 		var total = 0;
@@ -1057,6 +1072,14 @@ module.exports = Component.exports
 		// Convert back to dollars
 		return total / 100;
 	},
+
+
+	/** 
+  * Returns the total lodging cost in a set of work items.
+  *
+  * @param Array workItems - an array of WorkItem models
+  * @return Float
+ */
 	tallyWorkItemsLodgingCost: function tallyWorkItemsLodgingCost(workItems) {
 		// Cache total
 		var total = 0;
@@ -1068,6 +1091,14 @@ module.exports = Component.exports
 		// Convert back to dollars
 		return total / 100;
 	},
+
+
+	/** 
+  * Returns the total equipment cost in a set of work items.
+  *
+  * @param Array workItems - an array of WorkItem models
+  * @return Float
+ */
 	tallyWorkItemsEquipmentCost: function tallyWorkItemsEquipmentCost(workItems) {
 		// Cache total
 		var total = 0;
@@ -1079,6 +1110,14 @@ module.exports = Component.exports
 		// Convert back to dollars
 		return total / 100;
 	},
+
+
+	/** 
+  * Returns the total extra costs amount in a set up work items. (Mileage, per diem, lodging, and equipment).
+  *
+  * @param Array workItems - an array of WorkItem models
+  * @return Float
+ */
 	tallyWorkItemsExtraCosts: function tallyWorkItemsExtraCosts(workItems) {
 		// Cache total
 		var total = 0;
@@ -1096,12 +1135,14 @@ module.exports = Component.exports
 		// Convert back to dollars
 		return total / 100;
 	},
-	tallyWorkItemsGst: function tallyWorkItemsGst(workItems) {
-		// Get the subtotal
-		var subtotal = this.tallyWorkItemsSubTotal(workItems);
-		// Calculate in cents then convert back to dollars
-		return subtotal * 100 * 0.05 / 100;
-	},
+
+
+	/** 
+  * Returns the sub total for work hours and extra costs together for a set of work items.
+  *
+  * @param Array workItems - an array of WorkItem models
+  * @return Float
+ */
 	tallyWorkItemsSubTotal: function tallyWorkItemsSubTotal(workItems) {
 		// Tally
 		var hoursPayTotal = this.tallyWorkItemsHoursPay(workItems),
@@ -1109,12 +1150,42 @@ module.exports = Component.exports
 		// Calculate in cents then convert back to dollars
 		return (hoursPayTotal * 100 + extraCostsTotal * 100) / 100;
 	},
+
+
+	/** 
+  * Returns the total amount of GST for a set of work items. Work hours and extra costs included together.
+  *
+  * @param Array workItems - an array of WorkItem models
+  * @return Float
+ */
+	tallyWorkItemsGst: function tallyWorkItemsGst(workItems) {
+		// Get the subtotal
+		var subtotal = this.tallyWorkItemsSubTotal(workItems);
+		// Calculate in cents then convert back to dollars
+		return subtotal * 100 * 0.05 / 100;
+	},
+
+
+	/** 
+  * Returns the total amount (subtotal + GST) for a set of work items.
+  *
+  * @param Array workItems - an array of WorkItem models
+  * @return Float
+ */
 	tallyWorkItemsTotal: function tallyWorkItemsTotal(workItems) {
 		var subtotal = this.tallyWorkItemsSubTotal(workItems),
 		    gst = this.tallyWorkItemsGst(workItems);
 		// Calculate in cents then convert back to dollars
 		return (subtotal * 100 + gst * 100) / 100;
 	},
+
+
+	/** 
+  * Returns the total amount of pay for a set of work items that are on an invoice which is paid.
+  *
+  * @param Array workItems - an array of WorkItem models
+  * @return Float
+ */
 	tallyPaidWorkItemsTotal: function tallyPaidWorkItemsTotal(workItems) {
 		// Seperate the work items that are on a paid invoice
 		var paidWorkItems = [];
@@ -1128,7 +1199,148 @@ module.exports = Component.exports
 		// Calculate in cents then convert back to dollars
 		return (subtotal * 100 + gst * 100) / 100;
 	},
-	tallyWorkItemsBottomLine: function tallyWorkItemsBottomLine(workItems) {}
+
+
+	/** 
+  * Returns the total amount of pay still oustanding for a set of work items.
+  *
+  * @param Array workItems - an array of WorkItem models
+  * @return Float
+ */
+	tallyOwingProjectCost: function tallyOwingProjectCost(workItems) {
+		var total = parseFloat(this.tallyWorkItemsTotal(workItems)) * 100 - parseFloat(this.tallyPaidWorkItemsTotal(workItems)) * 100;
+		return total / 100;
+	},
+
+
+	/** 
+  * Returns the total bottom line (profit or loss) for a set of work items.
+  *
+  * @param Array workItems - an array of WorkItem models
+  * @param String invoicePaidDate - The date (or not) the parent invoice was paid
+  * @param Float clinetInvoicedAmount - The amount of the client invoice (could be zero)
+  * @return Float
+ */
+	tallyWorkItemsBottomLine: function tallyWorkItemsBottomLine(workItems, invoicePaidDate, clientInvoicedAmount) {
+		var invoiceAmount = 0;
+		// Determine invoice amount
+		if (invoicePaidDate) {
+			invoiceAmount = clientInvoicedAmount;
+		}
+		var total = parseFloat(invoiceAmount) * 100 - parseFloat(this.tallyWorkItemsTotal(workItems)) * 100;
+		return total / 100;
+	},
+
+
+	/** 
+  * Returns the total amount ($) for invoices that have been paid in a set of projects.
+  *
+  * @param Array projects - an array of Project models
+  * @return Float
+ */
+	tallyProjectsInvoicesPaidTotal: function tallyProjectsInvoicesPaidTotal(projects) {
+		var total = 0;
+		projects.forEach(function (project) {
+			if (project.invoice_paid_date != null) {
+				total += parseFloat(project.invoice_amount) * 100;
+			}
+		});
+		return total / 100;
+	},
+
+
+	/** 
+  * Returns the total outstanding amount ($) for invoices that have not been paid in a set of projects.
+  *
+  * @param Array projects - an array of Project models
+  * @return Float
+ */
+	tallyProjectsInvoicesOutstandingTotal: function tallyProjectsInvoicesOutstandingTotal(projects) {
+		var total = 0;
+		projects.forEach(function (project) {
+			if (project.invoice_paid_date === null) {
+				total += parseFloat(project.invoice_amount) * 100;
+			}
+		});
+		return total / 100;
+	},
+
+
+	/** 
+  * Returns the total crew cost in a set of projects.
+  *
+  * @param Array projects - an array of Project models
+  * @return Float
+ */
+	tallyProjectsTotalCrewCost: function tallyProjectsTotalCrewCost(projects) {
+		var _this = this;
+
+		var total = 0;
+		projects.forEach(function (project) {
+			if (project.work_items.length != 0) {
+				total += _this.tallyWorkItemsTotal(project.work_items) * 100;
+			}
+		});
+		return total / 100;
+	},
+
+
+	/** 
+  * Returns the total paid crew cost in a set of projects.
+  *
+  * @param Array projects - an array of Project models
+  * @return Float
+ */
+	tallyProjectsTotalPaidCrewCost: function tallyProjectsTotalPaidCrewCost(projects) {
+		var _this2 = this;
+
+		var total = 0;
+		projects.forEach(function (project) {
+			if (project.work_items.length != 0) {
+				total += _this2.tallyPaidWorkItemsTotal(project.work_items) * 100;
+			}
+		});
+		return total / 100;
+	},
+
+
+	/** 
+  * Returns the total crew cost still owed in a set of projects.
+  *
+  * @param Array projects - an array of Project models
+  * @return Float
+ */
+	tallyProjectsOwingCrewCost: function tallyProjectsOwingCrewCost(projects) {
+		var total = parseFloat(this.tallyProjectsTotalCrewCost(projects)) * 100 - parseFloat(this.tallyProjectsTotalPaidCrewCost(projects)) * 100;
+
+		return total / 100;
+	},
+
+
+	/** 
+  * Returns the total bottom line in a set of projects (Invoices paid - crew cost)
+  *
+  * @param Array projects - an array of Project models
+  * @return Float
+ */
+	tallyProjectsTotalBottomLine: function tallyProjectsTotalBottomLine(projects) {
+		var total = parseFloat(this.tallyProjectsInvoicesPaidTotal(projects)) * 100 - parseFloat(this.tallyProjectsTotalCrewCost(projects)) * 100;
+
+		return total / 100;
+	},
+
+
+	/** 
+  * Returns the 'sub bottom line'. (Bottom line - outstanding invoices total)
+  *
+  * @param Array projects - an array of Project models
+  * @return Float
+ */
+	tallyProjectsSubBottomLine: function tallyProjectsSubBottomLine(projects) {
+		var total = parseFloat(this.tallyProjectsTotalBottomLine(projects)) * 100 - parseFloat(this.tallyProjectsInvoicesOutstandingTotal(projects)) * 100;
+
+		return total / 100;
+	}
 });
 
 /***/ }),
@@ -45402,7 +45614,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			return state.notifications = payload;
 		},
 		deleteNotification: function deleteNotification(state, payload) {
-			var index = __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].pluckObjectById(state.notifications, payload);
+			var index = __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].pluckObjectById(state.notifications, 'id', payload);
 			// Remove from store
 			state.notifications.splice(index, 1);
 		},
@@ -52762,55 +52974,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   computed: {
     invoicesPaidTotal: function invoicesPaidTotal() {
-      var total = 0;
-      this.projects.forEach(function (project) {
-        if (project.invoice_paid_date != null) {
-          total += parseFloat(project.invoice_amount) * 100;
-        }
-      });
-      return total / 100;
+      return __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyProjectsInvoicesPaidTotal(this.projects).toFixed(2);
     },
     invoicesOutstandingTotal: function invoicesOutstandingTotal() {
-      var total = 0;
-      this.projects.forEach(function (project) {
-        if (project.invoice_paid_date === null) {
-          total += parseFloat(project.invoice_amount) * 100;
-        }
-      });
-      return total / 100;
+      return __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyProjectsInvoicesOutstandingTotal(this.projects).toFixed(2);
     },
     totalCrewCost: function totalCrewCost() {
-      var total = 0;
-      this.projects.forEach(function (project) {
-        if (project.work_items.length != 0) {
-          total += __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyWorkItemsTotal(project.work_items) * 100;
-        }
-      });
-      return total / 100;
+      return __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyProjectsTotalCrewCost(this.projects).toFixed(2);
     },
     totalPaidCrewCost: function totalPaidCrewCost() {
-      var total = 0;
-      this.projects.forEach(function (project) {
-        if (project.work_items.length != 0) {
-          total += __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyPaidWorkItemsTotal(project.work_items) * 100;
-        }
-      });
-      return total / 100;
+      return __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyProjectsTotalPaidCrewCost(this.projects).toFixed(2);
     },
     totalOwingCrewCost: function totalOwingCrewCost() {
-      var total = parseFloat(this.totalCrewCost) * 100 - parseFloat(this.totalPaidCrewCost) * 100;
-
-      return total / 100;
+      return __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyProjectsOwingCrewCost(this.projects).toFixed(2);
     },
     totalBottomLine: function totalBottomLine() {
-      var total = parseFloat(this.invoicesPaidTotal) * 100 - parseFloat(this.totalCrewCost) * 100;
-
-      return total / 100;
+      return __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyProjectsTotalBottomLine(this.projects).toFixed(2);
     },
-    subBottomLine: function subBottomLine() {
-      var total = parseFloat(this.totalBottomLine) * 100 - parseFloat(this.invoicesOutstandingTotal) * 100;
 
-      return total / 100;
+
+    // Bottom line minus invoices outstanding
+    subBottomLine: function subBottomLine() {
+      return __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyProjectsSubBottomLine(this.projects).toFixed(2);
     }
   }
 });
@@ -56955,17 +57140,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallyPaidWorkItemsTotal(this.workItems).toFixed(2);
 		},
 		totalOwingProjectCost: function totalOwingProjectCost() {
-			var total = parseFloat(this.totalProjectCost) * 100 - parseFloat(this.totalPaidProjectCost) * 100;
-
-			return (total / 100).toFixed();
+			return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallyOwingProjectCost(this.workItems).toFixed(2);
 		},
 		totalBottomLine: function totalBottomLine() {
-			var invoiceAmount = 0;
-			// Determine invoice amount
-			if (this.invoicePaidDate) {
-				invoiceAmount = this.clientInvoicedAmount;
-			}
-			return (parseFloat(invoiceAmount) - parseFloat(this.totalProjectCost)).toFixed(2);
+			return __WEBPACK_IMPORTED_MODULE_1__resources_bus_logic__["a" /* default */].tallyWorkItemsBottomLine(this.workItems, this.invoicePaidDate, this.clientInvoicedAmount).toFixed(2);
 		}
 	},
 
@@ -58215,31 +58393,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 			return this.$store.getters.projectsSelectList;
 		},
 		workHoursTotal: function workHoursTotal() {
-			if (this.currentInvoice) {
-				// Tally with helper
-				return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyWorkItemsHoursPay(this.currentInvoice.work_items).toFixed(2);
-			}
+			// Tally with helper
+			return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyWorkItemsHoursPay(this.currentInvoice.work_items).toFixed(2);
 		},
 		extraCostsTotal: function extraCostsTotal() {
-			if (this.currentInvoice) {
-				// Tally with helper
-				return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyWorkItemsExtraCosts(this.currentInvoice.work_items).toFixed(2);
-			}
+			// Tally with helper
+			return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyWorkItemsExtraCosts(this.currentInvoice.work_items).toFixed(2);
 		},
 		invoiceSubTotal: function invoiceSubTotal() {
-			if (this.currentInvoice) {
-				return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyWorkItemsSubTotal(this.currentInvoice.work_items).toFixed(2);
-			}
+			return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyWorkItemsSubTotal(this.currentInvoice.work_items).toFixed(2);
 		},
 		gstTotal: function gstTotal() {
-			if (this.currentInvoice) {
-				return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyWorkItemsGst(this.currentInvoice.work_items).toFixed(2);
-			}
+			return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyWorkItemsGst(this.currentInvoice.work_items).toFixed(2);
 		},
 		invoiceTotal: function invoiceTotal() {
-			if (this.currentInvoice) {
-				return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyWorkItemsTotal(this.currentInvoice.work_items).toFixed(2);
-			}
+			return __WEBPACK_IMPORTED_MODULE_2__resources_bus_logic__["a" /* default */].tallyWorkItemsTotal(this.currentInvoice.work_items).toFixed(2);
 		}
 	},
 

@@ -110,61 +110,32 @@
 
     computed: {
       invoicesPaidTotal () {
-        var total = 0;
-        this.projects.forEach((project) => {
-          if(project.invoice_paid_date != null) {
-            total += (parseFloat(project.invoice_amount) * 100);
-          }
-        });
-        return total / 100;
+        return BusLogic.tallyProjectsInvoicesPaidTotal(this.projects).toFixed(2);
       },
 
       invoicesOutstandingTotal () {
-        var total = 0;
-        this.projects.forEach((project) => {
-          if(project.invoice_paid_date === null) {
-            total += (parseFloat(project.invoice_amount) * 100);
-          }
-        });
-        return total / 100;
+        return BusLogic.tallyProjectsInvoicesOutstandingTotal(this.projects).toFixed(2);
       },
 
       totalCrewCost () {
-        var total = 0;
-        this.projects.forEach((project) => {
-          if(project.work_items.length != 0){
-            total += (BusLogic.tallyWorkItemsTotal(project.work_items) * 100);
-          }            
-        });
-        return total / 100;
+        return BusLogic.tallyProjectsTotalCrewCost(this.projects).toFixed(2);
       },
 
       totalPaidCrewCost () {
-        var total = 0;
-        this.projects.forEach((project) => {
-          if(project.work_items.length != 0){
-            total += (BusLogic.tallyPaidWorkItemsTotal(project.work_items) * 100);
-          }            
-        });
-        return total / 100;        
+        return BusLogic.tallyProjectsTotalPaidCrewCost(this.projects).toFixed(2);       
       },
 
       totalOwingCrewCost () {
-        var total = (parseFloat(this.totalCrewCost) * 100) - (parseFloat(this.totalPaidCrewCost) * 100);
-
-        return total / 100;
+        return BusLogic.tallyProjectsOwingCrewCost(this.projects).toFixed(2);
       },
 
       totalBottomLine () {
-        var total = (parseFloat(this.invoicesPaidTotal) * 100) - (parseFloat(this.totalCrewCost) * 100);
-
-        return total / 100;
+        return BusLogic.tallyProjectsTotalBottomLine(this.projects).toFixed(2);
       },
-
+      
+      // Bottom line minus invoices outstanding
       subBottomLine () {
-        var total = (parseFloat(this.totalBottomLine) * 100) - (parseFloat(this.invoicesOutstandingTotal) * 100);
-
-        return total / 100;
+        return BusLogic.tallyProjectsSubBottomLine(this.projects).toFixed(2);
       }         
     }
   }

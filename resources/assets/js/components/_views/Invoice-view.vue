@@ -644,35 +644,25 @@
 			},
 
 			workHoursTotal () {
-				if(this.currentInvoice){
-					// Tally with helper
-					return BusLogic.tallyWorkItemsHoursPay(this.currentInvoice.work_items).toFixed(2);			
-				}
+				// Tally with helper
+				return BusLogic.tallyWorkItemsHoursPay(this.currentInvoice.work_items).toFixed(2);			
 			},
 
 			extraCostsTotal () {
-				if(this.currentInvoice){
-					// Tally with helper
-					return BusLogic.tallyWorkItemsExtraCosts(this.currentInvoice.work_items).toFixed(2);				
-				}		
+				// Tally with helper
+				return BusLogic.tallyWorkItemsExtraCosts(this.currentInvoice.work_items).toFixed(2);				
 			},
 
 			invoiceSubTotal () {
-				if(this.currentInvoice){
-					return BusLogic.tallyWorkItemsSubTotal(this.currentInvoice.work_items).toFixed(2);
-				}	
+				return BusLogic.tallyWorkItemsSubTotal(this.currentInvoice.work_items).toFixed(2);
 			},
 
 			gstTotal () {
-				if(this.currentInvoice){
-					return BusLogic.tallyWorkItemsGst(this.currentInvoice.work_items).toFixed(2);
-				}				
+				return BusLogic.tallyWorkItemsGst(this.currentInvoice.work_items).toFixed(2);			
 			},
 
 			invoiceTotal () {
-				if(this.currentInvoice){
-					return BusLogic.tallyWorkItemsTotal(this.currentInvoice.work_items).toFixed(2);
-				}				
+				return BusLogic.tallyWorkItemsTotal(this.currentInvoice.work_items).toFixed(2);			
 			}
 		},
 

@@ -60,7 +60,7 @@ export const store = new Vuex.Store({
 		},
 
 		deleteNotification (state, payload) {
-			var index = Helpers.pluckObjectById(state.notifications, payload);
+			var index = Helpers.pluckObjectById(state.notifications, 'id', payload);
 			// Remove from store
 			state.notifications.splice(index, 1);
 		},
