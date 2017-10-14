@@ -6,7 +6,7 @@ import Helpers from './helpers';
 Vue.use(Vuex);
 
 /** 
- * The Vuex store 
+ * Holds state that can be used accross all components
 */
 export const store = new Vuex.Store({
 	/** 
@@ -52,24 +52,32 @@ export const store = new Vuex.Store({
 	},
 
 	/**
-	 * Methods that directly change the state cache
+	 * Methods that directly change the state cache.
+	 *
+	 * Method names are self descriptive so comments are only added where clarity is needed.
 	*/
 	mutations: {
+		/*
+		 * Notification mutations
+		*/
 		updateNotifications (state, payload) {
 			return state.notifications = payload;
 		},
 
 		deleteNotification (state, payload) {
+			// Use helper to get index
 			var index = Helpers.pluckObjectById(state.notifications, 'id', payload);
 			// Remove from store
-			state.notifications.splice(index, 1);
+			return state.notifications.splice(index, 1);
 		},
 
-		// Update projects
+		/*
+		 * Project based mutations
+		*/
 		updateProjects (state, payload) {
 			return state.projects = payload;
 		},
-		// Update the current project
+
 		updateCurrentProject (state, payload) {
 			return state.currentProject = payload;
 		},
@@ -100,38 +108,35 @@ export const store = new Vuex.Store({
 			}
 		},
 
-		// Push a freshly added comment into the current project
 		addProjectComment (state, payload) {
 			return state.currentProject.comments.push(payload);
 		},
-		// Remove a comment from the current project
+
 		deleteProjectComment (state, payload) {
-			// Find comment to delete
-			state.currentProject.comments.forEach(function(comment){
-				if(comment.id == payload) {
-					var index = state.currentProject.comments.indexOf(comment); 
-					state.currentProject.comments.splice(index, 1);					
-				}
-			});
+			// Use helper to get index
+			var index = Helpers.pluckObjectById(state.currentProject.comments, 'id', payload);
+			// Remove from store
+			return state.currentProject.comments.splice(index, 1);
 		},
-		// Push a freshly added crew member into the current project
+
 		addProjectCrew (state, payload) {
 			return state.currentProject.users.push(payload);
 		},
-		// Remove a crew member from the current project
+
 		deleteProjectCrew (state, payload) {
-			state.currentProject.users.forEach(function(user){
-				if(user.id == payload) {
-					var index = state.currentProject.users.indexOf(user); 
-					state.currentProject.users.splice(index, 1);					
-				}
-			});
+			// Use helper to get index
+			var index = Helpers.pluckObjectById(state.currentProject.users, 'id', payload);
+			// Remove from store
+			return state.currentProject.users.splice(index, 1);	
 		},
-		// Update the current project timline
+
 		updateCurrentProjectTimeline (state, payload) {
 			return state.currentProject.timeline = payload;
 		},
 
+		/*
+		 * Invoice based mutations
+		*/
 		updateInvoices (state, payload) {
 			return state.invoices = payload;
 		},
@@ -145,6 +150,7 @@ export const store = new Vuex.Store({
 		},
 
 		markInvoicesPaid (state, payload) {
+			// Itterate through each invoice
 			payload.forEach((id) => {
 				var invoice = state.crewInvoices.find(elem => elem.id === id),
 						invoiceIndex = state.crewInvoices.indexOf(invoice);
@@ -152,6 +158,7 @@ export const store = new Vuex.Store({
 				return state.crewInvoices[invoiceIndex].is_paid = 1;
 			});
 		},
+
 		updateCrewInvoices (state, payload) {
 			return state.crewInvoices = payload;
 		},
@@ -187,22 +194,25 @@ export const store = new Vuex.Store({
 		},
 
 		updateWorkItem (state, payload) {
-			// Find item in current store cache, then find the index of that item
-			var item = state.currentInvoice.work_items.find(elem => elem.id === payload.id),
-					itemIndex = state.currentInvoice.work_items.indexOf(item);
-			// Replace item in store cache
-			return state.currentInvoice.work_items[itemIndex] = payload;
+			// Use helper to get index
+			var index = Helpers.pluckObjectById(state.currentInvoice.work_items, 'id', payload);
+			// FIRST, remove item that was updated from store 
+			state.currentInvoice.work_items.splice(index, 1);	
+			// NEXT, add the updated work item back to the invoice 
+			// We do it this way so the computed property in the component will trigger an update
+			return state.currentInvoice.work_items.push(payload);
 		},
 
 		deleteWorkItem (state, payload) {
-			// Find item in current store cache, then find the index of that item
-			var item = state.currentInvoice.work_items.find(elem => elem.id === payload),
-					itemIndex = state.currentInvoice.work_items.indexOf(item);
-			// Remove item in store cache
-			return state.currentInvoice.work_items.splice(itemIndex, 1);		
+			// Use helper to get index
+			var index = Helpers.pluckObjectById(state.currentInvoice.work_items, 'id', payload);
+			// Remove item from cache 
+			return state.currentInvoice.work_items.splice(index, 1)	
 		},
 
-		// Update users
+		/*
+		 * User based mutations (Search and auth)
+		*/		
 		updateUsers (state, payload) {
 			return state.users = payload;
 		},
@@ -234,14 +244,24 @@ export const store = new Vuex.Store({
 			state.authUser = { };
 		},
 
-		// Update clients
+		/*
+		 * Misc mutations
+		*/
 		updateClients (state, payload) {
 			return state.clients = payload;
 		}
 	},
 
+	/** 
+	 * Actions that send API server calls and manipulate the database.
+	 *
+	 * Method names are self descriptive so comments are only added where clarity is needed.
+	*/
 	actions: {
 
+		/* 
+		 * Notification actions
+		*/
 		getNotifications (context, payload) {
 			return api.getAction(context, '/notifications', 'updateNotifications');
 		},
@@ -249,11 +269,10 @@ export const store = new Vuex.Store({
 		deleteNotification (context, payload) {
 			return api.deleteAction(context, '/notifications/delete/'+payload.id, 'deleteNotification');
 		},
-		/* 
-			PROJECT ACTIONS
-		*/
 
-		// Use api to retrieve all projects and set them in the state
+		/* 
+		 * Project based actions
+		*/
 		getProjects (context, payload) {
 			var url = '/projects'
 			// Create payload 
@@ -274,37 +293,41 @@ export const store = new Vuex.Store({
 			// Use api to send the request
 			return api.getAction(context, url, 'updateProjects');
 		},
-		// Use api to retrieve a project and set it in the state
+
+		// Projects the authenticated user is a part of
+		getUsersProjects (context, payload) {
+			 return api.getAction(context, '/projects/auth-users', 'updateProjects');
+		},
+
 		getProject (context, payload) {
 			// Use api to send request
 			return api.getAction(context, '/projects/'+payload, 'updateCurrentProject');
 		},
 
-		// Use api to add a new project to the db and update the current project in the state
 		addProject (context, payload) {
 			// Use api to send request
 			return api.postAction(context, payload, '/projects/start', 'updateCurrentProject');
 		},
-		// Use api to edit a project field in the db and update the current project in the state
+
 		updateProjectField (context, payload) {
 			// Use api to send request
 			return api.postAction(context, payload, '/projects/update-field', 'updateCurrentProject');
 		},
-		// Use api to add a comment to specific project and update the current project comments in the state
+
 		addProjectComment (context, payload) {
 			// Use api to send request
 			return api.postAction(context, payload, '/projects/add-comment', 'addProjectComment');
 		},
-		// Use api to delete a comment and update the current project comments in the state
+
 		deleteProjectComment (context, payload) {
 			// Use api to send request
 			return api.deleteAction(context, '/projects/delete-comment/'+payload.id, 'deleteProjectComment');
 		},
-		// Use api to add a crew member to a specific project and update the current project users in the state
+
 		addProjectCrew (context, payload) {
 			return api.postAction(context, payload, '/projects/add-crew', 'addProjectCrew');
 		},
-		// Use api to delete a crew member from a specific project and update the current project crew in the state
+
 		deleteProjectCrew (context, payload) {
 			return api.deleteAction(context, '/projects/'+payload.project_id+'/delete-crew/'+ payload.id, 'deleteProjectCrew');
 		},
@@ -312,12 +335,10 @@ export const store = new Vuex.Store({
 		updateTimelineField (context, payload) {
 			return api.postAction(context, payload, '/timelines/update-field', 'updateCurrentProjectTimeline');
 		},
-		// Use api to retrieve all of a users projects and set them in the state
-		getUsersProjects (context, payload) {
-			 return api.getAction(context, '/projects/auth-users', 'updateProjects');
-		},
 
-		// Use api to retrieve all invocies
+		/* 
+		 * Invoice based actions
+		*/
 		getAllInvoices (context, payload) {
 			var url = '/invoices';
 			// Create payload 
@@ -339,12 +360,11 @@ export const store = new Vuex.Store({
 			return api.getAction(context, url, 'updateCrewInvoices');
 		},
 
-		// Use api to retrieve all of a users invoices and set them in the state
+		// Invoices created by the authenticated user
 		getUsersInvoices (context, payload) {
 			 return api.getAction(context, '/invoices/auth-users', 'updateInvoices');
 		},
 	
-		// Use api to add an invoice
 		addInvoice (context, payload) {
 			return api.postAction(context, payload, '/invoices/add', 'updateCurrentInvoice');
 		},
@@ -353,78 +373,78 @@ export const store = new Vuex.Store({
 			return api.getAction(context, '/invoices/'+payload, 'updateCurrentInvoice');
 		},
 
+		// User, Admin only
 		publishInvoice (context, payload) {
 			return api.postAction(context, payload, '/invoices/publish', 'publishInvoice');
 		},
 
+		// Super only
 		markInvoicesPaid (context, payload) {
 			return api.postAction(context, payload, 'invoices/mark-paid', 'markInvoicesPaid');
 		},
 
-		// Use api to delete an invoice
 		deleteInvoice (context, payload) {
 			return api.deleteAction(context, '/invoices/delete/'+ payload, 'deleteInvoice');
 		},	
 
-		// Use api to add hours to a timesheet
 		addWorkItem (context, payload) {
 			return api.postAction(context, payload, '/invoices/add-item', 'addWorkItem');
 		},
-		// Use api to add hours to a timesheet
+
 		updateWorkItem (context, payload) {
 			return api.postAction(context, payload, '/invoices/edit-item', 'updateWorkItem');
 		},	
-		// Use api to delete an entire timesheet
+
 		deleteWorkItem (context, payload) {
 			return api.deleteAction(context, '/invoices/delete-item/'+ payload, 'deleteWorkItem');
 		},				
 
 		/* 
-			USER ACTIONS
+		 * User based actions
 		*/
-
-		// Use api to retrieve all users and set them in the store
 		getUsers (context, payload) {
 			return api.getAction(context, '/users', 'updateUsers');
 		},
 
-		// Use api to retrieve a user and set it in the state
 		getUser (context, payload) {
 			// Use api to send request
 			return api.getAction(context, '/users/'+payload, 'updateCurrentUser');
 		},
-		// Use api to add a new user to the db
+
 		addUser (context, payload) {
 			// Use api to send request
 			return api.postAction(context, payload, '/users/add', 'addUser');
-		},		
-		// Use api to edit a user field in the db and update the current user in the state
+		},	
+
 		updateUserField (context, payload) {
 			// Use api to send request
 			return api.postAction(context, payload, '/users/update-field', 'updateCurrentUser');
 		},
-		// Use api to change a users password
+
+		// Super, admin only
 		changeUserPassword (context, payload) {
 			return api.postAction(context, payload, '/users/change-password');
 		},
-		// Use api to change the logged in users password
+
 		changePersonalPassword (context, payload) {
 			return api.postAction(context, payload, '/users/change-personal-password');
 		},
-		/*
-			MISC ACTIONS
-		*/
 
-		// Use api to retrieve all the unique clients (from projects)
+		/* 
+		 * Misc actions
+		*/
 		getClients (context, payload) {
 			// Use api to send request
 			return api.getAction(context, '/projects/clients', 'updateClients');
 		},
 
-
-
 	},
 
+	/** 
+	 * Getters that access the state directly (For components)
+	 *
+	 * Method names are self descriptive so comments are only added where clarity is needed.	 
+	*/
 	getters: {
 		// Return the debug state
 		debug (state) {
@@ -435,7 +455,6 @@ export const store = new Vuex.Store({
 			return state.notifications;
 		},
 
-		// Return the loaded projects
 		projects (state) {
 			return state.projects;
 		},
@@ -476,12 +495,11 @@ export const store = new Vuex.Store({
 			return state.invoicesFilter;
 		},
 
-		// Return all users
 		users (state) {
 			return state.users;
 		},
 
-		// Return the logged in user
+		// Return the authenticated user
 		user (state) {
 			return state.authUser;
 		},
@@ -514,12 +532,10 @@ export const store = new Vuex.Store({
       return usersSelect;	
 		},
 
-		// Return the clients (from projects table)
 		clients (state) {
 			return state.clients;
 		},
 
-		// Return the clients formatted for a vuetify select list
 		clientsSelectList (state) {
 			// Cache clients
 			var clients = state.clients,
@@ -530,5 +546,7 @@ export const store = new Vuex.Store({
       });		
       return clientsSelect;	
 		}
+		
 	}
+
 });

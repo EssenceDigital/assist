@@ -639,6 +639,10 @@
 				return this.$store.getters.currentInvoice;
 			},
 
+			workItems () {
+				return this.$store.getters.currentInvoice.work_items;
+			},
+
 			projectsSelectList () {
 				return this.$store.getters.projectsSelectList;
 			},
@@ -805,9 +809,12 @@
 								// Toggle dialog
 								this.workItemDialog = false;
 								// Toggle loader
-								this.workItemSaving = false;								
+								this.workItemSaving = false;		
+								// Revert action to default
+								this.workItemDispatchAction = 'addWorkItem';															
 								// Reset form
 								Helpers.resetForm(this.workItemForm);
+								//
 							})
 							// Unsuccessful request
 							.catch((errors) => {

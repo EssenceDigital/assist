@@ -9,9 +9,13 @@
 // Laravel authentication setup
 Auth::routes();
 
-Route::get('/', function () {
-    return view('index');
-});
+// Site Routes
+Route::get('/', 'SiteController@index');
+Route::get('/our-services', 'SiteController@services');
+Route::get('/our-profile', 'SiteController@profile');
+Route::get('/our-projects', 'SiteController@projects');
+Route::get('/our-team', 'SiteController@team');
+
 
 // The CENTRAL ROUTE (VUE.JS will take over application routes from here)
 Route::get('/app', 'DashboardController@index');

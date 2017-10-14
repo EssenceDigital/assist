@@ -11,22 +11,22 @@
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://www.arrowarchaeology.com/profile</loc>
+  <loc>https://www.arrowarchaeology.com/our-profile</loc>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://www.arrowarchaeology.com/services</loc>
+  <loc>https://www.arrowarchaeology.com/our-services</loc>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://www.arrowarchaeology.com/projects</loc>
+  <loc>https://www.arrowarchaeology.com/our-projects</loc>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://www.arrowarchaeology.com/team</loc>
+  <loc>https://www.arrowarchaeology.com/our-team</loc>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>

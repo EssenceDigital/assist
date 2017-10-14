@@ -310,7 +310,7 @@
         // Toggle loader
         this.loading = true;
         // Dispatch action to find projects
-        this.$store.dispatch('getProjects', this.projectsFilter).then( () => {
+        this.$store.dispatch('getProjects', this.projectsFilter).then(() => {
           // Toggle loader
           this.loading = false;
         });

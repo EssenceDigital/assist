@@ -154,6 +154,7 @@
         <td v-if="table_state === 'admin'">{{ props.item.user.first }}</td>
       	<td>{{ props.item.from_date | date }}</td>
       	<td>{{ props.item.to_date | date }}</td>
+        <td>{{ invoiceTotal(props.item.work_items) | money }}</td>
         <td v-if="table_state === 'user'">
           <v-chip 
             v-if="!props.item.is_published"
@@ -240,6 +241,7 @@
 </template>
 
 <script>
+  import BusLogic from "./../../resources/bus-logic";
 
   export default {
     // Determines what headers and fields the table should display ("admin" or "user")
@@ -300,6 +302,7 @@
             { text: 'User', value: 'user', align: 'left' },            
             { text: 'From Date', value: 'from_date', align: 'left' },
             { text: 'To Date', value: 'to_date', align: 'left' },
+            { text: 'Amount', value: 'amount', align: 'left' },
             { text: 'Paid?', value: 'is_paid', align: 'left' },
             { text: 'Actions', value: '', align: 'left' }
           ];
@@ -321,6 +324,10 @@
     },
 
     methods: {
+      invoiceTotal (workItems) {
+        return BusLogic.tallyWorkItemsTotal(workItems).toFixed(2);
+      },
+
       viewInvoice (id) {
         // User state forward
         if(this.table_state === 'user') this.$router.push('/my-invoices/'+id+'/view');
@@ -396,7 +403,8 @@
         dispatchAction = 'getUsersInvoices';
         this.selectAll = false;
       } else if(this.table_state === 'admin'){
-        dispatchAction = 'getAllInvoices';        
+        dispatchAction = 'getAllInvoices'; 
+        payload = this.invoicesFilter;       
       }
 
       // Tell store to load projects

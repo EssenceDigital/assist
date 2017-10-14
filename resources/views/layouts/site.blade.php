@@ -57,10 +57,10 @@
                     <nav>
                         <ul>
                             <li><a href="/" title="">Home</a></li>
-                            <li><a href="/profile" title="">Profile</a></li>
-                            <li><a href="/services" title="">Services</a></li>
-                            <li><a href="/projects" title="">Projects</a></li>
-                            <li><a href="/team" title="">Team</a></li>
+                            <li><a href="/our-profile" title="">Profile</a></li>
+                            <li><a href="/our-services" title="">Services</a></li>
+                            <li><a href="/our-projects" title="">Projects</a></li>
+                            <li><a href="/our-team" title="">Team</a></li>
                             <li><a href="#contact" title="">Contact</a></li>
                         </ul>
                     </nav>

@@ -45561,7 +45561,7 @@ function unbind(el) {
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */]);
 
 /** 
- * The Vuex store 
+ * Holds state that can be used accross all components
 */
 var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 	/** 
@@ -45607,25 +45607,31 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 	},
 
 	/**
-  * Methods that directly change the state cache
+  * Methods that directly change the state cache.
+  *
+  * Method names are self descriptive so comments are only added where clarity is needed.
  */
 	mutations: {
+		/*
+   * Notification mutations
+  */
 		updateNotifications: function updateNotifications(state, payload) {
 			return state.notifications = payload;
 		},
 		deleteNotification: function deleteNotification(state, payload) {
+			// Use helper to get index
 			var index = __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].pluckObjectById(state.notifications, 'id', payload);
 			// Remove from store
-			state.notifications.splice(index, 1);
+			return state.notifications.splice(index, 1);
 		},
 
 
-		// Update projects
+		/*
+   * Project based mutations
+  */
 		updateProjects: function updateProjects(state, payload) {
 			return state.projects = payload;
 		},
-
-		// Update the current project
 		updateCurrentProject: function updateCurrentProject(state, payload) {
 			return state.currentProject = payload;
 		},
@@ -45649,43 +45655,32 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 				state.projectsFilter[i] = '';
 			}
 		},
-
-
-		// Push a freshly added comment into the current project
 		addProjectComment: function addProjectComment(state, payload) {
 			return state.currentProject.comments.push(payload);
 		},
-
-		// Remove a comment from the current project
 		deleteProjectComment: function deleteProjectComment(state, payload) {
-			// Find comment to delete
-			state.currentProject.comments.forEach(function (comment) {
-				if (comment.id == payload) {
-					var index = state.currentProject.comments.indexOf(comment);
-					state.currentProject.comments.splice(index, 1);
-				}
-			});
+			// Use helper to get index
+			var index = __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].pluckObjectById(state.currentProject.comments, 'id', payload);
+			// Remove from store
+			return state.currentProject.comments.splice(index, 1);
 		},
-
-		// Push a freshly added crew member into the current project
 		addProjectCrew: function addProjectCrew(state, payload) {
 			return state.currentProject.users.push(payload);
 		},
-
-		// Remove a crew member from the current project
 		deleteProjectCrew: function deleteProjectCrew(state, payload) {
-			state.currentProject.users.forEach(function (user) {
-				if (user.id == payload) {
-					var index = state.currentProject.users.indexOf(user);
-					state.currentProject.users.splice(index, 1);
-				}
-			});
+			// Use helper to get index
+			var index = __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].pluckObjectById(state.currentProject.users, 'id', payload);
+			// Remove from store
+			return state.currentProject.users.splice(index, 1);
 		},
-
-		// Update the current project timline
 		updateCurrentProjectTimeline: function updateCurrentProjectTimeline(state, payload) {
 			return state.currentProject.timeline = payload;
 		},
+
+
+		/*
+   * Invoice based mutations
+  */
 		updateInvoices: function updateInvoices(state, payload) {
 			return state.invoices = payload;
 		},
@@ -45696,6 +45691,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			return state.currentInvoice = false;
 		},
 		markInvoicesPaid: function markInvoicesPaid(state, payload) {
+			// Itterate through each invoice
 			payload.forEach(function (id) {
 				var invoice = state.crewInvoices.find(function (elem) {
 					return elem.id === id;
@@ -45732,26 +45728,25 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			return state.currentInvoice.work_items.push(payload);
 		},
 		updateWorkItem: function updateWorkItem(state, payload) {
-			// Find item in current store cache, then find the index of that item
-			var item = state.currentInvoice.work_items.find(function (elem) {
-				return elem.id === payload.id;
-			}),
-			    itemIndex = state.currentInvoice.work_items.indexOf(item);
-			// Replace item in store cache
-			return state.currentInvoice.work_items[itemIndex] = payload;
+			// Use helper to get index
+			var index = __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].pluckObjectById(state.currentInvoice.work_items, 'id', payload);
+			// FIRST, remove item that was updated from store 
+			state.currentInvoice.work_items.splice(index, 1);
+			// NEXT, add the updated work item back to the invoice 
+			// We do it this way so the computed property in the component will trigger an update
+			return state.currentInvoice.work_items.push(payload);
 		},
 		deleteWorkItem: function deleteWorkItem(state, payload) {
-			// Find item in current store cache, then find the index of that item
-			var item = state.currentInvoice.work_items.find(function (elem) {
-				return elem.id === payload;
-			}),
-			    itemIndex = state.currentInvoice.work_items.indexOf(item);
-			// Remove item in store cache
-			return state.currentInvoice.work_items.splice(itemIndex, 1);
+			// Use helper to get index
+			var index = __WEBPACK_IMPORTED_MODULE_3__helpers__["a" /* default */].pluckObjectById(state.currentInvoice.work_items, 'id', payload);
+			// Remove item from cache 
+			return state.currentInvoice.work_items.splice(index, 1);
 		},
 
 
-		// Update users
+		/*
+   * User based mutations (Search and auth)
+  */
 		updateUsers: function updateUsers(state, payload) {
 			return state.users = payload;
 		},
@@ -45782,13 +45777,24 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		},
 
 
-		// Update clients
+		/*
+   * Misc mutations
+  */
 		updateClients: function updateClients(state, payload) {
 			return state.clients = payload;
 		}
 	},
 
+	/** 
+  * Actions that send API server calls and manipulate the database.
+  *
+  * Method names are self descriptive so comments are only added where clarity is needed.
+ */
 	actions: {
+
+		/* 
+   * Notification actions
+  */
 		getNotifications: function getNotifications(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/notifications', 'updateNotifications');
 		},
@@ -45796,11 +45802,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/notifications/delete/' + payload.id, 'deleteNotification');
 		},
 
-		/* 
-  	PROJECT ACTIONS
-  */
 
-		// Use api to retrieve all projects and set them in the state
+		/* 
+   * Project based actions
+  */
 		getProjects: function getProjects(context, payload) {
 			var url = '/projects';
 			// Create payload 
@@ -45818,43 +45823,34 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, url, 'updateProjects');
 		},
 
-		// Use api to retrieve a project and set it in the state
+
+		// Projects the authenticated user is a part of
+		getUsersProjects: function getUsersProjects(context, payload) {
+			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/projects/auth-users', 'updateProjects');
+		},
 		getProject: function getProject(context, payload) {
 			// Use api to send request
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/projects/' + payload, 'updateCurrentProject');
 		},
-
-
-		// Use api to add a new project to the db and update the current project in the state
 		addProject: function addProject(context, payload) {
 			// Use api to send request
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/projects/start', 'updateCurrentProject');
 		},
-
-		// Use api to edit a project field in the db and update the current project in the state
 		updateProjectField: function updateProjectField(context, payload) {
 			// Use api to send request
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/projects/update-field', 'updateCurrentProject');
 		},
-
-		// Use api to add a comment to specific project and update the current project comments in the state
 		addProjectComment: function addProjectComment(context, payload) {
 			// Use api to send request
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/projects/add-comment', 'addProjectComment');
 		},
-
-		// Use api to delete a comment and update the current project comments in the state
 		deleteProjectComment: function deleteProjectComment(context, payload) {
 			// Use api to send request
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/projects/delete-comment/' + payload.id, 'deleteProjectComment');
 		},
-
-		// Use api to add a crew member to a specific project and update the current project users in the state
 		addProjectCrew: function addProjectCrew(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/projects/add-crew', 'addProjectCrew');
 		},
-
-		// Use api to delete a crew member from a specific project and update the current project crew in the state
 		deleteProjectCrew: function deleteProjectCrew(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/projects/' + payload.project_id + '/delete-crew/' + payload.id, 'deleteProjectCrew');
 		},
@@ -45862,13 +45858,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/timelines/update-field', 'updateCurrentProjectTimeline');
 		},
 
-		// Use api to retrieve all of a users projects and set them in the state
-		getUsersProjects: function getUsersProjects(context, payload) {
-			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/projects/auth-users', 'updateProjects');
-		},
 
-
-		// Use api to retrieve all invocies
+		/* 
+   * Invoice based actions
+  */
 		getAllInvoices: function getAllInvoices(context, payload) {
 			var url = '/invoices';
 			// Create payload 
@@ -45887,98 +45880,85 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		},
 
 
-		// Use api to retrieve all of a users invoices and set them in the state
+		// Invoices created by the authenticated user
 		getUsersInvoices: function getUsersInvoices(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/invoices/auth-users', 'updateInvoices');
 		},
-
-
-		// Use api to add an invoice
 		addInvoice: function addInvoice(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/invoices/add', 'updateCurrentInvoice');
 		},
 		getInvoice: function getInvoice(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/invoices/' + payload, 'updateCurrentInvoice');
 		},
+
+
+		// User, Admin only
 		publishInvoice: function publishInvoice(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/invoices/publish', 'publishInvoice');
 		},
+
+
+		// Super only
 		markInvoicesPaid: function markInvoicesPaid(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, 'invoices/mark-paid', 'markInvoicesPaid');
 		},
-
-
-		// Use api to delete an invoice
 		deleteInvoice: function deleteInvoice(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/invoices/delete/' + payload, 'deleteInvoice');
 		},
-
-
-		// Use api to add hours to a timesheet
 		addWorkItem: function addWorkItem(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/invoices/add-item', 'addWorkItem');
 		},
-
-		// Use api to add hours to a timesheet
 		updateWorkItem: function updateWorkItem(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/invoices/edit-item', 'updateWorkItem');
 		},
-
-		// Use api to delete an entire timesheet
 		deleteWorkItem: function deleteWorkItem(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].deleteAction(context, '/invoices/delete-item/' + payload, 'deleteWorkItem');
 		},
 
 
 		/* 
-  	USER ACTIONS
+   * User based actions
   */
-
-		// Use api to retrieve all users and set them in the store
 		getUsers: function getUsers(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/users', 'updateUsers');
 		},
-
-
-		// Use api to retrieve a user and set it in the state
 		getUser: function getUser(context, payload) {
 			// Use api to send request
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/users/' + payload, 'updateCurrentUser');
 		},
-
-		// Use api to add a new user to the db
 		addUser: function addUser(context, payload) {
 			// Use api to send request
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/users/add', 'addUser');
 		},
-
-		// Use api to edit a user field in the db and update the current user in the state
 		updateUserField: function updateUserField(context, payload) {
 			// Use api to send request
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/users/update-field', 'updateCurrentUser');
 		},
 
-		// Use api to change a users password
+
+		// Super, admin only
 		changeUserPassword: function changeUserPassword(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/users/change-password');
 		},
-
-		// Use api to change the logged in users password
 		changePersonalPassword: function changePersonalPassword(context, payload) {
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].postAction(context, payload, '/users/change-personal-password');
 		},
 
-		/*
-  	MISC ACTIONS
-  */
 
-		// Use api to retrieve all the unique clients (from projects)
+		/* 
+   * Misc actions
+  */
 		getClients: function getClients(context, payload) {
 			// Use api to send request
 			return __WEBPACK_IMPORTED_MODULE_2__api__["a" /* default */].getAction(context, '/projects/clients', 'updateClients');
 		}
 	},
 
+	/** 
+  * Getters that access the state directly (For components)
+  *
+  * Method names are self descriptive so comments are only added where clarity is needed.	 
+ */
 	getters: {
 		// Return the debug state
 		debug: function debug(state) {
@@ -45987,9 +45967,6 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		notifications: function notifications(state) {
 			return state.notifications;
 		},
-
-
-		// Return the loaded projects
 		projects: function projects(state) {
 			return state.projects;
 		},
@@ -46024,15 +46001,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 		invoicesFilter: function invoicesFilter(state) {
 			return state.invoicesFilter;
 		},
-
-
-		// Return all users
 		users: function users(state) {
 			return state.users;
 		},
 
 
-		// Return the logged in user
+		// Return the authenticated user
 		user: function user(state) {
 			return state.authUser;
 		},
@@ -46065,15 +46039,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			});
 			return usersSelect;
 		},
-
-
-		// Return the clients (from projects table)
 		clients: function clients(state) {
 			return state.clients;
 		},
-
-
-		// Return the clients formatted for a vuetify select list
 		clientsSelectList: function clientsSelectList(state) {
 			// Cache clients
 			var clients = state.clients,
@@ -46085,6 +46053,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 			return clientsSelect;
 		}
 	}
+
 });
 
 /***/ }),
@@ -50883,6 +50852,7 @@ exports.push([module.i, "\n.center[data-v-9c393a74]{\n  margin-left: auto;\n  ma
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__ = __webpack_require__(6);
 //
 //
 //
@@ -51124,6 +51094,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -51174,7 +51146,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     headers: function headers() {
       if (this.table_state === 'admin') {
-        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'User', value: 'user', align: 'left' }, { text: 'From Date', value: 'from_date', align: 'left' }, { text: 'To Date', value: 'to_date', align: 'left' }, { text: 'Paid?', value: 'is_paid', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
+        var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'User', value: 'user', align: 'left' }, { text: 'From Date', value: 'from_date', align: 'left' }, { text: 'To Date', value: 'to_date', align: 'left' }, { text: 'Amount', value: 'amount', align: 'left' }, { text: 'Paid?', value: 'is_paid', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
       }
       if (this.table_state === 'user') {
         var headers = [{ text: 'Identifier', value: 'id', align: 'left' }, { text: 'From Date', value: 'from_date', align: 'left' }, { text: 'To Date', value: 'to_date', align: 'left' }, { text: 'Published?', value: 'is_published', align: 'left' }, { text: 'Paid?', value: 'is_paid', align: 'left' }, { text: 'Actions', value: '', align: 'left' }];
@@ -51185,6 +51157,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
+    invoiceTotal: function invoiceTotal(workItems) {
+      return __WEBPACK_IMPORTED_MODULE_0__resources_bus_logic__["a" /* default */].tallyWorkItemsTotal(workItems).toFixed(2);
+    },
     viewInvoice: function viewInvoice(id) {
       // User state forward
       if (this.table_state === 'user') this.$router.push('/my-invoices/' + id + '/view');
@@ -51257,6 +51232,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.selectAll = false;
     } else if (this.table_state === 'admin') {
       dispatchAction = 'getAllInvoices';
+      payload = this.invoicesFilter;
     }
 
     // Tell store to load projects
@@ -51542,7 +51518,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
             },
             expression: "props.selected"
           }
-        })], 1) : _vm._e(), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.id))]), _vm._v(" "), (_vm.table_state === 'admin') ? _c('td', [_vm._v(_vm._s(props.item.user.first))]) : _vm._e(), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("date")(props.item.from_date)))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("date")(props.item.to_date)))]), _vm._v(" "), (_vm.table_state === 'user') ? _c('td', [(!props.item.is_published) ? _c('v-chip', {
+        })], 1) : _vm._e(), _vm._v(" "), _c('td', [_vm._v(_vm._s(props.item.id))]), _vm._v(" "), (_vm.table_state === 'admin') ? _c('td', [_vm._v(_vm._s(props.item.user.first))]) : _vm._e(), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("date")(props.item.from_date)))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("date")(props.item.to_date)))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm._f("money")(_vm.invoiceTotal(props.item.work_items))))]), _vm._v(" "), (_vm.table_state === 'user') ? _c('td', [(!props.item.is_published) ? _c('v-chip', {
           staticClass: "red white--text"
         }, [_vm._v("Not Published\n        ")]) : _c('v-chip', {
           staticClass: "green white--text"
@@ -58389,6 +58365,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		currentInvoice: function currentInvoice() {
 			return this.$store.getters.currentInvoice;
 		},
+		workItems: function workItems() {
+			return this.$store.getters.currentInvoice.work_items;
+		},
 		projectsSelectList: function projectsSelectList() {
 			return this.$store.getters.projectsSelectList;
 		},
@@ -58548,8 +58527,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 					_this.workItemDialog = false;
 					// Toggle loader
 					_this.workItemSaving = false;
+					// Revert action to default
+					_this.workItemDispatchAction = 'addWorkItem';
 					// Reset form
 					__WEBPACK_IMPORTED_MODULE_1__store_helpers__["a" /* default */].resetForm(_this.workItemForm);
+					//
 				})
 				// Unsuccessful request
 				.catch(function (errors) {
